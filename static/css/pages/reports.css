@@ -1,0 +1,23 @@
+.desktop-graph{
+    width: 750px; height: 400px;
+}
+@media all and (max-width: 420px){
+.mobileButton{
+    margin-top: 10px;
+    width: 100%;
+    }
+.android-report-title{
+    font-size: 16px;
+    }
+#piechart_3d{
+        float: left;
+        margin-left: -250px;
+        width: 820px;
+        height: 580px;
+    }
+}
+
+#piechart_3d{
+    width: 620px;
+    height: 520px;
+}

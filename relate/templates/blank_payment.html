@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load profile number %}
+
+{% block content %}
+
+    <style>
+        #div-recipient-name .tt-menu {
+            max-height: 150px;
+            width: 100%;
+            overflow-y: auto;
+            border-bottom: 1px solid #ccc;
+            background-color: #ffffff;
+        }
+    </style>
+
+    <div class="container-fluid"></div>
+    <form id="blank-payment-form" action="{% url 'blank_payment_user' %}" method="POST">
+        <div class="container">
+            <div class="row">
+                <span id="max-amount" class="label label-primary pull-right" hidden></span>
+                {% csrf_token %}
+                <div class="alert alert-info ripple-hours" hidden></div>
+
+                <input type="text" id="boolean-referral" data-referral="" hidden>
+
+                <input type="text" id="form-submit-checker" data-submit-checker="" hidden>
+
+                {% for field in form %}
+                    {% if field.errors %}
+                        <div class="form-group">
+                            <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                            {{ field }}
+                            <div class="alert alert-warning message">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="form-group">
+                         {% if field.auto_id == 'id_recipient' %}
+
+                             <div class="form-group" id="div-recipient-name">
+                                <label for="{{ field.label }}">{{ field.label }}</label>
+                                 <br>
+                                {{ field }}
+                            </div>
+                             <label id="label-profile-image" for="profile-image" hidden>Receiver profile picture</label>
+                             <div>
+                                 <img id="profile-image" src="" class="img-rounded" hidden style="height: 70px; width: 120px;">
+                             </div>
+                        {% else %}
+                            <label for="{{ field.label }}">{{ field.label }}</label>
+                            {{ field }}
+                        {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <button type="submit" id="save-payment" class=" btn btn-success gradient save-button">
+                    <i class="fa fa-check"></i> Save</button>
+                <button class="btn btn-danger"><i class="fa fa-sign-out"></i> Back</button>
+            </div>
+        </div>
+    </form>
+
+    {% if received_payments %}
+        <div class="container"><h3>Received payments</h3>
+        <table id="table-received-payments" class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Payer</th>
+                <th>Recipient</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for received in received_payments %}
+                <tr>
+                    <td width="25%">{{ received.item.payer }}</td>
+                    <td width="25%">{{ received.item.recipient }}</td>
+                    <td width="25%">{{ received.item.amount }}</td>
+                    <td width="25%">{{ received.item.date }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <br>
+        <div class="container" style="padding: 0;">
+        <p>No received payments until now.</p>
+        </div>
+    {% endif %}
+
+    {% if made_payments %}
+        <h3>Payments made</h3>
+            <table id="table-made-payments" class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Payer</th>
+                    <th>Recipient</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for made in made_payments %}
+                    <tr>
+                        <td width="25%">{{ made.item.payer }}</td>
+                        <td width="25%">{{ made.item.recipient }}</td>
+                        <td width="25%">{{ made.item.amount }}</td>
+                        <td width="25%">{{ made.item.date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="container" style="padding: 0;">
+            <p>No payments made until now.</p>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Double Check Modal -->
+    <div class="modal fade" id="referralModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info" role="alert">Would you like to refer this person's services to your friends?</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="not-refer" data-dismiss="modal">
+                        <i class="fa fa-arrow-left"></i>Not yet
+                    </button>
+                    <button type="submit" class="btn btn-success" id="saveReferral" data-dismiss="modal">
+                        <i class="fa fa-check"></i>Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+        var recipients = new Bloodhound({
+            datumTokenizer: function (datum) {
+                return Bloodhound.tokenizers.whitespace(datum.value);
+            },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                wildcard: '%QUERY',
+                url: "{% url 'get_recipients_data' %}?query=%QUERY",
+                transform: function (response) {
+                    return $.map(response.result, function (recipient) {
+                        $('#id_recipient').attr("data-profile-selected", recipient.username);
+                        return {
+                            value: recipient.username,
+                            suggest: recipient
+                        };
+                    });
+                }
+            }
+
+        });
+        $('#id_recipient').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 0
+        },
+        {
+            display: 'value',
+            source: recipients,
+            limit: 20,
+            templates: {
+                suggestion: function (data) {
+                    return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
+                }
+            }
+        });
+        var max_amount_span = $("#max-amount");
+        $("#id_recipient").bind('typeahead:selected', function (e) {
+            $.ajax({
+                url:'/get_user_photo/' + $("#id_recipient").val(),
+                type:'POST',
+                beforeSend: function (xhr) {
+                    $('#spin-modal').fadeIn();
+                    var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (e) {
+                    if(e['data']['has_trust']){
+                        $("#id_weight").val(e['data']['credit_limit']);
+                        $("#id_text").val(e['data']['text'])
+                }
+                $('#profile-image').attr("src", e['data']['profile_photo_path']);
+                $('#profile-image').attr("hidden", false);
+                $('#label-profile-image').attr("hidden", false);
+                $('#label-profile-image').attr("hidden", false);
+                if(!e['data']['can_ripple']) {
+                    $('label[for="id_ripple_0"]').closest('li').hide();
+                    $('#id_ripple_1').attr('checked', true);
+                    $('.ripple-hours').html("There are no available paths through the trust network to <strong>" + e['data']['recipient'] + "</strong>, so you can only send direct payment.");
+                    $('.ripple-hours').attr("hidden", false);
+                }else if(e['data']['can_ripple']) {
+                    if(!$('label[for="id_ripple_0"]').closest('li').is(":visible")){
+                        $('label[for="id_ripple_0"]').closest('li').show()
+                    }
+                    $('#id_ripple_0').attr('checked', true);
+                    $('.ripple-hours').html("You can send a trusted payment of up to " + e['data']['max_amount'] + " hour(s) or a direct payment of any amount.");
+                    $('.ripple-hours').attr("hidden", false);
+                }
+                debugger;
+                if(e['data']['refer']) {
+                    $('#boolean-referral').attr("data-referral", true);
+                }
+
+                $('#spin-modal').fadeOut();
+                },
+                error: function (e){
+                    if (e.status === 500) {
+                        showInternalServerError();
+                        $('#spin-modal').fadeOut();
+                    }
+                }
+            });
+        });
+
+        $("#blank-payment-form").submit(function (e) {
+            debugger;
+            if($("#form-submit-checker").attr("data-submit-checker") === "true"){
+                $("#form-submit-checker").attr("data-submit-checker", false);
+            } else {
+                e.preventDefault();
+                debugger;
+                var modal = $('#referralModal');
+                if($("#id_recipient").val() == '') {
+                    modal.find('.modal-body').html('Recipient is invalid');
+                    modal.modal();
+                } else {
+                    if($("#boolean-referral").attr("data-referral") === "true") {
+                        $("#form-submit-checker").attr("data-submit-checker", true);
+                        $("#blank-payment-form").submit();
+                    } else {
+                        modal.modal();
+                    }
+                }
+            }
+        });
+
+    $("#save-payment").click(function (e) {
+        debugger;
+        var profile = $('#id_recipient').val();
+        $("#id_recipient").val(profile);
+        var url = '/pay/'+profile;
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: $("#blank-payment-form").serialize(),
+            beforeSend: function (xhr) {
+                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                if (data['referral'] === true) {
+
+                } else {
+                    showSuccessMessage('Payment sent')
+                }
+            },
+            error: function (data) {
+                console.log(data);
+                showFormErrors(data['responseJSON']['errors'])
+            }
+        });
+    });
+
+    $("#saveReferral").click(function () {
+        var profile = $('#id_recipient').val();
+        $.ajax({
+            url: "{% url 'referral_on_payment' %}",
+            data: JSON.stringify({'profile': profile}),
+            contentType: "application/json; charset=utf-8",
+            method: 'POST',
+            success: function() {
+                $("#form-submit-checker").attr("data-submit-checker", true);
+                $("#blank-payment-form").submit();
+            }
+        })
+    });
+
+    $("#not-refer").click(function (e) {
+        $("#form-submit-checker").attr("data-submit-checker", true);
+        $("#blank-payment-form").submit();
+    })
+</script>
+
+{% endblock %}

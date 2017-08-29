@@ -1,0 +1,17 @@
+{
+  "villages": {
+    "db_user": "villages_db_user",
+    "db_pass": "villages_db_pass",
+    "db_name": "villages_db_name"
+  },
+  "ripple": {
+    "db_user": "ripple_db_user",
+    "db_pass": "ripple_db_pass",
+    "db_name": "ripple_db_name"
+  },
+  "mail": {
+    "mail_user": "your@mail.net",
+    "mail_pass": "mail_pass_here"
+  },
+  "secret_key": "oe@ut#9t8xzd0%19xobf3c4jqa75&#!@+e27ioubq=#r1^4h#8"
+}

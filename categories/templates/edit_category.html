@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block head-css %}
+{{ block.super }}
+    <link href="{% static 'chosen/chosen.css' %}" rel="stylesheet" type="text/css" />
+    <style>
+    .custom-input-group {
+      display: table;
+      border-collapse: separate;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h3 class="page-title container">
+    <a href="{% url 'categories:categories_manager:manage_categories' %}">
+        <i class="fa fa-sitemap"></i> Categories
+    </a> | Edit category
+    </h3>
+    <hr>
+
+    <form action="" class="form-horizontal" method="post">
+    {% csrf_token %}
+
+    {% for field in form %}
+        <div class="form-group">
+            <label for="{{field.label}}" class="col-lg-2 control-label {% if field.errors %}error{% endif %}">{{ field.label }}</label>
+            <div class="col-lg-6 {% if field.errors %}error{% endif %}">
+                {{ field }}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-error">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+
+     <div class="form-group form-footer">
+        <div class="col-lg-offset-2 col-lg-10">
+            <a href="{% url 'categories:categories_manager:manage_categories' %}">
+                <button type="button" class="btn btn-default"><i class="fa fa-sign-out"></i>Cancel</button>
+            </a>
+            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i>Save</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,76 @@
+PUT _template/villages
+{
+    "template": "villages*",
+      "settings": {
+         "index": {
+            "refresh_interval": "30s",
+            "number_of_shards": "3",
+            "translog": {
+               "durability": "async"
+            },
+            "number_of_replicas": "0"
+         }
+      },
+      "mappings": {
+         "listings": {
+            "_all": {
+               "enabled": false
+            },
+            "properties": {
+                "listing_id": {
+                    "type": "keyword"
+                },
+                "listing_title": {
+                    "type": "text"
+                },
+                "price": {
+                    "type": "byte"
+                },
+                "listing_type": {
+                    "type": "keyword"
+                },
+                "user_id": {
+                    "type": "keyword"
+                },
+                "user_name": {
+                    "type": "keyword"
+                },
+                "category": {
+                    "type": "keyword"
+                },
+                "subcategory": {
+                    "type": "keyword"
+                },
+                "description": {
+                    "type": "text"
+                },
+                "created": {
+                  "type": "date"
+               },
+               "updated": {
+                  "type": "date"
+               },
+               "listing_url": {
+                  "type": "text"
+               },
+               "location": {
+                  "type": "geo_point",
+                  "ignore_malformed": false
+               },
+               "city": {
+                  "type": "keyword"
+               },
+               "state": {
+                  "type": "keyword"
+               },
+               "country": {
+                  "type": "keyword"
+               },
+               "location_full_name": {
+                   "type": "text"
+               }
+            }
+         }
+      },
+      "aliases": {}
+}

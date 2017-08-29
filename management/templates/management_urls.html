@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <style>
+        .nav-tabs .fa {
+            margin-right: 15px;
+        }
+    </style>
+
+    <ul class="nav nav-tabs" role="tablist" style="position: relative;">
+        <li class="nav-item">
+            <a class="nav-link active" href="#urls-management" data-toggle="tab" role="tab">
+                <i class="fa fa-globe"></i>URLs
+            </a>
+        </li>
+        <li class="nav-item" id="user-management-tab">
+            <a class="nav-link" href="#users-management" data-toggle="tab" role="tab">
+                <i class="fa fa-user"></i>Users
+            </a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active" id="urls-management" role="tabpanel">
+            <div id="reportrange" class="form-control col-lg-4 pull-left">
+                <i class="fa fa-calendar"></i>&nbsp;
+                <span></span>
+                <a href="{% url 'management:management' %}">
+                    <i class="fa fa-sitemap"></i> Management
+                </a> | Management URLs
+            </div>
+            <div class="col-sm-12"><a href="{% url 'categories:categories_manager:manage_categories' %}">
+                <i class="fa fa-tag"></i> Manage Categories</a></div>
+            <div class="col-sm-12"><a href="{% url 'categories:subcategories_manager:manage_subcategories' %}">
+                <i class="fa fa-tags"></i> Manage Subcategories</a></div>
+        </div>
+        <div class="tab-pane" id="users-management" role="tabpanel">
+            <form method="post">
+            {% csrf_token %}
+                <div class="input-group">
+                    {{ form.search }}
+                    <span class="input-group-btn">
+                        <button id="submit" class="btn btn-primary">Submit</button>
+                    </span>
+                </div>
+
+                <button id="delete" class="btn btn-danger" type="button"><i class="fa fa-exclamation"></i>Delete</button>
+
+                <table id="table-users" class="table table-responsive table-hover">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Username</th>
+                        <th>Name</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td class="pointer center td-checkbox">
+                                <input id="{{ user.id }}" type="checkbox" value="{{ user.id }}">
+                            </td>
+                            <td width="50%">{{ user.username }}</td>
+                            <td width="50%">{{ user.profile.name }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+            </div>
+        </div>
+
+    <script>
+        $('#delete').click(function(e){
+            debugger;
+            var original_value = $(this).html();
+            $(this).html('Deleting selected...');
+
+
+            debugger;
+            var values = [];
+            var rows_to_remove = [];
+            var table = $('#table-users');
+
+
+            table.find(':checked').each(function() {
+                if ($(this).val() > 0) {
+                    values.push($(this).val());
+                    rows_to_remove.push($(this).parent().parent());
+                }
+            });
+
+            if (values.length > 0) {
+                if (confirm('Are you sure ? ')) {
+                    $.ajax({
+                        async: false,
+                        url: '{% url 'management:delete' '' %}',
+                        type: 'POST',
+                        data: { ids:values, csrfmiddlewaretoken:"{{ csrf_token }}" },
+                        success: function (data) {
+                            for (var row in rows_to_remove) {
+                                rows_to_remove[row].remove();
+                            }
+                        },
+                        error: function (resp) {
+                            console.log("Error:" + resp);
+                        }
+                    });
+                }
+            } else {
+                alert('Please select a listing first.')
+            }
+
+            $(this).html(original_value);
+        });
+    </script>
+{% endblock %}

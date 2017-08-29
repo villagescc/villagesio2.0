@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<!-- App page content -->
+        <form class="col-sm-6 col-lg-4" action="" method="post">
+            {% csrf_token %}
+
+            <a class="btn btn-primary" href="{% url 'social:begin' 'facebook' %}?next=/settings/"><i class="fa fa-facebook-official">&nbsp; Register with facebook</i></a>
+
+            {% for field in form %}
+                {% if field.errors %}
+                    <div class="form-group">
+                        <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                        {{ field }}
+                        <div class="alert alert-warning message">
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="form-group">
+                        <label for="{{ field.label }}">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary pull-right">
+                    <i class="fa fa-sign-in"></i>&nbsp;Submit
+                </button>
+            {% if not form.is_valid %}
+                <script>
+                    setTimeout(function () {
+                        $('.message').slideUp("fast");
+                    }, 4000);
+                </script>
+            {% endif %}
+    </form>
+{% endblock content %}

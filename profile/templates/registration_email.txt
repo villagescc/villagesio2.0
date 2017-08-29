@@ -1,0 +1,14 @@
+{% load i18n %}
+{% blocktrans %}Thanks for registering at Villages.cc! We hope you find our system useful.{% endblocktrans %}
+
+{% blocktrans %}Begin by making sure you've filled out your profile to include a picture and a description of your skills and things you'd like to offer to the community:{% endblocktrans %}
+
+http://{{ domain }}{% url 'accounts:sign_in_user:edit_profile' %}
+
+{% blocktrans %}Next, check your feed for interesting people and posts in your neighbourhood:{% endblocktrans %}
+
+http://{{ domain }}
+
+{% blocktrans %}If you have received this email in error, please reply and let us know so that we can remove your email address from the system.{% endblocktrans %}
+
+{% blocktrans %}Thanks!{% endblocktrans %}

@@ -1,0 +1,85 @@
+<style>
+    .modal-body {
+        max-height: 100vh;
+        overflow-y: scroll;
+    }
+</style>
+
+
+<form class="form-horizontal" id="add-posting-modal" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div id="new-posting-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-posting-modal" aria-hidden="true" style="opacity: 0.9 !important;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
+                    <h4 class="modal-title" id="myModalLabel">New Posting</h4>
+                </div>
+                <div id="modaltext" class="modal-body">
+                    <div class="form-group">
+                    <div class="col-sm-12">
+                        {% for field in listing_form %}
+                            <label for="{{ field.auto_id }}">{{ field.label }}</label>
+                            {{ field }}
+                            <div class="alert alert-warning collapse" id="error_{{ field.name }}"></div>
+                        {% endfor %}
+                    </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="save-post" class=" btn btn-success gradient save-button">
+                        <i class="fa fa-check"></i>Post
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+                <div id="msg"></div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $('#add-posting-modal').submit(function (e) {
+        e.preventDefault();
+        $('#save-post').attr("disabledd", true);
+        debugger;
+        var postData = new FormData($('#add-posting-modal')[0]);
+        $.ajax({
+            url: '{% url 'new_listing' %}',
+            type: 'POST',
+            data: postData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                debugger;
+                $('#new-posting-modal').modal("hide");
+                showSuccessMessage('Listing added successfully!');
+                $('#save-post').attr("disabled", false);
+                location.reload();
+            },
+            error: function (d) {
+                showFormErrors(d['responseJSON']['errors'])
+            }
+        });
+    });
+
+    $("#id_categories").on('change', function (e) {
+        var selected_category = $(this).val();
+        $.ajax({
+            url: "{% url 'subcategories_filter' %}",
+            type: 'GET',
+            data: {'category': selected_category},
+            success: function (e) {
+                $("#id_subcategories").find("option").remove().end();
+                e.result.forEach(function (data) {
+                    $("#id_subcategories").append($("<option />").val(data["id"]).text(data["text"]))
+                });
+            },
+            error: function (e) {
+                showInternalServerError();
+            }
+        })
+    })
+</script>
+

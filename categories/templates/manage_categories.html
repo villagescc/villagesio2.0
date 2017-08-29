@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="container">
+            <a type="button" href="{% url 'categories:categories_manager:add_category' %}" class="btn btn-primary">Add Category</a>
+            <button id="delete" class="btn btn-danger pull-right"><i class="fa fa-exclamation"></i>Delete</button>
+            {% if categories %}
+                <table id="table-categories" class="table table-responsive table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for category_info in categories %}
+                    <tr>
+                        <td class="pointer center td-checkbox">
+                            <input id="{{ category_info.id }}" type="checkbox" value="{{ category_info.id }}">
+                        </td>
+                        <td width="100%"><a href="{% url 'categories:categories_manager:edit_category' category_info.id %}" class="pull-left">{{ category_info.categories_text }}</a></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                Sorry, we did not find any families.
+            {% endif %}
+        </div>
+
+    <script>
+        $('#delete').click(function(e){
+            var original_value = $(this).html();
+            $(this).html('Deleting selected...');
+
+            var values = [];
+            var rows_to_remove = [];
+            var table = $('#table-categories');
+
+
+            table.find(':checked').each(function() {
+                if ($(this).val() > 0) {
+                    values.push($(this).val());
+                    rows_to_remove.push($(this).parent().parent());
+                }
+            });
+
+            if (values.length > 0) {
+                if (confirm('Are you sure ? ')) {
+                    $.ajax({
+                        async: false,
+                        url: '{% url 'categories:categories_manager:delete_category' %}',
+                        type: 'POST',
+                        data: { ids:values, csrfmiddlewaretoken:"{{ csrf_token }}" },
+                        success: function (data) {
+                            for (var row in rows_to_remove) {
+                                rows_to_remove[row].remove();
+                            }
+                        },
+                        error: function (resp) {
+                            console.log("Error:" + resp);
+                        }
+                    });
+                }
+            } else {
+                alert('Please select a category first.')
+            }
+
+            $(this).html(original_value);
+        });
+    </script>
+{% endblock %}

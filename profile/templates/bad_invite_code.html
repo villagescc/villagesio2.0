@@ -1,0 +1,14 @@
+{% extends "no_subnav_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Unknown or Expired Invitation' %}{% endblock %}
+
+{% block content %}
+<h2>{% trans 'Unknown or Expired Invitation' %}</h2>
+
+<p>{% blocktrans %}Please contact the person who invited you
+	to see if they can invite you again.{% endblocktrans %}</p>
+
+<p><a href="{% url 'home' %}">{% trans 'Return Home' %}</a></p>
+
+{% endblock %}

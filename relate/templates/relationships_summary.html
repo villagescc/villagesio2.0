@@ -1,0 +1,25 @@
+{% load i18n %}
+<table class="data">
+	<tr title="{% blocktrans %}Sum of all acknowledgements
+				sent and received{% endblocktrans %}">
+		<th>{% trans 'Overall Balance' %}</th>
+		<td>
+			{% blocktrans count hours=request.profile.overall_balance %}
+				{{ hours }} hour
+			{% plural %}
+				{{ hours }} hours
+			{% endblocktrans %}
+		</td>
+	</tr>
+	<tr title="{% blocktrans %}Sum of all *trusted* acknowledgements
+				sent and received{% endblocktrans %}">
+		<th>{% trans 'Trusted Balance' %}</th>
+		<td><strong>
+			{% blocktrans count hours=request.profile.trusted_balance %}
+				{{ hours }} hour
+			{% plural %}
+				{{ hours }} hours
+			{% endblocktrans %}
+		</strong></td>
+	</tr>
+</table>

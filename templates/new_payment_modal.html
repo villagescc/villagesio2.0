@@ -1,0 +1,175 @@
+{% load relate %}
+<!-- Trust Modal -->
+
+<style>
+@media (min-width: 1000px)/* The minimum width of the display area, such as a browser window*/
+{
+  .modal-dialog {
+      width: 1000px;
+  }
+}
+</style>
+
+<form class="form-horizontal" id="new-payment-form" method="POST">
+    {% csrf_token %}
+    <div id="new-payment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <input type="text" id="profile-username" hidden>
+        <div class="modal-dialog">
+            <div class="modal-content" id="payment-modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
+                    <h4 class="modal-title" id="payment-modal-title">Pay this person</h4>
+                </div>
+                <div id="modaltext" class="modal-body">
+                    <div class="form-group">
+                        <div class="container-fluid">
+                            <div class="alert alert-info ripple-hours">
+                            </div>
+                            <br>
+                            <br>
+                            {{ payment_form }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning collapse" id="payment-msg"></div>
+                    <div class="modal-footer">
+                        <button type="submit" id="save-payment"
+                                class=" btn btn-success gradient save-button"
+                                onclick="return confirm(confirm_text());">
+                            <i class="fa fa-check"></i>Save payment
+                        </button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+</form>
+
+<!-- Double Check Modal -->
+    <div class="modal fade" id="referralModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info" role="alert">Would you like to refer this person's services to your friends?</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="not-refer" data-dismiss="modal">
+                        <i class="fa fa-arrow-left"></i>Not yet
+                    </button>
+                    <button type="submit" class="btn btn-success" id="saveReferral" data-dismiss="modal">
+                        <i class="fa fa-check"></i>Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    function confirm_text() {
+		var can_ripple = {% if can_ripple %}true{% else %}false{% endif %};
+		var hours = $("#id_amount").val();
+		var ack_type = "direct";
+		if (can_ripple) {
+			var ripple = ($("input:radio[name=ripple]:checked").val() ==
+							"routed");
+			if (ripple) {
+				ack_type = "trusted";
+			}
+		}
+		if (!hours) hours = 0;
+		var q = "Send a direct acknowledgement of " +
+				hours + "h ?";
+		if (ack_type=="trusted")
+			q = "Send a trusted acknowledgement of " +
+				hours + " h? ";
+		return q;
+	}
+
+    $("#save-payment").click(function(e) {
+        debugger;
+        $("#save-payment").attr("disabled", true);
+        var profile_username = $("#profile-username").val();
+        var url = '/pay_user_ajax/'+profile_username+'/';
+        console.log(url);
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: $('#new-payment-form').serialize(),
+            cache: false,
+            beforeSend: function (xhr) {
+                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function(data){
+                debugger;
+                if(data['data']['stat'] == 'ok'){
+                    var recipient = data['data']['recipient'];
+                    $('#payment-msg').html(data).fadeIn('slow');
+                    $('#payment-msg').html("<strong><p>Successfully sent trust to " +recipient+ "</p></strong>").fadeIn('slow');
+                    $('#payment-msg').delay(2500).fadeOut('slow');
+                    $("#save-payment").attr("disabled", false);
+                    $('#new-payment-modal').modal("hide");
+
+                    if(!data['data']['refer']) {
+                        var modal = $('#referralModal');
+                        modal.modal();
+                    } else {
+                        location.reload();
+                    }
+
+                }
+                else if(data['data']['stat'] == 'error'){
+                    debugger;
+                    if('weight' in data['data']['errors']) {
+                        $('#payment-msg').html(data).fadeIn('slow');
+                        var error = data["data"]["errors"]["weight"];
+                        $('#payment-msg').html("<strong><p> Weight: " +error+ " Please verify</p></strong>").fadeIn('slow');
+                        $('#payment-msg').delay(2500).fadeOut('slow');
+                        $("#save-payment").attr("disabled", false);
+                    }
+                }
+            },
+            error: function (resp){
+                debugger;
+                $("#save-payment").attr("disabled", false);
+                console.log('Error ' + resp);
+            }
+        });
+        e.preventDefault();
+    });
+
+    $('#new-payment-modal').on('hidden.bs.modal', function (e) {
+        $(this)
+                .find("input,textarea,select")
+                .val('')
+                .end()
+                .find("input[type=checkbox], input[type=radio]")
+                .prop("checked", "")
+                .end();
+    });
+
+    $("#saveReferral").click(function() {
+        debugger;
+        var profile_username = $("#profile-username").val();
+        $.ajax({
+            url: "{% url 'referral_on_payment' %}",
+            data: JSON.stringify({'profile': profile_username}),
+            contentType: "application/json; charset=utf-8",
+            method: 'POST',
+            success: function() {
+                location.reload();
+            }
+        })
+    });
+
+    $("#not-refer").click(function (e) {
+        location.reload();
+    })
+</script>

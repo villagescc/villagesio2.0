@@ -1,0 +1,592 @@
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.ir {
+  border: 0; 
+  font: 0/0 a; 
+  text-shadow: none; 
+  color: transparent; 
+  background-color: transparent;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+	font-family: "Open Sans", "Helvetica Neue", HelveticaNeue, Helvetica, Arial;
+	font-size: 15px;
+}
+
+#preloader {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	top: 0px;
+	background: #236DA6;
+	z-index: 1000;
+	padding-top: 150px;
+	color: #FFF;
+}
+
+.table-divided td:not(.table-header) {
+	border-bottom: 1px solid #FFF;
+}
+.table-divided .table-header {
+	border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	border-color: #FFF;
+	border-width: 0;
+	background-color: #EEE;
+}
+
+table:not(.ui-datepicker-calendar) th,
+.table-header {
+	background: #236DA6!important;
+	color: #FFF;
+	font-weight: 700;
+}
+
+
+/*------------------------------------*\
+    NAV
+\*------------------------------------*/
+
+#header {	
+	border-bottom: 1px solid #EEE;
+	padding: 20px 0 20px 420px;
+	color: #FFF;
+	background-color: #236DA6;
+	background-repeat: no-repeat;
+    list-style:none;
+    float:left; /* Clear floats */
+    width:100%;
+    position:relative;
+    z-index:5;
+}
+
+#header a {
+	transition: background-color 0.15s ease-in-out;
+	-moz-transition: background-color 0.15s ease-in-out;
+	-webkit-transition: background-color 0.15s ease-in-out;
+}
+
+#header a,
+#header a:visited {
+	color: #FFF;
+	text-decoration: none;
+	padding: 5px 10px;
+	border-radius: 3px;
+}
+
+#header a:hover {
+	background-color: rgba(255,255,255,0.1);
+}
+
+#header li{
+    float:left;
+    margin-right:10px;
+    position:relative;
+}
+#header a{
+    display:block;
+}
+
+/*--- DROPDOWN ---*/
+#header ul{
+    background: #236DA6; /* Adding a background makes the dropdown work properly in IE7+. Make this as close to your page's background as possible (i.e. white page == white background). */
+    background: rgba(255,255,255,0); /* But! Let's make the background fully transparent where we can, we don't actually want to see it if we can help it... */
+    list-style: none;
+    position: absolute;
+    left: -9999px; /* Hide off-screen when not needed (this is more accessible than display:none;) */
+}
+#header ul li{
+    float: none;
+}
+#header ul a{
+    white-space: nowrap; /* Stop text wrapping and creating multi-line dropdown items */
+}
+#header li:hover ul{ /* Display the dropdown on hover */
+    left: 0; /* Bring back on-screen when needed */
+}
+#header li:hover ul a{ /* The persistent hover state does however create a global style for links even before they're hovered. Here we undo these effects. */
+    text-decoration: none;
+}
+#header li:hover ul li a:hover{ /* Here we define the most explicit hover states--what happens when you hover each individual link. */
+    background-color: rgba(255,255,255,0.1);
+}
+#header>li>ul {
+	background: #236DA6;
+	margin-top: 0;
+	padding: 0 0 20px 15px;
+	border-radius: 3px;
+}
+#header>li:not(.menu-user) {
+	border-right: 1px solid #FFF;
+	margin: 0;
+	padding: 0 10px;
+}
+.menu-user {
+	box-shadow: 0 0 0 1px #FFF inset;
+	border-radius: 3px;
+	position: absolute!important;
+	right: 10px;
+}
+
+
+
+.header form,
+.header p {
+	padding: 0;
+	margin: 0;
+	height: auto!important;
+	width: auto!important;
+}
+
+.header > div:first-child {  margin: 0 auto; position:relative;}
+
+
+.filter {
+	background-color: #F0F0F0;
+	padding: 10px 0;
+}
+
+.filter p {
+	position: relative;
+	display: block;
+	margin: 0 auto;
+	width: 1050px;
+}
+
+.body {
+	width: 100%;
+	max-width: 1175px;
+	margin: 0 auto;
+	/*padding-bottom: 100px;*/
+}
+
+button:active,
+button:focus {
+  outline: none;
+  border: none;
+}
+
+button,
+input[type="submit"],
+input[type="button"] {
+  
+  -webkit-box-shadow: 0 -4px 0 rgba(0,0,0,0.3) inset;
+  -moz-box-shadow: 0 -4px 0 rgba(0,0,0,0.3) inset;
+  box-shadow: 0 -4px 0 rgba(0,0,0,0.3) inset;
+  
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1em;
+  vertical-align: middle;
+  font-weight: 400;
+  display: inline-block;
+  cursor: pointer;
+  margin: 1px 5px 2px 5px;
+  border-radius: 3px;
+  min-height: 30px;
+  padding: 4px 20px 8px 20px;
+  border: none;
+  color: #FFF;
+  background-color: #3EA300;
+}
+
+  button:hover,
+  input[type="submit"]:hover,
+  input[type="button"]:hover {
+    margin: 3px 5px 2px 5px;
+    padding: 4px 20px 6px 20px;
+    -webkit-box-shadow: 0 -2px 0 rgba(0,0,0,0.3) inset;
+    -moz-box-shadow: 0 -2px 0 rgba(0,0,0,0.3) inset;
+    box-shadow: 0 -2px 0 rgba(0,0,0,0.3) inset;
+  }
+  
+  button:active,
+  input[type="submit"]:active,
+  input[type="button"]:active {
+    margin: 5px 5px 0px 5px;
+    padding: 4px 20px 4px 20px;
+    -webkit-box-shadow: 0 0px 0 rgba(0,0,0,0.3) inset;
+    -moz-box-shadow: 0 0px 0 rgba(0,0,0,0.3) inset;
+    box-shadow: 0 0px 0 rgba(0,0,0,0.3) inset;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  select {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.3);
+  min-height: 34px;
+  vertical-align: middle;
+  padding: 0 10px;
+  margin: 5px 0;
+}
+
+ input[type="textarea"],
+  select {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.3);
+  min-height: 34px;
+  vertical-align: middle;
+  padding: 0 10px;
+  margin: 5px 0;
+}
+
+select {
+	padding-right: 0;
+}
+  
+ input[type="text"]:hover,
+  input[type="password"]:hover,
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    border: 1px solid rgba(0,0,0,0.5);
+  }
+  
+ input[type="text"]:focus,
+  input[type="password"]:focus {
+    outline: none;
+}
+
+
+#login {
+  margin: 20px auto;
+  border-radius: 5px;
+}
+
+#login td {
+  padding: 5px 20px;
+}
+
+#login td:first-child {
+  text-align: right;
+  padding: 5px 0 5px 20px;
+}
+
+#login tr {
+  background-color: transparent!important;
+  color: #444!important;
+  font-weight: normal!important;
+}
+
+.menu {
+	padding: 0 20px;
+}
+
+.categories_list {
+	padding-left: 0;
+}
+
+#header>li>ul>li a,
+.categories_list li a {
+	padding-left: 30px;
+	display: inline-table;
+	top: 6px;
+	position: relative;
+	width: 24px;
+	height: 26px;
+	background-repeat: no-repeat;
+	background-position-y: 3px;
+}
+
+#header>li>ul>li a:hover {
+	background-color: transparent!important;
+	opacity: 0.6;
+}
+
+.user-logout {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAMBJREFUeNpiYBjqgBGf5P///wWA1H0gFiDR3A+MjIyCIAYTEYoFyHC4AFE+gPriP1ghEKCL4Q0aqHomWoU9NHiJsmADWZHLyPiBkAvOw1wBpPvRg40QIMaLIHAfiA1wyFHFAhB4D8QBFFtAhJ4CWlsAAvNJtYCJbmUGEY5qoGUkJ9AqFb2nZTLFl9EaKLYAybD12DSAfAZ1BMUW4NQA8iHIdzSzAEmNAzS+MCxgIcUicpI/MRntAxnmfmAYNgAgwACKhHWrvHRgIgAAAABJRU5ErkJggg==);
+}
+
+.user-profile {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAThJREFUeNrcVdERgjAMFSdgBEboCI7gBjICI7ABOoEjKBN0BNygI9QNanv3uIsxocXz+DB3OSB9fQlp+7rb/b2FEA7Rr9Gn8G4T4odviU10G91FHzgREg8YTzizhrxFlT2J1ekbY4bhe+DbUnJPSeJ7gyqpOYYxmNfm2hKECm9BtlvJfAqwtC0krpqATe2y2m5xSuLiBMC7eVPsSfwU/S6A68yaSeN38L0lSH0bBfAxsy+kfo8f8YXfNWHZjNbWogQY6xTydmHOqgS1QO6X1mfmo2vw0HSlqqpnfJxZ+IK4uCMTHw8m4RqEyjtB6KjgdfxPoFFX9RwQ3fGhzDzwNT8H4kmG9pSS0ySNepK5lhDxKiU3WS3iaqqoKDcLXF5NtfsAk3uoqsWznytddR9scqNtcif/yl4CDADGQlydLRbr0AAAAABJRU5ErkJggg==)
+}
+
+.user-register {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJdJREFUeNpiYBgFgx78//8/AYjf/0cAELuBWoYr/McNEogxg4mAPD5D4qlhAcVg+FvwAY/cA1qnogBqJdX1WAy/j0UdGJBjgQExeYBkC6DB04+Wi//jMohoC4BqBKAG4wXIhuJTg264Ayh8/xMBSLYAWqgRDYgNIkYkBe+BlAA5KY0RCGCGg9i4LPhPblLGZ8EoGHgAEGAApWuSu2ujx/0AAAAASUVORK5CYII=)
+}
+
+.package-add {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAMpJREFUeNrsVdENhCAMFXMDMAIjuIErsBmr3AaECW6F20A36L1L9IKNQlH0fnzJi0kh77UNrU1zIwOVu0BEBh8L9qCewiMYwKdS6r3LGcIadJSHn5IoEjfgi+QYwK4k8xLx2MRIDDbbEt3ZbJekNXTAgHgVLfOwFV6mTRn0FQwWGg92qBdDAqwOD4vH7eMa7dmTzCsYE5n9MufxlAavIFRIOlz6TNdM/AEDJ91Dw45V8V0vWrqPukITuTirxAvEXUr8fz+cGzM+AgwAdslKsYhIkv8AAAAASUVORK5CYII=)
+}
+
+.package-pending {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAPBJREFUeNpiYBgF5IL///87/CcNBJBqwXwgPk+k2vUg9djkmPDocwDihVAD9uNw9X6o2oNQ9ST5AAQcoOz7uMIFOThJ9QEyUCA3LvFZ8AGIDaDsDTjUHCDbAUAf9wPxeyBWAGIBUISjhc55qLgAVN18Ui2AGYps0Hyo4euRxM5DLRAgxxcGUM0gQwxgEQqlFZAMN6AkwyVAXX0fTRyWshIoMRzZBwpY5Mj3ATR878PigEA8kR4H0AglqBEaF2SlIqLDFxZP5OTkB0S65wE5OZkqgImAq4hNHQa4fIHPAlD5E0+kBfZI5dIgqdGGDAAIMAA6RLDFtSqmGQAAAABJRU5ErkJggg==)
+}
+
+.package-publish {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAM5JREFUeNpiYBgFwwr8//9fAYj7gfg9tQ0OAOL9/xFgPbVc2wDE9/9jggRKDHYA4vn/8QMBUg0VALkKi2tBFr1HE1tPisEGOAzZD/XJerKCB+ra/Vg034dGKCj8z5MUPMhJDIsmkFgDUhy8x2H4enyubsChERREClA1BQQil+jggYczUiQTSjnEpx5o5CUgBd15IgwnKfUkwDTgSCn/Kcpc0CD5D02msEh2wJNzycpc66FBcx4WyWg+PE9R2YNkiACBYmM9RWXPKBj6ACDAABLxhRnfeXORAAAAAElFTkSuQmCC)
+}
+
+.package-gas {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQRJREFUeNrMVQENhDAMfFAwCUhAwiS8hEnACRImAVBAXgESeAfgoN8l/U+zfKFdQv4vaQLbtd3W7lbfLkb9swQA0KBFtBWOkeb7xFdnRXKLtoENid9qE8xQhjmPVQkJoPTMK8RfFPmJthtj7eSnqkHC3VDojfhgSZAK7dCWk+AL8WZLgncXeXKOQvBI817qIilBzB3oMnH0XxYUtQk6Fsiz8UBjgY15xu0sN/lzxidcXqPWIhe8g4LACbyTTE2dFXYVOFwIo1WuH+y7yXdB/43AV+3A5bJ8sPoEZ9YRdBqUN3kofdEm5VqmIiWkY9oUOuSKdoDSnhRyPFnHSLzf4PIH5yXAAJC9jWjTFkl4AAAAAElFTkSuQmCC)
+}
+
+.approve-block {
+	text-align: center;
+}
+
+.approve-block a {
+	width: 14px;
+	height: 14px;
+	background-repeat: no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0 1px;
+}
+
+.package-approve {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAOBJREFUeNpiZEAGk1wVgGQ9EDsAsQJU9AEQHwDiRoa83Q9gShmRNBUAyX4G/KAQqHkCiMFMgiYQ8GDwVP7IsP3eCUao8+4ToekDEAtA2YpMUD8RAolA7AjVDAL1TNCAQDYVU1Pe7gVAfAHInggVc2BCCr0PUFMTMTRBwiEByXUKLEiKJkJNvQBUBBFB1TQf2RmgwLmPZCvCBkQ0YWgCxS0TNHJhYD5UIT5NIHAAV3Qkwg3CDhQZSUwA8NQDSTnAlABOEaCUQVKSQ2heCE0dAkipBJSwNwBxIFDTDphygAADAJn3SYLG6AP3AAAAAElFTkSuQmCC)
+}
+
+.package-block {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFFJREFUeNpiYEAC/xkYEoD4Pw6cwIANENCEXTORmlA1k6gJrpnxP1gv6YCJgUzAAmMwghFhAHMh5TaS6leybQRpTCRDXyL5CYCiJEdOIgcIMAD1D5GKaYgymAAAAABJRU5ErkJggg==)
+}
+
+.package-edit {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANBJREFUeNpiZEAC3yfLKQCpfCB2AGIDqPAFID4AxBM5cx89gKllRNKUAKT6gViAATv4AMSFQM0L4BqhmuYz4AYLoDRIXSJIMyPUeefx2LQAqDARagHI8AAgNmSC+omgJiQAUpvPBA0IgpqgtiVAuQ5MSKFHrCYQMGDCoukBAU1gwASNJ2SgAFWMUxNIDws0cmHOBdlkD1IM1ATyuwIO/x8A2TgRGrkPoJF7EGYznoQwETkB+ENtVmDAD8AJABw4UJs24olPmE2JKEmOnEQOEGAApSJSexmqu+UAAAAASUVORK5CYII=)
+}
+
+.package-refresh {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAABh0lEQVQ4jcWRMWhTURSGv3PvC9GETtkcHLRrwa1QcLMpIn0kbxIUdOoiCJ0KxSHg5NRBEAQHRR30EZ4kQ+la54gRXIqTuw4dqqX35u+ShEcSXfsvl3vPOf/5fi5ctGzRW5Zlm5K2JK2YWRX4ZmZvvfcfYowvJH0vimIPIClPpmm65JzLJW0AmE391yWthxD2gIakzqTgypu99+/MbAM4lrQLrEhaNrPHQAAas7hTgna7fQdIgd8xxtVer/cDoNPpuOFweHOWds4AeDDGfjoZBhgMBpeSJDkCnk2xnTucMzCzG5IIIeyXN/T7/RPgCUCz2azXarV7wJU5A0nbwOVqtfpzESpAvV6/CrwEjoD3sxFOzWwzxngryzJGo9FJpVLZzfP8T6nn9vj8uohgDdgqRfqY5/nfyT1N0+VJFEmv5wxmdCbpc6vVuiap5pxLgR1gycw+FUWx/z+DX0DDzJ6PSaYFM+t67x+Wm8u/cAy8SpLkUQjhLnAfuA6cAV+cc2+63e7BP4gvUOfBposS2TuHNQAAAABJRU5ErkJggg==);
+}
+
+.package-reprocess {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACj0lEQVR4Xm1T30vaURS/6vwBReTyYc9iwZ62J/FVGOxPGI0efegfEF/cxl6m9GCIhhUVTJlz0cYefKhIbZGppeYPtEBQ0PBXMcRZqd+v3Z1z4cYGXvjI8dzPOfd8zjlfCaWUjDsrKyvzOp3uHdqVSsW+uLjoHceT/uswm83PuD01NfXWaDQ+R0xOTs7/yxmbYH19/aPJZLra29tLHhwcxAwGw+vhcEgQer3+1e7ubvTw8DADlVxtbm5+IvygBKvVqs5ms2Kz2aTtdpve3NxQtAuFAkOr1WK+6+trdp/L5USMwVhMwOD1es+r1SoLjMViFF6kiUSCxuNxZp+cnNB6vU5rtRr1+/05Hvcood/v/xkMBgQIRKVSkdnZWTIzM8Og1WqJQqEgjUaD3N7eInqEH4fDMb+1tbUfiUSGxWKRvZjP5+nR0dFgY2PjO+j9AXYf77Cis7MzCj0SfD5fCGIXiMvlSmBQOp2mSMpkMhT6QT0ez1cuD5J8w16cnp7SVCqFPUA+clJSURQlvNtSqZRhNBqRh4eHAZc3hNPr9dBHYKR4z/iCIBCytLT0BjLtB4NBAcsrl8vspVAo1F9bW/sCEgLhcHgIEiksFKsORi2CvJDNZlt4nILb7T6ORqOYAEmolWlGXzKZpKVSCSfA/KurqzEe94SXCaWr0AFjJBqNhnUdp6JWq8nExASRy+Wk2+0yiRKJRPHfJlosFg2M7aVMJkMijpRdTk9PE6VSSe7u7kin00Ht7P/c3NwLjOGbyLC8vPweVlUMBAIpwC+QI+BULi4ucImE7e3t452dnTT4RafT+YHH4Q8HVvKU26DzJwZfXl5S+E6C4ziPm8hht9t/cxtG9BkSnCPu7++94zh4/gJN+RzZHrXVJgAAAABJRU5ErkJggg==);
+}
+
+li{list-style:none;}
+	
+			
+/*copiado do site*/
+.list-header {
+  background-color:#EEEEEE;
+  background-position:initial initial;
+  background-repeat:initial initial;
+  font-size:12px;
+  margin-bottom:20px;
+  overflow:hidden;
+  padding:10px 0;
+  text-align:center;
+}
+
+.list-content { 
+  font-size:12px; 
+}
+
+
+/* Package URL*/
+td.grid-50 {
+text-align: center;
+padding: 10px;
+border: 1px solid #fff;}
+tr:hover{background:#ccc;}
+
+
+.analyzing,
+.pending,
+.success {
+	position: relative;
+}
+
+.analyzing:before,
+.pending:before,
+.success:before {
+	content: ""!important;
+	display: block;
+	position: absolute;
+	top: 3px;
+	left: 10px;
+	height: 14px!important;
+	width: 14px!important;
+	background: #000;
+	visibility: visible!important;
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	box-shadow: 0 0 0 1px #FFF inset, 
+				0 0 0 1px rgba(0,0,0,0.3), 
+				0 -1px 7px 0 rgba(0,0,0,0.6) inset,
+				0 1px 7px 0 rgba(255,255,255,0.8) inset
+}
+
+
+.analyzing:before {
+	background: #FFCC00;
+}
+
+.pending:before {
+	background: #CC0000;
+}
+
+.success:before {
+	background: #009900;
+}
+
+.analyzing span,
+.pending span,
+.success span {
+	background: #FFFFFF;
+	padding: 5px 10px;
+	border-radius: 3px;
+	box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+	color: #666;
+	position: absolute;
+	left: 24px;
+	top: -4px;
+	opacity: 0;
+	transition: all 0.15s ease-in-out;
+	-moz-transition: all 0.15s ease-in-out;
+	-webkit-transition: all 0.15s ease-in-out;
+}
+
+tr:hover .analyzing span,
+tr:hover .pending span,
+tr:hover .success span {
+	opacity: 1;
+	left: 28px;
+}
+
+.time {
+	background: #FFF;
+	padding: 0 6px;
+	border-radius: 10px;
+}
+
+
+/* Phishing add */
+#type_url, 
+#source, 
+#classification, 
+#class_tags {
+	width: 180px;
+}
+
+#graph-container {
+	position: relative;
+}
+
+.graph-preloader {
+	background: rgba(255, 255, 255, 0.7);
+	display: none;
+	height: 80%;
+	width: 100%;
+	position: absolute;
+	z-index: 1000;
+	font-size: 1.2em;
+}
+
+.graph-preloader p {
+	margin: 120px auto;
+	font-weight: bold;
+	background: #FFF;
+	padding: 10px;
+	width: 140px;
+	border-radius: 2px;
+	color: #666;
+	box-shadow: 0 3px 7px rgba(0,0,0,0.4);
+}
+
+.details_apks {
+	background: rgba(255, 255, 255, 0.7);
+	display: none;
+	width: 100%;
+	z-index: 1000;
+	font-size: 1.2em;
+}
+.result_base {
+	background: rgba(255, 255, 255, 0.7);
+	display: none;
+	width: 100%;
+	z-index: 1000;
+	font-size: 1.2em;
+}
+.details-preloader {
+	background: rgba(255, 255, 255, 0.7);
+	display: none;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	z-index: 1000;
+	font-size: 1.2em;
+}
+
+.details-preloader p {
+	margin: 120px auto;
+	font-weight: bold;
+	background: #FFF;
+	padding: 10px;
+	width: 140px;
+	border-radius: 2px;
+	color: #666;
+	box-shadow: 0 3px 7px rgba(0,0,0,0.4);
+}
+
+a.internal-link  {
+	text-decoration: none;
+	-webkit-box-shadow: 0 -4px 0 rgba(0,0,0,0.3) inset;
+	-moz-box-shadow: 0 -4px 0 rgba(0,0,0,0.3) inset;
+	box-shadow: 0 -4px 0 rgba(0,0,0,0.3) inset;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1em;
+	vertical-align: middle;
+	font-weight: 400;
+	display: inline-block;
+	cursor: pointer;
+	margin: 1px 5px 2px 5px;
+	border-radius: 3px;
+	min-height: 30px;
+	padding: 4px 20px 8px 20px;
+	border: none;
+	color: #FFF;
+	background-color: #3EA300;
+
+}
+
+a.internal-link:hover {
+	 text-decoration: none;
+	 margin: 3px 5px 2px 5px;
+     padding: 4px 20px 6px 20px;
+     -webkit-box-shadow: 0 -2px 0 rgba(0,0,0,0.3) inset;
+     -moz-box-shadow: 0 -2px 0 rgba(0,0,0,0.3) inset;
+     box-shadow: 0 -2px 0 rgba(0,0,0,0.3) inset;
+  }
+
+  
+ a.internal-link:active {
+	 text-decoration: none;
+     margin: 5px 5px 0px 5px;
+     padding: 4px 20px 4px 20px;
+     -webkit-box-shadow: 0 0px 0 rgba(0,0,0,0.3) inset;
+     -moz-box-shadow: 0 0px 0 rgba(0,0,0,0.3) inset;
+     box-shadow: 0 0px 0 rgba(0,0,0,0.3) inset;
+  }
+  
+  #cboxClose {
+min-height: initial;
+box-shadow: none;
+-webkit-box-shadow: none;
+}
+
+#holder {
+  border: 10px dashed #ccc;
+  width: 300px;
+  height: 300px;
+}
+
+#holder.hover {
+  border: 10px dashed #333;
+}

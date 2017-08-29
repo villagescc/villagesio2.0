@@ -1,0 +1,172 @@
+<style>
+    #messages span {
+        margin: 0 25px 0 15px;
+    }
+    #messages i {
+        margin-right: 25px;
+    }
+</style>
+
+{% extends 'base.html' %}
+{% load i18n %}
+    {% block page_header %}
+        <div class="page-header">
+            <i class="fa fa-lock"></i> Please authenticate to proceed
+        </div>
+    {% endblock %}
+    {% block content %}
+        <form class="col-lg-4" action="" method="post">
+            {% csrf_token %}
+
+            <a class="btn btn-primary" href="{% url 'social:begin' 'facebook' %}?next=/settings/"><i class="fa fa-facebook-official">&nbsp; Login with facebook</i></a>
+
+
+                {% for field in form %}
+                    {% if field.errors %}
+                        <div class="form-group">
+                            <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                            {{ field }}
+                            <div class="alert alert-warning message">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="form-group">
+                            <label for="{{ field.label }}">{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% if not form.is_valid %}
+                    <script>
+                        setTimeout(function () {
+                            $('.message').slideUp("fast");
+                        }, 4000);
+                    </script>
+                {% endif %}
+                <button type="submit" class="btn btn-primary pull-right">
+                    <i class="fa fa-sign-in"></i>&nbsp;Sign in
+                </button>
+                <a href="{% url 'accounts:sign_in_user:sign_in_register' %}">
+                    Create a new account
+                </a>
+                <div class="clearfix"></div>
+                <hr>
+
+                <a href="{% url 'accounts:forgot_password' %}">
+                    {% trans 'Forgot username or password?' %}
+                </a>
+        </form>
+
+        <script>
+            $("#first").hide();
+        </script>
+    {% endblock %}
+
+    <div class="page-header col-sm-12" style="padding-top: 50px;">
+        <h2 class="col-sm-7"><i class="fa fa-sign-in"></i>Sign In | Register</h2>
+
+        {% if alert_failed %}
+            <div class="alert alert-danger col-sm-5 pull-right">
+                <a class="close" data-dismiss="alert" aria-label="close">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+                <p class="alert-error"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <strong>{{ alert_failed.warning }}</strong> {{ alert_failed.message }}
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+    <section class="col-sm-12">
+        <div class="access">
+            <ul class="nav nav-tabs nav-justified">
+                <li role="presentation">
+                    <a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}" id="login">
+                        <h4><i class="fa fa-sign-in margin-right"></i> Login</h4></a>
+                </li>
+                <li role="presentation">
+                    <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" id="register">
+                        <h4><i class="fa fa-user margin-right"></i> Register</h4>
+                    </a>
+                </li>
+            </ul>
+
+            {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == 'success'%}
+                            <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-{{ message.tags }} margin-top pointer"{% endif %}>
+                            <i class="fa fa-check"></i>{{ message }}
+                            </div>
+                        {% else %}
+                            <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-danger pointer"{% endif %}>
+                            <i class="fa fa-meh-o"></i>{{ message }}
+                            </div>
+                        {% endif %}
+                        <script> setTimeout(function(){ $(".alert-personalized").fadeOut('slow'); }, 3000); </script>
+                    {% endfor %}
+            {% endif %}
+
+            <div id="div-sign_in">
+                <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-input">
+                            <label class="col-sm-5 label-input">{{ field.label_tag }}</label>
+                            <div class="">{{ field }}</div>
+                        </div>
+                    {% endfor %}
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger" style="padding: 5px;">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="col-sm-offset-4" id="div-button">
+                        <button type="submit" class="btn btn-success button-access">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <div class="form-control" style="text-align: center">
+                <p>
+                    <a href="{% url 'accounts:forgot_password' %}"
+                    >{% trans 'Forgot username or password?' %}</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        $(document).ready(function(){
+            getUrl();
+            debugger;
+        });
+
+        function getUrl() {
+            var urlName = $(location).attr('pathname').split('/');
+            debugger;
+            if (urlName[3] == "log_in") {
+                $('#login').addClass('nav-home-active');
+            } else {
+                if (urlName[3] == "register") {
+                    $('#register').addClass('nav-home-active');
+                }
+            }
+        }
+
+        setInterval(function () {
+            $('.alert').fadeOut("medium");
+        }, 3000);
+
+    </script>
+

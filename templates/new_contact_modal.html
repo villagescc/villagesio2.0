@@ -1,0 +1,98 @@
+<style>
+    .modal-body {
+        max-height: 100vh;
+        overflow-y: scroll;
+    }
+</style>
+
+
+<form class="form-horizontal" id="contact-form" method="POST">
+    {% csrf_token %}
+    <div id="new-contact-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <input type="text" id="profile-username" hidden>
+        <div class="modal-dialog">
+            <div class="modal-content" id="payment-modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
+                    <h4 class="modal-title" id="contact-modal-title">Contact this person</h4>
+                </div>
+                <div id="modaltext" class="modal-body">
+                    <div class="container">
+                        {% for field in contact_form %}
+                            {% if field.errors %}
+                                <div class="form-group">
+                                    <label id="label_{{ field.auto_id }}" for="{{ field.auto_id }}" class="error">{{ field.label }}</label>
+                                    {{ field }}
+                                    <div class="alert alert-warning message">
+                                        {% for error in field.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="form-group">
+                                    <label for="label_{{ field.auto_id }}">{{ field.label }}</label>
+                                    {{ field }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                        <input id="selected-contact-recipient-value" hidden>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="send-contact" class=" btn btn-success gradient save-button">
+                            <i class="fa fa-check"></i>Send
+                        </button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                    <div id="msg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $("#send-contact").click(function (e) {
+       $("#send-contact").attr("disabled", true);
+       var profile_username = $("#profile-username").val();
+       $("#id_contact_recipient_name").val(profile_username);
+       var url = '/contact/'+profile_username+'/';
+       $.ajax({
+           url: url,
+           type: 'POST',
+           data: $("#contact-form").serialize(),
+           cache: false,
+           beforeSend: function (xhr) {
+               var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+               xhr.setRequestHeader("X-CSRFToken", csrftoken);
+           },
+           success: function (data) {
+               $('#new-contact-modal').modal("hide");
+               showSuccessMessage('Contact sent');
+               $('#send-contact').attr("disabled", false);
+               location.reload();
+           },
+           error: function (resp) {
+               if (resp.status === 500) {
+                   showInternalServerError();
+               }
+           }
+       });
+       e.preventDefault();
+    });
+    $("#id_contact_recipient_name").val($("#contact-modal-title").val());
+    $("#id_contact_recipient_name").hide();
+    $("label[for='label_id_contact_recipient_name']").hide();
+
+    $("#id_message").css('width', '560px');
+
+    var send_contact = $("#send-contact");
+    send_contact.click(function (e) {
+        $(this).attr("disabled", true)
+    });
+
+    $("#blank-contact-form").submit(function (e) {
+        $("#id_contact_recipient_name").val($("#selected-contact-recipient-value").val());
+    })
+</script>

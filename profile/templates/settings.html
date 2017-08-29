@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Account Settings' %}{% endblock %}
+
+{% block nav_settings_class %}selected{% endblock %}
+
+{% block content %}
+
+<style>
+html {
+    padding: 15px;
+}
+</style>
+
+<h2>{% trans 'Account Settings' %}</h2>
+
+<form action="" method="post">
+	{% csrf_token %}
+
+    {% if not social_auth %}
+        <a class="btn btn-primary" href="{% url 'social:begin' 'facebook' %}?next=/settings/?settings=true"><i class="fa fa-facebook-official">&nbsp; Bind account to facebook</i></a>
+    {% endif %}
+
+    {% for field in settings_form %}
+        {% if field.errors %}
+            <div class="form-group">
+                <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                {{ field }}
+                <div class="alert alert-warning message">
+                    {% for error in field.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="form-group">
+                <label for="{{ field.label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endif %}
+    {% endfor %}
+	<table class="form">
+{#        {% if settings_form.errors %}#}
+{#            <div class="alert alert-warning message">{{ form.errors }}</div>#}
+{#        {% endif %}#}
+{#		{{ settings_form.as_p }}#}
+		<tr>
+			<th></th>
+			<td>
+				<input class="btn btn-submit btn-success" type="submit" name="change_settings"
+					value="{% trans 'Save Settings' %}">
+			</td>
+		</tr>
+	</table>
+    {% if not form.is_valid %}
+        <script>
+            setTimeout(function () {
+                $('.message').slideUp("fast");
+            }, 4000);
+        </script>
+    {% endif %}
+</form>
+
+<hr>
+
+<h3>{% trans 'Change Password' %}</h3>
+<form action="" method="post">
+	{% csrf_token %}
+	<table class="form">
+		{% for field in password_form %}
+        {% if field.errors %}
+            <div class="form-group">
+                <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                {{ field }}
+                <div class="alert alert-warning message">
+                    {% for error in field.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="form-group">
+                <label for="{{ field.label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endif %}
+    {% endfor %}
+		<tr>
+			<th></th>
+			<td>
+				<input class="btn btn-danger" type="submit" name="change_password"
+					value="{% trans 'Change Password' %}">
+			</td>
+		</tr>
+	</table>
+</form>
+{% endblock %}

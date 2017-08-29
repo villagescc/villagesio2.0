@@ -1,0 +1,345 @@
+{% load staticfiles profile relate i18n %}
+
+<style>
+    .thumbnail .listing-modal{
+        width : 300px;
+        height: 260px;
+        overflow: auto;
+    }
+
+    .thumbnail .listing {
+        width: 100%;
+        height: 150px;
+        display: block;
+    }
+
+    #id_trusted {
+        width: 25px;
+        padding: 0;
+        margin:0;
+        vertical-align: bottom;
+        position: relative;
+        top: -1px;
+        *overflow: hidden;
+    }
+
+    #profile-listing-img {
+        width: 60px;
+        height: 60px;
+        display: block;
+    }
+</style>
+
+{#<script>#}
+{#    $("#section-padding-base").css('padding-top', '5px');#}
+{#</script>#}
+
+<form action="" method="get">
+    {% if user_agent_type == 'mobile' %}
+        <div class="col-md-2">
+            <div>
+                {% if feed_items %}
+                    <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
+                {% elif listing_items %}
+                    <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
+                {% endif %}
+            </div>
+            {% if listing_items %}
+            <nav class="sidebar">
+                <ul>
+                    <li class="menu-group" style="padding-left: 0">
+                    <div id="all_categories"><i class="fa fa-globe"></i>ALL CATEGORIES</div>
+                    <ul class="collapse">
+                        {% for each in categories %}
+                        {% if each.categories_text == 'PRODUCTS' %}
+                            <li class="menu-group">
+                            <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
+                                <ul>
+                                    <li><a href="{% url 'frontend:home' 'PRODUCTS' %}">ALL PRODUCTS</a></li>
+                                    <hr>
+                                    {% for each_sub_category in item_sub_categories %}
+                                        <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% elif each.categories_text == 'SERVICES' %}
+                            <li class="menu-group">
+                                <div><i class="fa fa-truck"></i> {{ each.categories_text }}</div>
+                                <ul>
+                                    <li><a href="{% url 'frontend:home' 'SERVICES' %}">ALL SERVICES</a></li>
+                                    <hr>
+                                    {% for each_sub_category in services_sub_categories %}
+                                        <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% elif each.categories_text == 'RIDESHARE' %}
+                            <li class="menu-group">
+                                <div><i class="fa fa-bug"></i> {{ each.categories_text }}</div>
+                                <ul>
+                                    <li><a href="{% url 'frontend:home' 'RIDESHARE' %}">ALL RIDESHARE</a></li>
+                                    <hr>
+                                    {% for each_sub_category in rideshare_sub_categories %}
+                                        <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% elif each.categories_text == 'HOUSING' %}
+                            <li class="menu-group">
+                                <div><i class="fa fa-home"></i> {{ each.categories_text }}</div>
+                                <ul>
+                                <li><a href="{% url 'frontend:home' 'HOUSING' %}">ALL HOUSING</a></li>
+                                <hr>
+                                    {% for each_sub_category in housing_sub_categories %}
+                                        <li><a href="#">{{ each_sub_category.id }}</a>{{ each_sub_category.sub_categories_text }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                    </li>
+
+                </ul>
+            </nav>
+            {% endif %}
+            <br>
+        </div>
+    {% else %}
+
+        <div class="col-md-2">
+            <div>
+                {% if feed_items %}
+                    <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
+                {% elif listing_items %}
+                    <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
+                {% endif %}
+            </div>
+            <hr>
+            <nav class="sidebar">
+                <ul>
+                    <li>
+                        <div id="all_categories"><i class="fa fa-globe"></i><a href="{% url 'frontend:home' %}">ALL CATEGORIES</a></div>
+                        <ul class="collapse">
+                            <li></li>
+                        </ul>
+                    </li>
+                    {% for each in categories %}
+                        {% if each.categories_text == 'PRODUCTS' %}
+                            <li class="menu-group">
+                            <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
+                                <ul class="collapse">
+                                    <li><a href="{% url 'frontend:home' 'PRODUCTS' %}">ALL PRODUCTS</a></li>
+                                    <hr>
+                                    {% for each_sub_category in item_sub_categories %}
+                                        <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% elif each.categories_text == 'SERVICES' %}
+                            <li class="menu-group">
+                                <div><i class="fa fa-truck"></i> {{ each.categories_text }}</div>
+                                <ul class="collapse">
+                                    <li><a href="{% url 'frontend:home' 'SERVICES' %}">ALL SERVICES</a></li>
+                                    <hr>
+                                    {% for each_sub_category in services_sub_categories %}
+                                        <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% elif each.categories_text == 'RIDESHARE' %}
+                            <li class="menu-group">
+                                <div><i class="fa fa-bug"></i> {{ each.categories_text }}</div>
+                                <ul class="collapse">
+                                    <li><a href="{% url 'frontend:home' 'RIDESHARE' %}">ALL RIDESHARE</a></li>
+                                    <hr>
+                                    {% for each_sub_category in rideshare_sub_categories %}
+                                        <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% elif each.categories_text == 'HOUSING' %}
+                            <li class="menu-group">
+                                <div><i class="fa fa-home"></i> {{ each.categories_text }}</div>
+                                <ul class="collapse">
+                                <li><a href="{% url 'frontend:home' 'HOUSING' %}">ALL HOUSING</a></li>
+                                <hr>
+                                    {% for each_sub_category in housing_sub_categories %}
+                                        <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+            {% endif %}
+            <br>
+        </div>
+
+    <section class="container-fluid" id="home-sub-menu">
+        <div class="row">
+            <div class="col-md-6">
+                <ul style="padding-left: 0;">
+                    <div class="form-group">
+                        <div class="btn-group">
+                            {% if is_listing %}
+                                <button type="button" class="btn btn-default btn-md btn-change" style="float: left; padding-bottom: 10px;">Listing Types</button>
+                                <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px; padding-bottom: 10px;">
+                                    <span class="caret"></span>
+                                </button>
+
+                                <!-- Given for loop to construct all -->
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'frontend:home'%}">ALL LISTING TYPES</a></li>
+                                    <li><a href="{% url 'frontend:home' 'OFFER' %}">OFFER</a></li>
+                                    <li><a href="{% url 'frontend:home' 'REQUEST' %}">REQUEST</a></li>
+                                    <li><a href="{% url 'frontend:home' 'TEACH' %}">TEACH</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{% url 'frontend:home' 'LEARN' %}">LEARN</a></li>
+                                    {#                                <li><a href="{% url 'frontend:listing_type' 'GIFT' %}">Gift</a></li>#}
+                                </ul>
+                                </div>
+                                </div>
+                            {% endif %}
+                    {% if not is_listing %}
+                        <div class="form-group">
+                            {{ form.q }}
+                        </div>
+                    {% else %}
+                        <div class="form-group">
+                            {{ form_listing_settings.q }}
+                        </div>
+                    {% endif %}
+
+                </ul>
+                {% if item_type_name %}
+                    <p style="font-size: 15px; font-weight: 600; padding-bottom: 0;
+                        font-family: 'Open Sans'; color: #000;">{{ item_type_name }}</p>
+                {% endif %}
+                <hr>
+</form>
+</div>
+
+{% if feed_items %}
+    <div class="col-md-10">
+        {% for each in feed_items %}
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ each }}</div>
+                <div class="panel-body">
+                    <a href="{{ each.get_absolute_url }}">
+                        <img src="{% profile_image_url each '150x150' %}" style="height: auto; width: 100px;">
+                    </a>
+                </div>
+                {% if each.trusted %}
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span><i class="fa fa-location-arrow" style="font-size: medium">&nbspLocation:</i></span>
+                            </div>
+                            <div class="col-md-10">
+                                {{ each.location }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span><i class="fa fa-balance-scale" style="font-size: medium">&nbspBalance:</i></span>
+                            </div>
+                            <div class="col-md-10 pull-left">
+                                {{ each.overall_balance }} hours
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span><i class="fa fa-calendar" style="font-size: medium">&nbspLast visit:</i></span>
+                            </div>
+                            <div class="col-md-10">
+                                {{ each.user.last_login }}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span style="color: grey;"><i class="fa fa-location-arrow" style="font-size: medium">&nbspLocation:</i></span>
+                            </div>
+                            <div class="col-md-10" style="color: grey;">
+                                {{ each.location }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span style="color: grey;"><i class="fa fa-balance-scale" style="font-size: medium">&nbspBalance:</i></span>
+                            </div>
+                            <div class="col-md-10 pull-left" style="color: grey;">
+                                {{ each.overall_balance }} hours
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span style="color: grey;"><i class="fa fa-calendar" style="font-size: medium">&nbspLast visit:</i></span>
+                            </div>
+                            <div class="col-md-10" style="color: grey;">
+                                {{ each.user.last_login }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+        {% empty %}
+            <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
+        {% endfor %}
+        {% if remaining_count %}
+            <p><a href="?{{ next_page_param_str }}">
+                {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
+            </a></p>
+        {% endif %}
+    </div>
+
+{% elif listing_items %}
+    <div class="col-md-10" style="padding-left: 0;">
+    {% for each in listing_items %}
+        <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-3">
+            <div class="thumbnail">
+                <a id="not-logged-listing-image" href="{% url 'accounts:sign_in_user:sign_in_register' %}">
+                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}"
+                         data-listing-id="{{ each.id }}" alt="...">
+                </a>
+                <p class="thumbnail-info">{{ each.title }}</p>
+                <p class="thumbnail-tag" style="margin-left: -80px;">{{ each.listing_type }} | {{ each.price }} VH</p>
+                <div class="caption" style="height: 115px;">
+                    <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" style="float: left;">
+                        <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}"
+                             data-toggle="tooltip" title="{{ each.user.profile.name }}"
+                             style="margin-right: 10px;" class="img-circle inline"/>
+                    </a>
+                    {% for each_tag in each.tag.all %}
+                        <span class="label label-info">{{ each_tag.name }}</span>
+                    {% endfor %}
+                    {#                            <div class="col-sm-12"></div>#}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% if remaining_count %}
+        <p><a href="?{{ next_page_param_str }}">
+            {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
+        </a></p>
+    {% endif %}
+{% else %}
+    <div class="col-md-9">
+        <strong>There is nothing to show</strong>
+    </div>
+{% endif %}
+</div>
+</div>
+</section>
+
+<script>
+    $('.menu-group div').click(function () {
+        var menu = $(this).parent().find('ul');
+        menu.slideToggle();
+    });
+</script>

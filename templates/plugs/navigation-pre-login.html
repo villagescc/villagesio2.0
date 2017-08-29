@@ -1,0 +1,133 @@
+{% load staticfiles %}
+{% load i18n %}
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <img class="navbar-brand" id="navbar-logo" src="{% static 'images/logo.png' %}" alt="Brand">
+            <a href="{% url 'frontend:home' %}" class="navbar-brand navbar-title navtop">VILLAGES.CC</a>
+            <div class="beta"></div>
+        </div>
+
+        <!-- Navbar form -->
+        <form class="navbar-form navbar-left">
+
+{#            <div class="form-group navtop">#}
+{#                <input type="text" class="form-control form-nav-what" placeholder="What do you need?">#}
+{#            </div>#}
+
+{#            <div class="input-group navtop">#}
+{#                <input type="text" class="form-control form-nav-location" placeholder="Location">#}
+{#                <span class="input-group-btn">#}
+{#          <button class="btn btn-default" type="button">#}
+{#            <i class="fa fa-search" aria-hidden="true"></i>#}
+{#          </button>#}
+{#        </span>#}
+{#            </div><!-- /input-group -->#}
+        </form>
+        <div id="navbar" class="navbar-collapse collapse navtop navbar-right">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About Us<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'how_it_works' %}">How it works</a></li>
+                        <li><a href="{% url 'motivation' %}">Motivation</a></li>
+                        <li><a href="{% url 'privacy' %}">Privacy</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{% url 'contact_us' %}">Feedback</a></li>
+                    </ul>
+                </li>
+            </ul>
+                <ul class="nav navbar-nav navbar-right navbar-auth">
+                    <li><a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}">Log in</a></li>
+                    <li><a href="{% url 'accounts:sign_in_user:sign_in_register' %}">Sign up</a></li>
+                </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<style>
+
+@import url(https://fonts.googleapis.com/css?family=Questrial);
+@import url(https://fonts.googleapis.com/css?family=Dancing+Script:700);
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Questrial','Helvetica Neue',Arial,sans-serif;
+}
+
+#first {
+    position: relative;
+    text-align: center;
+    background-repeat: no-repeat;
+    color: #fff;
+    height: 100vh;
+    width: 100%;
+    padding-top: 250px;
+    background-color: #c9c9c9;
+    background-image: url('../../static/img/peace.jpg');
+    background-position: center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+#first .header-content {
+    position: relative;
+    width: 100%;
+    padding: 10px 15px;
+    text-align: center;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.5)
+}
+
+#first .header-content .inner h1 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#first .header-content .inner p {
+    margin-bottom: 50px;
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.7);
+}
+
+.cursive {
+    font-family: 'Dancing Script', cursive;
+    text-transform: none;
+}
+</style>
+{% if request.path == '/' %}
+    <form id="form-header-image" action="" method="get">
+    <header id="first">
+        <div class="header-content">
+            <div class="inner">
+                <h1 class="cursive">Villages.cc Marketplace</h1>
+                <h4>Everyone has value to share!</h4>
+                <div class="form-group">
+                    {{ form_listing_settings.q }}
+                </div>
+            </div>
+        </div>
+    </header>
+    </form>
+{% endif %}
+{% include 'messages.html' %}
+<script>
+    var query_input = $("#id_q");
+    query_input.css('width', '50%');
+    query_input.css('border-radius', '10px');
+    query_input.css('height', '40px');
+    query_input.css('padding', '5px');
+    query_input.css('display', 'inline-block');
+    query_input.attr('placeholder', 'What are you seeking?');
+    query_input.attr('text-align', 'center');
+</script>

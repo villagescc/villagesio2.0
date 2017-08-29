@@ -1,0 +1,74 @@
+{% extends "profile_base.html" %}
+{% load i18n %}
+
+{% block title %}
+	{% blocktrans %}Endorse {{ recipient }}{% endblocktrans %}
+{% endblock %}
+
+{% block extrahead %}
+	{{ block.super }}
+	{% include "spinner_js.html" %}
+{% endblock %}
+
+{% block nav_endorse_class %}selected{% endblock %}
+
+{% block content %}
+<h2>{% blocktrans %}Endorse {{ recipient }}{% endblocktrans %}</h2>
+
+<div class="feature">
+	<p>{% blocktrans %}If you trust {{ recipient }} to provide value to the
+		community, please fill out the form below.{% endblocktrans %}</p>
+
+	<p>{% blocktrans %}Each heart represents an hour of value you are willing
+		to provide for {{ recipient }}, trusting that by acknowledging your
+		gift, they will return the favour eventually.{% endblocktrans %}</p>
+
+	<p><a href="{% url 'how_it_works' %}">{% trans 'Read more' %}</a></p>
+
+	<p>{% trans 'This endorsement will be <strong>public</strong>.' %}</p>
+</div>
+
+{% if form.instance.id %}
+	<p>{% blocktrans count hearts=form.instance.weight %}
+		You have already endorsed {{ recipient }} with
+		<strong>{{ hearts }}</strong> heart.
+	{% plural %}
+		You have already endorsed {{ recipient }} with
+		<strong>{{ hearts }}</strong> hearts.
+	{% endblocktrans %}</p>
+{% endif %}
+
+{% if request.profile.endorsement_limited %}
+	<p>{% blocktrans count hearts=request.profile.endorsements_remaining %}
+		You have <strong>{{ hearts }}</strong> heart remaining to give out.
+	{% plural %}
+		You have <strong>{{ hearts }}</strong> hearts remaining to give out.
+	{% endblocktrans %}</p>
+{% endif %}
+
+{% if form.instance.id or request.profile.can_endorse %}
+	<form action="" method="post">
+		{% csrf_token %}
+		<table class="form">
+			{{ form }}
+			<tr>
+				<th></th>
+				<td>
+					<input type="submit"
+						value="{% trans 'Save Endorsement' %}">
+				{% if form.instance.id %}
+					<input type="submit" name="delete"
+						value="{% trans 'Delete' %}"
+						onclick="return confirm('{% trans "Delete endorsement?" %}')">
+				{% endif %}
+				</td>
+			</tr>
+		</table>
+	</form>
+{% else %}
+	<p>{% blocktrans %}You need more hearts to endorse {{ recipient }}.
+		You get five hearts for every endorsement you receive from
+		another user.{% endblocktrans %}</p>
+{% endif %}
+
+{% endblock %}

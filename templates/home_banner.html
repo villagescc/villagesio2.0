@@ -1,0 +1,338 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Villages.cc</title>
+    <meta name="description" content="Local Exchange Trading with A Network You Trust" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Codeply">
+{#    <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}"/>#}
+{#    <link rel="stylesheet" href="{% static 'animate.css/animate.min.css' %}"/>#}
+{#    <link rel="stylesheet" href="{% static 'ionicons-2.0.1/css/ionicons.min.css' %}" />#}
+{#    <link rel="stylesheet" href="{% static 'stylesheets/styles.css' %}" />#}
+      <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  </head>
+
+<body>
+    <nav id="topNav" class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="#first"><img src="{% static 'images/logo.png' %}"> <strong>Villages.cc</strong></a>
+            </div>
+            <div class="navbar-collapse collapse" id="bs-navbar">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a class="page-scroll" href="#one">What</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#two">Why</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#four">Who</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#last">Contact</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a  title="Register or Login" href="{% url 'accounts:sign_in_user:sign_in_register' %}">Get Started</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <header id="first">
+        <div class="header-content">
+            <div class="inner">
+                <h1 class="cursive">Villages.cc Marketplace</h1>
+                <h4>Everyone has value to share!</h4>
+               <input style="width:400px; border-radius:10px;height:40px;padding:5px" placeholder="What are you seeking?"><button class="btn btn-primary btn-l">Submit</button>
+
+            </div>
+        </div>
+    <div data-wow-delay=".5s" class="wow pulse fadeIn " style="visibility: visible; animation-iteration-count: 13; animation-name: pulse; position:absolute;bottom:0px;width:100%;text-align:center"><a class="page-scroll" href="#one"><i class="icon-lg ion-chevron-down"></i></a></div>
+    </header>
+    <section class="bg-primary" id="one">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 text-center">
+                    <h2 class="margin-top-0 text-primary">Local Trade Exchange Network</h2>
+                    <br>
+                    <p class="text-faded">
+                       Villages.cc is a decentralized mutual credit system and marketplace. By creating a trusted network, users can issue and send credit through pathways to their extended 'web of trust' without the need for traditional '3rd party IOU's' (such as national currencies). This is an effective and useful complementary currency system that can be used anywhere in the world.
+                    </p>
+                    <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" class="btn btn-default btn-xl">Get Started</a>
+                </div>
+
+            </div>
+            <hr>
+            <div data-wow-delay=".5s" class="wow bounceInDown center" style="visibility: visible; animation-delay: 0.5s; animation-name: bounceInDown; margin-top:10px;width:100%;text-align:center"><a class="page-scroll" href="#graphics"><i class="icon-lg ion-chevron-down"></i></a></div>
+        </div>
+     </section><section id="graphics">
+                 <div class="media wow col-lg-4 col-md-4 col-sm-4 col-xs-6 bounceInLeft" style="visibility: visible; animation-name: bounceInLeft;"><img style="width:100%" src="{% static 'img/trade-network-1-purple.png' %}"></div>
+
+        <div class="media  wow  col-lg-4 col-md-4 col-sm-4 col-xs-6 bounceInDown center" style="visibility: visible; animation-delay: 0.5s; animation-name: bounceInDown;"> <h3>Everyone has equal opportunity to share, receive, and thrive.</h3> </div>
+
+        <div class="media wow second-clear col-lg-4 col-md-4 col-sm-4 col-xs-6 bounceInRight" style="visibility: visible; animation-name: bounceInRight;"><img style="width:100%"  src="{% static 'img/trust-pathways-purple-1.png' %}"></div>
+
+      <div data-wow-delay="1s" class=" col-lg-12 col-md-12 col-sm-12 col-xs-6 span3 wow bounceInUp center" style="visibility: visible; animation-delay: 0.5s; animation-name: bounceInUp;"><h1 style="width:100%;text-align:center;">Extend your web of trust by endorsing your friends!</h1></div>
+
+        <div data-wow-delay="2s" class=" wow lightSpeedIn center" style="clear:both;visibility: visible; animation-name: lightSpeedIn; margin-top:10px;width:100%;text-align:center"><a class="page-scroll"  href="#two"><i class="icon-lg ion-chevron-down"></i></a></div>
+
+    </section>
+    <section id="two">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="margin-top-0 text-primary">Benefits</h2>
+                    <hr class="primary">
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+                    <div class="feature">
+                        <i class="icon-lg ion-ios-people-outline wow fadeIn" data-wow-delay=".3s"></i>
+                        <h3>Meet your Commuity</h3>
+                        <p class="text-muted">Collaborating with trusted people to offer skills and get needs met.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+                    <div class="feature">
+                        <i class="icon-lg ion-ios-lightbulb-outline wow fadeInUp" data-wow-delay=".2s"></i>
+                        <h3>Abundance</h3>
+                        <p class="text-muted">Creating your own money gives you access, based on your reputation.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+                    <div class="feature">
+                        <i class="icon-lg ion-ios-location-outline wow fadeIn" data-wow-delay=".3s"></i>
+                        <h3>Local Economy</h3>
+                        <p class="text-muted">Money is issued by you! It doesn't get more local than that! </p>
+                    </div>
+                </div>
+            </div>
+               <div data-wow-delay=".5s" class="wow bounceInDown center" style="visibility: visible; animation-delay: 0.5s; animation-name: bounceInDown; margin-top:10px;width:100%;text-align:center"><a class="page-scroll" href="#four"><i class="icon-lg ion-chevron-down"></i></a></div>
+        </div>
+
+
+    </section>
+    <section class="container-fluid" id="four">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12  col-md-12">
+                <h2 class="text-center text-primary">Who We Are</h2>
+                <hr>
+                <div data-wow-delay=".5s" class="col-sm-6 media wow fadeInRight">
+                    <h3>Global Community</h3>
+                     <div class="media-left">
+                        <i class="icon-lg ion-android-globe"></i>
+                    </div>
+                    <div class="media-body media-middle">
+                        <p>Villages.cc is an open source, global community working together, building this project, since 2011. The idea and platform was originally created by Ryan Fuggar. </p>
+                    </div>
+
+                </div>
+                <hr>
+                <div data-wow-delay="1s" class="col-sm-6  media wow fadeInRight">
+                    <h3>Puna Community Currency</h3>
+                    <div class="media-left">
+                       <i class="icon-lg ion-ios-bolt-outline"></i>
+                    </div>
+                    <div class="media-body media-left">
+                        <p>Started by <a href="http://twitter.com/dlevy2013" target="_blank">Daniel Levy</a>, Puna Community Currency, a grassroots organization on Big Island of Hawaii, is pushing this tech forward and teaching residents how to use it.</p>
+                    </div>
+                </div>
+                <hr>
+                <div data-wow-delay="1.5s" class="col-sm-6 media wow fadeInRight">
+                    <h3>Security</h3>
+                     <div class="media-left">
+                        <i class="icon-lg ion-thumbsup"></i>
+                    </div>
+                    <div class="media-body media-middle">
+                        <p>We are committed to ideals of individual soverignty, privacy, governance transperancy, decentralization and open source. <br>
+                            Fork our <a href="https://github.com/villagescc/">source code!</a></p>
+                    </div>
+
+                </div>
+                <hr>
+                <div data-wow-delay="2s" class="col-sm-6 media wow fadeInRight">
+                    <h3>Tested</h3>
+                    <div class="media-left">
+                        <i class="icon-lg ion-ios-heart-outline"></i>
+                    </div>
+                    <div class="media-body media-middle">
+                        <p>Be a part of a movement of over 4000 decentralized economies emerging across the planet.</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+    <aside class="bg-dark">
+        <div class="container text-center">
+            <div class="call-to-action">
+                <h2 class="text-primary">Get Started</h2>
+                <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" target="ext" class="btn btn-default btn-lg wow flipInX">GET STARTED</a>
+            </div>
+            <br>
+
+        </div>
+    </aside>
+    <section id="last">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h2 class="margin-top-0 wow fadeIn">Get in Touch</h2>
+                    <hr class="primary">
+                    <p>We love feedback. Fill out the form below and we'll get back to you as soon as possible.</p>
+                </div>
+                <div class="col-lg-10 col-lg-offset-1 text-center">
+                    <form method="POST" action="https://formspree.io/info@punacommunitycurrency.com" target="_blank" class="contact-form row">
+                        <div class="col-md-4">
+                            <label></label>
+                            <input name="name" type="text" class="form-control" placeholder="Name">
+                        </div>
+                        <div class="col-md-4">
+                            <label></label>
+                            <input name="_replyto" type="email" class="form-control" placeholder="Email">
+                        </div>
+                        <div class="col-md-4">
+                            <label></label>
+                            <input name="phone" type="text" class="form-control" placeholder="Phone">
+                        </div>
+                        <div class="col-md-12">
+                            <label></label>
+                            <textarea name="message" class="form-control" rows="9" placeholder="Your message here.."></textarea>
+                        </div>
+                        <div class="col-md-4 col-md-offset-4">
+                            <label></label>
+                            <button class="btn btn-primary btn-block btn-lg" type="submit" value="Send">Send <i class="ion-android-arrow-forward"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+          <aside class="bg-dark">
+        <div class="container text-center">
+            <div class="call-to-action">
+                <h2 class="text-primary">Get Started</h2>
+                <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" target="ext" class="btn btn-default btn-lg wow flipInX">GET STARTED</a>
+            </div>
+            <br>
+
+        </div>
+    </aside>
+    <footer id="footer">
+        <div class="container-fluid">
+
+                <div class="col-xs-12 col-sm-6 column">
+                    <h4>Stay Posted</h4>
+                <!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+	#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+	/* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+	   We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<div id="mc_embed_signup">
+<form action="//humandalas.us2.list-manage.com/subscribe/post?u=621ac030d46fffebc477ef12b&amp;id=f62bf1180d" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	<label for="mce-EMAIL">Subscribe to our mailing list</label>
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_621ac030d46fffebc477ef12b_f62bf1180d" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+<!--End mc_embed_signup-->
+                </div>
+                <div class="col-xs-12 col-sm-6 text-right">
+                    <h4>Follow</h4>
+                    <ul class="list-inline">
+                      <li><a rel="nofollow" href="https://twitter.com/villagescc" title="Twitter"><i class="icon-lg ion-social-twitter-outline"></i></a>&nbsp;</li>
+                      <li><a rel="nofollow" href="https://github.com/villagescc/" title="Github"><i class="icon-lg ion-social-github-outline"></i></a>&nbsp;</li>
+                      <li><a rel="nofollow" href="https://groups.google.com/forum/#!forum/villagescc" title="Google"><i class="icon-lg ion-social-google"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <br/>
+
+        </div>
+    </footer>
+    <div id="galleryModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        	<div class="modal-body">
+        		<img src="" id="galleryImage" class="img-responsive" />
+        		<p>
+        		    <br/>
+        		    <button class="btn btn-primary btn-lg center-block" data-dismiss="modal" aria-hidden="true">Close <i class="ion-android-close"></i></button>
+        		</p>
+        	</div>
+        </div>
+        </div>
+    </div>
+    <div id="aboutModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+        	<div class="modal-body">
+        		<h2 class="text-center">Villages.cc</h2>
+        		<h5 class="text-center">
+
+        		</h5>
+        		<p class="text-justify">
+
+        		</p>
+
+        		<button class="btn btn-primary btn-lg center-block" data-dismiss="modal" aria-hidden="true"> OK </button>
+        	</div>
+        </div>
+        </div>
+    </div>
+    <div id="alertModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+        	<div class="modal-body">
+        		<h2 class="text-center">Nice Job!</h2>
+        		<p class="text-center">Thanks! We'll get back to you, soon!
+        		<button class="btn btn-primary btn-lg center-block" data-dismiss="modal" aria-hidden="true">OK <i class="ion-android-close"></i></button>
+        	</div>
+        </div>
+        </div>
+    </div>
+    <!--scripts loaded here -->
+{#    <script src={% static 'jquery/dist/jquery.min.js' %}></script>#}
+{#    <script src={% static 'bootstrap/dist/js/bootstrap.min.js' %}></script>#}
+{#    <script src={% static 'jquery/dist/jquery.easing.min.js' %}></script>#}
+{#    <script src={% static 'js/wow.js' %}></script>#}
+{#    <script src={% static 'js/scripts.js' %}></script>#}
+
+
+{#<script>#}
+{#    window.intergramId = "39686555";#}
+{#    window.intergramCustomizations = {#}
+{#        titleClosed: 'Live Support',#}
+{#        titleOpen: 'Live Support',#}
+{#        introMessage: 'Please let us know your email address and about your experience. We will get back to you as soon as we can.',#}
+{#        autoResponse: 'Please wait for support team.',#}
+{#        autoNoResponse: 'No one is currently available. Please leave your email address and a detailed message. We can get back to you as soon as possible.',#}
+{#        mainColor: "#2b5886", // Can be any css supported color 'red', 'rgb(255,87,34)', etc#}
+{#        alwaysUseFloatingButton: false // Use the mobile floating button also on large screens#}
+{#    };#}
+{#</script>#}
+{#<script id="intergram" type="text/javascript" src="https://www.intergram.xyz/js/widget.js"></script>#}
+  </body>

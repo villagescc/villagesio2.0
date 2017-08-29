@@ -1,0 +1,12 @@
+pytz
+Django==1.8
+psycopg2==2.6.2
+sqlalchemy
+IPy
+networkx==1.8
+Pillow
+marshmallow
+django-user-agents
+elasticsearch
+social-auth-app-django
+ujson

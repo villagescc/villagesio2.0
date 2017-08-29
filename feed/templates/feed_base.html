@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block head-css %}
+    {{block.super}}
+    <link rel="stylesheet" href="{% static 'css/pages/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link type="text/css" href="{% static 'css/jquery.tag-editor.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'css/timeline.css' %}">
+    <link href="{% static 'chosen/chosen.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block ready_js %}
+	{{ block.super }}
+    <script>
+	init_feed_filter_form();
+	</script>
+{% endblock %}
+
+{% block nav_feed_class %}selected{% endblock %}
+{% block content %}
+    <br><br><br>
+    <style>
+        .icon-success{
+            color: #18bc9c;
+        }
+        .page-header {
+            border-bottom: solid 1px #E0E4E8;
+            margin: 40px 0 20px;
+        }
+    </style>
+
+<div class="page-header col-sm-12">
+ <h2 class="col-sm-7"><i class="fa fa-globe"></i><span class="icon-success">   All</span> |
+            <strong> Filter</strong>
+        </h2>
+</div>
+<div>
+	<form class="form-horizontal" action="" method="get">
+    <div class="input-group" style="align-content: center; width: 60%;">
+			{{ form.q }}
+    <span class="input-group-addon" id="">
+			<a id="id_clear" href="javascript:void(0)">{% trans 'Clear' %}</a>
+    </span>
+    </div>
+		{{ form.radius }}
+	{% if request.profile %}
+		<label>{{ form.trusted }}
+			<img src="{% static 'img/heart_icon.png' %}"
+				alt="{% trans 'Heart icon = trusted user' %}">
+				{% trans 'Trusted only' %}</label>
+	{% endif %}
+	</form>
+</div>
+
+{% block pre_feed %}{% endblock %}
+{% include "feed_item_list.html" %}
+
+{% endblock %}

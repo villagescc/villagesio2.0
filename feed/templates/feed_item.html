@@ -1,0 +1,30 @@
+{% load profile location humanize staticfiles %}
+{% load i18n %}
+<div class="feed_item_user unit">
+	{% block user %}
+	<a href="{{ item.feed_poster.get_absolute_url }}"
+		><img src="{% profile_image_url item.feed_poster '60x60' %}"
+			alt="{% blocktrans with user=item.feed_poster.name %}{{ user }} image{% endblocktrans %}"></a>
+	{% endblock %}
+</div>
+<div class="feed_item_content unit lastUnit">
+	<h3 class="feed_item_title">
+		{% if item.trusted %}
+			<img src="{% static 'img/heart_icon.png' %}"
+				title="{% trans 'Trusted User' %}"
+				alt="{% trans 'Heart icon = trusted user' %}">
+		{% endif %}
+		{% block title %}{% endblock %}
+	</h3>
+	<div class="feed_item_data">
+		{% block poster %}{% endblock %}
+		{{ item.date|naturaltime }}
+		{% if item.location %}
+			- {% relative_location item.location request.location %}
+		{% endif %}
+	</div>
+	<div class="teaser">
+		{% block teaser %}{{ item.text|truncatewords:20 }}{% endblock %}
+	</div>
+</div>
+

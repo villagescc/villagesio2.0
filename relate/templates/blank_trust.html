@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+    <style>
+        #div-recipient-name .tt-menu {
+            max-height: 150px;
+            width: 100%;
+            overflow-y: auto;
+            border-bottom: 1px solid #ccc;
+            background-color: #ffffff;
+        }
+    </style>
+
+    <form id="form-blank-trust" action="{% url 'blank_trust_user' %}" method="POST">
+
+        <h3 class="page-title container">
+            <span>
+                <i class="fa fa-thumbs-o-up"></i> Trust
+            </span> | <span style="font-size: 18px;"> Let your friends know that you trust a promise from them and they can use their credit with your network.</span>
+        </h3>
+        <hr>
+
+        <div class="container">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.errors %}
+                    <div class="form-group">
+                        <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                        {{ field }}
+                        <div class="alert alert-warning message">
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="form-group">
+                        {% if not field.auto_id == 'id_data_profile' %}
+                            <label for="{{ field.label }}">{{ field.label }}</label>
+                        {% endif %}
+                        {% if field.auto_id == 'id_recipient_name' %}
+                            <div class="form-group" id="div-recipient-name">
+                                {{ field }}
+                            </div>
+                            <label id="label-profile-image" for="profile-image" hidden>Receiver profile picture</label>
+                            <div><img id="profile-image" src="" class="img-rounded" hidden style="height: 70px; width: 120px;"></div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+
+            <input id="selected-recipient-value" hidden>
+
+
+            <button type="submit" id="save-payment" class=" btn btn-success gradient save-button">
+                <i class="fa fa-check"></i> Save trust</button>
+            <a href="{% url 'frontend:home' %}" class="btn btn-danger"><i class="fa fa-sign-out"></i> Back</a>
+
+            <table class="data">
+                    <tr title="{% blocktrans %}Sum of all payments
+				sent and received{% endblocktrans %}">
+                        <th>{% trans 'Overall Balance' %}</th>
+                        <td>
+                            {% blocktrans count hours=request.profile.overall_balance %}
+                                {{ hours }} hour trust
+                            {% plural %}
+                                {{ hours }} hours trust
+                            {% endblocktrans %}
+                        </td>
+                    </tr>
+                    <tr title="{% blocktrans %}Sum of all *trusted* payments
+				sent and received{% endblocktrans %}">
+                        <th>{% trans 'Trusted Balance' %}</th>
+                        <td><strong>
+                            {% blocktrans count hours=request.profile.trusted_balance %}
+                                {{ hours }} hour trust
+                            {% plural %}
+                                {{ hours }} hours trust
+                            {% endblocktrans %}
+                        </strong></td>
+                    </tr>
+                </table>
+
+            <div class="container" style="padding-top: 10px;">
+
+            </div>
+
+            <div class="container"><h3>Transaction Info</h3>
+                <table class="table table-striped table-hover table-trust">
+                    <thead>
+                    <tr>
+                        <th>{% trans 'Name' %}</th>
+                        <th class="number_header">{% trans 'Health' %}</th>
+                        <th class="number_header">{% trans 'Trusts from you' %}</th>
+                        <th class="number_header">{% trans 'Payments from them' %}</th>
+                        <th class="number_header">{% trans 'Payments from you' %}</th>
+                        <th class="number_header">{% trans 'Trusts from them' %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for account in accounts %}
+                        <tr>
+                            <td>
+                                <a href="{{ account.partner.get_absolute_url }}"
+                                   title="{% blocktrans with user=account.partner %}View Profile for {{ user }}{% endblocktrans %}"
+                                >{{ account.partner }}</a>
+                            </td>
+                            <td class="number">{{ account.health|default:"X" }}</td>
+                            <td class="number">
+                                {% if account.endorsement %}
+                                    {{ account.in_limit }}
+                                {% elif account.parner %}
+                                    0
+                                {% endif %}
+                            </td>
+                            {% if account.partner %}
+                                <td class="number">
+                                    {{ account.owed_to_you|default_if_none:"" }}</td>
+                                <td class="number">
+                                    {{ account.owed_to_them|default_if_none:"" }}</td>
+                                <td class="number">
+                                    {% if account.partner_endorsement %}
+                                        {{ account.out_limit }}
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% if not form.is_valid %}
+            <script>
+                setTimeout(function () {
+                    $('.message').slideUp("fast");
+                }, 4000);
+            </script>
+        {% endif %}
+    </form>
+    <script>
+        var recipients = new Bloodhound({
+            datumTokenizer: function (datum) {
+                return Bloodhound.tokenizers.whitespace(datum.value);
+            },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                wildcard: '%QUERY',
+                url: "{% url 'get_recipients_data' %}?query=%QUERY",
+                transform: function (response) {
+                    return $.map(response.result, function (recipient) {
+                        $('#id_recipient_name').attr("data-profile-selected", recipient.username);
+                        return {
+                            value: recipient.username,
+                            suggest: recipient
+                        };
+                    });
+                }
+            }
+
+        });
+        $('#id_recipient_name').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 0
+        },
+        {
+            display: 'value',
+            source: recipients,
+            limit: 20,
+            templates: {
+                suggestion: function (data) {
+                    return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
+                }
+            }
+        });
+
+        $("#id_recipient_name").bind('typeahead:selected', function (e) {
+            $("#id_data_profile").val($("#id_recipient_name").val());
+            $.ajax({
+                url:'/get_user_photo/' + $("#id_recipient_name").val(),
+                type:'POST',
+                data: {'profile_username': $("#id_recipient_name").val()},
+                beforeSend: function (xhr) {
+                    $('#spin-modal').fadeIn();
+                    var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (e) {
+
+                    $("#id_weight").val('');
+                    $("#id_text").val('');
+                    $("#id_referral").prop('checked', false);
+
+
+                    if(e['data']['error']) {
+                        $('#error-modal-alert').text(e["data"]["error_message"]);
+                        $('#spin-modal').fadeOut();
+                        $('#error-modal').modal("show");
+                        location.reload();
+                    }
+                    if(e['data']['has_trust']){
+                        $("#id_weight").val(e['data']['credit_limit']);
+                        $("#id_text").val(e['data']['text']);
+                        if(e['data']['refer']){
+                            $("#id_referral").prop('checked', true);
+                        }
+                    }
+                    $('#profile-image').attr("src", e['data']['profile_photo_path']);
+                    $('#profile-image').attr("hidden", false);
+                    $('#label-profile-image').attr("hidden", false);
+                    $('#spin-modal').fadeOut();
+                },
+                error: function (e){
+                    if (e.status === 500) {
+                        showInternalServerError();
+                        $('#spin-modal').fadeOut();
+                    }
+                }
+            });
+        });
+
+
+    </script>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "feed_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Endorsements' %}{% endblock %}
+
+{% block feed_endorsements_class %}selected{% endblock %}
+
+{% block pre_feed %}
+
+{% url 'relationships' as url_relationships %}
+<p>{% blocktrans %}Visit <a href="{{ url_relationships }}">Relationships</a>
+	for a more structured list of endorsements.{% endblocktrans %}</p>
+
+{% endblock %}

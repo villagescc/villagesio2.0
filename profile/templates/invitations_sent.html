@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Invitations Sent' %}{% endblock %}
+
+{% block nav_invite_class %}selected{% endblock %}
+
+{% block content %}
+<h2>{% trans 'Invitations Sent' %}</h2>
+
+<p><a href="{% url 'invite' %}">{% trans 'Back to invitation form' %}</a></p>
+
+{% if invitations %}
+	<form action="" method="post">
+		{% csrf_token %}
+		<table class="data">
+			<tr>
+				<th>{% trans "Friend's Email" %}</th>
+				<th>{% trans 'Hearts' %}</th>
+				<th>{% trans 'Date Sent' %}</th>
+				<th></th>
+			</tr>
+		{% for invitation in invitations %}
+			<tr>
+				<td>{{ invitation.to_email }}</td>
+				<td>{{ invitation.endorsement_weight }}</td>
+				<td>{{ invitation.date|date }}</td>
+				<td>
+					<input type="submit" name="resend_{{ invitation.id }}"
+						value="{% trans 'Resend' %}">
+					<input type="submit" name="delete_{{ invitation.id }}"
+						value="{% trans 'Delete' %}">
+				</td>
+			</tr>
+		{% endfor %}
+		</table>
+	</form>
+{% else %}
+	<p>{% trans 'You have no pending sent invitations.' %}</p>
+{% endif %}
+
+{% endblock %}

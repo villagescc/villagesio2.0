@@ -1,0 +1,393 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css?family=Varela+Round');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+html {
+    font-family: "Lato", serif;
+    box-sizing: border-box; /* https://css-tricks.com/box-sizing/ */
+    height: 100%;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit; /* https://css-tricks.com/box-sizing/ */
+}
+
+body {
+    margin: 0;
+    min-height: 100%;
+    display: flex; /* body is the outer flex container */
+    flex-flow: row wrap;
+    text-align: center;
+}
+
+aside   {
+    flex: 1 230px;
+    background: #2C3E50;
+    box-shadow: inset -70px 0 9px -70px rgba(0,0,0,0.7);
+    font-family: "Lato", serif;
+}
+
+aside header {
+    height: 60px;
+    padding-left: 10px;
+    color: white;
+    font-size: 15px;
+    background: #416FBA;
+    box-shadow: inset -70px 0 9px -70px rgba(0,0,0,0.7);
+}
+
+aside header img {
+    float: left;
+    position: relative;
+    top: 2px;
+    left: 4px;
+}
+
+aside header span {
+    float: left;
+    position: relative;
+    top: 10px;
+    left: 20px;
+}
+
+aside ul {
+    padding: 0;
+}
+
+aside ul li {
+    width: 100%;
+    color: white;
+    list-style: none;
+    border-top: solid 1px #3C4F5E;
+    cursor: pointer;
+}
+
+aside ul li div {
+    padding: 12px 20px;
+}
+
+aside ul li ul {
+    font-size: 14px;
+}
+
+aside ul li ul li a {
+    width: 100%;
+    color: white;
+    padding: 10px !important;
+    list-style: none;
+    border-top: solid 1px #3C4F5E;
+    cursor: pointer;
+}
+
+aside ul li .fa {
+    float: left;
+    position: relative;
+    left: 10px;
+    color: #8DCEE2;
+    font-size: 22px;
+}
+
+aside ul li div:hover, aside ul li ul li:hover {
+    background: #202d3a;
+}
+
+aside ul li:last-child {
+    border-bottom: solid 1px #3C4F5E;
+}
+
+aside a, aside a:hover, aside a:active {
+    display: block;
+    width: 100%;
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+#inner-flex-container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 230px);
+}
+
+#inner-flex-container > header, #inner-flex-container > section {
+    padding: 0 30px;
+}
+
+#inner-flex-container > div.alert {
+    height: 60px;
+    border-radius: 0;
+    font-weight: normal !important;
+    padding-top: 20px;
+}
+
+#inner-flex-container > div.alert a.close {
+    position: relative;
+    top: -3px;
+}
+
+#inner-flex-container > div.alert .fa {
+    margin-right: 10px;
+}
+
+#inner-flex-container > header  {
+    height: 62px;
+}
+
+#inner-flex-container > header .wrapper {
+    height: 100%;
+}
+
+#top-header {
+    margin-bottom: 30px;
+    font-family: "Open Sans", serif;
+    border-bottom: 1px solid #bcc6d2;
+}
+
+#top-header .page-header {
+    float: left;
+    position: relative;
+    top: 20px;
+    font-size: 17px;
+}
+
+#top-header .page-header .fa {
+    margin-right: 10px;
+}
+
+#top-header .page-header {
+
+}
+
+.icon-separator {
+    margin-right: 10px !important;
+    margin-left: 10px !important;
+    font-size: 13px;
+    position: relative;
+    top: -2px;
+}
+
+section { flex: 4; }
+
+.form-group label {
+    float: left;
+}
+
+.btn .fa {
+    margin-right: 10px;
+}
+
+.btn {
+    font-size: 14px;
+}
+
+@media only screen and (max-width: 500px) {
+    html {
+        height: auto;
+    }
+
+    aside ul {
+        display:none;
+    }
+
+    #inner-flex-container {
+        flex: 0 1 auto;
+        width: 100%;
+        padding: 0 5px;
+    }
+
+    #top-header {
+        padding: 0 10px;
+    }
+}
+
+.btn.btn-success {
+    background: #4fb878;
+    border: 1px solid #98c3af;
+}
+
+.btn.btn-input {
+    background: white;
+    border: 1px solid #cccccc;
+    color: #2C3E50;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.zero-margin {
+    margin: 0 !important;
+}
+
+.zero-padding {
+    padding: 0 !important;
+}
+
+.help-icon {
+    font-size: 14px !important;
+    margin: 2px;
+    color: #2C3E50;
+    font-weight: normal;
+}
+
+label.form-check-label input {
+    position: relative !important;
+    top: 1px;
+}
+
+.btn-primary.gradient {
+    border-color: #a4bacc;
+	background: -moz-linear-gradient(top,  #33a6cc 50%, #0099cc 50%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(50%,#33a6cc), color-stop(50%,#0099cc)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #33a6cc 50%,#0099cc 50%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #33a6cc 50%,#0099cc 50%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #33a6cc 50%,#0099cc 50%); /* IE10+ */
+	background: linear-gradient(to bottom,  #33a6cc 50%,#0099cc 50%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#33a6cc', endColorstr='#0099cc',GradientType=0 ); /* IE6-9 */
+}
+
+.btn-primary.gradient:hover, .btn-primary.gradient:focus, .btn-primary.gradient:active, .btn-primary.gradient.active, .open > .dropdown-toggle.btn-primary {
+	background: -moz-linear-gradient(top,  #66b2cc 50%, #33a6cc 50%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(50%,#66b2cc), color-stop(50%,#33a6cc)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #66b2cc 50%,#33a6cc 50%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #66b2cc 50%,#33a6cc 50%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #66b2cc 50%,#33a6cc 50%); /* IE10+ */
+	background: linear-gradient(to bottom,  #66b2cc 50%,#33a6cc 50%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66b2cc', endColorstr='#33a6cc',GradientType=0 ); /* IE6-9 */
+}
+
+.btn-primary.gradient:active, .btn-primary.gradient.active {
+	background: -moz-linear-gradient(top,  #267c99 50%, #007299 50%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(50%,#267c99), color-stop(50%,#007299)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #267c99 50%,#007299 50%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #267c99 50%,#007299 50%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #267c99 50%,#007299 50%); /* IE10+ */
+	background: linear-gradient(to bottom,  #267c99 50%,#007299 50%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#267c99', endColorstr='#007299',GradientType=0 ); /* IE6-9 */
+}
+
+h4 .fa-margin-right {
+    margin-right: 10px;
+}
+
+.dropdown-menu a .fa {
+    margin-right: 10px;
+}
+
+.btn-group-user {
+    margin-top: 43px;
+}
+
+.btn-group-user .btn {
+    padding: 6px 20px;
+}
+
+.btn-user-login {
+    position: absolute;
+    top: 43px;
+    right: 35px;
+    padding: 6px 20px;
+}
+
+.btn-user-menu {
+    text-transform: capitalize;
+}
+
+.text-precise {
+
+}
+
+/* BADGE CLASSIFICATIONS */
+.badge-md {
+    padding: 6px 10px;
+    font-size: 13px;
+    font-weight: normal;
+    font-family: "Varela Round", "Open Sans", serif;
+}
+
+.badge-default {
+    background: white;
+    color: #1d1e1f;
+    border: 1px solid #d9e0e1;
+}
+
+.badge-5, .badge-6, .badge-7, .badge-8, .badge-9, .badge-10,
+.badge-11, .badge-12, .badge-13, .badge-14, .badge-15,
+.badge-16, .badge-17, .badge-29 {
+    background: #fcf3ec;
+    border: 1px solid #d4c2b4;
+    color: #1d1e1f;
+}
+
+.badge-1, .badge-2, .badge-3, .badge-4, .badge-30 {
+    background: #eaf9f4;
+    border: 1px solid #d9e7e2;
+    color: #2C3E50;
+}
+
+.badge-20, .badge- {
+    background: #f5e5f2;
+    border: 1px solid #decedb;
+    color: #504240;
+}
+
+/* Base styles (regardless of theme) */
+.bs-callout {
+    margin: 20px 0;
+    padding: 15px 30px 15px 15px;
+    border-left: 5px solid #eee;
+}
+
+.bs-callout h4 {
+    margin-top: 0;
+}
+
+.bs-callout p:last-child {
+    margin-bottom: 0;
+}
+
+.bs-callout code,
+.bs-callout .highlight {
+    background-color: #fff;
+}
+
+/* Themes for different contexts */
+.bs-callout-danger {
+    background-color: #fcf2f2;
+    border-color: #dFb5b4;
+}
+
+.bs-callout-warning {
+    background-color: #fefbed;
+    border-color: #f1e7bc;
+}
+
+.bs-callout-info {
+    background-color: #f0f7fd;
+    border-color: #d0e3f0;
+}
+
+.bs-callout-danger h4,
+.bs-callout-danger a.alert-link {
+    color: #B94A48;
+}
+
+.bs-callout-warning h4,
+.bs-callout-warning a.alert-link {
+    color: #C09853;
+}
+
+.bs-callout-info h4,
+.bs-callout-info a.alert-link {
+    color: #3A87AD;
+}
+
+.bs-callout a.alert-link {
+    font-weight: bold;
+}
+
+.bs-callout-hover:hover {
+    background: #f4f4f4;
+    transition: background-color 100ms linear;
+}
+
+.btn-primary {
+    background: #416FBA;
+}

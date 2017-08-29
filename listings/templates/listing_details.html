@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}{{ profile }}{% endblock %}
+
+{% block nav_info_class %}selected{% endblock %}
+
+{% block content %}
+
+    {% include  'new_trust_modal.html' %}
+    {% include 'new_payment_modal.html' %}
+    {% include 'new_contact_modal.html' %}
+    {% include 'error-modal.html' %}
+
+    {% load profile relate humanize feed%}
+    {% load staticfiles %}
+    {% load i18n %}
+
+    {% include 'messages.html' %}
+
+    <section class="container" id="listing-info">
+        <div class="panel panel-default line">
+            <div class="panel-heading">Listing overview</div>
+            <div class="panel-body">
+                <a href="{{ listing.get_absolute_url }}">
+                    <img src="{% profile_image_url listing '200x200' %}">
+                </a>
+                <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="float: right;">
+                    <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
+                        <i class="fa fa-heart" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
+                        <i class="fa fa-money" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="container">
+                 <div class="row top-buffer">
+                    <div class="col-md-2">
+                        <span><i class="fa fa-user" style="font-size: medium">&nbspSeller: </i></span>
+                    </div>
+                    <div class="col-md-10">
+                        {{ listing.user.profile.name }}
+                    </div>
+                </div>
+                <div class="row top-buffer">
+                    <div class="col-md-2">
+                        <span><i class="fa fa-barcode" style="font-size: medium">&nbspTitle: </i></span>
+                    </div>
+                    <div class="col-md-10">
+                        {{ listing.title }}
+                    </div>
+                </div>
+                <div class="row top-buffer">
+                    <div class="col-md-2">
+                        <span><i class="fa fa-location-arrow" style="font-size: medium">&nbspLocation:</i></span>
+                    </div>
+                    <div class="col-md-10">
+                        {{ listing.user.profile.location }}
+                    </div>
+                </div>
+                <div class="row top-buffer">
+                    <div class="col-md-2">
+                        <span><i class="fa fa-tags" style="font-size: medium">&nbspCategory:</i></span>
+                    </div>
+                    <div class="col-md-10 pull-left">
+                        {{ listing.subcategories.categories }}
+                    </div>
+                </div>
+                <div class="row top-buffer">
+                    <div class="col-sm-2">
+                        <span><i class="fa fa-tag" style="font-size: medium">&nbspSub-category:</i></span>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ listing.subcategories }}
+                    </div>
+                </div>
+                <div class="row top-buffer" style="text-align: justify">
+                    <div class="col-sm-2">
+                        <span><i class="fa fa-file-text-o" style="font-size: medium">&nbspDescription: </i></span>
+                    </div>
+                    <div class="col-sm-9">
+                        {{ listing.description }}
+                    </div>
+                </div>
+                <div class="row top-buffer">
+                    <div class="col-sm-2">
+                        <span><i class="fa fa-calendar" style="font-size: medium">&nbspCreated at: </i></span>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ listing.created }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<div id="spin-modal" class="collapse">
+    <i class="fa fa-refresh fa-spin fa-4x"></i>
+</div>
+
+<script>
+    $(".trust-modal").click(function (e) {
+        $('#spin-modal').fadeIn();
+        var profile_username = '{{ listing.user.username }}';
+        $("#profile-username").val(profile_username);
+        var url = '/trust_ajax/' + profile_username;
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (data) {
+                if (data["data"]["stat"] != "ok") {
+                    $('#error-modal-alert').text(data["data"]["stat"]);
+                    $('#spin-modal').fadeOut();
+                    $('#error-modal').modal("show");
+                }
+                else if (data["data"]["stat"] == "ok") {
+                    $('#spin-modal').fadeOut();
+                    $("#new-trust-modal").modal("show");
+                }
+            }
+        });
+
+    });
+
+    $(".payment-modal").click(function (e) {
+        $('#spin-modal').fadeIn();
+        var profile_username = '{{ listing.user.username }}';
+        $('#payment-modal-title').text('Pay '+profile_username);
+        $("#profile-username").val(profile_username);
+        var url = '/acknowledge_ajax/'+profile_username;
+        console.log(url);
+        $.ajax({
+            url: url,
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                if(data["data"]["stat"] != "ok"){
+                    $('#error-modal-alert').text(data["data"]["stat"]);
+                    $('#spin-modal').fadeOut();
+                    $('#error-modal').modal("show");
+                }
+                else if(!data['data']['can_ripple']){
+                    $('label[for="id_ripple_0"]').closest('li').hide();
+                    $('#id_ripple_1').attr('checked', true);
+                    $('.ripple-hours').html("There are no available paths through the trust network to <strong>"+data['data']['recipient']+"</strong>, so you can only send direct acknowledgement.")
+                    $('#spin-modal').fadeOut();
+                    $("#new-payment-modal").modal("show");
+                }else if(data["data"]["can_ripple"]){
+                    $('#id_ripple_0').attr('checked', true);
+                    $('.ripple-hours').html("You can send a trusted acknowledgement of up to " + data['data']['max_amount'] + " hour(s) or a direct acknowledgement of any amount.")
+                    $('#spin-modal').fadeOut();
+                    $("#new-payment-modal").modal("show");
+                }
+            },
+
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+        e.preventDefault();
+    });
+
+    $(".contact-modal").click(function (e) {
+        $('#spin-modal').fadeIn();
+        var profile_username = '{{ listing.user.username }}';
+        $("#profile-username").val(profile_username);
+        $('#contact-modal-title').text('Contact '+profile_username);
+        $('#spin-modal').fadeOut();
+        $("#new-contact-modal").modal("show");
+    });
+</script>
+
+{% endblock %}

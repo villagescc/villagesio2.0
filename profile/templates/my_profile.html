@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% load tag_utils %}
+
+{% block title %}{{ profile }}{% endblock %}
+
+{% block nav_info_class %}selected{% endblock %}
+
+{% block content %}
+    {% load profile relate humanize feed%}
+    {% load staticfiles %}
+    {% load i18n %}
+
+    <style>
+        .image {
+            width: 60px;
+            height: 60px;
+            float: left;
+            border: 1px hidden #999;
+        }
+
+        .thumbnail .listing {
+            width: 100%;
+            height: 150px;
+            display: block;
+        }
+    </style>
+    <div class="col-sm-12">
+        <div class="container-fluid" id="profile-container-fluid">
+            <div class="jumbotron" id="profile-jumbotron">
+                <h2>{{ profile.name }}</h2>
+            </div>
+        </div>
+
+        <section class="container-fluid" id="profile-info">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="inside-profile-info">
+                        <p>Profile description:</p>
+                        <p>{{ profile.description }}</p>
+                    </div>
+                    <hr>
+                </div>
+
+                <div class="col-md-4" style="text-align: center; padding-left: 100px;">
+                    <img src="{% profile_image_url request.profile '150x150' %}" alt="" height=88px width=88px class="img-circle">
+                    <p class="profile-star-rating">
+                    {% if referral_count %}
+                        <th>{% trans 'Trusted referrals: ' %}</th>
+                        <td>{{ referral_count }} people</td>
+                    {% endif %}
+                    </p>
+                    <p><i class="fa fa-balance-scale" aria-hidden="true"></i>
+                        {% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour
+                        {% plural %} {{ hours }} hours</p>{% endblocktrans %}
+
+                    <p><i class="fa fa-pencil" aria-hidden="true"></i>Job: {% if profile.job %}{{ profile.job }} {% else %} -- {% endif %}</p>
+                    <p><i class="fa fa-heart" aria-hidden="true"></i> Total Hearts: {{ profile.endorsement_sum }}</p>
+                    <p data-toggle="tooltip" title="{{ profile.location.full_name }}"><i class="fa fa-home" aria-hidden="true" data-toggle="tooltip" title="{{ profile.location.full_name }}"></i>{{ profile.location.full_name|slice:":50" }}</p>
+                    <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ profile.user.date_joined|naturalday }}</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="container-fluid" id="profile-listing-info">
+            <div class="row">
+                <div class="col-md-9">
+                    {% if listings %}
+                        <h3>Open listings</h3>
+                        <bold><hr></bold>
+                        <!-- Construct in the for loop -->
+                        {% for each in listings %}
+                            <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-3">
+                                <div class="thumbnail">
+                                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
+                                    <p class="thumbnail-info">{{ each.title }}</p>
+                                    <p class="thumbnail-tag" style="left: 70px;">{{ each.listing_type }} | {{ each.price }} VH</p>
+                                    <div class="caption" style="height: 115px;">
+                                        <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;">
+                                            <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}" data-toggle="tooltip" title="{{ each.user.profile.name }}"
+                                                 style="margin-right: 10px;" class="img-circle inline"/>
+                                        </a>
+
+                                        {% for each_tag in each.tag.all %}
+                                            <span class="label label-info">{{ each_tag.name }}</span>
+
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <h3>There is no open listings for this user</h3>
+                    {% endif %}
+                </div>
+                <div class="col-md-3">
+                    {#  <p><i class="fa fa-balance-scale" aria-hidden="true"></i>{% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour {% plural %} {{ hours }} hours</p>#}
+                    {#    {% endblocktrans %}#}
+                    {% if offer_tags %}
+                        <div class="card">
+                            <h4>Offer tags</h4>
+                            {% for offer_tag in offer_tags %}
+                                <span class="badge">{{ offer_tag.tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if request_tags %}
+                        <div class="card">
+                            <h4>Request tags</h4>
+                            {% for request_tag in request_tags %}
+                                <span class="badge">{{ request_tag.tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if teach_tags %}
+                        <div class="card">
+                            <h4>Teach tags</h4>
+                            {% for teach_tag in teach_tags %}
+                                <span class="badge">{{ teach_tag.tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if learn_tags %}
+                        <div class="card">
+                            <h4>Learn tags</h4>
+                            {% for learn_tag in learn_tags %}
+                                <span class="badge">{{ learn_tag.tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if other_tags %}
+                        <div class="card">
+                            <h4>Other tags</h4>
+                            {% for other_tag in other_tags %}
+                                <span class="badge">{{ other_tag.tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </section>
+
+        <section class="container-fluid">
+            <div class="row">
+                <div class="col-md-9">
+                    <h3>Endorsed by:</h3>
+                    {% if endorsements_received %}
+                        {% for each_endorsement_received in endorsements_received %}
+                            <div class="container-fluid">
+                                <hr>
+                                <div class="image">
+                                    <img class="img-rounded endorsed-by-img" src="{% profile_image_url each_endorsement_received.endorser '60x60' %}" alt="">
+                                </div>
+                                <p class="text">Description: {{ each_endorsement_received.text }}</p>
+                                <p class="text">From <a href="{{ each_endorsement_received.endorser.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> to <a href="{{ each_endorsement_received.recipient.get_absolute_url }}">{{ profile.name }}</a></p>
+                                {% if each_endorsement_received.endorser|check_referral:request.profile %}
+                                    <p class="text"><i class="fa fa-thumbs-o-up" aria-hidden="true">&nbsp<a href="{{ each_endorsement_received.endorser.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> referred <a href="{{ each_endorsement_received.recipient.get_absolute_url }}">{{ profile.name }}</a> services</i></p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text">No endorsements received yet</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+
+        <section class="container-fluid">
+            <div class="row">
+                <div class="col-md-9">
+                    <h3>Endorsements made:</h3>
+                    {% if endorsements_made %}
+                        {% for each_endorsement_made in endorsements_made %}
+                            <div class="container-fluid">
+                                <hr>
+                                <div class="image">
+                                    <img class="img-rounded endorsed-by-img" src="{% profile_image_url each_endorsement_made.recipient '60x60' %}" alt="">
+                                </div>
+                                <p class="text">Description: {{ each_endorsement_made.text }}</p>
+                                <p class="text">From {{ each_endorsement_made.endorser.name }} to
+                                    <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">{{ each_endorsement_made.recipient.name }}</a></p>
+                                {% if each_endorsement_made.endorser|check_referral:each_endorsement_made.recipient %}
+                                    <p class="text"><i class="fa fa-thumbs-o-up" aria-hidden="true">&nbsp<a href="{{ each_endorsement_received.endorser.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> referred <a href="{{ each_endorsement_received.recipient.get_absolute_url }}">{{ profile.name }}</a> services</i></p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text">No endorsements received yet</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <script>
+            $(".listing-modal-profile").click(function (e) {
+                $('#spin-modal').fadeIn();
+                var listing_id = $(this).attr('data-listing-id');
+                var url = '/get_listing_info/'+listing_id;
+                var listing_picture_path = '/media/';
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    cache: false,
+                    success: function (data) {
+                        if(data["data"]["stat"] == "ok"){
+                            $('#listing-id').val(listing_id);
+                            $('.listing-modal-title').text(data["data"]["listing_title"]);
+                            $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
+                            $('#label-price').text(data["data"]["listing_price"]);
+                            $('#label-profile-name').text(data["data"]["profile_name"]);
+                            $('#profile-location').text(data["data"]["profile_location"]);
+                            $('#listing-created-at').text(data["data"]["created_at"]);
+                            $('#listing-created-at').attr("href", "/listing_details/"+listing_id);
+                            $('#label-description').text(data["data"]["description"]);
+                            $('#label-profile-username').text(data["data"]["username"]);
+                            $('#label-profile-balance').text(data["data"]["balance"]);
+                            $('#label-profile-occupation').text(data["data"]["job"]);
+                            $('#trust-btn').attr('data-profile-username', data["data"]["username"]);
+                            $('#payment-btn').attr('data-profile-username', data["data"]["username"]);
+                            $('#contact-btn').attr('data-profile-username', data["data"]["username"]);
+                            $('#spin-modal').fadeOut();
+                            $("#listing-modal").modal("show");
+                        }
+                    },
+                    error: function (data) {
+                        $('#spin-modal').fadeOut();
+                        showInternalServerError();
+                    }
+                });
+            });
+        </script>
+    </div>
+{% endblock %}

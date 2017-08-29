@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Account Settings' %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <form method="POST">
+    {% csrf_token %}
+        <div class="form-group">
+        {{ tag_form }}
+        <input type="submit" class="btn btn-success">
+        </div>
+    </form>
+
+    <div class="container">
+            <button id="delete" class="btn btn-danger pull-right"><i class="fa fa-exclamation"></i>Delete</button>
+            {% if profile_tags %}
+                <table id="table-tags" class="table table-responsive table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Tag name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for tag in profile_tags %}
+                    <tr>
+                        <td class="pointer center td-checkbox">
+                            <input id="{{ tag.id }}" type="checkbox" value="{{ tag.id }}">
+                        </td>
+                        <td width="100%"><p class="pull-left">{{ tag.tag.name }}</p></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>
+                    Sorry, we did not find any tags.
+                </p>
+            {% endif %}
+        </div>
+</div>
+
+<script>
+    $('#delete').click(function(e){
+        var original_value = $(this).html();
+        $(this).html('Deleting selected...');
+
+        var values = [];
+        var rows_to_remove = [];
+        var table = $('#table-tags');
+
+
+        table.find(':checked').each(function() {
+            if ($(this).val() > 0) {
+                values.push($(this).val());
+                rows_to_remove.push($(this).parent().parent());
+            }
+        });
+
+        if (values.length > 0) {
+            if (confirm('Are you sure ? ')) {
+                $.ajax({
+                    async: false,
+                    url: '{% url 'delete_profile_tags' %}',
+                    type: 'POST',
+                    data: { ids:values, csrfmiddlewaretoken:"{{ csrf_token }}" },
+                    success: function (data) {
+                        for (var row in rows_to_remove) {
+                            rows_to_remove[row].remove();
+                        }
+                    },
+                    error: function (resp) {
+                        console.log("Error:" + resp);
+                    }
+                });
+            }
+        } else {
+            alert('Please select a listing first.')
+        }
+
+        $(this).html(original_value);
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="page-title" style="padding-left: 10px;">
+    <span>
+        <i class="fa fa-lightbulb-o"></i> Notifications
+    </span> | <span style="font-size: 18px;"> Check your last activities </span>
+</h3>
+<hr>
+
+{% if unread_notifications %}
+    {% for each_notification in unread_notifications %}
+        {% if each_notification.notification_type == 'TRUST' %}
+            <div class="container">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Trust</h3>
+                    </div> <div class="panel-body">
+                    From <a href="{{ each_notification.notifier.get_absolute_url }}">{{ each_notification.notifier}}</a> to you<br>Created At: {{ each_notification.created_at }}<br>Status: {{ each_notification.status }}
+                </div>
+                </div>
+                {% elif each_notification.notification_type == 'PAYMENT' %}
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Payment</h3>
+                    </div> <div class="panel-body">
+                    From <a href="{{ each_notification.notifier.get_absolute_url }}">{{ each_notification.notifier}}</a> to you<br>Created At: {{ each_notification.created_at }}<br>Status: {{ each_notification.status }}
+                </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info">
+        <strong>All set!</strong> There is no pending notifications for you! =)
+    </div>
+{% endif %}
+
+{% endblock %}

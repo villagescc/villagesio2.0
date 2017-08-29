@@ -1,0 +1,98 @@
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 700;
+  src: local("Open Sans Bold"), local("OpenSans-Bold"), url("http://fonts.gstatic.com/s/opensans/v10/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff") format("woff");
+}
+
+body {
+  background: #2c3338;
+  height: 100%;
+  min-width: 600px;
+}
+
+html {
+    height: 100%;
+}
+
+.login-stripe {
+    height: 268px;
+    padding-top: 34px;
+    width: 100%;
+    background: transparent url("/static/img/bg-login-stripe.fw.png") repeat-x;
+}
+
+.logo {
+    margin: auto;
+    display:block;
+}
+
+.box-push {
+    height: 30%;
+}
+
+.text-input {
+    background: #2C3338;
+    border: 1px solid #252525;
+    margin: auto auto 12px auto;
+    width: 530px;
+    height: 57px;
+    padding: 20px;
+    display:block;
+    box-shadow:inset 1px 2px 10px 1px #181C1F;
+    font-family: "Open Sans", Arial, serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: white;
+    outline: none;
+    text-align: center;
+}
+
+.text-input:focus {
+    background: #353E44;
+}
+
+/* #181C1F */
+
+button {
+    background: #0A988C;
+    border: 1px solid #0aa397;
+    display: block;
+    margin: auto;
+    width: 530px;
+    height: 57px;
+    border-radius: 4px;
+    font-family: "Open Sans", Arial, serif;
+    font-size: 18px;
+    outline: none;
+}
+
+button:focus, button:hover {
+    background: #065B55;
+}
+
+button i {
+    margin-right: 10px;
+}
+
+.flash-danger {
+    display: block;
+    width: 100%;
+    margin: 30px auto auto auto;
+    padding: 15px 40px;
+    background: #95464F;
+    border-radius: 0;
+    color: white;
+    text-align: center;
+    font-family: "Open Sans", Arial, serif;
+}
+
+.flash-danger i {
+    margin-right: 10px;
+}
+
+@media screen and ( max-height: 450px ){
+    .box-push {
+        height: 10%;
+    }
+}

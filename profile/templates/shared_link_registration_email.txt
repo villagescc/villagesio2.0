@@ -1,0 +1,12 @@
+{% load i18n %}
+{% blocktrans %}{{ profile }} has registered on Villages after clicking on a link that you shared.{% endblocktrans %}
+
+{% blocktrans %}To view their profile, go to:{% endblocktrans %}
+
+http://{{ domain }}{% url 'profile' profile.username %}
+
+{% blocktrans %}To endorse them:{% endblocktrans %}
+
+http://{{ domain }}{% url 'endorse_user' profile.username %}
+
+{% blocktrans %}Thank you for sharing Villages!{% endblocktrans %}

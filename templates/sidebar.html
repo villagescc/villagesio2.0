@@ -1,0 +1,87 @@
+{% load static %}
+<aside>
+    <a href="#">
+        <header>
+{#            <img src="{% static 'img/logo_psafe_trans.png' %}">#}
+            <span>Psafe Security <br>Intelligence</span>
+        </header>
+    </a>
+    <ul>
+        <li class="menu-group">
+            <div><i class="fa fa-bug"></i> APKs</div>
+            <ul class="collapse">
+                <li>
+                    <a href="#">
+                        Search
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        Statistics
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        Submit
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <div><i class="fa fa-rss-square"></i>
+                DNS
+            </div>
+        </li>
+        <li>
+            <div><i class="fa fa-chain-broken"></i>
+                Leaks
+            </div>
+        </li>
+        <li>
+            <div><i class="fa fa-exchange"></i>
+                Route
+            </div>
+        </li>
+        <li class="menu-group">
+            <div><i class="fa fa-globe"></i> URLs</div>
+            <ul class="collapse">
+                <li>
+                    <a href="#">
+                        Regex Lists
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        Search
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        Statistics
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        Submit
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <div><i class="fa fa-phone"></i>
+                Phones
+            </div>
+        </li>
+        <li>
+            <div><i class="fa fa-wifi"></i>
+                Wifi
+            </div>
+        </li>
+    </ul>
+</aside>
+<script>
+    $('.menu-group div').click(function () {
+        var menu = $(this).parent().find('ul');
+        menu.slideToggle();
+    });
+</script>

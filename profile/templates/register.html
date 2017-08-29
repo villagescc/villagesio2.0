@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Register' %}{% endblock %}
+
+{% block nav_register_class %}selected{% endblock %}
+
+{% block content %}
+<h2>{% trans 'Register' %}</h2>
+
+<p class="feature">{% blocktrans %}Please enter the name you'd like to
+	use on the system, your email address, and then the username and
+	password you'd like to use to log in.{% endblocktrans %}</p>
+
+<form action="" method="post">
+	{% csrf_token %}
+	<table class="form">
+		{{ form }}
+		<script>
+			$("#id_name").focus();
+		</script>
+		<tr>
+			<th></th>
+			<td><input type="submit" value="{% trans 'Register' %}" /></td>
+		</tr>
+	</table>
+</form>
+{% endblock %}

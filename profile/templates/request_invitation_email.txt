@@ -1,0 +1,5 @@
+{% load i18n %}
+{{ text }}
+
+----
+{% blocktrans context "email" %}Invite this person:{% endblocktrans %} http://{{ domain }}{% url 'invite' %}?email={{ email }}

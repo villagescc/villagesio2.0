@@ -1,0 +1,239 @@
+{% load profile relate humanize %}
+{% load staticfiles %}
+{% load i18n %}
+
+<style>
+    html {
+        padding-top: 40px;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+</style>
+
+
+<div class="container-fluid" id="profile-container-fluid">
+  <div class="jumbotron" id="profile-jumbotron">
+    <h2>{{ profile.name }}</h2>
+  </div>
+</div>
+
+<section class="container-fluid" id="profile-info">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="inside-profile-info">
+        <p>Profile description:</p>
+        <p>{{ profile.description }}</p>
+      </div>
+    </div>
+
+    <div class="col-md-4" style="text-align: center;">
+      <img src="{% profile_image_url request.profile '150x150' %}" alt="" height=88px width=88px class="img-circle">
+      <p class="profile-star-rating">
+{#        <i class="fa fa-star" aria-hidden="true"></i>#}
+{#        <i class="fa fa-star" aria-hidden="true"></i>#}
+{#        <i class="fa fa-star" aria-hidden="true"></i>#}
+{#        <i class="fa fa-star" aria-hidden="true"></i>#}
+{#        <i class="fa fa-star" aria-hidden="true"></i>#}
+      </p>
+      <div class="btn-group btn-group-lg" role="group" aria-label="...">
+        <button type="button" class="btn btn-default btn-warning">
+          <i class="fa fa-heart" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn btn-default btn-success">
+          <i class="fa fa-money" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn btn-default btn-primary" data-toggle="tooltip" title="Edit my profile">
+          <i class="fa fa-cog" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container-fluid" id="profile-listing-info">
+  <div class="row">
+    <div class="col-md-9">
+    {% if listings %}
+      <h3>{{ listings.count }} open listings</h3>
+      <bold><hr></bold>
+    {% endif %}
+      <div class="listing-image">
+        <!-- Construct in the for loop -->
+        {% for each in listings %}
+          <div class="col-sm-6 col-md-4" style="width: 30%;">
+              <div class="thumbnail">
+                  <img src="{% product_image_url each '280x280'%}">
+                  <div class="caption">
+                      <p class="thumbnail-tag" data-toggle="tooltip" title="{{ each.subcategories.sub_categories_text }}" style="align-content: center; margin-left: -115px;">{{ each.subcategories.sub_categories_text }}</p>
+                      <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
+                      <a href="#"><h4 class="inline">{{ each.user }}</h4></a>
+                      <hr>
+                      <h4>{{ each.title }}</h4>
+                  </div>
+              </div>
+          </div>
+        {% endfor %}
+
+      </div>
+
+    </div>
+
+    <div class="col-md-3">
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+
+      <p><a href="#"><i class="fa fa-balance-scale" aria-hidden="true"></i>{% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour {% plural %} {{ hours }} hours</a></p>
+        {% endblocktrans %}
+      <p><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Job Description</a></p>
+      <p><a href="#"><i class="fa fa-home" aria-hidden="true"></i> {{ profile.location.full_name }}</a></p>
+
+      <div class="card">
+        <h4>Offerings</h4>
+        <span class="badge">Massage</span>
+        <span class="badge">Web Design</span>
+        <span class="badge">Child Care</span>
+        <span class="badge">Off Grid</span>
+      </div>
+      <div class="card">
+        <h4>Requests</h4>
+        <span class="badge">Massage</span>
+        <span class="badge">Organic Vegan Food</span>
+        <span class="badge">Help Building</span>
+        <span class="badge">Kids Stuff</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Relationship with -->
+<section class="container-fluid">
+  <div class="row">
+    <div class="col-md-9">
+    {% if request.profile %}
+      <h3>My Relationship with {{ profile.name }}</h3>
+      <table class="table table-bordered table-relationship">
+        <tbody>
+          <tr>
+            <td>Current Balance</td>
+            <td>{{ balance }}</td>
+          </tr>
+          {% if account.partner_endorsement %}
+          <tr>
+            {% blocktrans count hearts=account.partner_endorsement.weight %}
+            <td>{{ partner }} endorsement of you</td>
+            {% plural %}
+                {{ partner }} endorsement of you
+            {% endblocktrans %}
+            <td>{% blocktrans count hearts=account.partner_endorsement.weight %}
+				{{ hearts }} heart
+			{% plural %}
+				{{ hearts }} hearts
+			{% endblocktrans %}</td>
+          </tr>
+          {% endif %}
+          {% if account.endorsement %}
+          <tr>
+            {% blocktrans count hearts=account.endorsement.weight %}
+            <td>Your endorsement of {{ partner }}</td>
+            {% plural %}
+                <td>Your endorsement of {{ partner }}</td>
+            {% endblocktrans %}
+            <td>{% blocktrans count hearts=account.endorsement.weight %}
+				{{ hearts }} heart
+			{% plural %}
+				{{ hearts }} hearts
+			{% endblocktrans %}</td>
+          </tr>
+        {% endif %}
+        </tbody>
+      </table>
+    {% endif %}
+    </div>
+  </div>
+</section>
+
+{% if request.profile %}
+<!-- our transcation history -->
+<section class="container-fluid">
+  <div class="row">
+    <div class="col-md-9">
+      <h3>Our Transaction History</h3>
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td>11/20/2016</td>
+            <td>-6 hours</td>
+            <td>Good Job painting</td>
+            <td>
+              <p class="profile-star-rating">
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td>11/11/2016</td>
+            <td>+ 4 hours</td>
+            <td></td>
+            <td>
+              <p class="profile-star-rating">
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td>11/9/2016</td>
+            <td>+10 hours</td>
+            <td></td>
+            <td>
+              <p class="profile-star-rating">
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+              </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if request.profile %}
+<!-- endorsed by -->
+<section class="container-fluid">
+  <div class="row">
+    <div class="col-md-9">
+      <p>{{ profile_endorsement }}</p>
+      <h3>Endorsed by:</h3>
+      <hr>
+      <h4>2 received reviews(100% postive, 2/2)</h4>
+      <hr>
+      <div class="Media">
+        <img class="Media-figure" src="https://randomuser.me/api/portraits/thumb/men/83.jpg" alt="">
+        <p class="Media-body">Everything went well</p>
+      </div>
+      <hr>
+      <div class="Media">
+        <img class="Media-figure" src="https://randomuser.me/api/portraits/thumb/men/83.jpg" alt="">
+        <p class="Media-body">Everything went well</p>
+      </div>
+      <hr>
+    </div>
+
+  </div>
+</section>
+{% endif %}

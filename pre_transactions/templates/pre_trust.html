@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% load staticfiles profile relate i18n %}
+{% load tag_utils %}
+
+{% block content %}
+
+    <h3 class="page-title" style="padding-left: 10px;">
+    <span>
+        <i class="fa fa-lightbulb-o"></i> Prefilled Trust
+    </span> | <span style="font-size: 18px;"> Confirm your transaction</span>
+    </h3>
+    <hr>
+    <div class="col-lg-6 col-lg-offset-3">
+        <form method="post" id="pre-trust-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="panel panel-default">
+                <div class="panel-heading">Recipient: {{ recipient }}</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 col-md-12">
+                            <a href="#" class="thumbnail">
+                                <img src="{% profile_image_url recipient '150x150' %}" alt="..."
+                                     style="width: 200px; height: 200px;">
+                            </a>
+                        </div>
+                        <div class="cointainer">
+                            <div class="form-group">
+                                <label>Testimonial</label>
+                                <textarea class="form-control" rows="4" cols="20">{{ text }}</textarea>
+
+                                <label for="Credit Limit (Measured in 'Village Hours'.)">Credit Limit (Measured in 'Village Hours'.)</label>
+                                <input class="form-control" id="id_weight" min="0" name="weight" type="number" value="{{ weigth }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" id="save-pre-trust" class=" btn btn-success gradient save-button">
+                    <i class="fa fa-check"></i> Save trust</button>
+                <a href="{% url 'pre_transactions:pre_trust' %}" class="btn btn-danger"><i class="fa fa-sign-out"></i> Back</a>
+            </div>
+
+            <script>
+                $("#pre-trust-form").submit(function (e) {
+                    debugger;
+                    $.ajax({
+                        url: {% url 'pre_transactions:pre_trust' %},
+                        data: JSON.stringify($("#pre-trust-form")),
+                        method: 'POST',
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            debugger;
+                            showSuccessMessage('Successfuly sent trust');
+                            window.location.replace({% url 'frontend:home' %});
+                        }
+                    })
+                })
+            </script>
+
+
+        </form>
+    </div>
+
+
+
+{% endblock %}
+

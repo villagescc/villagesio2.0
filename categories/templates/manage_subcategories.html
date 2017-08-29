@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="container">
+            <a type="button" href="{% url 'categories:subcategories_manager:add_subcategory' %}" class="btn btn-primary">Add Subcategory</a>
+            <button id="delete" class="btn btn-danger pull-right"><i class="fa fa-exclamation"></i>Delete</button>
+            {% if subcategories %}
+                <table class="table" id="table-subcategories">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Subcategory</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for subcategory_info in subcategories %}
+                    <tr>
+                        <td class="pointer center td-checkbox">
+                            <input id="{{ subcategory_info.id }}" type="checkbox" value="{{ subcategory_info.id }}">
+                        </td>
+                        <td width="50%"><a href="{% url 'categories:subcategories_manager:edit_subcategory' subcategory_info.id%}" class="pull-left">{{ subcategory_info.sub_categories_text }}</a></td>
+                        <td width="50%">{{ subcategory_info.categories.categories_text }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                Sorry, we did not find any subcategories.
+            {% endif %}
+        </div>
+
+    <script>
+        $('#delete').click(function(e){
+            var original_value = $(this).html();
+            $(this).html('Deleting selected...');
+
+            var values = [];
+            var rows_to_remove = [];
+            var table = $('#table-subcategories');
+
+
+            table.find(':checked').each(function() {
+                if ($(this).val() > 0) {
+                    values.push($(this).val());
+                    rows_to_remove.push($(this).parent().parent());
+                }
+            });
+
+            if (values.length > 0) {
+                if (confirm('Are you sure ? ')) {
+                    $.ajax({
+                        async: false,
+                        url: '{% url 'categories:subcategories_manager:delete_subcategory' %}',
+                        type: 'POST',
+                        data: { ids:values, csrfmiddlewaretoken:"{{ csrf_token }}" },
+                        success: function (data) {
+                            for (var row in rows_to_remove) {
+                                rows_to_remove[row].remove();
+                            }
+                        },
+                        error: function (resp) {
+                            console.log("Error:" + resp);
+                        }
+                    });
+                }
+            } else {
+                alert('Please select a subcategory first.')
+            }
+
+            $(this).html(original_value);
+        });
+    </script>
+{% endblock %}

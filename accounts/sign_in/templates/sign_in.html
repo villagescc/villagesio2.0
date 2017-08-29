@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '1199641510163736',
+                cookie     : true,
+                xfbml      : true,
+                version    : 'v2.8'
+            });
+            FB.AppEvents.logPageView();
+        };
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+    <div class="page-header col-sm-12">
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success'%}
+                <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-{{ message.tags }} margin-top pointer"{% endif %}>
+                    <i class="fa fa-check"></i>{{ message }}
+                </div>
+            {% else %}
+                <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-danger pointer"{% endif %}>
+                    <i class="fa fa-meh-o"></i>{{ message }}
+                </div>
+            {% endif %}
+            <script> setTimeout(function(){ $(".alert-personalized").fadeOut('slow'); }, 3000); </script>
+        {% endfor %}
+    {% endif %}
+        <h2 class="col-sm-7"><i class="fa fa-sign-in"></i>Sign In</h2>
+
+        {% if alert_failed %}
+            <div class="alert alert-danger col-sm-5 pull-right">
+                <a class="close" data-dismiss="alert" aria-label="close">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+                <p class="alert-error"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <strong>{{ alert_failed.warning }}</strong> {{ alert_failed.message }}
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+        <div class="access">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+                <li role="active">
+                    <a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}" id="login">
+                        <h4><i class="fa fa-sign-in margin-right"></i> Login</h4></a>
+                </li>
+                <li role="active">
+                    <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" id="register">
+                        <h4><i class="fa fa-user margin-right"></i> Register</h4>
+                    </a>
+                </li>
+            </ul>
+
+{% for field in form %}
+    {% if field.errors %}
+        <div class="form-group">
+            <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+            {{ field }}
+            <div class="alert alert-warning message">
+                {% for error in field.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="form-group">
+            <label for="{{ field.label }}">{{ field.label }}</label>
+            {{ field }}
+        </div>
+    {% endif %}
+{% endfor %}
+{% if not form.is_valid %}
+    <script>
+        setTimeout(function () {
+            $('.message').slideUp("fast");
+        }, 4000);
+    </script>
+{% endif %}
+        </div>
+
+    <script>
+        $(document).ready(function(){
+            getUrl();
+        });
+
+        function getUrl() {
+            var urlName = $(location).attr('pathname').split('/');
+            if (urlName[3] == "log_in") {
+                $('#login').addClass('nav-home-active');
+            } else {
+                if (urlName[3] == "register") {
+                    $('#register').addClass('nav-home-active');
+                }
+            }
+        }
+
+        setInterval(function () {
+            $('.alert').fadeOut("medium");
+        }, 3000);
+    </script>
+{% endblock %}
+

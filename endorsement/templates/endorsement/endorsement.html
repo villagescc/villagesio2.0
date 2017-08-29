@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Navigation / from plugs / we need to show two plugs here -->
+<!-- 1. if user not logged in comes from pre-login  -->
+<!-- 2. lf user logged in comes from post-login -->
+  {% include 'plugs/navigation-post-login.html' %}
+
+<section class="container" id="endorsement">
+
+  <div class="row">
+    <div class="col-md-9">
+      <h2 style="text-align: center;">Endorsement</h2>
+      <form class="form-horizontal">
+        <!-- Pop-up page -->
+        <div class="form-group">
+          <label for="" class="col-sm-2 control-lable"></label>
+          <div class="col-sm-10">
+            <input type="text" name="" value="" class="form-control" placeholder="To:">
+          </div>
+        </div>
+
+        <!-- Hours -->
+        <div class="form-group">
+          <label for="" class="col-sm-2 control-label">Hours</label>
+          <div class="col-sm-10">
+            <input type="text" name="" value="">
+          </div>
+        </div>
+
+        <!-- Testimonial -->
+        <div class="form-group">
+          <label for="" class="col-sm-2 control-label">Testimonial</label>
+          <div class="col-sm-10">
+            <textarea name="name" rows="8" cols="80" class="form-control"></textarea>
+          </div>
+        </div>
+
+        <!-- Save button -->
+        <div class="form-group">
+          <!-- Empty label -->
+          <label for="" class="col-sm-2 control-label"></label>
+          <div class="col-sm-10">
+            <input type="submit" name="" value="Save endorsement" class="btn">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="row">
+    <div class="col-md-9">
+      <h4>Trust Relationship</h4>
+
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td>Overall Balance</td>
+            <td>1.00 hours</td>
+          </tr>
+          <tr>
+            <td>Trusted Balance</td>
+            <td>1.00 hours</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock content %}

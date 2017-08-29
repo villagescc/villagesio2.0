@@ -1,0 +1,82 @@
+<form class="form-horizontal" id="endorsement-modal-form" action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div id="new-endorsement-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="endorsement-modal" aria-hidden="true" style="opacity: 0.9 !important;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
+                    <h4 class="modal-title" id="myModalLabel">New Endorsement</h4>
+                </div>
+                <div id="modaltext" class="modal-body">
+                    <div class="form-group" id="div_{{ field.auto_id }}">
+                        <label for="{{ field.label }}" class="col-sm-3 control-label {% if field.erros %}error{% endif %}" style="padding-top: 7px;">{{ field.label }}</label>
+                        <div class="col-sm-8 {% if field.error %}error{% endif %}">
+                            {{ form.as_p }}
+                                {% if field.errors %}
+                                    {% for error in field.errors %}
+                                        <div class="alert alert-error">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                <div class="clearfix"></div>
+                </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="add-endorsement-modal" class=" btn btn-success gradient save-button">
+                            <i class="fa fa-check"></i>Save Endorsement
+                        </button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                    <div id="msg"></div>
+                </div>
+            </div>
+        </div>
+</form>
+
+<script>
+    $("#endorsement-modal-form").submit(function(e){
+        var formObj = $(this);
+        var formURL = formObj.attr("action");
+        var formData = new FormData(this);
+        var message_status = $('#message_status');
+        var error_message = $('#error_message');
+        var save = $("#add-endorsement-modal");
+        $.ajax({
+            url:'{% url 'endorse_user' each.profile.username %}',
+            type:'POST',
+            data: {
+            },
+            cache: false,
+            beforeSend: function (xhr) {
+                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                save.prop('disabled', true);
+            },
+            complete: function () {
+                save.prop('disabled', false);
+            },
+            success: function(resp){
+                $('#msg').html(resp).fadeIn('slow');
+                $('#msg').html("Target inserted successfully").fadeIn('slow');
+                $('#msg').delay(2500).fadeOut('slow');
+            },
+            error: function (resp){
+                console.log(resp);
+                var errors = JSON.parse(resp.responseText);
+                var errorMsg = "<font>Sorry, it was not possible to perform the operation:" +
+                        "<br/><ul>";
+                for (var error in errors) {
+                    errorMsg += "<li>";
+                    for (var e in errors[error]) {
+                        errorMsg += errors[error][e] + " ";
+                    }
+                    errorMsg += "</li>";
+                }
+                errorMsg += "</ul>";
+                error_message.removeAttr('style');
+                error_message.html(errorMsg);
+            }
+        });
+        e.preventDefault();
+    });
+</script>

@@ -1,0 +1,8 @@
+{% load i18n %}
+{{ message }}
+
+----
+{% blocktrans context "email" %}View post{% endblocktrans %}: http://{{ domain }}{{ post.get_absolute_url }}
+
+{% blocktrans context "email" %}View {{ sender }}{% endblocktrans %}: http://{{ domain }}{{ sender.get_absolute_url }}
+

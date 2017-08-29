@@ -1,0 +1,33 @@
+{% extends "profile_base.html" %}
+{% load i18n %}
+{% load relate %}
+
+{% block title %}
+	{% blocktrans %}Endorsements For {{ profile }}{% endblocktrans %}
+{% endblock %}
+
+{% block nav_endorsements_class %}selected{% endblock %}
+
+{% block content %}
+<h2>{% blocktrans %}Endorsements For {{ profile }}{% endblocktrans %}</h2>
+
+<div class="feature">
+	<table class="data">
+		<tr>
+			<th>{% trans 'Reputation' %}</th>
+			<td>{% reputation profile request.profile %}</td>
+		</tr>
+		<tr>
+			<th>{% trans 'Total Hearts' %}</th>
+			<td>{{ profile.endorsement_sum }}</td>
+		</tr>
+	</table>
+	<p>{% blocktrans %}Reputation is how much trust I have in someone,
+		directly, as well as indirectly through the network. It is equal
+		to the maximum number of acknowledgement hours they could send
+		me if all outstanding acknowledgements were wiped away and we
+		started from zero.{% endblocktrans %}</p>
+</div>
+
+	{% include "feed_item_list.html" %}
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Edit My Profile' %}{% endblock %}
+
+{% block nav_edit_profile_class %}selected{% endblock %}
+
+{% block content %}
+
+    <style>
+        html {
+            padding: 15px;
+        }
+
+    </style>
+    <div class="container">
+        <h2>{% trans 'Edit My Profile' %}</h2>
+
+        <div class="feature">
+            <p>{% blocktrans %}Your profile tells other community members about
+                you, and lets them find you based on your interests and skills.
+                Please mention anything that you wish to offer or bring to the
+                community generally, so others will find you when they search
+                for those things.{% endblocktrans %}</p>
+            <p>{% trans 'Your profile data is <strong>public</strong>.' %}</p>
+        </div>
+        <span>
+            <a href="{% url 'my_profile' %}" class="btn btn-info">
+                {% trans 'View my profile' %}
+            </a>
+            <a class="btn btn-warning" href="{% url 'add_profile_tag' %}">Edit tags</a>
+        </span>
+
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form }}
+            </div>
+
+            <div class="container" style="padding-left: 0">
+                <input class="btn btn-submit btn-success" type="submit" value="{% trans 'Save Changes' %}" />
+            </div>
+        </form>
+    </div>
+{% endblock %}

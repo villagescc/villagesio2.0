@@ -1,0 +1,23 @@
+{
+  "name": "villagescc",
+  "homepage": "https://github.com/villagescc/villagescc",
+  "authors": [
+    "Raja Simon <rajasimon@icloud.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0",
+    "animate.css": "^3.5.2"
+  }
+}

@@ -1,0 +1,15 @@
+{% extends "feed_item.html" %}
+{% load profile %}
+{% load i18n %}
+
+{% block title %}
+
+{% profile_display item.endorser request _("You endorsed") item.endorser %}
+{% profile_display item.recipient request _("endorsed you") item.recipient %}
+{% blocktrans count hearts=item.weight %}
+	with {{ hearts }} heart.
+{% plural %}
+	with {{ hearts }} hearts.
+{% endblocktrans %}
+
+{% endblock %}

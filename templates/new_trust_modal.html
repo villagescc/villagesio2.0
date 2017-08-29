@@ -1,0 +1,126 @@
+<style>
+
+.align-check-label {
+  display: block;
+  padding-left: 15px;
+  text-indent: -15px;
+}
+.align-check-input {
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  margin:0;
+  vertical-align: bottom;
+  position: relative;
+  top: -1px;
+  *overflow: hidden;
+}
+
+.modal-body {
+    max-height: 100vh;
+    overflow-y: scroll;
+}
+</style>
+
+<!-- Trust Modal -->
+<form class="form-horizontal" id="new-trust-form" method="POST">
+    {% csrf_token %}
+    <div id="new-trust-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <input type="text" id="profile-username" hidden>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
+                    <h4 class="modal-title trust-modal-title" id="trust-modal-title"></h4>
+                </div>
+                <div id="modaltext" class="modal-body">
+                    <div class="form-group">
+                        <div class="container-fluid">
+                            <label for="{{ trust_form.weight.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.weight.label }}</label>
+                            {{ trust_form.weight.errors }}
+                            <div class="input-group">
+                                {{ trust_form.weight }}
+                            </div>
+                            <div class="alert alert-warning collapse" id="error_id_weight"></div>
+                            <label for="{{ trust_form.text.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.text.label }}</label>
+                            {{ trust_form.text.errors }}
+                            <div class="input-group">
+                                {{ trust_form.text }}
+                            </div>
+                            <label for="{{ trust_form.referral.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.referral.label }}</label>
+                            {{ trust_form.referral.errors }}
+                            <div class="input-group">
+                                {{ trust_form.referral }}
+                            </div>
+                            <div class="alert alert-warning collapse" id="error_id_text"></div>
+                            <label for="{{ trust_form.anonymous.label }}" class="align-check-label {% if field.errors %}error{% endif %}"><div class="align-check-input">{{ trust_form.anonymous }}</div>{{ trust_form.anonymous.label }}</label>
+                            {{ trust_form.anonymous.errors }}
+                        </div>
+                    </div>
+                    <div class="alert alert-warning collapse" id="trust-msg"></div>
+                    <div class="modal-footer">
+                        <button type="submit" id="save-trust" class=" btn btn-success gradient save-button">
+                            <i class="fa fa-check"></i>Save Trust
+                        </button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $("#save-trust").click(function(e) {
+        $('#save-trust').attr("disabled", true);
+        var profile_username = $("#profile-username").val();
+        var url = '/endorse/'+profile_username+'/';
+        console.log(url);
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: $('#new-trust-form').serialize(),
+            cache: false,
+            beforeSend: function (xhr) {
+                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function(data){
+                if(data['data']['stat'] == 'ok'){
+                    var recipient = data['data']['recipient'];
+                    $('#trust-msg').html(data).fadeIn('slow');
+                    $('#trust-msg').html("<strong><p>Successfully sent trust to " +recipient+ "</p></strong>").fadeIn('slow');
+                    $('#trust-msg').delay(2500).fadeOut('slow');
+                    $('#save-trust').attr("disabled", false);
+                    $('#new-trust-modal').modal('hide');
+                    location.reload();
+                }
+                else if(data['data']['stat'] == 'error'){
+                    debugger;
+                    if('weight' in data['data']['errors']) {
+                        var error = data["data"]["errors"]["weight"];
+                        $('#trust-msg').html("<strong><p> Weight: " +error+ " Please verify </strong></p>").fadeIn('slow');
+                        $('#trust-msg').delay(2500).fadeOut('slow');
+                        $("#save-trust").attr("disabled", false);
+                    }
+                }
+            },
+            error: function (resp){
+                if(resp.status === 500) {
+                    showInternalServerError();
+                }
+            }
+        });
+        e.preventDefault();
+    });
+
+    $('#new-trust-modal').on('hidden.bs.modal', function (e) {
+        $(this)
+                .find("input,textarea,select")
+                .val('')
+                .end()
+                .find("input[type=checkbox], input[type=radio]")
+                .prop("checked", "")
+                .end();
+    })
+</script>

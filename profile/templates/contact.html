@@ -1,0 +1,101 @@
+{% extends "profile_base.html" %}
+{% load i18n %}
+{% block content %}
+
+        <style>
+        #div-recipient-name .tt-menu {
+            max-height: 150px;
+            width: 100%;
+            overflow-y: auto;
+            border-bottom: 1px solid #ccc;
+            background-color: #ffffff;
+        }
+    </style>
+
+
+    <form id="blank-contact-form" action="" method="post">
+        {% csrf_token %}
+        <div class="container">
+            <h2>{% blocktrans %}Contact {{ profile }}{% endblocktrans %}</h2>
+            <p class="feature">
+                {% blocktrans %}Your message will be forwarded
+                    to {{ profile }} by email.{% endblocktrans %}</p>
+            {% for field in form %}
+                {% if field.errors %}
+                    <div class="form-group">
+                        <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                        {{ field }}
+                        <div class="alert alert-warning message">
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="form-group">
+                        {% if field.auto_id == 'id_contact_recipient_name' %}
+                            <div class="form-group" id="div-recipient-name">
+                                <label for="{{ field.label }}">{{ field.label }}</label>
+                                <br>
+                                {{ field }}
+                            </div>
+                        {% else %}
+                            <label for="{{ field.label }}">{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            <input id="selected-contact-recipient-value" hidden>
+
+            <tr>
+                <td><input type="submit" class="btn btn-primary" value="{% trans 'Send' %}"></td>
+            </tr>
+        </div>
+    </form>
+
+    <script>
+        var recipients = new Bloodhound({
+            datumTokenizer: function (datum) {
+                return Bloodhound.tokenizers.whitespace(datum.value);
+            },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                wildcard: '%QUERY',
+                url: "{% url 'get_recipients_data' %}?query=%QUERY",
+                transform: function (response) {
+                    return $.map(response.result, function (recipient) {
+                        $('#id_contact_recipient_name').attr("data-profile-selected", recipient.username);
+                        return {
+                            value: recipient.username,
+                            suggest: recipient
+                        };
+                    });
+                }
+            }
+
+        });
+        $('#id_contact_recipient_name').typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 0
+            },
+            {
+                display: 'value',
+                source: recipients,
+                limit: 20,
+                templates: {
+                suggestion: function (data) {
+                    debugger;
+                    return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
+                }
+            }
+            });
+        debugger;
+        $("#blank-contact-form").submit(function (e) {
+            $("#id_data_profile").val($('#id_contact_recipient_name').val());
+        })
+    </script>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Request Invitation{% endblock %}
+
+{% block nav_register_class %}selected{% endblock %}
+
+{% block content %}
+<h2>{% trans 'Request Invitation' %}</h2>
+
+<p>{% blocktrans %}Villages is a trust network. You need to be endorsed
+	by an existing user to join. If you think you belong here, let us
+	know, and if we agree, we'll invite you!{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Villages isn't for everyone. If you:{% endblocktrans %}</p>
+
+<ul class="feature">
+	<li>{% blocktrans %}Have time and skills to contribute to your local
+		community{% endblocktrans %}</li>
+
+	<li>{% blocktrans %}Are willing to make new connections and facilitate
+		new connections for others{% endblocktrans %}</li>
+
+	<li>{% blocktrans %}Believe in the need for new economic systems
+		{% endblocktrans %}</li>
+</ul>
+
+<p>{% blocktrans %}please let us know a bit about yourself and why you wish
+	to participate in Villages.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Please also let us know who gave you the link to Villages,
+	or where you found it. Thanks!{% endblocktrans %}</p>
+
+<hr>
+
+<form action="" method="post">
+	{% csrf_token %}
+	<table class="form">
+		{{ form }}
+		<tr>
+			<th></th>
+			<td>
+				<input type="submit" value="{% trans 'Request Invitation' %}">
+			</td>
+		</tr>
+	</table>
+</form>
+
+<p class="feature">{% blocktrans %}If you have received an invitation email,
+	please visit the link in the email before visiting this page to see a
+	registration form instead.{% endblocktrans %}</p>
+{% endblock %}
