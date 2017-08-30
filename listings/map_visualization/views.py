@@ -41,6 +41,9 @@ class Search(View):
         post_data = json.loads(request.body.decode('utf-8'))
         for listing_location in all_listings:
             listing_locations.append({'lat': listing_location.user.profile.location.point.coords[1],
-                                      'lng': listing_location.user.profile.location.point.coords[0]})
+                                      'lng': listing_location.user.profile.location.point.coords[0],
+                                      'seller': listing_location.user.profile.name,
+                                      'price': listing_location.price,
+                                      'title': listing_location.title})
 
         return JsonResponse({'listing_locations': listing_locations})
