@@ -10,7 +10,8 @@ function initMap() {
     var pos = {lat: 21.289373, lng: -157.917480};
     map = new google.maps.Map(document.getElementById('map'), {
         center: pos,
-        zoom: 12
+        zoom: 12,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
     });
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
@@ -89,9 +90,15 @@ function get_wifi_data(area_map) {
                 return marker_content
             });
 
+            var mcOptions = {
+                infoOnClick: true,
+                infoOnClickZoom: 7,
+                imagePath: '../static/maps/MarkerClusterer/images/m'
+            };
+
             // Create wifi groups
-            var markerCluster = new MarkerClusterer(map, markers,
-                {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+            var markerCluster = new MarkerClusterer(map, markers, mcOptions,
+                {imagePath: ''});
 
             // Add function get_wifi_details in each wifi marker in map
             $.each(markers, function (index, element) {
