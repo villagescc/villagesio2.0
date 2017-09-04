@@ -16,6 +16,7 @@ develop-eggs/
 dist/
 .idea/
 uploads/
+sessions/
 downloads/
 eggs/
 .eggs/
