@@ -1,4 +1,5 @@
 
+
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
     initMap();
@@ -70,6 +71,10 @@ function get_wifi_data(area_map) {
                     lat: parseFloat(element['lat']),
                     lng: parseFloat(element['lng']),
                     seller: element['seller'],
+                    seller_username: element['seller_username'],
+                    listing_id: element['listing_id'],
+                    listing_img: element['listing_img'],
+                    profile_img: element['profile_img'],
                     price: element['price'],
                     title: element['title']
                 };
@@ -85,8 +90,12 @@ function get_wifi_data(area_map) {
 
                 });
                 marker_content.seller = location['seller'];
+                marker_content.seller_username = location['seller_username'];
                 marker_content.price = location['price'];
                 marker_content.title = location['title'];
+                marker_content.listing_img = location['listing_img'];
+                marker_content.profile_img = location['profile_img'];
+                marker_content.listing_id = location['listing_id'];
                 return marker_content
             });
 
@@ -103,21 +112,60 @@ function get_wifi_data(area_map) {
             // Add function get_wifi_details in each wifi marker in map
             $.each(markers, function (index, element) {
 
-                var marker_content = {
-                    seller: element['seller'],
-                    price: element['price'],
-                    title: element['title']
-                };
-
                 var infowindow = new google.maps.InfoWindow({
+                    maxWidth: 400,
                     content: " "
                 });
 
+                var item_content =
+                         '<div style="overflow-x: hidden; overflow-y: hidden; position: relative; padding-right: 6px; padding-left: 6px; top: 1px; width: 0; opacity: 0.5"></div>'
+                        + '<img src="https://maps.gstatic.com/intl/en_us/mapfiles/iw_close.gif" style="position: absolute; width: 12px; height: 12px; border: 0px; z-index: 101; cursor: pointer; right: 3px; top: 3px; display: none;">'
+                        + '<div style="overflow-y: hidden; overflow-x: hidden; cursor: default; clear: both; position: relative; border-radius: 5px; border-width: 1px; padding: 0px; background-color: rgb(255, 255, 255); border-color: rgb(204, 204, 204); border-style: solid; width: 237px; height: 213px;">'
+                        + '<div>'
+                        + '<div id="map_bubble"><div class="bubble-navi-container">'
+                        + '<div class="bubble-navi-container">'
+                        + '<div class="bubble-navi"><a>'
+                        + '<i class="ss-navigateleft bubble-navi-left disabled"></i></a>'
+                        + '<div class="bubble-navi-header">'
+                        + '</div>'
+                        + '<a><i class="ss-navigateright bubble-navi-right"></i></a></div>'
+                        + '<div class="bubble-multi-content" style="width: 100px; left: 0px;">'
+                        + '<div class="bubble-item">'
+                        + '<div class="bubble-image-container">'
+                        + '<a href="/listing_details/'+ this.listing_id + '"><img alt="For sale: '+ this.title +'"src="'+this.listing_img+'"></a></div>'
+                        + '<a class="bubble-overlay" href="/listing_details/'+ this.listing_id + '"><span class="bubble-title-link">' + this.title + '</span></a>'
+                        + '<div class="bubble-title">'
+                        + '<div class="bubble-avatar">'
+                        + '<a href="http://villages.cc/profiles/' + this.seller_username +'"><img src="'+this.profile_img+'" alt="Image"></a></div>'
+                        + '<div class="bubble-details">'
+                        + '<div class="bubble-author">'
+                        + '<a title="'+this.seller_username+'" href="http://villages.cc/profiles/'+this.seller_username+'">'+this.seller+'</a></div>'
+                        + '<div class="bubble-price" title="'+this.price+'">'+ this.price + '<span class="bubble-price-quantity"></span>'
+                        + '</div></div></div></div>'
+                        + '<div class="bubble-item">'
+                        + '<div class="bubble-image-container">'
+                        + '<a href="/listing_details/'+this.listing_id+'"><img alt="For Sale: '+ this.title + 'src="'+ this.listing_img + '"></a></div>'
+                        + '<a class="bubble-overlay" href="/listing_details/'+this.listing_id+'">'
+                        + '<span class="bubble-title-link">' + this.title + '</span></a>'
+                        + '<div class="bubble-title">'
+                        + '<div class="bubble-avatar">'
+                        + '<a href="http://villages.cc/profiles/' + this.seller_username +'"><img src="'+this.profile_img+'" alt="Image"></a></div>'
+                        + '<div class="bubble-details">'
+                        + '<div class="bubble-author"><a title="'+this.seller+'" href="http://villages.cc/profiles/' + this.seller_username +'">'+this.seller+'</a></div>'
+                        + '<div class="bubble-price" title="'+this.title+'">'+this.title+'<span class="bubble-price-quantity"></span></div>'
+                        + '</div></div></div></div></div>'
+                        + '</div></div></div>'
+                        + '<div style="position: relative; margin-top: -1px;">'
+                        + '<div style="position: absolute; left: 30%; height: 0; width: 0; margin-left: -15px; border-width: 15px 15px 0; border-color: rgb(204, 204, 204) transparent transparent; border-style: solid;"></div><div style="position: absolute; left: 30%; height: 0px; width: 0px; border-top: 14px solid rgb(255, 255, 255); border-left: 14px solid transparent; border-right: 14px solid transparent; margin-left: -14px; border-bottom-color: transparent; border-bottom-style: solid;">'
+                        + '</div></div></div></div>';
+
+                // element.addListener('click', function () {
+                //     infowindow.setContent(item_content);
+                // infowindow.open(map, this);
+                // });
+
                 element.addListener('click', function () {
-                    infowindow.setContent('<p>Seller: '+this.seller+'</p>' +
-                    '<p>Price: '+this.price+'</p>' +
-                    '<p>Title: '+this.title+'</p>');
-                    // get_wifi_details(element);
+                    infowindow.setContent(item_content);
                 infowindow.open(map, this);
                 });
             });

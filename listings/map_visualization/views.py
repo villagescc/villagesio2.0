@@ -43,7 +43,10 @@ class Search(View):
             listing_locations.append({'lat': listing_location.user.profile.location.point.coords[1],
                                       'lng': listing_location.user.profile.location.point.coords[0],
                                       'seller': listing_location.user.profile.name,
+                                      'seller_username': listing_location.user.username,
+                                      'listing_id': listing_location.id,
                                       'price': listing_location.price,
-                                      'title': listing_location.title})
-
+                                      'title': listing_location.title,
+                                      'listing_img': listing_location.photo.url if listing_location.photo else None,
+                                      'profile_img': listing_location.user.profile.photo.url if listing_location.user.profile.photo else None})
         return JsonResponse({'listing_locations': listing_locations})
