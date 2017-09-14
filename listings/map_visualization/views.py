@@ -37,8 +37,25 @@ class Search(View):
 
         listing_locations = []
 
-        all_listings = Listings.objects.all()
         post_data = json.loads(request.body.decode('utf-8'))
+
+        if post_data.get('max_price'):
+            query = Listings.objects.filter(price__range=(post_data['min_price'],
+                                                          post_data['max_price']))
+
+            for each_listing in query:
+                listing_locations.append({'lat': each_listing.user.profile.location.point.coords[1],
+                                          'lng': each_listing.user.profile.location.point.coords[0],
+                                          'seller': each_listing.user.profile.name,
+                                          'seller_username': each_listing.user.username,
+                                          'listing_id': each_listing.id,
+                                          'price': each_listing.price,
+                                          'title': each_listing.title,
+                                          'listing_img': each_listing.photo.url if each_listing.photo else None,
+                                          'profile_img': each_listing.user.profile.photo.url if each_listing.user.profile.photo else None})
+            return JsonResponse({'listing_locations': listing_locations})
+
+        all_listings = Listings.objects.all()
         for listing_location in all_listings:
             listing_locations.append({'lat': listing_location.user.profile.location.point.coords[1],
                                       'lng': listing_location.user.profile.location.point.coords[0],

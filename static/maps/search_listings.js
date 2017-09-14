@@ -41,6 +41,8 @@ function call_area_map() {
         lat_max: map.getBounds().getNorthEast().lat(),
         lng_min: map.getBounds().getSouthWest().lng(),
         lng_max: map.getBounds().getNorthEast().lng(),
+        min_price: priceSlider.slider('getValue')[0],
+        max_price: priceSlider.slider('getValue')[1],
         query: value
     };
     get_wifi_data(area_map)

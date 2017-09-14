@@ -35,9 +35,12 @@
 
         .col-9{width:100%;margin-bottom:0.75em;min-height:1px}.col-9:last-child{margin-bottom:0}@media (min-width: 48em){.col-9{width:75%;float:left;padding-left:0.75em;padding-right:0.75em;margin-bottom:0}}
 
+        .slider.slider-horizontal{width: 150px;height:20px;}
+
     </style>
 
-    <form action="" method="get">
+    <form id="form-map-listing" method="post">
+    {% csrf_token %}
         {% if user_agent_type == 'mobile' %}
             <div class="col-md-2">
                 {% if not listing_items %}
@@ -205,8 +208,12 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="custom-filter-options">
-                                    <div class="range-slider noUi-target noUi-ltr noUi-horizontal noUi-background" id="range-slider-price">
-                                        <div class="noUi-base"><div class="noUi-origin noUi-connect" data-style="left" style="left: 0%;"><div class="noUi-handle noUi-handle-lower"></div></div><div class="noUi-origin noUi-background" data-style="left" style="left: 77.592%;"><div class="noUi-handle noUi-handle-upper"></div></div></div></div>
+                                   <b>1</b> <input id="price" name="map-price" type="text" class="span2" value=""
+                                                      data-slider-min="0"
+                                                      data-slider-max="1000"
+                                                      data-slider-step="5"
+                                                      data-slider-value="[0,100]"/>
+                                    <b>1000</b>
                                 </div>
                             </div>
                         </div>
@@ -265,18 +272,38 @@
                 </div>
 
 
+
     <script src="{% static 'maps/search_listings.js' %}"></script>
-    <script src="{% static 'maps/markerclustererthequiver.js' %}"></script>
+    <script src="{% static 'maps/MarkerClusterer/src/markerclusterer.js' %}"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA"></script>
 
     <div class="col-9" style="padding-left: 0;">
         <div class="home-map">
             <div id="map" class="map" style="height: 500px; position: relative; overflow: hidden"></div>
         </div>
-    </form>
 
-    </div>
+    <script src="{% static 'seiyria-bootstrap-slider/dist/bootstrap-slider.min.js' %}" charset="utf-8"></script>
+    <script>
+        // Without JQuery
+        var priceSlider = $("#price").slider();
+        priceSlider.on('slideStop', function () {
+            call_area_map();
+{#            $.ajax({#}
+{#                url: '/search/',#}
+{#                contentType: 'application/json; charset=utf-8',#}
+{#                data:#}
+{#            })#}
+{#            $('<input />').attr('type', 'hidden')#}
+{#            .attr('minPrice', priceSlider.slider('getValue')[0])#}
+{#            .attr('maxPrice', priceSlider.slider('getValue')[1])#}
+{#            .appendTo($('#form-map-listing'));#}
+{#            $(this).closest('form').submit()#}
+        });
+    </script>
+
+    </form>
     </section>
+    </div>
 
     <script>
         $(".listing-facebook-share").click(function () {
