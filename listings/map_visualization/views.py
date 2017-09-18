@@ -10,8 +10,42 @@ from profile.forms import ContactForm
 from relate.forms import AcknowledgementForm
 
 
-class Search(View):
-    def get(self, request):
+def listing_map(request):
+    if request.method == 'POST':
+        listing_locations = []
+
+        post_data = json.loads(request.body.decode('utf-8'))
+
+        if post_data.get('max_price'):
+            query = Listings.objects.filter(price__range=(post_data['min_price'],
+                                                          post_data['max_price']))
+
+            for each_listing in query:
+                listing_locations.append({'lat': each_listing.user.profile.location.point.coords[1],
+                                          'lng': each_listing.user.profile.location.point.coords[0],
+                                          'seller': each_listing.user.profile.name,
+                                          'seller_username': each_listing.user.username,
+                                          'listing_id': each_listing.id,
+                                          'price': each_listing.price,
+                                          'title': each_listing.title,
+                                          'listing_img': each_listing.photo.url if each_listing.photo else None,
+                                          'profile_img': each_listing.user.profile.photo.url if each_listing.user.profile.photo else None})
+            return JsonResponse({'listing_locations': listing_locations})
+
+        all_listings = Listings.objects.all()
+        for listing_location in all_listings:
+            listing_locations.append({'lat': listing_location.user.profile.location.point.coords[1],
+                                      'lng': listing_location.user.profile.location.point.coords[0],
+                                      'seller': listing_location.user.profile.name,
+                                      'seller_username': listing_location.user.username,
+                                      'listing_id': listing_location.id,
+                                      'price': listing_location.price,
+                                      'title': listing_location.title,
+                                      'listing_img': listing_location.photo.url if listing_location.photo else None,
+                                      'profile_img': listing_location.user.profile.photo.url if listing_location.user.profile.photo else None})
+        return JsonResponse({'listing_locations': listing_locations})
+
+    else:
         form = ListingsForms()
         listing_locations = []
 
@@ -53,38 +87,3 @@ class Search(View):
                        'housing_sub_categories': housing_sub_categories,
                        'payment_form': payment_form, 'contact_form': contact_form,
                        'notification_number': notification_number, 'listing_locations': listing_locations})
-
-    def post(self, request):
-
-        listing_locations = []
-
-        post_data = json.loads(request.body.decode('utf-8'))
-
-        if post_data.get('max_price'):
-            query = Listings.objects.filter(price__range=(post_data['min_price'],
-                                                          post_data['max_price']))
-
-            for each_listing in query:
-                listing_locations.append({'lat': each_listing.user.profile.location.point.coords[1],
-                                          'lng': each_listing.user.profile.location.point.coords[0],
-                                          'seller': each_listing.user.profile.name,
-                                          'seller_username': each_listing.user.username,
-                                          'listing_id': each_listing.id,
-                                          'price': each_listing.price,
-                                          'title': each_listing.title,
-                                          'listing_img': each_listing.photo.url if each_listing.photo else None,
-                                          'profile_img': each_listing.user.profile.photo.url if each_listing.user.profile.photo else None})
-            return JsonResponse({'listing_locations': listing_locations})
-
-        all_listings = Listings.objects.all()
-        for listing_location in all_listings:
-            listing_locations.append({'lat': listing_location.user.profile.location.point.coords[1],
-                                      'lng': listing_location.user.profile.location.point.coords[0],
-                                      'seller': listing_location.user.profile.name,
-                                      'seller_username': listing_location.user.username,
-                                      'listing_id': listing_location.id,
-                                      'price': listing_location.price,
-                                      'title': listing_location.title,
-                                      'listing_img': listing_location.photo.url if listing_location.photo else None,
-                                      'profile_img': listing_location.user.profile.photo.url if listing_location.user.profile.photo else None})
-        return JsonResponse({'listing_locations': listing_locations})

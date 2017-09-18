@@ -85,13 +85,21 @@ function get_wifi_data(area_map) {
             });
 
             // Add wifi points on map
+            // for (var i = 0, len = locations.length; i < len; i++) {
+            //     (function() {
+            //         var markerData = locations[i];
+            //         var marker - new google.maps.Marker({})
+            //     }
+            // }
+
+
+
             var markers_array = [];
             var markers = locations.map(function(location) {
                 var marker_content = new google.maps.Marker({
                     position: {lat: location['lat'], lng: location['lng']},
                     map: map,
                     title: 'See details'
-
                 });
                 markers_array.push(marker);
 
@@ -105,15 +113,21 @@ function get_wifi_data(area_map) {
                 return marker_content
             });
 
-            var mcOptions = {
-                infoOnClick: true,
-                infoOnClickZoom: 7,
-                imagePath: '../static/maps/MarkerClusterer/images/m'
-            };
+            // var mcOptions = {
+            //     infoOnClick: true,
+            //     infoOnClickZoom: 7,
+            //     imagePath: '../static/maps/MarkerClusterer/images/m'
+            // };
+            //
+            // // Create wifi groups
+            // var markerCluster = new MarkerClusterer(map, markers, mcOptions,
+            //     {imagePath: ''});
 
-            // Create wifi groups
-            var markerCluster = new MarkerClusterer(map, markers, mcOptions,
-                {imagePath: ''});
+            var oms = new OverlappingMarkerSpiderfier(map, {
+                markersWontMove: true,
+                markersWontHide: true,
+                basicFormatEvents: true
+            });
 
             // Add function get_wifi_details in each wifi marker in map
             $.each(markers, function (index, element) {
@@ -170,10 +184,11 @@ function get_wifi_data(area_map) {
                 // infowindow.open(map, this);
                 // });
 
-                element.addListener('click', function () {
+                element.addListener('spider_click', function () {
                     infowindow.setContent(item_content);
                 infowindow.open(map, this);
                 });
+                oms.addMarker(element);
             });
         },
         error: function (e) {

@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 from listing_management import urls as listing_management_urls
 import listings.views as listing_views
+
 from listings.map_visualization import urls as search_listings
 
 urlpatterns = [
