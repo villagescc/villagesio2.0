@@ -61,6 +61,7 @@ $('#search_wifi').on('click keypress', function (e) {
 });
 
 function get_wifi_data(area_map) {
+
     $.ajax({
         url: '/search/',
         contentType: "application/json; charset=utf-8",
@@ -84,6 +85,7 @@ function get_wifi_data(area_map) {
             });
 
             // Add wifi points on map
+            var markers_array = [];
             var markers = locations.map(function(location) {
                 var marker_content = new google.maps.Marker({
                     position: {lat: location['lat'], lng: location['lng']},
@@ -91,6 +93,8 @@ function get_wifi_data(area_map) {
                     title: 'See details'
 
                 });
+                markers_array.push(marker);
+
                 marker_content.seller = location['seller'];
                 marker_content.seller_username = location['seller_username'];
                 marker_content.price = location['price'];
@@ -211,3 +215,5 @@ var delay = (function(){
         timer = setTimeout(callback, ms);
     };
 })();
+
+

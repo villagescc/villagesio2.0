@@ -50,8 +50,7 @@
 
     </style>
 
-    <form id="form-map-listing" method="post">
-    {% csrf_token %}
+    <form id="form-map-listing" method="get">
         {% if user_agent_type == 'mobile' %}
             <div class="col-md-2">
                 {% if not listing_items %}
@@ -209,26 +208,26 @@
                                 </li>
                             {% endif %}
                         {% endfor %}
-                    <hr>
-                    <div id="filters">
-                        <div class="col-12">
-                            <div class="custom-filter-title">
-                                Price
-                            </div>
-                        </div>
-                        <div class="row">
+                        <hr>
+                        <div id="filters">
                             <div class="col-12">
-                                <div class="custom-filter-options">
-                                   <b>1</b> <input id="price" name="map-price" type="text" class="span2" value=""
-                                                      data-slider-min="0"
-                                                      data-slider-max="1000"
-                                                      data-slider-step="5"
-                                                      data-slider-value="[0,100]"/>
-                                    <b>1000</b>
+                                <div class="custom-filter-title">
+                                    Price
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="custom-filter-options">
+                                        <b>1</b> <input id="price" name="map-price" type="text" class="span2" value=""
+                                                        data-slider-min="0"
+                                                        data-slider-max="1000"
+                                                        data-slider-step="5"
+                                                        data-slider-value="[0,100]"/>
+                                        <b>1000</b>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     </ul>
                 </nav>
                 <br>
@@ -284,33 +283,23 @@
 
 
 
-    <script src="{% static 'maps/search_listings.js' %}"></script>
-    <script src="{% static 'maps/MarkerClusterer/src/markerclusterer.js' %}"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA"></script>
+                <script src="{% static 'maps/search_listings.js' %}"></script>
+                <script src="{% static 'maps/MarkerClusterer/src/markerclusterer.js' %}"></script>
+                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA"></script>
 
-    <div class="col-9" style="padding-left: 0;">
-        <div class="home-map">
-            <div id="map" class="map" style="height: 500px; position: relative; overflow: hidden"></div>
-        </div>
+                <div class="col-9" style="padding-left: 0;">
+                    <div class="home-map">
+                        <div id="map" class="map" style="height: 500px; position: relative; overflow: hidden"></div>
+                    </div>
 
-    <script src="{% static 'seiyria-bootstrap-slider/dist/bootstrap-slider.min.js' %}" charset="utf-8"></script>
-    <script>
-        // Without JQuery
-        var priceSlider = $("#price").slider();
-        priceSlider.on('slideStop', function () {
-            call_area_map();
-{#            $.ajax({#}
-{#                url: '/search/',#}
-{#                contentType: 'application/json; charset=utf-8',#}
-{#                data:#}
-{#            })#}
-{#            $('<input />').attr('type', 'hidden')#}
-{#            .attr('minPrice', priceSlider.slider('getValue')[0])#}
-{#            .attr('maxPrice', priceSlider.slider('getValue')[1])#}
-{#            .appendTo($('#form-map-listing'));#}
-{#            $(this).closest('form').submit()#}
-        });
-    </script>
+                    <script src="{% static 'seiyria-bootstrap-slider/dist/bootstrap-slider.min.js' %}" charset="utf-8"></script>
+                    <script>
+                        // Without JQuery
+                        var priceSlider = $("#price").slider();
+                        priceSlider.on('slideStop', function () {
+                            $(this).closest('form').submit()
+                        });
+                    </script>
 
     </form>
     </section>
@@ -470,5 +459,7 @@
             menu.slideToggle();
         });
     </script>
+
+
 
 {% endblock %}
