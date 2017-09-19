@@ -92,8 +92,6 @@ function get_wifi_data(area_map) {
             //     }
             // }
 
-
-
             var markers_array = [];
             var markers = locations.map(function(location) {
                 var marker_content = new google.maps.Marker({

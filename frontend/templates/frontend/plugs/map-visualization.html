@@ -283,9 +283,15 @@
 
                 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA"></script>
                 <script src="{% static 'maps/oms.min.js' %}"></script>
-                <script src="{% static 'maps/search_listings.js' %}"></script>
-{#                <script src="{% static 'maps/MarkerClusterer/src/markerclusterer.js'%}"></script>#}
 
+            {% if request.method == 'POST' %}
+                <script src="{% static 'maps/search_listings_post.js' %}"></script>
+            {% elif request.method == 'GET' %}
+                <script src="{% static 'maps/search_listings_get.js' %}"></script>
+                <script type="text/javascript">
+                    var listings_locations = JSON.parse("{{ listing_locations|escapejs }}");
+                </script>
+            {% endif %}
 
 
                 <div class="col-9" style="padding-left: 0;">
@@ -301,7 +307,7 @@
                             $(this).closest('form').submit()
                         });
                     </script>
-
+    </div>
     </form>
     </section>
     </div>
