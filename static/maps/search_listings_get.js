@@ -36,7 +36,6 @@ function initMap() {
 
 function call_area_map() {
     var value = $('#input_search').val();
-    debugger;
     var area_map = {
         lat_min: map.getBounds().getSouthWest().lat(),
         lat_max: map.getBounds().getNorthEast().lat(),
@@ -64,7 +63,6 @@ $('#search_wifi').on('click keypress', function (e) {
 function get_wifi_data(area_map) {
 
     var locations = [];
-    debugger;
     $.each(listings_locations, function (index, element) {
         var latlong = {
             lat: parseFloat(element['lat']),
@@ -164,7 +162,6 @@ function get_wifi_data(area_map) {
 }
 //
 function get_wifi_details(element){
-    debugger;
     var content = {
         name: element['seller'],
         address: element['price'],

@@ -61,7 +61,7 @@ def listing_map(request):
 
         notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
 
-        if request.GET.get('map_price'):
+        if request.GET.get('map-price'):
 
             min_price = request.GET.get('map-price').split(',')[0]
             max_price = request.GET.get('map-price').split(',')[1]
@@ -75,10 +75,20 @@ def listing_map(request):
                                           'seller': each_listing.user.profile.name,
                                           'seller_username': each_listing.user.username,
                                           'listing_id': each_listing.id,
-                                          'price': each_listing.price,
+                                          'price': int(each_listing.price),
                                           'title': each_listing.title,
                                           'listing_img': each_listing.photo.url if each_listing.photo else None,
                                           'profile_img': each_listing.user.profile.photo.url if each_listing.user.profile.photo else None})
+
+            listing_locations = json.dumps(listing_locations)
+
+            return render(request, 'frontend/plugs/map-visualization.html',
+                          {'listing_form': form, 'categories': categories_list, 'item_sub_categories': item_sub_categories,
+                           'services_sub_categories': services_sub_categories, 'subcategories': subcategories,
+                           'rideshare_sub_categories': rideshare_sub_categories,
+                           'housing_sub_categories': housing_sub_categories,
+                           'payment_form': payment_form, 'contact_form': contact_form,
+                           'notification_number': notification_number, 'listing_locations': listing_locations})
 
         all_listings = Listings.objects.all()
 
