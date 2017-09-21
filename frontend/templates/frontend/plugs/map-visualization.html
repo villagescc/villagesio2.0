@@ -49,7 +49,7 @@
                                                 <li><a href="{% url 'frontend:home' 'PRODUCTS' %}">ALL PRODUCTS</a></li>
                                                 <hr>
                                                 {% for each_sub_category in item_sub_categories %}
-                                                    <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                                    <li><a href="" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
                                                 {% endfor %}
                                             </ul>
                                         </li>
@@ -114,7 +114,7 @@
                 <nav class="sidebar">
                     <ul>
                         <li>
-                            <div id="all_categories"><i class="fa fa-globe"></i><a href="{% url 'frontend:home' %}">ALL CATEGORIES</a></div>
+                            <div id="all_categories"><i class="fa fa-globe"></i><a href="{% url 'map_search:map' %}">ALL CATEGORIES</a></div>
                             <ul class="collapse">
                                 <li></li>
                             </ul>
@@ -124,10 +124,10 @@
                                 <li class="menu-group">
                                     <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
                                     <ul class="collapse">
-                                        <li><a href="{% url 'frontend:home' 'PRODUCTS' %}">ALL PRODUCTS</a></li>
+                                        <li><a href="?category={{ each.id }}&map-price={{ min_price }},{{ max_price }}" name="category">ALL PRODUCTS</a></li>
                                         <hr>
                                         {% for each_sub_category in item_sub_categories %}
-                                            <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                            <li><a href="?subcategory={{ each_sub_category.id }}&map-price={{ min_price }},{{ max_price }}" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </li>
@@ -135,10 +135,10 @@
                                 <li class="menu-group">
                                     <div><i class="fa fa-truck"></i> {{ each.categories_text }}</div>
                                     <ul class="collapse">
-                                        <li><a href="{% url 'frontend:home' 'SERVICES' %}">ALL SERVICES</a></li>
+                                        <li><a href="?category={{ each.id }}&map-price={{ min_price }},{{ max_price }}" name="category">ALL SERVICES</a></li>
                                         <hr>
                                         {% for each_sub_category in services_sub_categories %}
-                                            <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                            <li><a href="?subcategory={{ each_sub_category.id }}&map-price={{ min_price }},{{ max_price }}" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </li>
@@ -146,10 +146,10 @@
                                 <li class="menu-group">
                                     <div><i class="fa fa-bug"></i> {{ each.categories_text }}</div>
                                     <ul class="collapse">
-                                        <li><a href="{% url 'frontend:home' 'RIDESHARE' %}">ALL RIDESHARE</a></li>
+                                        <li><a href="?category={{ each.id }}&map-price={{ min_price }},{{ max_price }}" name="category">ALL RIDESHARE</a></li>
                                         <hr>
                                         {% for each_sub_category in rideshare_sub_categories %}
-                                            <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                            <li><a href="?subcategory={{ each_sub_category.id }}&map-price={{ min_price }},{{ max_price }}" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </li>
@@ -157,10 +157,10 @@
                                 <li class="menu-group">
                                     <div><i class="fa fa-home"></i> {{ each.categories_text }}</div>
                                     <ul class="collapse">
-                                        <li><a href="{% url 'frontend:home' 'HOUSING' %}">ALL HOUSING</a></li>
+                                        <li><a href="?category={{ each.id }}&map-price={{ min_price }},{{ max_price }}" name="category">ALL HOUSING</a></li>
                                         <hr>
                                         {% for each_sub_category in housing_sub_categories %}
-                                            <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                            <li><a href="?subcategory={{ each_sub_category.id }}&map-price={{ min_price }}%2C{{ max_price }}" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </li>
@@ -185,15 +185,67 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="checkbox" name="filter_option_3496" id="filter_option_3496" value="3496">
+                                                <span class="custom-filter-checkbox-label-text">Trusted only</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="custom-filter-title">
+                                        Listing Type
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="checkbox" name="filter_option_3496" id="filter_option_3496" value="3496">
+                                                <span class="custom-filter-checkbox-label-text">Offer</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="checkbox" name="filter_option_3496" id="filter_option_3496" value="3496">
+                                                <span class="custom-filter-checkbox-label-text">Request</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="checkbox" name="filter_option_3496" id="filter_option_3496" value="3496">
+                                                <span class="custom-filter-checkbox-label-text">Teach</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="checkbox" name="filter_option_3496" id="filter_option_3496" value="3496">
+                                                <span class="custom-filter-checkbox-label-text">Learn</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                </div>
+                            </div>
                         </div>
                     </ul>
                 </nav>
                 <br>
-            </div>
         {% endif %}
 
         <section class="container-fluid" id="home-sub-menu">
-            <div class="row">
+            <div class="row" style="height: 100%">
                 <div class="col-md-6">
                     <ul style="padding-left: 0;">
                         <div class="form-group">
@@ -254,7 +306,7 @@
 
                 <div class="col-9" style="padding-left: 0;">
                     <div class="home-map">
-                        <div id="map" class="map" style="height: 500px; position: relative; overflow: hidden"></div>
+                        <div id="map" class="map" style="height: 600px; position: relative; overflow: hidden"></div>
                     </div>
 
                     <script src="{% static 'seiyria-bootstrap-slider/dist/bootstrap-slider.min.js' %}" charset="utf-8"></script>

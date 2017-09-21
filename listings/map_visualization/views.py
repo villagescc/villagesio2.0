@@ -62,37 +62,22 @@ def listing_map(request):
         notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
 
         if request.GET.get('map-price'):
-
             min_price = request.GET.get('map-price').split(',')[0]
             max_price = request.GET.get('map-price').split(',')[1]
+        else:
+            min_price = 0
+            max_price = 1000
 
-            query = Listings.objects.filter(price__range=(min_price,
-                                                          max_price))
+        query = Listings.objects.filter(price__range=(min_price,
+                                                      max_price))
 
-            for each_listing in query:
-                listing_locations.append({'lat': each_listing.user.profile.location.point.coords[1],
-                                          'lng': each_listing.user.profile.location.point.coords[0],
-                                          'seller': each_listing.user.profile.name,
-                                          'seller_username': each_listing.user.username,
-                                          'listing_id': each_listing.id,
-                                          'price': int(each_listing.price),
-                                          'title': each_listing.title,
-                                          'listing_img': each_listing.photo.url if each_listing.photo else None,
-                                          'profile_img': each_listing.user.profile.photo.url if each_listing.user.profile.photo else None})
+        if request.GET.get('category'):
+            query = query.filter(subcategories__categories__id=request.GET.get('category'))
 
-            listing_locations = json.dumps(listing_locations)
+        if request.GET.get('subcategory'):
+            query = query.filter(subcategories_id=request.GET.get('subcategory'))
 
-            return render(request, 'frontend/plugs/map-visualization.html',
-                          {'listing_form': form, 'categories': categories_list, 'item_sub_categories': item_sub_categories,
-                           'services_sub_categories': services_sub_categories, 'subcategories': subcategories,
-                           'rideshare_sub_categories': rideshare_sub_categories,
-                           'housing_sub_categories': housing_sub_categories,
-                           'payment_form': payment_form, 'contact_form': contact_form,
-                           'notification_number': notification_number, 'listing_locations': listing_locations})
-
-        all_listings = Listings.objects.all()
-
-        for each_listing in all_listings:
+        for each_listing in query:
             listing_locations.append({'lat': each_listing.user.profile.location.point.coords[1],
                                       'lng': each_listing.user.profile.location.point.coords[0],
                                       'seller': each_listing.user.profile.name,
@@ -111,4 +96,29 @@ def listing_map(request):
                        'rideshare_sub_categories': rideshare_sub_categories,
                        'housing_sub_categories': housing_sub_categories,
                        'payment_form': payment_form, 'contact_form': contact_form,
-                       'notification_number': notification_number, 'listing_locations': listing_locations})
+                       'notification_number': notification_number, 'listing_locations': listing_locations,
+                       'min_price': min_price, 'max_price': max_price})
+
+        # all_listings = Listings.objects.all()
+        #
+        # for each_listing in all_listings:
+        #     listing_locations.append({'lat': each_listing.user.profile.location.point.coords[1],
+        #                               'lng': each_listing.user.profile.location.point.coords[0],
+        #                               'seller': each_listing.user.profile.name,
+        #                               'seller_username': each_listing.user.username,
+        #                               'listing_id': each_listing.id,
+        #                               'price': int(each_listing.price),
+        #                               'title': each_listing.title,
+        #                               'listing_img': each_listing.photo.url if each_listing.photo else None,
+        #                               'profile_img': each_listing.user.profile.photo.url if each_listing.user.profile.photo else None})
+        #
+        # listing_locations = json.dumps(listing_locations)
+        #
+        # return render(request, 'frontend/plugs/map-visualization.html',
+        #               {'listing_form': form, 'categories': categories_list, 'item_sub_categories': item_sub_categories,
+        #                'services_sub_categories': services_sub_categories, 'subcategories': subcategories,
+        #                'rideshare_sub_categories': rideshare_sub_categories,
+        #                'housing_sub_categories': housing_sub_categories,
+        #                'payment_form': payment_form, 'contact_form': contact_form,
+        #                'notification_number': notification_number, 'listing_locations': listing_locations,
+        #                'min_price': min_price, 'max_price': max_price})

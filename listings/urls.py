@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^get_listing_info/([^/]+)/$', listing_views.get_listing_info, name='listing_modal_details'),
     url(r'^get_subcategories', listing_views.get_subcategories_filter, name='subcategories_filter'),
     url(r'^get_category_by_subcategory', listing_views.get_category_by_subcategory, name='get_category'),
-    url(r'^search/', include(search_listings, namespace='search')),
+    url(r'^search/', include(search_listings, namespace='map_search')),
     url(r'^listing_management/', include(listing_management_urls, namespace='listing_management'))
 
 ]
