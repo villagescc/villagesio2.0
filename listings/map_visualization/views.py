@@ -9,6 +9,11 @@ from notification.models import Notification
 from profile.forms import ContactForm
 from relate.forms import AcknowledgementForm
 
+TRUSTED_SUBQUERY = (
+    "feed_feeditem.poster_id in "
+    "(select to_profile_id from profile_profile_trusted_profiles "
+    "    where from_profile_id = %s)")
+
 
 def listing_map(request):
     if request.method == 'POST':
@@ -70,6 +75,15 @@ def listing_map(request):
 
         query = Listings.objects.filter(price__range=(min_price,
                                                       max_price))
+
+        if request.GET.get('trusted'):
+            query.extra(select={
+                "trusted_listings": "select listings_listings.id from listings_listings "
+                                    "inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) "
+                                    "where profile_profile.id in "
+                                    "(select profile_profile_trusted_profiles.to_profile_id "
+                                    "from profile_profile_trusted_profiles "
+                                    "where profile_profile_trusted_profiles.from_profile_id = {0} LIMIT 1)".format(request.profile.id)})
 
         if request.GET.get('category'):
             query = query.filter(subcategories__categories__id=request.GET.get('category'))

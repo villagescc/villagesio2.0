@@ -190,7 +190,7 @@
                                     <div class="custom-filter-options">
                                         <div class="custom-filter-checkbox-container">
                                             <label class="custom-filter-checkbox-label">
-                                                <input type="checkbox" name="filter_option_3496" id="filter_option_3496" value="3496">
+                                                <input type="checkbox" name="trusted" id="id_trusted_only" value="on">
                                                 <span class="custom-filter-checkbox-label-text">Trusted only</span>
                                             </label>
                                         </div>
@@ -205,7 +205,7 @@
                                     <div class="custom-filter-options">
                                         <div class="custom-filter-checkbox-container">
                                             <label class="custom-filter-checkbox-label">
-                                                <input type="checkbox" name="filter_option_3496" id="filter_option_3496" value="3496">
+                                                <input type="radio" name="listing_type" id="id_offer_type" value="offer">
                                                 <span class="custom-filter-checkbox-label-text">Offer</span>
                                             </label>
                                         </div>
@@ -213,7 +213,7 @@
                                     <div class="custom-filter-options">
                                         <div class="custom-filter-checkbox-container">
                                             <label class="custom-filter-checkbox-label">
-                                                <input type="checkbox" name="filter_option_3496" id="filter_option_3496" value="3496">
+                                                <input type="radio" name="listing_type" id="id_request_type" value="request">
                                                 <span class="custom-filter-checkbox-label-text">Request</span>
                                             </label>
                                         </div>
@@ -221,7 +221,7 @@
                                     <div class="custom-filter-options">
                                         <div class="custom-filter-checkbox-container">
                                             <label class="custom-filter-checkbox-label">
-                                                <input type="checkbox" name="filter_option_3496" id="filter_option_3496" value="3496">
+                                                <input type="radio" name="listing_type" id="id_teach_type" value="teach">
                                                 <span class="custom-filter-checkbox-label-text">Teach</span>
                                             </label>
                                         </div>
@@ -229,8 +229,31 @@
                                     <div class="custom-filter-options">
                                         <div class="custom-filter-checkbox-container">
                                             <label class="custom-filter-checkbox-label">
-                                                <input type="checkbox" name="filter_option_3496" id="filter_option_3496" value="3496">
+                                                <input type="radio" name="listing_type" id="id_learn_type" value="learn">
                                                 <span class="custom-filter-checkbox-label-text">Learn</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="custom-filter-title">
+                                        Balance Type
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="radio" name="negative_balance" id="id_negative_balance" value="on">
+                                                <span class="custom-filter-checkbox-label-text">Negative balance</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="radio" name="positive_balance" id="id_positive_balance" value="on">
+                                                <span class="custom-filter-checkbox-label-text">Positive balance</span>
                                             </label>
                                         </div>
                                     </div>
@@ -238,7 +261,6 @@
                             </div>
                                 </div>
                             </div>
-                        </div>
                     </ul>
                 </nav>
                 <br>
@@ -311,9 +333,69 @@
 
                     <script src="{% static 'seiyria-bootstrap-slider/dist/bootstrap-slider.min.js' %}" charset="utf-8"></script>
                     <script>
+
+                        $(function () {
+                            var trusted_only = localStorage.trusted_only === "true";
+                            $("#id_trusted_only").prop('checked', trusted_only);
+
+                            var offer_type = localStorage.offer_type === "true";
+                            $("#id_offer_type").prop('checked', offer_type);
+
+                            var request_type = localStorage.request_type === "true";
+                            $("#id_request_type").prop('checked', request_type);
+
+                            var teach_type = localStorage.teach_type === "true";
+                            $("#id_teach_type").prop('checked', teach_type);
+
+                            var learn_type = localStorage.learn_type === "true";
+                            $("#id_learn_type").prop('checked', learn_type);
+
+                            var negative_balance = localStorage.negative_balance === "true";
+                            $("#id_negative_balance").prop('checked', negative_balance);
+
+                            var positive_balance = localStorage.positive_balance === "true";
+                            $("#id_positive_balance").prop('checked', positive_balance);
+                        });
+
+
                         // Without JQuery
                         var priceSlider = $("#price").slider();
                         priceSlider.on('slideStop', function () {
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_trusted_only").on("change", function () {
+                            localStorage.trusted_only = $(this).is(':checked');
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_offer_type").on("change", function () {
+                            localStorage.offer_type = $(this).is(':checked');
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_request_type").on("change", function () {
+                            localStorage.request_type = $(this).is(':checked');
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_teach_type").on("change", function () {
+                            localStorage.teach_type = $(this).is(':checked');
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_learn_type").on("change", function () {
+                            localStorage.learn_type = $(this).is(':checked');
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_negative_balance").on("change", function () {
+                            localStorage.negative_balance = $(this).is(':checked');
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_positive_balance").on("change", function () {
+                            localStorage.positive_balance = $(this).is(':checked');
                             $(this).closest('form').submit()
                         });
                     </script>
