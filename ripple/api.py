@@ -348,4 +348,3 @@ def _reputation_cache_version():
 def _invalidate_reputation_cache():
     cache.add(REPUTATION_VERSION_KEY, 1)
     cache.incr(REPUTATION_VERSION_KEY)
-
