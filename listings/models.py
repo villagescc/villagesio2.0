@@ -60,7 +60,6 @@ class ListingsManager(GeoManager):
                     up_to_date=None, request_profile=None, type_filter=None, listing_type=None):
         query = self.get_queryset().order_by('-updated')
         if trusted_only:
-
             profile_obj_list = []
             trusting_profiles = request_profile.trusted_profiles.through.objects.filter(from_profile_id=request_profile.id)
             for each_trusting in trusting_profiles:

@@ -77,13 +77,23 @@ def listing_map(request):
                                                       max_price))
 
         if request.GET.get('trusted'):
-            query.extra(select={
-                "trusted_listings": "select listings_listings.id from listings_listings "
-                                    "inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) "
-                                    "where profile_profile.id in "
-                                    "(select profile_profile_trusted_profiles.to_profile_id "
-                                    "from profile_profile_trusted_profiles "
-                                    "where profile_profile_trusted_profiles.from_profile_id = {0} LIMIT 1)".format(request.profile.id)})
+            profile_obj_list = []
+            trusting_profiles = request.profile.trusted_profiles.through.objects.filter(
+                from_profile_id=request.profile.id)
+            for each_trusting in trusting_profiles:
+                profile_obj_list.append(each_trusting.to_profile)
+            query = query.filter(profile_id__in=profile_obj_list)
+
+            # query.extra(select={
+            #     "trusted_listings": "select listings_listings.id from listings_listings "
+            #                         "inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) "
+            #                         "where profile_profile.id in "
+            #                         "(select profile_profile_trusted_profiles.to_profile_id "
+            #                         "from profile_profile_trusted_profiles "
+            #                         "where profile_profile_trusted_profiles.from_profile_id = {0} LIMIT 1)".format(request.profile.id)})
+
+        if request.GET.get('listing_type'):
+            query = query.filter(listing_type=request.GET.get('listing_type').upper())
 
         if request.GET.get('category'):
             query = query.filter(subcategories__categories__id=request.GET.get('category'))
