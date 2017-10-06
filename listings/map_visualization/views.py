@@ -2,6 +2,8 @@ import json
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import JsonResponse
+
+from feed.models import FeedItem
 from listings.models import Listings
 from listings.forms import ListingsForms
 from categories.models import Categories, SubCategories
@@ -100,6 +102,19 @@ def listing_map(request):
 
         if request.GET.get('subcategory'):
             query = query.filter(subcategories_id=request.GET.get('subcategory'))
+
+        if request.GET.get('balance_type'):
+            balance_type_list = []
+            if request.GET.get('balance_type') == 'positive':
+                positive_balances = FeedItem.objects.filter(balance__gt=0).all()
+                for each_positive in positive_balances:
+                    balance_type_list.append(each_positive.poster)
+                query = query.filter(profile_id__in=balance_type_list)
+            elif request.GET.get('balance_type') == 'negative':
+                negative_balances = FeedItem.objects.filter(balance__lt=0).all()
+                for each_negative in negative_balances:
+                    balance_type_list.append(each_negative.poster)
+                query = query.filter(profile_id__in=balance_type_list)
 
         for each_listing in query:
             listing_locations.append({'lat': each_listing.user.profile.location.point.coords[1],

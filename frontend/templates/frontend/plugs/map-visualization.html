@@ -205,7 +205,7 @@
                                     <div class="custom-filter-options">
                                         <div class="custom-filter-checkbox-container">
                                             <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="category" id="id_category" value="products">
+                                                <input type="radio" name="category" id="id_products" value="products">
                                                 <span class="custom-filter-checkbox-label-text">Products</span>
                                             </label>
                                         </div>
@@ -213,7 +213,7 @@
                                     <div class="custom-filter-options">
                                         <div class="custom-filter-checkbox-container">
                                             <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="category" id="id_category" value="services">
+                                                <input type="radio" name="category" id="id_services" value="services">
                                                 <span class="custom-filter-checkbox-label-text">Services</span>
                                             </label>
                                         </div>
@@ -221,7 +221,7 @@
                                     <div class="custom-filter-options">
                                         <div class="custom-filter-checkbox-container">
                                             <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="category" id="id_category" value="rideshare">
+                                                <input type="radio" name="category" id="id_rideshare" value="rideshare">
                                                 <span class="custom-filter-checkbox-label-text">Rideshare</span>
                                             </label>
                                         </div>
@@ -229,7 +229,7 @@
                                     <div class="custom-filter-options">
                                         <div class="custom-filter-checkbox-container">
                                             <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="category" id="id_category" value="housing">
+                                                <input type="radio" name="category" id="id_housing" value="housing">
                                                 <span class="custom-filter-checkbox-label-text">Housing</span>
                                             </label>
                                         </div>
@@ -283,7 +283,7 @@
                                     <div class="custom-filter-options">
                                         <div class="custom-filter-checkbox-container">
                                             <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="negative_balance" id="id_negative_balance" value="on">
+                                                <input type="radio" name="balance_type" id="id_negative_balance" value="negative">
                                                 <span class="custom-filter-checkbox-label-text">Negative balance</span>
                                             </label>
                                         </div>
@@ -291,7 +291,7 @@
                                     <div class="custom-filter-options">
                                         <div class="custom-filter-checkbox-container">
                                             <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="positive_balance" id="id_positive_balance" value="on">
+                                                <input type="radio" name="balance_type" id="id_positive_balance" value="positive">
                                                 <span class="custom-filter-checkbox-label-text">Positive balance</span>
                                             </label>
                                         </div>
@@ -427,6 +427,22 @@
                             localStorage.learn_type = $(this).is(':checked');
                             $(this).closest('form').submit()
                         });
+
+{#                        $("#id_products").on("change", function () {#}
+{#                            localStorage.products = $(this).is(':checked');#}
+{#                            $(this).closest('form').submit();#}
+{##}
+{#                        $("#id_services").on("change", function () {#}
+{#                            localStorage.services = $(this).is(':checked');#}
+{#                            $(this).closest('form').submit();#}
+{##}
+{#                        $("#id_rideshare").on("change", function () {#}
+{#                            localStorage.rideshare = $(this).is(':checked');#}
+{#                            $(this).closest('form').submit();#}
+{##}
+{#                        $("#id_housing").on("change", function () {#}
+{#                            localStorage.housing = $(this).is(':checked');#}
+{#                            $(this).closest('form').submit();#}
 
                         $("#id_negative_balance").on("change", function () {
                             localStorage.negative_balance = $(this).is(':checked');
