@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -33,7 +33,7 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'ccproject', 'locale/'),
 )
 
-AUTH_LOCATION = '/home/filipe/.villages_auth.json'
+AUTH_LOCATION = '/home/ubuntu/.villages_auth.json'
 
 
 def get_credentials(auth_location):
