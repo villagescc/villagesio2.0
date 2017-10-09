@@ -100,7 +100,7 @@ def listing_map(request):
         if request.GET.get('balance_type'):
             balance_type_list = []
             if request.GET.get('balance_type') == 'positive':
-                positive_balances = FeedItem.objects.filter(balance__gt=0).all()
+                positive_balances = FeedItem.objects.filter(balance__gte=0).all()
                 for each_positive in positive_balances:
                     balance_type_list.append(each_positive.poster)
                 query = query.filter(profile_id__in=balance_type_list)
