@@ -22,6 +22,8 @@ from django.core.exceptions import ObjectDoesNotExist
 import mailchimp
 import requests
 
+
+
 # Session key to store invite code for later signing up.
 INVITE_CODE_KEY = 'invite_code'
 
@@ -99,7 +101,7 @@ def subscribe_mailchimp(profile):
                     postal_code = each_type.get('long_name').encode('UTF-8')
                     break
 
-    API_KEY = 'd19591a955cb1c0057ec1e7e463c5d30-us2'
+    API_KEY = settings.mailchimp_apikey
     LIST_ID = '063533ab5b'
 
     api = mailchimp.Mailchimp(API_KEY)

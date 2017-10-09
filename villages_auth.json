@@ -1,17 +1,17 @@
 {
   "villages": {
-    "db_user": "villages_db_user",
-    "db_pass": "villages_db_pass",
-    "db_name": "villages_db_name"
+    "db_user": "postgres",
+    "db_pass": "test123!",
+    "db_name": "villages_new_ui"
   },
   "ripple": {
-    "db_user": "ripple_db_user",
-    "db_pass": "ripple_db_pass",
-    "db_name": "ripple_db_name"
+    "db_user": "postgres",
+    "db_pass": "test123!",
+    "db_name": "villagesripple_new_ui"
   },
   "mail": {
-    "mail_user": "your@mail.net",
-    "mail_pass": "mail_pass_here"
+    "mail_user": "web@villages.cc",
+    "mail_pass": "Xve4k3EWVbxvrSsu"
   },
   "secret_key": "oe@ut#9t8xzd0%19xobf3c4jqa75&#!@+e27ioubq=#r1^4h#8"
 }

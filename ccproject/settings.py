@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -33,7 +33,7 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'ccproject', 'locale/'),
 )
 
-AUTH_LOCATION = '/home/ubuntu/.villages_auth.json'
+AUTH_LOCATION = '/home/filipe/.villages_auth.json'
 
 
 def get_credentials(auth_location):
@@ -52,11 +52,12 @@ def get_credentials(auth_location):
                auth_data['ripple']['db_name'], \
                auth_data['mail']['mail_user'], \
                auth_data['mail']['mail_pass'], \
-               auth_data['secret_key']
+               auth_data['secret_key'], \
+               auth_data['mailchimp_apikey']
 
 
 villages_db_user, villages_db_pass, villages_db_name, ripple_db_user, ripple_db_pass, ripple_db_name, \
-mail_user, mail_password, secret_key = get_credentials(AUTH_LOCATION)
+mail_user, mail_password, secret_key, mailchimp_apikey = get_credentials(AUTH_LOCATION)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = secret_key
