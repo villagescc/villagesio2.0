@@ -4,37 +4,9 @@
 
 {% block content %}
 
-    <style>
-        .thumbnail .listing-modal{
-            width : 300px;
-            height: 260px;
-            overflow: auto;
-        }
+    <link href="{% static 'maps/css/listing_map_style.css' %}" rel="stylesheet">
 
-        .thumbnail .listing {
-            width: 100%;
-            height: 150px;
-            display: block;
-        }
-
-        #id_trusted {
-            width: 25px;
-            padding: 0;
-            margin:0;
-            vertical-align: bottom;
-            position: relative;
-            top: -1px;
-            *overflow: hidden;
-        }
-
-        #profile-listing-img {
-            width: 60px;
-            height: 60px;
-            display: block;
-        }
-    </style>
-
-    <form action="" method="get">
+    <form id="form-map-listing" method="get">
         {% if user_agent_type == 'mobile' %}
             <div class="col-md-2">
                 {% if not listing_items %}
@@ -54,14 +26,19 @@
                 {% endif %}
                 <div>
                     {% if feed_items %}
-                        <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
+                        <a href="{% url 'frontend:home' %}">
+                            <img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
                     {% elif listing_items %}
-                        <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
+                        <a href="{% url 'frontend:home_people' %}">
+                            <img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
                     {% endif %}
                 </div>
                 <nav class="sidebar">
+
                     <ul>
                         <li class="menu-group" style="padding-left: 0">
+
+
                             <div id="all_categories"><i class="fa fa-globe"></i>ALL CATEGORIES</div>
                             <ul class="collapse">
                                 {% for each in categories %}
@@ -72,7 +49,7 @@
                                                 <li><a href="{% url 'frontend:home' 'PRODUCTS' %}">ALL PRODUCTS</a></li>
                                                 <hr>
                                                 {% for each_sub_category in item_sub_categories %}
-                                                    <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                                    <li><a href="" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
                                                 {% endfor %}
                                             </ul>
                                         </li>
@@ -137,7 +114,7 @@
                 <nav class="sidebar">
                     <ul>
                         <li>
-                            <div id="all_categories"><i class="fa fa-globe"></i><a href="{% url 'frontend:home' %}">ALL CATEGORIES</a></div>
+                            <div id="all_categories"><i class="fa fa-globe"></i><a href="{% url 'map_search:map' %}">ALL CATEGORIES</a></div>
                             <ul class="collapse">
                                 <li></li>
                             </ul>
@@ -147,10 +124,10 @@
                                 <li class="menu-group">
                                     <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
                                     <ul class="collapse">
-                                        <li><a href="{% url 'frontend:home' 'PRODUCTS' %}">ALL PRODUCTS</a></li>
+                                        <li><a href="?category={{ each.id }}&map-price={{ min_price }},{{ max_price }}" name="category">ALL PRODUCTS</a></li>
                                         <hr>
                                         {% for each_sub_category in item_sub_categories %}
-                                            <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                            <li><a href="?subcategory={{ each_sub_category.id }}&map-price={{ min_price }},{{ max_price }}" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </li>
@@ -158,10 +135,10 @@
                                 <li class="menu-group">
                                     <div><i class="fa fa-truck"></i> {{ each.categories_text }}</div>
                                     <ul class="collapse">
-                                        <li><a href="{% url 'frontend:home' 'SERVICES' %}">ALL SERVICES</a></li>
+                                        <li><a href="?category={{ each.id }}&map-price={{ min_price }},{{ max_price }}" name="category">ALL SERVICES</a></li>
                                         <hr>
                                         {% for each_sub_category in services_sub_categories %}
-                                            <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                            <li><a href="?subcategory={{ each_sub_category.id }}&map-price={{ min_price }},{{ max_price }}" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </li>
@@ -169,10 +146,10 @@
                                 <li class="menu-group">
                                     <div><i class="fa fa-bug"></i> {{ each.categories_text }}</div>
                                     <ul class="collapse">
-                                        <li><a href="{% url 'frontend:home' 'RIDESHARE' %}">ALL RIDESHARE</a></li>
+                                        <li><a href="?category={{ each.id }}&map-price={{ min_price }},{{ max_price }}" name="category">ALL RIDESHARE</a></li>
                                         <hr>
                                         {% for each_sub_category in rideshare_sub_categories %}
-                                            <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                            <li><a href="?subcategory={{ each_sub_category.id }}&map-price={{ min_price }},{{ max_price }}" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </li>
@@ -180,23 +157,159 @@
                                 <li class="menu-group">
                                     <div><i class="fa fa-home"></i> {{ each.categories_text }}</div>
                                     <ul class="collapse">
-                                        <li><a href="{% url 'frontend:home' 'HOUSING' %}">ALL HOUSING</a></li>
+                                        <li><a href="?category={{ each.id }}&map-price={{ min_price }},{{ max_price }}" name="category">ALL HOUSING</a></li>
                                         <hr>
                                         {% for each_sub_category in housing_sub_categories %}
-                                            <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                            <li><a href="?subcategory={{ each_sub_category.id }}&map-price={{ min_price }}%2C{{ max_price }}" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </li>
                             {% endif %}
                         {% endfor %}
+                        <hr>
+                        <div id="filters">
+                            <div class="col-12">
+                                <div class="custom-filter-title">
+                                    Price
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="custom-filter-options">
+                                        <b>1</b> <input id="price" name="map-price" type="text" class="span2" value=""
+                                                        data-slider-min="0"
+                                                        data-slider-max="1000"
+                                                        data-slider-step="5"
+                                                        data-slider-value="[0,100]"/>
+                                        <b>1000</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="checkbox" name="trusted" id="id_trusted_only" value="on">
+                                                <span class="custom-filter-checkbox-label-text">Trusted only</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="custom-filter-title">
+                                        Category
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="radio" name="category" id="id_products" value="2" class="category">
+                                                <span class="custom-filter-checkbox-label-text">Products</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="radio" name="category" id="id_services" value="1" class="category">
+                                                <span class="custom-filter-checkbox-label-text">Services</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="radio" name="category" id="id_rideshare" value="4" class="category">
+                                                <span class="custom-filter-checkbox-label-text">Rideshare</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="radio" name="category" id="id_housing" value="3" class="category">
+                                                <span class="custom-filter-checkbox-label-text">Housing</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button id="btn_clear_cateogry" type="button" class="btn btn-primary btn-sm">clear</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="custom-filter-title">
+                                        Listing Type
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="radio" name="listing_type" id="id_offer_type" value="offer" class="listing_type">
+                                                <span class="custom-filter-checkbox-label-text">Offer</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="radio" name="listing_type" id="id_request_type" value="request" class="listing_type">
+                                                <span class="custom-filter-checkbox-label-text">Request</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="radio" name="listing_type" id="id_teach_type" value="teach" class="listing_type">
+                                                <span class="custom-filter-checkbox-label-text">Teach</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="radio" name="listing_type" id="id_learn_type" value="learn" class="listing_type">
+                                                <span class="custom-filter-checkbox-label-text">Learn</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm" id="btn_clear_listing">clear</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="custom-filter-title">
+                                        Balance Type
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="radio" name="balance_type" id="id_negative_balance" value="negative" class="balance_type">
+                                                <span class="custom-filter-checkbox-label-text">Negative balance</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="custom-filter-options">
+                                        <div class="custom-filter-checkbox-container">
+                                            <label class="custom-filter-checkbox-label">
+                                                <input type="radio" name="balance_type" id="id_positive_balance" value="positive" class="balance_type">
+                                                <span class="custom-filter-checkbox-label-text">Positive balance</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm" id="btn_clear_balance">clear</button>
+                                </div>
+                            </div>
+                                </div>
+                            </div>
                     </ul>
                 </nav>
                 <br>
-            </div>
         {% endif %}
 
         <section class="container-fluid" id="home-sub-menu">
-            <div class="row">
+            <div class="row" style="height: 100%">
                 <div class="col-md-6">
                     <ul style="padding-left: 0;">
                         <div class="form-group">
@@ -241,18 +354,155 @@
                     {% endif %}
                     <hr>
                 </div>
-    <div class="col-md-10" style="padding-left: 0;">
-        <div class="col-10">
-            <div id="map" style="height: 500px"></div>
-        </div>
-    </form>
 
+                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA"></script>
+                <script src="{% static 'maps/oms.min.js' %}"></script>
+
+            {% if request.method == 'POST' %}
+                <script src="{% static 'maps/search_listings_post.js' %}"></script>
+            {% elif request.method == 'GET' %}
+                <script src="{% static 'maps/search_listings_get.js' %}"></script>
+                <script type="text/javascript">
+                    var listings_locations = JSON.parse("{{ listing_locations|escapejs }}");
+                </script>
+            {% endif %}
+
+
+                <div class="col-9" style="padding-left: 0;">
+                    <div class="home-map">
+                        <div id="map" class="map" style="height: 600px; position: relative; overflow: hidden"></div>
+                    </div>
+
+                    <script src="{% static 'seiyria-bootstrap-slider/dist/bootstrap-slider.min.js' %}" charset="utf-8"></script>
+                    <script>
+
+                        $(function () {
+                            var trusted_only = localStorage.trusted_only === "true";
+                            $("#id_trusted_only").prop('checked', trusted_only);
+
+                            var offer_type = localStorage.offer_type === "true";
+                            $("#id_offer_type").prop('checked', offer_type);
+
+                            var request_type = localStorage.request_type === "true";
+                            $("#id_request_type").prop('checked', request_type);
+
+                            var teach_type = localStorage.teach_type === "true";
+                            $("#id_teach_type").prop('checked', teach_type);
+
+                            var learn_type = localStorage.learn_type === "true";
+                            $("#id_learn_type").prop('checked', learn_type);
+
+                            var category_products = localStorage.products === "true";
+                            $("#id_products").prop('checked', category_products);
+
+                            var category_services = localStorage.services === "true";
+                            $("#id_services").prop('checked', category_services);
+
+                            var category_rideshare = localStorage.rideshare === "true";
+                            $("#id_rideshare").prop('checked', category_rideshare);
+
+                            var category_housing = localStorage.housing === "true";
+                            $("#id_housing").prop('checked', category_housing);
+
+                            var negative_balance = localStorage.negative_balance === "true";
+                            $("#id_negative_balance").prop('checked', negative_balance);
+
+                            var positive_balance = localStorage.positive_balance === "true";
+                            $("#id_positive_balance").prop('checked', positive_balance);
+                        });
+
+                        $('#btn_clear_cateogry').click(function () {
+                            $("input:radio[class^='category']").each(function(i) {
+                              this.checked = false;
+                            });
+                            $(this).closest('form').submit()
+                        });
+
+                        $('#btn_clear_listing').click(function () {
+                            $("input:radio[class^='listing_type']").each(function(i) {
+                              this.checked = false;
+                            });
+                            $(this).closest('form').submit()
+                        });
+
+                        $('#btn_clear_balance').click(function () {
+                            $("input:radio[class^='balance_type']").each(function(i) {
+                              this.checked = false;
+                            });
+                            $(this).closest('form').submit()
+                        });
+
+                        // Without JQuery
+                        var priceSlider = $("#price").slider();
+                        priceSlider.on('slideStop', function () {
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_trusted_only").on("change", function () {
+                            localStorage.trusted_only = $(this).is(':checked');
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_offer_type").on("change", function () {
+                            localStorage.offer_type = $(this).is(':checked');
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_request_type").on("change", function () {
+                            localStorage.request_type = $(this).is(':checked');
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_teach_type").on("change", function () {
+                            localStorage.teach_type = $(this).is(':checked');
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_learn_type").on("change", function () {
+                            localStorage.learn_type = $(this).is(':checked');
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_products").on("change", function () {
+                            localStorage.products = $(this).is(':checked');
+                            $(this).closest('form').submit();
+                        });
+
+                        $("#id_services").on("change", function () {
+                            localStorage.services = $(this).is(':checked');
+                            $(this).closest('form').submit();
+                        });
+
+                        $("#id_rideshare").on("change", function () {
+                            localStorage.rideshare = $(this).is(':checked');
+                            $(this).closest('form').submit();
+                        });
+
+                        $("#id_housing").on("change", function () {
+                            localStorage.housing = $(this).is(':checked');
+                            $(this).closest('form').submit();
+                        });
+
+                        $("#id_negative_balance").on("change", function () {
+                            localStorage.negative_balance = $(this).is(':checked');
+                            $(this).closest('form').submit()
+                        });
+
+                        $("#id_positive_balance").on("change", function () {
+                            localStorage.positive_balance = $(this).is(':checked');
+                            $(this).closest('form').submit()
+                        });
+                    </script>
+
+                    <script>
+                        $(document).ready(function() {
+                            localStorage.clear()
+                        })
+                    </script>
     </div>
+    </form>
     </section>
-
-    <script src="{% static 'maps/search_listings.js' %}"></script>
-    <script src="{% static 'maps/markerclusterer.js' %}"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA"></script>
+    </div>
 
     <script>
         $(".listing-facebook-share").click(function () {
@@ -332,7 +582,6 @@
                     else if(data["data"]["stat"] == "existing"){
                         $('#id_weight').val(data['data']['weight']);
                         $('#id_text').val(data['data']['text']);
-                        debugger;
                         if(data["data"]["refer"]) {
                             $("#id_referral").prop('checked', true)
                         }
@@ -349,7 +598,6 @@
         });
 
         $(".payment-modal").click(function (e) {
-            debugger;
             $('#payment-loading-modal').modal("show");
             $('#spin-modal').fadeIn();
             var profile_username = $(this).attr('data-profile-username');
@@ -361,7 +609,6 @@
                 type: 'GET',
                 cache: false,
                 success: function (data) {
-                    debugger;
                     if(data["data"]["stat"] != "ok"){
                         $('#error-modal-alert').text(data["data"]["stat"]);
                         $('#spin-modal').fadeOut();
@@ -370,7 +617,7 @@
                     else if(!data['data']['can_ripple']){
                         $('label[for="id_ripple_0"]').closest('li').hide();
                         $('#id_ripple_1').attr('checked', true);
-                        $('.ripple-hours').html("There are no available paths through the trust network to <strong>"+data['data']['recipient']+"</strong>, so you can only send direct acknowledgement.")
+                        $('.ripple-hours').html("There are no available paths through the trust network to <strong>"+data['data']['recipient']+"</strong>, so you can only send direct acknowledgement.");
                         $('#spin-modal').fadeOut();
                         $('#payment-loading-modal').modal("hide");
                         $("#new-payment-modal").modal("show");
@@ -384,7 +631,6 @@
                 },
 
                 error: function (data) {
-                    debugger;
                     $('#spin-modal').fadeOut();
                     showInternalServerError();
                 }
@@ -408,5 +654,7 @@
             menu.slideToggle();
         });
     </script>
+
+
 
 {% endblock %}

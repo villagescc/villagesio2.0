@@ -1,5 +1,6 @@
 from django.conf import settings
 from tags.models import Tag
+from profile.models import Profile
 from django.contrib.auth.models import User
 from django.db import models
 from categories.models import Categories, SubCategories
@@ -58,16 +59,16 @@ class ListingsManager(GeoManager):
     def _item_query(self, profile=None, location=None, radius=None, tsearch=None, trusted_only=False,
                     up_to_date=None, request_profile=None, type_filter=None, listing_type=None):
         query = self.get_queryset().order_by('-updated')
+        if trusted_only:
+            profile_obj_list = []
+            trusting_profiles = request_profile.trusted_profiles.through.objects.filter(from_profile_id=request_profile.id)
+            for each_trusting in trusting_profiles:
+                profile_obj_list.append(each_trusting.to_profile)
+            query = query.filter(profile_id__in=profile_obj_list)
+            # query = query.extra(select={
+            #     "trusted_listings": "select list.id from listings_listings list where list.profile_id in (select profile_profile_trusted_profiles.to_profile_id from profile_profile_trusted_profiles where profile_profile_trusted_profiles.from_profile_id = {0} limit 1)".format(request_profile.id)})
         if up_to_date:
             query = query.filter(updated__lt=up_to_date)
-        if trusted_only:
-            query.extra(select={
-                "trusted_listings": "select listings_listings.id from listings_listings "
-                                    "inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) "
-                                    "where profile_profile.id in "
-                                    "(select profile_profile_trusted_profiles.to_profile_id "
-                                    "from profile_profile_trusted_profiles "
-                                    "where profile_profile_trusted_profiles.from_profile_id = {0} LIMIT 1)".format(request_profile.id)})
         if location and radius:
             query = query.filter(
                 Q(user__profile__location__point__dwithin=(location.point, radius)) |
@@ -91,11 +92,9 @@ class ListingsManager(GeoManager):
         return query
 
 
-
-
-
 class Listings(models.Model):
     user = models.ForeignKey(User, null=True, blank=True)
+    profile = models.ForeignKey(Profile, null=True, blank=True)
     title = models.CharField(max_length=70)
     description = models.CharField(max_length=5000, null=True, blank=True)
     price = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)

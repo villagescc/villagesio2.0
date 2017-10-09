@@ -10,3 +10,4 @@ django-user-agents
 elasticsearch
 social-auth-app-django
 ujson
+mailchimp

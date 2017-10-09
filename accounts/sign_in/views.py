@@ -1,6 +1,4 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -8,23 +6,23 @@ from django.views.generic import View
 from django.shortcuts import render as django_render
 from django.utils.translation import ugettext_lazy as _
 from accounts.forms import UserForm
-from profile.forms import RegistrationForm
-from profile.models import Profile, Invitation, PasswordResetLink
+from profile.models import Profile, Invitation
 from django.conf import settings
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login
 from relate.models import Endorsement
 from general.mail import send_mail_from_system
-from general.util import render, deflect_logged_in
+from general.util import render
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as django_login
 from geo.models import Location
-from geo.util import location_required
-from profile.forms import (
-    RegistrationForm, ProfileForm, ContactForm, SettingsForm, InvitationForm,
-    RequestInvitationForm, ForgotPasswordForm)
+from profile.forms import RegistrationForm, ProfileForm
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.exceptions import ObjectDoesNotExist
+import mailchimp
+import requests
+
+
 
 # Session key to store invite code for later signing up.
 INVITE_CODE_KEY = 'invite_code'
@@ -76,6 +74,46 @@ def get_invitation(request):
         except Invitation.DoesNotExist:
             pass
     return invitation
+
+
+def subscribe_mailchimp(profile):
+
+    postal_code = ''
+
+    neighborhood = profile.location.neighborhood.replace(' ', '+').encode('UTF-8')
+    city = profile.location.city.replace(' ', '+').encode('UTF-8')
+    state = profile.location.state
+
+    lon = profile.location.point.coords[0]
+    lat = profile.location.point.coords[1]
+
+    google_geo_endpoint_address = 'https://maps.googleapis.com/maps/api/geocode/json?address=1+{0},{1},{2}&key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA'.format(
+        neighborhood, city, state)
+    google_geo_endpoint_coords = 'https://maps.googleapis.com/maps/api/geocode/json?latlng={0}, {1}&key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA'.format(
+        lat, lon)
+
+    response = requests.get(google_geo_endpoint_address).json()
+
+    if response["results"][0].get("address_components"):
+        for each_type in response["results"][0]["address_components"]:
+            for type in each_type['types']:
+                if type == 'postal_code':
+                    postal_code = each_type.get('long_name').encode('UTF-8')
+                    break
+
+    API_KEY = settings.mailchimp_apikey
+    LIST_ID = '063533ab5b'
+
+    api = mailchimp.Mailchimp(API_KEY)
+    try:
+        api.lists.subscribe(LIST_ID, {'name': profile.name,
+                                      'email': profile.settings.email,
+                                      'zipcode': postal_code if postal_code else ''},
+                            send_welcome=False, double_optin=False)
+    except Exception as e:
+        print(e)
+
+    return
 
 
 class SignInUserLogIn(View):
@@ -137,6 +175,7 @@ class SignInUserRegister(View):
             form = RegistrationForm(request.POST)
             if form.is_valid():
                 profile = form.save(request.location, settings.LANGUAGE_CODE)
+                subscribe_mailchimp(profile)
                 if invitation:
                     # Turn invitation into endorsement.
                     Endorsement.objects.create(
@@ -157,9 +196,6 @@ class SignInUserRegister(View):
                 send_registration_email(profile)
                 messages.info(request, MESSAGES['registration_done'])
                 return HttpResponseRedirect(reverse('accounts:sign_in_user:edit_profile'))
-            # else:
-            #     messages.add_message(request, messages.ERROR, 'An error occurred, please contact an administrator.')
-            #     return django_render(request, 'accounts/sign_in.html', {'form': form})
         else:
             initial = {}
             if invitation:
