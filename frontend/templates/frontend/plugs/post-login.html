@@ -37,8 +37,6 @@
             {% if not listing_items %}
                 {{ form.radius }}
                 <div><span><label>{{ form.trusted }}
-            <img src="{% static 'img/heart_icon.png' %}"
-                 alt="{% trans 'Heart icon = trusted user' %}">
                     {% trans 'Trusted only' %}</label>
         </span></div>
                 <div><span>
@@ -139,8 +137,6 @@
             {% if not is_listing %}
                 {{ form.radius }}
                 <div><span><label>{{ form.trusted }}
-            <img src="{% static 'img/heart_icon.png' %}"
-                 alt="{% trans 'Heart icon = trusted user' %}">
                     {% trans 'Trusted only' %}</label>
         </span></div>
                 <div><span>
@@ -163,8 +159,6 @@
             {% else %}
                 {{ form_listing_settings.radius }}
                 <span><label>{{ form_listing_settings.trusted }}
-            <img src="{% static 'img/heart_icon.png' %}"
-                 alt="{% trans 'Heart icon = trusted user' %}">
                     {% trans 'Trusted only' %}</label>
         </span>
             {% endif %}

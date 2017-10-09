@@ -111,6 +111,10 @@ function get_wifi_data(area_map) {
             content: " "
         });
 
+        if(!this.profile_img){
+            this.profile_img = '/static/images/logo.png'
+        }
+
         var item_content =
             '<div style="overflow-x: hidden; overflow-y: hidden; position: relative; padding-right: 6px; padding-left: 6px; top: 1px; width: 0; opacity: 0.5"></div>'
             + '<img src="https://maps.gstatic.com/intl/en_us/mapfiles/iw_close.gif" style="position: absolute; width: 12px; height: 12px; border: 0px; z-index: 101; cursor: pointer; right: 3px; top: 3px; display: none;">'
@@ -119,10 +123,10 @@ function get_wifi_data(area_map) {
             + '<div id="map_bubble"><div class="bubble-navi-container">'
             + '<div class="bubble-navi-container">'
             + '<div class="bubble-navi"><a>'
-            + '<i class="ss-navigateleft bubble-navi-left disabled"></i></a>'
+            + '</a>'
             + '<div class="bubble-navi-header">'
             + '</div>'
-            + '<a><i class="ss-navigateright bubble-navi-right"></i></a></div>'
+            + '<a></a></div>'
             + '<div class="bubble-multi-content" style="width: 100px; left: 0px;">'
             + '<div class="bubble-item">'
             + '<div class="bubble-image-container">'
@@ -130,7 +134,7 @@ function get_wifi_data(area_map) {
             + '<a class="bubble-overlay" href="/listing_details/'+ this.listing_id + '"><span class="bubble-title-link">' + this.title + '</span></a>'
             + '<div class="bubble-title">'
             + '<div class="bubble-avatar">'
-            + '<a href="http://villages.cc/profiles/' + this.seller_username +'"><img src="'+this.profile_img+'" alt="Image"></a></div>'
+            + '<a href="http://villages.cc/profiles/' + this.seller_username +'"><img src="'+this.profile_img+'"></a></div>'
             + '<div class="bubble-details">'
             + '<div class="bubble-author">'
             + '<a title="'+this.seller_username+'" href="http://villages.cc/profiles/'+this.seller_username+'">'+this.seller+'</a></div>'
@@ -143,7 +147,7 @@ function get_wifi_data(area_map) {
             + '<span class="bubble-title-link">' + this.title + '</span></a>'
             + '<div class="bubble-title">'
             + '<div class="bubble-avatar">'
-            + '<a href="http://villages.cc/profiles/' + this.seller_username +'"><img src="'+this.profile_img+'" alt="Image"></a></div>'
+            + '<a href="http://villages.cc/profiles/' + this.seller_username +'"><img src="'+this.profile_img+'"></a></div>'
             + '<div class="bubble-details">'
             + '<div class="bubble-author"><a title="'+this.seller+'" href="http://villages.cc/profiles/' + this.seller_username +'">'+this.seller+'</a></div>'
             + '<div class="bubble-price" title="'+this.title+'">'+this.title+'<span class="bubble-price-quantity"></span></div>'

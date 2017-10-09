@@ -82,9 +82,11 @@ def listing_map(request):
             profile_obj_list = []
             trusting_profiles = request.profile.trusted_profiles.through.objects.filter(
                 from_profile_id=request.profile.id)
-            for each_trusting in trusting_profiles:
-                profile_obj_list.append(each_trusting.to_profile)
-            query = query.filter(profile_id__in=profile_obj_list)
+
+            if trusting_profiles:
+                for each_trusting in trusting_profiles:
+                    profile_obj_list.append(each_trusting.to_profile)
+                query = query.filter(profile_id__in=profile_obj_list)
 
             # query.extra(select={
             #     "trusted_listings": "select listings_listings.id from listings_listings "
@@ -98,7 +100,7 @@ def listing_map(request):
             query = query.filter(listing_type=request.GET.get('listing_type').upper())
 
         if request.GET.get('category'):
-            query = query.filter(subcategories__categories__id=request.GET.get('category'))
+            query = query.filter(subcategories__categories__id=int(request.GET.get('category')))
 
         if request.GET.get('subcategory'):
             query = query.filter(subcategories_id=request.GET.get('subcategory'))
