@@ -314,11 +314,11 @@
                     <ul style="padding-left: 0;">
                         <div class="form-group">
                             <div class="filters-enabled home-toolbar-button-group">
-                                <a class="home-toolbar-button-group-button selected" title="Grid" href="{% url 'frontend:home' %}"><i class="ss-thumbnails icon-fix home-button-group-icon"></i>
+                                <a class="home-toolbar-button-group-button" title="Grid" href="{% url 'frontend:home' %}"><i class="ss-thumbnails icon-fix home-button-group-icon"></i>
                                     <span class="home-toolbar-button-text">Grid
                                 </span>
                                 </a>
-                                <a class="home-toolbar-button-group-button " title="Map" href="{% url 'frontend:map' %}"><i class="ss-maplocation icon-fix home-button-group-icon"></i>
+                                <a class="home-toolbar-button-group-button selected" title="Map" href="{% url 'frontend:map' %}"><i class="ss-maplocation icon-fix home-button-group-icon"></i>
                                     <span class="home-toolbar-button-text">Map
                                 </span>
                                 </a>
@@ -378,36 +378,50 @@
 
                         $(function () {
                             var trusted_only = localStorage.trusted_only === "true";
+                            google.maps.event.trigger(map, 'resize');
+                            map.setCenter(localStorage.map_center);
                             $("#id_trusted_only").prop('checked', trusted_only);
 
                             var offer_type = localStorage.offer_type === "true";
+                            map.setCenter(localStorage.map_center);
                             $("#id_offer_type").prop('checked', offer_type);
 
                             var request_type = localStorage.request_type === "true";
+                            map.setCenter(localStorage.map_center);
                             $("#id_request_type").prop('checked', request_type);
 
                             var teach_type = localStorage.teach_type === "true";
+                            map.setCenter(localStorage.map_center);
                             $("#id_teach_type").prop('checked', teach_type);
 
                             var learn_type = localStorage.learn_type === "true";
+                            map.setCenter(localStorage.map_center);
                             $("#id_learn_type").prop('checked', learn_type);
 
                             var category_products = localStorage.products === "true";
+                            map.setCenter(localStorage.map_center);
                             $("#id_products").prop('checked', category_products);
 
                             var category_services = localStorage.services === "true";
+                            map.setCenter(localStorage.map_center);
                             $("#id_services").prop('checked', category_services);
 
                             var category_rideshare = localStorage.rideshare === "true";
+                            map.setCenter(localStorage.map_center);
                             $("#id_rideshare").prop('checked', category_rideshare);
 
                             var category_housing = localStorage.housing === "true";
+                            map.setCenter(localStorage.map_center);
                             $("#id_housing").prop('checked', category_housing);
 
                             var negative_balance = localStorage.negative_balance === "true";
+                            google.maps.event.trigger(map, 'resize');
+                            alert(localStorage.map_center);
+                            map.setCenter(localStorage.map_center);
                             $("#id_negative_balance").prop('checked', negative_balance);
 
                             var positive_balance = localStorage.positive_balance === "true";
+                            map.setCenter(localStorage.map_center);
                             $("#id_positive_balance").prop('checked', positive_balance);
                         });
 
@@ -435,61 +449,74 @@
                         // Without JQuery
                         var priceSlider = $("#price").slider();
                         priceSlider.on('slideStop', function () {
+                            localStorage.map_center = map.getCenter();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_trusted_only").on("change", function () {
                             localStorage.trusted_only = $(this).is(':checked');
+                            localStorage.map_center = map.getCenter();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_offer_type").on("change", function () {
                             localStorage.offer_type = $(this).is(':checked');
+                            localStorage.map_center = map.getCenter();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_request_type").on("change", function () {
                             localStorage.request_type = $(this).is(':checked');
+                            localStorage.map_center = map.getCenter();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_teach_type").on("change", function () {
                             localStorage.teach_type = $(this).is(':checked');
+                            localStorage.map_center = map.getCenter();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_learn_type").on("change", function () {
                             localStorage.learn_type = $(this).is(':checked');
+                            localStorage.map_center = map.getCenter();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_products").on("change", function () {
                             localStorage.products = $(this).is(':checked');
+                            localStorage.map_center = map.getCenter();
                             $(this).closest('form').submit();
                         });
 
                         $("#id_services").on("change", function () {
                             localStorage.services = $(this).is(':checked');
+                            localStorage.map_center = map.getCenter();
                             $(this).closest('form').submit();
                         });
 
                         $("#id_rideshare").on("change", function () {
                             localStorage.rideshare = $(this).is(':checked');
+                            localStorage.map_center = map.getCenter();
                             $(this).closest('form').submit();
                         });
 
                         $("#id_housing").on("change", function () {
                             localStorage.housing = $(this).is(':checked');
+                            localStorage.map_center = map.getCenter();
                             $(this).closest('form').submit();
                         });
 
                         $("#id_negative_balance").on("change", function () {
                             localStorage.negative_balance = $(this).is(':checked');
+                            localStorage.map_center = map.getCenter();
+                            alert(localStorage.map_center);
                             $(this).closest('form').submit()
                         });
 
                         $("#id_positive_balance").on("change", function () {
                             localStorage.positive_balance = $(this).is(':checked');
+                            localStorage.map_center = map.getCenter();
                             $(this).closest('form').submit()
                         });
                     </script>
