@@ -435,6 +435,10 @@
                         // Without JQuery
                         var priceSlider = $("#price").slider();
                         priceSlider.on('slideStop', function () {
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
 
