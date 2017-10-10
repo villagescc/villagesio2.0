@@ -440,16 +440,28 @@
 
                         $("#id_trusted_only").on("change", function () {
                             localStorage.trusted_only = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_offer_type").on("change", function () {
                             localStorage.offer_type = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_request_type").on("change", function () {
                             localStorage.request_type = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
 
@@ -460,36 +472,64 @@
 
                         $("#id_learn_type").on("change", function () {
                             localStorage.learn_type = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_products").on("change", function () {
                             localStorage.products = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit();
                         });
 
                         $("#id_services").on("change", function () {
                             localStorage.services = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit();
                         });
 
                         $("#id_rideshare").on("change", function () {
                             localStorage.rideshare = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit();
                         });
 
                         $("#id_housing").on("change", function () {
                             localStorage.housing = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit();
                         });
 
                         $("#id_negative_balance").on("change", function () {
                             localStorage.negative_balance = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_positive_balance").on("change", function () {
                             localStorage.positive_balance = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
                     </script>

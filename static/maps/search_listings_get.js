@@ -8,18 +8,31 @@ $(document).ready(function () {
 var map;
 
 function initMap() {
+
+     var mapOptions;
+
+        if(localStorage.mapLat!=null && localStorage.mapLng!=null && localStorage.mapZoom!=null){
+            mapOptions = {
+                center: new google.maps.LatLng(localStorage.mapLat,localStorage.mapLng),
+                zoom: parseInt(localStorage.mapZoom),
+                scaleControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+        }else{
+            //Choose some default options
+            mapOptions = {
+                center: new google.maps.LatLng(21.289373, -157.917480),
+                zoom: 11,
+                scaleControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+        }
+
     var pos = {lat: 21.289373, lng: -157.917480};
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: pos,
-        zoom: 12,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
-            pos = {lat: position.coords.latitude, lng: position.coords.longitude};
-            map.setCenter(pos);
-            map.setZoom(15);
             call_area_map();
             add_listener_map();
         }, function() {
@@ -31,6 +44,29 @@ function initMap() {
         showWarningMessage('Error: Your browser doesn\'t support geolocation.');
         add_listener_map();
     }
+
+    mapCentre = map.getCenter();
+    localStorage.mapLat = mapCentre.lat();
+    localStorage.mapLng = mapCentre.lng();
+    localStorage.mapZoom = map.getZoom();
+
+    google.maps.event.addListener(map,"center_changed", function() {
+        //Set local storage variables.
+        mapCentre = map.getCenter();
+
+        localStorage.mapLat = mapCentre.lat();
+        localStorage.mapLng = mapCentre.lng();
+        localStorage.mapZoom = map.getZoom();
+    });
+
+    google.maps.event.addListener(map,"zoom_changed", function() {
+        //Set local storage variables.
+        mapCentre = map.getCenter();
+
+        localStorage.mapLat = mapCentre.lat();
+        localStorage.mapLng = mapCentre.lng();
+        localStorage.mapZoom = map.getZoom();
+    });
 
 }
 
