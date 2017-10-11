@@ -4,6 +4,7 @@
 
 {% block content %}
 
+    <script src="{% static 'maps/oms.min.js' %}"></script>
     <link href="{% static 'maps/css/listing_map_style.css' %}" rel="stylesheet">
 
     <form id="form-map-listing" method="get">
@@ -354,9 +355,6 @@
                     {% endif %}
                     <hr>
                 </div>
-
-                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA"></script>
-                <script src="{% static 'maps/oms.min.js' %}"></script>
 
             {% if request.method == 'POST' %}
                 <script src="{% static 'maps/search_listings_post.js' %}"></script>

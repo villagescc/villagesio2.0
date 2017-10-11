@@ -40,7 +40,7 @@ def send_mail(subject, sender, recipient, template, context):
 
 
 def send_mail_to_admin(subject, sender, template, context):
-    recipient = settings.MANAGERS[0][1]
+    recipient = 'villagescc@protonmail.com'
     send_mail(subject, sender, recipient, template, context)
 
 

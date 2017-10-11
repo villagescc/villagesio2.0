@@ -8,9 +8,7 @@ $(document).ready(function () {
 var map;
 
 function initMap() {
-
      var mapOptions;
-
         if(localStorage.mapLat!=null && localStorage.mapLng!=null && localStorage.mapZoom!=null){
             mapOptions = {
                 center: new google.maps.LatLng(localStorage.mapLat,localStorage.mapLng),
@@ -199,30 +197,6 @@ function get_wifi_data(area_map) {
         });
         oms.addMarker(element);
     });
-}
-//
-function get_wifi_details(element){
-    var content = {
-        name: element['seller'],
-        address: element['price'],
-        ssid: element['title']
-    };
-    var template = Handlebars.compile($('#wifi_info').html());
-    $('#card_block').html(template(content));
-}
-
-function get_wifi_password(list) {
-    var password_list = [];
-    $.each(list, function (index, element) {
-        if (element['password']){
-            var password_data = {
-                password: element['password'],
-                created_at: element['created_at']
-            };
-            password_list.push(password_data);
-        }
-    });
-    return password_list;
 }
 
 // Add delay on zoom_changed in map
