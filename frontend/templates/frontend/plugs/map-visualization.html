@@ -697,6 +697,14 @@
         });
     </script>
 
+    {% if request.profile.location %}
+        <script>
+            var user_lat = "{{request.profile.location.point.coords.1}}";
+            var user_lon = "{{request.profile.location.point.coords.0}}";
+            console.log(lat, lon);
+        </script>
+    {% endif %}
+
 
 
 {% endblock %}

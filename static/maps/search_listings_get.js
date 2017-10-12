@@ -8,6 +8,7 @@ $(document).ready(function () {
 var map;
 
 function initMap() {
+
      var mapOptions;
         if(localStorage.mapLat!=null && localStorage.mapLng!=null && localStorage.mapZoom!=null){
             mapOptions = {
@@ -19,7 +20,7 @@ function initMap() {
         }else{
             //Choose some default options
             mapOptions = {
-                center: new google.maps.LatLng(21.289373, -157.917480),
+                center: new google.maps.LatLng(user_lat, user_lon),
                 zoom: 11,
                 scaleControl: true,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
