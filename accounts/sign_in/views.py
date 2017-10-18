@@ -129,6 +129,10 @@ class SignInUserLogIn(View):
         form = UserForm(request.POST)
         username = request.POST['username']
         password = request.POST['password']
+        remember = request.POST.get('remember-me')
+
+        if remember:
+            request.session.set_expiry(0)
 
         try:
             if not '@' in username:

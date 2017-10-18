@@ -380,7 +380,8 @@
         {% if each|check_is_trusted_listing:request.profile %}
             <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">
                 <div class="thumbnail">
-                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
+                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}"
+                         data-listing-title="{{ each.title|slice:":80" }}" alt="...">
                     <p class="thumbnail-info">{{ each.title }}</p>
                     <p class="thumbnail-tag" style="left: 70px;">{{ each.listing_type }} | {{ each.price }} VH</p>
                     <div class="caption" style="height: 115px;">
@@ -415,7 +416,8 @@
         {% else %}
             <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">
                 <div class="thumbnail" style="background: grey">
-                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
+                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}"
+                         data-listing-title="{{ each.title|slice:":80" }}" alt="...">
                     <p class="thumbnail-info">{{ each.title }}</p>
                     <p class="thumbnail-tag" style="left: 70px;">{{ each.listing_type }} | {{ each.price }} VH</p>
                     <div class="caption" style="height: 115px;">
@@ -471,8 +473,10 @@
 
 
     $(".listing-twitter-share").click(function () {
+        debugger;
         var listing_id = $(".listing-modal").attr("data-listing-id");
-        var url = 'https://twitter.com/share?url=https%3A%2F%2Fvillages.cc%2Flisting_details%2F'+listing_id+'&via=Villagescc&related=villagesmarketplace%2Ctwitter&hashtags=villagescc%2Clisting&text=Listing%20share%20';
+        var listing_title = $(".listing-modal").attr("data-listing-title");
+        var url = 'https://twitter.com/share?url=https%3A%2F%2Fvillages.cc%2Flisting_details%2F'+listing_id+'&via=Villagescc&related=villagesmarketplace%2Ctwitter&hashtags=villagescc%2Clisting&text='+listing_title;
         $(".listing-twitter-share").attr("href", url)
     })
 </script>
