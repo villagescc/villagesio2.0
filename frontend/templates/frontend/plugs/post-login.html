@@ -1,6 +1,8 @@
 {% load staticfiles profile relate i18n %}
 {% load tag_utils %}
 
+<script src="{% static 'js/pagination/jquery.twbsPagination.js' %}"></script>
+
 <style>
     .thumbnail .listing-modal{
         width : 300px;
@@ -139,17 +141,21 @@
                 <div><span><label>{{ form.trusted }}
                     {% trans 'Trusted only' %}</label>
         </span></div>
-                <div><span>
+            <div><span>
             <label class="custom-control custom-radio">
               <input id="id_referral_filter" name="referral-radio" type="radio" class="custom-control-input">
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">Sort by referral</span>
             </label>
+                </span></div>
+                <div><span>
             <label class="custom-control custom-radio">
               <input id="balance-high" name="radio-low" type="radio" class="custom-control-input">
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">Balance low to high</span>
             </label>
+                    </span></div>
+                <div><span>
             <label class="custom-control custom-radio">
               <input id="balance-low" name="radio-high" type="radio" class="custom-control-input">
               <span class="custom-control-indicator"></span>
@@ -364,6 +370,7 @@
         {% empty %}
             <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
         {% endfor %}
+
         {% if remaining_count %}
             <p><a href="?{{ next_page_param_str }}">
                 {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
@@ -451,13 +458,7 @@
         <strong>There is nothing to show</strong>
     </div>
 {% endif %}
-<div class="col-sm-12">
-    {% if remaining_count %}
-        <p><a href="?{{ next_page_param_str }}">
-            {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
-        </a></p>
-    {% endif %}
-</div>
+
 </div>
 </div>
 </section>
@@ -557,7 +558,6 @@
     });
 
     $(".payment-modal").click(function (e) {
-        debugger;
         $('#payment-loading-modal').modal("show");
         $('#spin-modal').fadeIn();
         var profile_username = $(this).attr('data-profile-username');
@@ -569,7 +569,6 @@
             type: 'GET',
             cache: false,
             success: function (data) {
-                debugger;
                 if(data["data"]["stat"] != "ok"){
                     $('#error-modal-alert').text(data["data"]["stat"]);
                     $('#spin-modal').fadeOut();
@@ -608,9 +607,7 @@
         $('#spin-modal').fadeOut();
         $("#new-contact-modal").modal("show");
     });
-</script>
 
-<script>
     $('.menu-group div').click(function () {
         var menu = $(this).parent().find('ul');
         menu.slideToggle();

@@ -300,9 +300,21 @@ def my_profile(request):
         else:
             other_tags.append(each_profile_tag)
 
+    referral_obj_list = []
+    referral_count = []
     referral = Referral.objects.filter(recipient=request.profile)
-    if referral:
-        referral_count = referral.count()
+    for each_referral in referral:
+        referral_obj_list.append(each_referral.referrer)
+    trusting_profiles = request.profile.trusted_profiles.through.objects.filter(
+        from_profile_id=request.profile.id)
+
+    if trusting_profiles:
+        for each_trusting in trusting_profiles:
+            if each_trusting.to_profile in referral_obj_list:
+                referral_count.append(each_trusting.to_profile)
+
+    if referral_count:
+        referral_count = len(referral_count)
     else:
         referral_count = None
 
