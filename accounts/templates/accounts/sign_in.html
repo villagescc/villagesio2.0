@@ -19,8 +19,6 @@
             {% csrf_token %}
 
             <a class="btn btn-primary" href="{% url 'social:begin' 'facebook' %}?next=/settings/"><i class="fa fa-facebook-official">&nbsp; Login with facebook</i></a>
-
-
                 {% for field in form %}
                     {% if field.errors %}
                         <div class="form-group">
@@ -39,6 +37,12 @@
                         </div>
                     {% endif %}
                 {% endfor %}
+                <div class="form-check col-3">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" name="remember-me">
+                        Remember me
+                    </label>
+                </div>
                 {% if not form.is_valid %}
                     <script>
                         setTimeout(function () {

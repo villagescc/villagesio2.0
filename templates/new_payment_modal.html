@@ -52,7 +52,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" id="id_cancel_payment" name="class=" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -97,7 +97,7 @@
         var profile_username = $("#profile-username").val();
         var url = '/pay_user_ajax/'+profile_username+'/';
         console.log(url);
-        $.ajax({
+        var request = $.ajax({
             url: url,
             type: 'POST',
             data: $('#new-payment-form').serialize(),
