@@ -266,7 +266,7 @@ MEDIA_ROOT = 'uploads'
 
 GEOIP_PATH = '/usr/share/GeoIP'
 
-LOGIN_URL = ''
+LOGIN_URL = '/accounts/sign_in/log_in'
 
 PASSWORD_RESET_LINK_EXPIRY = timedelta(days=7)
 
