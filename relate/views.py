@@ -196,10 +196,12 @@ def pay_user_ajax(request, recipient_username):
             data['recipient'] = recipient_username
             data['refer'] = True if has_referral else False
             return JsonResponse({'data': data})
+        else:
+            data['stat'] = 'error'
+            data['errors'] = form.errors
+            return JsonResponse({'data': data})
     else:
         form = AcknowledgementForm(max_ripple=max_amount, initial=request.GET)
-    can_ripple = max_amount > 0
-    profile = recipient  # For profile_base.html.
     data['stat'] = 'error'
     return JsonResponse({'data': data})
 
