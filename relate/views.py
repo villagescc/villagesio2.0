@@ -190,7 +190,7 @@ def pay_user_ajax(request, recipient_username):
                 request.profile, recipient)
             create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
             has_referral = Referral.objects.filter(referrer=request.profile, recipient=recipient).all()
-            # send_acknowledgement_notification(acknowledgement)
+            send_acknowledgement_notification(acknowledgement)
             messages.info(request, MESSAGES['acknowledgement_sent'])
             data['stat'] = 'ok'
             data['recipient'] = recipient_username
