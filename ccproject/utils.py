@@ -4,7 +4,7 @@ from PIL import Image, ExifTags
 
 def rotate_image(infile):
     try:
-        image = Image.open(r'/home/filipe/Pictures/TR-504-11.jpg')
+        image = Image.open(infile)
         for orientation in ExifTags.TAGS.keys():
             if ExifTags.TAGS[orientation] == 'Orientation':
                 break
@@ -16,9 +16,8 @@ def rotate_image(infile):
             image = image.rotate(270, expand=True)
         elif exif[orientation] == 8:
             image = image.rotate(90, expand=True)
-        image.save(r'/home/filipe/Pictures/TR-504-11.jpg')
-        image.close()
+        return image
 
     except (AttributeError, KeyError, IndexError):
         # cases: image don't have getexif
-        pass
+        return None

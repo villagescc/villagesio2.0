@@ -216,15 +216,15 @@ def edit_profile(request):
 
     profile = request.profile
     if request.method == 'POST':
-        # if user_agent.device.family == 'Moto G (5)':
-        new_photo = rotate_image(request.FILES.get('photo'))
-        if new_photo:
-            request.FILES['photo'] = new_photo
+        if user_agent.device.family == 'iPhone':
+            new_photo = rotate_image(request.FILES.get('photo'))
+            if new_photo:
+                request.FILES['photo'] = new_photo
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             messages.info(request, MESSAGES['profile_saved'])
-            return HttpResponseRedirect(reverse('my_profile'))
+            return HttpResponseRedirect(reverse('frontend:home'))
     else:
         form = ProfileForm(instance=profile)
     return locals()
