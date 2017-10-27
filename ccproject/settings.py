@@ -59,6 +59,8 @@ def get_credentials(auth_location):
 villages_db_user, villages_db_pass, villages_db_name, ripple_db_user, ripple_db_pass, ripple_db_name, \
 mail_user, mail_password, secret_key, mailchimp_apikey = get_credentials(AUTH_LOCATION)
 
+MAILCHIMP_APIKEY = mailchimp_apikey
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = secret_key
 
@@ -100,7 +102,6 @@ INSTALLED_APPS = [
     'listings',
     'tags',
     'notification',
-    'pre_transactions',
     'django_user_agents',
 
     # Ripple

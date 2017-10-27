@@ -19,6 +19,8 @@ from geo.models import Location
 from profile.forms import RegistrationForm, ProfileForm
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.exceptions import ObjectDoesNotExist
+from django_user_agents.utils import get_user_agent
+from ccproject.utils import rotate_image
 import mailchimp
 import requests
 
@@ -101,7 +103,7 @@ def subscribe_mailchimp(profile):
                     postal_code = each_type.get('long_name').encode('UTF-8')
                     break
 
-    API_KEY = settings.mailchimp_apikey
+    API_KEY = settings.MAILCHIMP_APIKEY
     LIST_ID = '063533ab5b'
 
     api = mailchimp.Mailchimp(API_KEY)
@@ -210,8 +212,14 @@ class SignInUserRegister(View):
 @login_required
 @render()
 def edit_profile(request):
+    user_agent = get_user_agent(request)
+
     profile = request.profile
     if request.method == 'POST':
+        # if user_agent.device.family == 'Moto G (5)':
+        new_photo = rotate_image(request.FILES.get('photo'))
+        if new_photo:
+            request.FILES['photo'] = new_photo
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
