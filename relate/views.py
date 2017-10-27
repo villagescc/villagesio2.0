@@ -363,7 +363,7 @@ def blank_payment(request):
                                                                  'listing_form': listing_form})
         payment = form.send_payment(request.profile, recipient, request.POST)
         create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
-        # send_payment_notification(payment)
+        send_payment_notification(payment)
         messages.add_message(request, messages.INFO, 'Payment sent.')
         return HttpResponseRedirect(reverse('blank_payment_user'))
     else:
