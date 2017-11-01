@@ -129,7 +129,7 @@ class SignInUserLogIn(View):
 
     def post(self, request):
         form = UserForm(request.POST)
-        username = request.POST['username']
+        username = request.POST['username'].lower()
         password = request.POST['password']
         remember = request.POST.get('remember-me')
 
