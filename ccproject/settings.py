@@ -33,7 +33,7 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'ccproject', 'locale/'),
 )
 
-AUTH_LOCATION = '/home/filipe/.villages_auth.json'
+AUTH_LOCATION = '/home/ubuntu/.villages_auth.json'
 
 
 def get_credentials(auth_location):

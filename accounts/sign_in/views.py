@@ -13,6 +13,7 @@ from relate.models import Endorsement
 from general.mail import send_mail_from_system
 from general.util import render
 from django.contrib.auth.models import User
+from profile.models import Settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as django_login
 from geo.models import Location
@@ -141,8 +142,8 @@ class SignInUserLogIn(View):
                 user = User.objects.get(username=username)
                 user = authenticate(username=username, password=password)
             else:
-                user = User.objects.get(email=username)
-                user = authenticate(username=user.username, password=password)
+                user = Settings.objects.get(email=username)
+                user = authenticate(username=user.profile.username, password=password)
             if user:
                 # Password matching and user found with authenticate
                 login(request, user)
