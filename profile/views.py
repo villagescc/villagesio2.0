@@ -274,6 +274,7 @@ def edit_profile(request):
 #                                                                   'tags': tags})
 
 
+@login_required
 def my_profile(request):
 
     offer_tags = []
@@ -327,6 +328,7 @@ def my_profile(request):
 
 
 @render()
+@login_required
 def profile(request, username):
 
     offer_tags = []
@@ -437,6 +439,7 @@ def undefined_contact(request, username=None):
             messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
             return JsonResponse({'msg': 'Success'})
     return django_render(request, 'contact.html', {'form': form})
+
 
 @login_required
 @render()

@@ -31,18 +31,18 @@
 {% if form.instance.id %}
 	<p>{% blocktrans count hearts=form.instance.weight %}
 		You have already endorsed {{ recipient }} with
-		<strong>{{ hearts }}</strong> heart.
+		<strong>{{ hearts }}</strong> hour credit limit
 	{% plural %}
 		You have already endorsed {{ recipient }} with
-		<strong>{{ hearts }}</strong> hearts.
+		<strong>{{ hearts }}</strong> hours credit limit
 	{% endblocktrans %}</p>
 {% endif %}
 
 {% if request.profile.endorsement_limited %}
 	<p>{% blocktrans count hearts=request.profile.endorsements_remaining %}
-		You have <strong>{{ hearts }}</strong> heart remaining to give out.
+		You have <strong>{{ hearts }}</strong> hour credit limit remaining to give out.
 	{% plural %}
-		You have <strong>{{ hearts }}</strong> hearts remaining to give out.
+		You have <strong>{{ hearts }}</strong> hours credit limit remaining to give out.
 	{% endblocktrans %}</p>
 {% endif %}
 
@@ -66,8 +66,8 @@
 		</table>
 	</form>
 {% else %}
-	<p>{% blocktrans %}You need more hearts to endorse {{ recipient }}.
-		You get five hearts for every endorsement you receive from
+	<p>{% blocktrans %}You need more hours credit limit to endorse {{ recipient }}.
+		You get five hours credit limit for every endorsement you receive from
 		another user.{% endblocktrans %}</p>
 {% endif %}
 
