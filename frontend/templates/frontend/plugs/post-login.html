@@ -466,13 +466,37 @@
 </section>
 
 <script>
-    $(".listing-facebook-share").click(function () {
-        var listing_id = $(".listing-modal").attr("data-listing-id");
-        var url = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvillages.cc%2Flisting_details%2F'+listing_id;
-        $(".listing-facebook-share").attr("href", url)
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '527732490904454',
+      xfbml      : true,
+      version    : 'v2.11'
     });
+    FB.AppEvents.logPageView();
+  };
 
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
 
+    $(".listing-facebook-share").click(function () {
+        debugger;
+        var listing_id = $(".listing-modal").attr("data-listing-id");
+        var url = 'https://villages.cc/listing_details/'+listing_id;
+        FB.ui({
+            method: 'share',
+            display: 'popup',
+            mobile_iframe: true,
+            href: url
+        }, function (response){});
+    });
+</script>
+
+<script>
     $(".listing-twitter-share").click(function () {
         debugger;
         var listing_id = $(".listing-modal").attr("data-listing-id");

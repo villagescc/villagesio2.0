@@ -2,10 +2,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta property="og:title" content="Stuffed Cookies" />
+    <meta property="og:image" content="http://fbwerks.com:8000/zhen/cookie.jpg" />
+    <meta property="og:description" content="The Turducken of Cookies" />
+    <meta property="og:url" content="http://fbwerks.com:8000/zhen/cookie.html">
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Villages.cc</title>
     <!-- Bootstrap -->
     <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -83,24 +87,31 @@
 <script>
   window.fbAsyncInit = function() {
     FB.init({
-      appId      : '1199641510163736',
-      cookie     : true,
+      appId      : '527732490904454',
       xfbml      : true,
-      version    : 'v2.8'
+      version    : 'v2.11'
     });
     FB.AppEvents.logPageView();
   };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
 </script>
 
 <div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9&appId=1199641510163736";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-</script>
+{#<script>(function(d, s, id) {#}
+{#  var js, fjs = d.getElementsByTagName(s)[0];#}
+{#  if (d.getElementById(id)) return;#}
+{#  js = d.createElement(s); js.id = id;#}
+{#  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9&appId=527732490904454";#}
+{#  fjs.parentNode.insertBefore(js, fjs);#}
+{#}(document, 'script', 'facebook-jssdk'));#}
+{#</script>#}
 
 {% if request.user.is_authenticated %}
     {% include 'plugs/navigation-post-login.html' %}
