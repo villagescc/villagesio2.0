@@ -52,7 +52,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" id="id_cancel_payment" name="class=" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -93,12 +93,11 @@
 	}
 
     $("#save-payment").click(function(e) {
-        debugger;
         $("#save-payment").attr("disabled", true);
         var profile_username = $("#profile-username").val();
         var url = '/pay_user_ajax/'+profile_username+'/';
         console.log(url);
-        $.ajax({
+        var request = $.ajax({
             url: url,
             type: 'POST',
             data: $('#new-payment-form').serialize(),
@@ -113,7 +112,7 @@
                     var recipient = data['data']['recipient'];
                     $('#payment-msg').html(data).fadeIn('slow');
                     $('#payment-msg').html("<strong><p>Successfully sent trust to " +recipient+ "</p></strong>").fadeIn('slow');
-                    $('#payment-msg').delay(2500).fadeOut('slow');
+                    $('#payment-msg').delay(4500).fadeOut('slow');
                     $("#save-payment").attr("disabled", false);
                     $('#new-payment-modal').modal("hide");
 
@@ -131,7 +130,14 @@
                         $('#payment-msg').html(data).fadeIn('slow');
                         var error = data["data"]["errors"]["weight"];
                         $('#payment-msg').html("<strong><p> Weight: " +error+ " Please verify</p></strong>").fadeIn('slow');
-                        $('#payment-msg').delay(2500).fadeOut('slow');
+                        $('#payment-msg').delay(4500).fadeOut('slow');
+                        $("#save-payment").attr("disabled", false);
+                    }
+                    else if('amount' in data['data']['errors']){
+                        $('#payment-msg').html(data).fadeIn('slow');
+                        var error = data["data"]["errors"]["amount"];
+                        $('#payment-msg').html("<strong><p> Amount of Hours: " +error+ " Please verify</p></strong>").fadeIn('slow');
+                        $('#payment-msg').delay(4500).fadeOut('slow');
                         $("#save-payment").attr("disabled", false);
                     }
                 }

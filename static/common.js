@@ -39,7 +39,18 @@ function init_feed_items() {
 	}, function() {
 		$(this).removeClass('hover')
 	});
-}	
+}
+
+$(function () {
+	var referral = localStorage.referral === "true";
+	$("#id_referral_filter").prop('checked', referral);
+
+    var balance_high = localStorage.balance_high === "true";
+    $("#balance-high").prop('checked', balance_high);
+
+    var balance_low = localStorage.balance_low === "true";
+    $("#balance-low").prop('checked', balance_low);
+});
 
 function init_feed_filter_form() {
 	/* Make form submit on change. */
@@ -50,15 +61,18 @@ function init_feed_filter_form() {
 		$(this).closest('form').submit();
 	});
 	$('#id_referral_filter').change(function() {
+		localStorage.referral = $(this).is(':checked');
 		$(this).closest('form').submit();
 	});
 	$('#inputListingType').change(function () {
 		$(this).closest('form').submit();
 	});
 	$('#balance-low').change(function() {
+		localStorage.balance_low = $(this).is(':checked');
 		$(this).closest('form').submit();
 	});
 	$('#balance-high').change(function() {
+		localStorage.balance_high = $(this).is(':checked');
 		$(this).closest('form').submit();
 	});
 	$('#id_clear').click(function() {

@@ -109,7 +109,8 @@ def get_listing_info(request, listing_id):
         data["username"] = listing.user.username
         data["balance"] = listing.user.profile.overall_balance()
         data["description"] = listing.description
-        data["profile_location"] = listing.user.profile.location.full_name()
+        if listing.user.profile.location:
+            data["profile_location"] = listing.user.profile.location.full_name()
         data["created_at"] = listing.created.date() if listing.created else None
         data["stat"] = "ok"
     except Exception as e:

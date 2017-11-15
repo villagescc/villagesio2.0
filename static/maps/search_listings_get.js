@@ -8,18 +8,30 @@ $(document).ready(function () {
 var map;
 
 function initMap() {
+
+     var mapOptions;
+        if(localStorage.mapLat!=null && localStorage.mapLng!=null && localStorage.mapZoom!=null){
+            mapOptions = {
+                center: new google.maps.LatLng(localStorage.mapLat,localStorage.mapLng),
+                zoom: parseInt(localStorage.mapZoom),
+                scaleControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+        }else{
+            //Choose some default options
+            mapOptions = {
+                center: new google.maps.LatLng(user_lat, user_lon),
+                zoom: 11,
+                scaleControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+        }
+
     var pos = {lat: 21.289373, lng: -157.917480};
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: pos,
-        zoom: 12,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
-            pos = {lat: position.coords.latitude, lng: position.coords.longitude};
-            map.setCenter(pos);
-            map.setZoom(15);
             call_area_map();
             add_listener_map();
         }, function() {
@@ -31,6 +43,29 @@ function initMap() {
         showWarningMessage('Error: Your browser doesn\'t support geolocation.');
         add_listener_map();
     }
+
+    mapCentre = map.getCenter();
+    localStorage.mapLat = mapCentre.lat();
+    localStorage.mapLng = mapCentre.lng();
+    localStorage.mapZoom = map.getZoom();
+
+    google.maps.event.addListener(map,"center_changed", function() {
+        //Set local storage variables.
+        mapCentre = map.getCenter();
+
+        localStorage.mapLat = mapCentre.lat();
+        localStorage.mapLng = mapCentre.lng();
+        localStorage.mapZoom = map.getZoom();
+    });
+
+    google.maps.event.addListener(map,"zoom_changed", function() {
+        //Set local storage variables.
+        mapCentre = map.getCenter();
+
+        localStorage.mapLat = mapCentre.lat();
+        localStorage.mapLng = mapCentre.lng();
+        localStorage.mapZoom = map.getZoom();
+    });
 
 }
 
@@ -163,30 +198,6 @@ function get_wifi_data(area_map) {
         });
         oms.addMarker(element);
     });
-}
-//
-function get_wifi_details(element){
-    var content = {
-        name: element['seller'],
-        address: element['price'],
-        ssid: element['title']
-    };
-    var template = Handlebars.compile($('#wifi_info').html());
-    $('#card_block').html(template(content));
-}
-
-function get_wifi_password(list) {
-    var password_list = [];
-    $.each(list, function (index, element) {
-        if (element['password']){
-            var password_data = {
-                password: element['password'],
-                created_at: element['created_at']
-            };
-            password_list.push(password_data);
-        }
-    });
-    return password_list;
 }
 
 // Add delay on zoom_changed in map

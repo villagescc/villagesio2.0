@@ -88,14 +88,6 @@ def listing_map(request):
                     profile_obj_list.append(each_trusting.to_profile)
                 query = query.filter(profile_id__in=profile_obj_list)
 
-            # query.extra(select={
-            #     "trusted_listings": "select listings_listings.id from listings_listings "
-            #                         "inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) "
-            #                         "where profile_profile.id in "
-            #                         "(select profile_profile_trusted_profiles.to_profile_id "
-            #                         "from profile_profile_trusted_profiles "
-            #                         "where profile_profile_trusted_profiles.from_profile_id = {0} LIMIT 1)".format(request.profile.id)})
-
         if request.GET.get('listing_type'):
             query = query.filter(listing_type=request.GET.get('listing_type').upper())
 
@@ -108,7 +100,7 @@ def listing_map(request):
         if request.GET.get('balance_type'):
             balance_type_list = []
             if request.GET.get('balance_type') == 'positive':
-                positive_balances = FeedItem.objects.filter(balance__gt=0).all()
+                positive_balances = FeedItem.objects.filter(balance__gte=0).all()
                 for each_positive in positive_balances:
                     balance_type_list.append(each_positive.poster)
                 query = query.filter(profile_id__in=balance_type_list)
@@ -119,15 +111,16 @@ def listing_map(request):
                 query = query.filter(profile_id__in=balance_type_list)
 
         for each_listing in query:
-            listing_locations.append({'lat': each_listing.user.profile.location.point.coords[1],
-                                      'lng': each_listing.user.profile.location.point.coords[0],
-                                      'seller': each_listing.user.profile.name,
-                                      'seller_username': each_listing.user.username,
-                                      'listing_id': each_listing.id,
-                                      'price': int(each_listing.price),
-                                      'title': each_listing.title,
-                                      'listing_img': each_listing.photo.url if each_listing.photo else None,
-                                      'profile_img': each_listing.user.profile.photo.url if each_listing.user.profile.photo else None})
+            if each_listing.user.profile.location:
+                listing_locations.append({'lat': each_listing.user.profile.location.point.coords[1],
+                                          'lng': each_listing.user.profile.location.point.coords[0],
+                                          'seller': each_listing.user.profile.name,
+                                          'seller_username': each_listing.user.username,
+                                          'listing_id': each_listing.id,
+                                          'price': int(each_listing.price),
+                                          'title': each_listing.title,
+                                          'listing_img': each_listing.photo.url if each_listing.photo else None,
+                                          'profile_img': each_listing.user.profile.photo.url if each_listing.user.profile.photo else None})
 
         listing_locations = json.dumps(listing_locations)
 

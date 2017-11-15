@@ -1,8 +1,8 @@
 {% load i18n %}
 {% blocktrans count hearts=endorsement.weight with endorser=endorsement.endorser %}
-You have been endorsed with {{ hearts }} heart on Villages.cc by {{ endorser }}.
+You have been endorsed with {{ hearts }} hour credit limit on Villages.cc by {{ endorser }}.
 {% plural %}
-You have been endorsed with {{ hearts }} hearts on Villages.cc by {{ endorser }}.
+You have been endorsed with {{ hearts }} hours credit limit on Villages.cc by {{ endorser }}.
 {% endblocktrans %}
 
 {% if endorsement.text %}{% blocktrans with endorser=endorsement.endorser %}{{ endorser }} added:{% endblocktrans %}

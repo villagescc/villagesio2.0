@@ -31,9 +31,9 @@
 {% if request.profile.endorsement_limited %}
 <p>
 	{% blocktrans count hearts=request.profile.endorsements_remaining %}
-		You have <strong>{{ hearts }}</strong> heart remaining to give out.
+		You have <strong>{{ hearts }}</strong> hour credit limit remaining to give out.
 	{% plural %}
-		You have <strong>{{ hearts }}</strong> hearts remaining to give out.
+		You have <strong>{{ hearts }}</strong> hours credit limit remaining to give out.
 	{% endblocktrans %}
 </p>
 {% endif %}
@@ -50,8 +50,8 @@
 		</table>
 	</form>
 {% else %}
-	<p>{% blocktrans %}You need more hearts to invite a friend. You get 5
-		hearts for each endorsement you receive.{% endblocktrans %}</p>
+	<p>{% blocktrans %}You need more hours credit limit to invite a friend. You get 5
+		hours credit limit for each endorsement you receive.{% endblocktrans %}</p>
 {% endif %}
 
 <p><a href="{% url 'invitations_sent' %}"

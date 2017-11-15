@@ -4,6 +4,7 @@
 
 {% block content %}
 
+    <script src="{% static 'maps/oms.min.js' %}"></script>
     <link href="{% static 'maps/css/listing_map_style.css' %}" rel="stylesheet">
 
     <form id="form-map-listing" method="get">
@@ -314,11 +315,11 @@
                     <ul style="padding-left: 0;">
                         <div class="form-group">
                             <div class="filters-enabled home-toolbar-button-group">
-                                <a class="home-toolbar-button-group-button selected" title="Grid" href="{% url 'frontend:home' %}"><i class="ss-thumbnails icon-fix home-button-group-icon"></i>
+                                <a class="home-toolbar-button-group-button" title="Grid" href="{% url 'frontend:home' %}"><i class="ss-thumbnails icon-fix home-button-group-icon"></i>
                                     <span class="home-toolbar-button-text">Grid
                                 </span>
                                 </a>
-                                <a class="home-toolbar-button-group-button " title="Map" href="{% url 'frontend:map' %}"><i class="ss-maplocation icon-fix home-button-group-icon"></i>
+                                <a class="home-toolbar-button-group-button selected" title="Map" href="{% url 'frontend:map' %}"><i class="ss-maplocation icon-fix home-button-group-icon"></i>
                                     <span class="home-toolbar-button-text">Map
                                 </span>
                                 </a>
@@ -354,9 +355,6 @@
                     {% endif %}
                     <hr>
                 </div>
-
-                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA"></script>
-                <script src="{% static 'maps/oms.min.js' %}"></script>
 
             {% if request.method == 'POST' %}
                 <script src="{% static 'maps/search_listings_post.js' %}"></script>
@@ -435,21 +433,37 @@
                         // Without JQuery
                         var priceSlider = $("#price").slider();
                         priceSlider.on('slideStop', function () {
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_trusted_only").on("change", function () {
                             localStorage.trusted_only = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_offer_type").on("change", function () {
                             localStorage.offer_type = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_request_type").on("change", function () {
                             localStorage.request_type = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
 
@@ -460,36 +474,64 @@
 
                         $("#id_learn_type").on("change", function () {
                             localStorage.learn_type = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_products").on("change", function () {
                             localStorage.products = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit();
                         });
 
                         $("#id_services").on("change", function () {
                             localStorage.services = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit();
                         });
 
                         $("#id_rideshare").on("change", function () {
                             localStorage.rideshare = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit();
                         });
 
                         $("#id_housing").on("change", function () {
                             localStorage.housing = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit();
                         });
 
                         $("#id_negative_balance").on("change", function () {
                             localStorage.negative_balance = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
 
                         $("#id_positive_balance").on("change", function () {
                             localStorage.positive_balance = $(this).is(':checked');
+                            mapCentre = map.getCenter();
+                            localStorage.mapLat = mapCentre.lat();
+                            localStorage.mapLng = mapCentre.lng();
+                            localStorage.mapZoom = map.getZoom();
                             $(this).closest('form').submit()
                         });
                     </script>
@@ -654,6 +696,14 @@
             menu.slideToggle();
         });
     </script>
+
+    {% if request.profile.location %}
+        <script>
+            var user_lat = "{{request.profile.location.point.coords.1}}";
+            var user_lon = "{{request.profile.location.point.coords.0}}";
+            console.log(lat, lon);
+        </script>
+    {% endif %}
 
 
 
