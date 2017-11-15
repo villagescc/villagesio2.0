@@ -22,7 +22,7 @@ class RippleRouter(object):
             return True
         return None
     
-    def allow_syncdb(self, db, model):
+    def allow_migrate(self, db, model):
         if db == self.DB_ALIAS:
             # Only put models from APPS into Ripple table (and south).
             return model._meta.app_label in self.APPS + ('south',)

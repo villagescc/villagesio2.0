@@ -139,17 +139,21 @@
                 <div><span><label>{{ form.trusted }}
                     {% trans 'Trusted only' %}</label>
         </span></div>
-                <div><span>
+            <div><span>
             <label class="custom-control custom-radio">
               <input id="id_referral_filter" name="referral-radio" type="radio" class="custom-control-input">
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">Sort by referral</span>
             </label>
+                </span></div>
+                <div><span>
             <label class="custom-control custom-radio">
               <input id="balance-high" name="radio-low" type="radio" class="custom-control-input">
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">Balance low to high</span>
             </label>
+                    </span></div>
+                <div><span>
             <label class="custom-control custom-radio">
               <input id="balance-low" name="radio-high" type="radio" class="custom-control-input">
               <span class="custom-control-indicator"></span>
@@ -243,7 +247,7 @@
                                 <span class="home-toolbar-button-text">Grid
                                 </span>
                             </a>
-                            <a class="home-toolbar-button-group-button " title="Map" href="{% url 'map_search:map' %}"><i class="ss-maplocation icon-fix home-button-group-icon"></i>
+                            <a class="home-toolbar-button-group-button " title="Map" href="{% url 'frontend:map' %}"><i class="ss-maplocation icon-fix home-button-group-icon"></i>
                                 <span class="home-toolbar-button-text">Map
                                 </span>
                             </a>
@@ -364,6 +368,7 @@
         {% empty %}
             <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
         {% endfor %}
+
         {% if remaining_count %}
             <p><a href="?{{ next_page_param_str }}">
                 {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
@@ -379,8 +384,9 @@
     {% for each in listing_items %}
         {% if each|check_is_trusted_listing:request.profile %}
             <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">
-                <div class="thumbnail">
-                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
+                <div class="thumbnail" style="background: #16ba1a">
+                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}"
+                         data-listing-title="{{ each.title|slice:":80" }}" alt="...">
                     <p class="thumbnail-info">{{ each.title }}</p>
                     <p class="thumbnail-tag" style="left: 70px;">{{ each.listing_type }} | {{ each.price }} VH</p>
                     <div class="caption" style="height: 115px;">
@@ -415,7 +421,8 @@
         {% else %}
             <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">
                 <div class="thumbnail" style="background: grey">
-                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
+                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}"
+                         data-listing-title="{{ each.title|slice:":80" }}" alt="...">
                     <p class="thumbnail-info">{{ each.title }}</p>
                     <p class="thumbnail-tag" style="left: 70px;">{{ each.listing_type }} | {{ each.price }} VH</p>
                     <div class="caption" style="height: 115px;">
@@ -451,28 +458,48 @@
         <strong>There is nothing to show</strong>
     </div>
 {% endif %}
-<div class="col-sm-12">
-    {% if remaining_count %}
-        <p><a href="?{{ next_page_param_str }}">
-            {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
-        </a></p>
-    {% endif %}
-</div>
+
 </div>
 </div>
 </section>
 
 <script>
-    $(".listing-facebook-share").click(function () {
-        var listing_id = $(".listing-modal").attr("data-listing-id");
-        var url = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvillages.cc%2Flisting_details%2F'+listing_id;
-        $(".listing-facebook-share").attr("href", url)
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '527732490904454',
+      xfbml      : true,
+      version    : 'v2.11'
     });
+    FB.AppEvents.logPageView();
+  };
 
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
 
-    $(".listing-twitter-share").click(function () {
+    $(".listing-facebook-share").click(function () {
+        debugger;
         var listing_id = $(".listing-modal").attr("data-listing-id");
-        var url = 'https://twitter.com/share?url=https%3A%2F%2Fvillages.cc%2Flisting_details%2F'+listing_id+'&via=Villagescc&related=villagesmarketplace%2Ctwitter&hashtags=villagescc%2Clisting&text=Listing%20share%20';
+        var url = 'https://villages.cc/listing_details/'+listing_id;
+        FB.ui({
+            method: 'share',
+            display: 'popup',
+            mobile_iframe: true,
+            href: url
+        }, function (response){});
+    });
+</script>
+
+<script>
+    $(".listing-twitter-share").click(function () {
+        debugger;
+        var listing_id = $(".listing-modal").attr("data-listing-id");
+        var listing_title = $(".listing-modal").attr("data-listing-title");
+        var url = 'https://twitter.com/share?url=https%3A%2F%2Fvillages.cc%2Flisting_details%2F'+listing_id+'&via=Villagescc&related=villagesmarketplace%2Ctwitter&hashtags=villagescc%2Clisting&text='+listing_title;
         $(".listing-twitter-share").attr("href", url)
     })
 </script>
@@ -557,7 +584,6 @@
     });
 
     $(".payment-modal").click(function (e) {
-        debugger;
         $('#payment-loading-modal').modal("show");
         $('#spin-modal').fadeIn();
         var profile_username = $(this).attr('data-profile-username');
@@ -569,7 +595,6 @@
             type: 'GET',
             cache: false,
             success: function (data) {
-                debugger;
                 if(data["data"]["stat"] != "ok"){
                     $('#error-modal-alert').text(data["data"]["stat"]);
                     $('#spin-modal').fadeOut();
@@ -608,9 +633,7 @@
         $('#spin-modal').fadeOut();
         $("#new-contact-modal").modal("show");
     });
-</script>
 
-<script>
     $('.menu-group div').click(function () {
         var menu = $(this).parent().find('ul');
         menu.slideToggle();
