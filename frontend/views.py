@@ -1,10 +1,7 @@
-import ripple.api as ripple
-# from general.util import render
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.db.models import Q
 # Forms
 from listings.forms import ListingsForms
 from listings.models import LISTING_TYPE_CHECK
@@ -107,7 +104,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
                               poster, recipient, do_filter)
         trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
         if form.is_valid():
-            feed_items, remaining_count = form.get_results(form.data.get('radio-low'),
+            feed_items, remaining_count, total_items = form.get_results(form.data.get('radio-low'),
                                                            form.data.get('radio-high'),
                                                            form.data.get('referral-radio'))
             if do_filter:
@@ -124,6 +121,8 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         if next_page_date:
             url_params['d'] = next_page_date.strftime(DATE_FORMAT)
         next_page_param_str = url_params.urlencode()
+
+        number_of_pages = len(total_items)/settings.FEED_ITEMS_PER_PAGE
 
         listing_form = ListingsForms()
         categories_list = Categories.objects.all()
@@ -155,7 +154,8 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
                        'housing_sub_categories': housing_sub_categories,
                        'categories': categories_list, 'trust_form': trust_form,
                        'payment_form': payment_form, 'contact_form': contact_form,
-                       'notification_number': notification_number})
+                       'notification_number': notification_number,
+                       'number_of_pages': number_of_pages})
     else:
         if request.method == 'POST':
             form = ListingsForms(request.POST, request.FILES)

@@ -13,12 +13,15 @@ from relate.models import Endorsement
 from general.mail import send_mail_from_system
 from general.util import render
 from django.contrib.auth.models import User
+from profile.models import Settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as django_login
 from geo.models import Location
 from profile.forms import RegistrationForm, ProfileForm
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.exceptions import ObjectDoesNotExist
+from django_user_agents.utils import get_user_agent
+from ccproject.utils import rotate_image
 import mailchimp
 import requests
 
@@ -101,7 +104,7 @@ def subscribe_mailchimp(profile):
                     postal_code = each_type.get('long_name').encode('UTF-8')
                     break
 
-    API_KEY = settings.mailchimp_apikey
+    API_KEY = settings.MAILCHIMP_APIKEY
     LIST_ID = '063533ab5b'
 
     api = mailchimp.Mailchimp(API_KEY)
@@ -127,16 +130,20 @@ class SignInUserLogIn(View):
 
     def post(self, request):
         form = UserForm(request.POST)
-        username = request.POST['username']
+        username = request.POST['username'].lower()
         password = request.POST['password']
+        remember = request.POST.get('remember-me')
+
+        if remember:
+            request.session.set_expiry(0)
 
         try:
             if not '@' in username:
                 user = User.objects.get(username=username)
                 user = authenticate(username=username, password=password)
             else:
-                user = User.objects.get(email=username)
-                user = authenticate(username=user.username, password=password)
+                user = Settings.objects.get(email=username)
+                user = authenticate(username=user.profile.username, password=password)
             if user:
                 # Password matching and user found with authenticate
                 login(request, user)
@@ -206,13 +213,19 @@ class SignInUserRegister(View):
 @login_required
 @render()
 def edit_profile(request):
+    user_agent = get_user_agent(request)
+
     profile = request.profile
     if request.method == 'POST':
+        if user_agent.device.family == 'iPhone':
+            new_photo = rotate_image(request.FILES.get('photo'))
+            if new_photo:
+                request.FILES['photo'] = new_photo
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             messages.info(request, MESSAGES['profile_saved'])
-            return HttpResponseRedirect(reverse('my_profile'))
+            return HttpResponseRedirect(reverse('frontend:home'))
     else:
         form = ProfileForm(instance=profile)
     return locals()

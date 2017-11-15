@@ -73,6 +73,7 @@ class RegistrationForm(UserCreationForm):
         user.email = data['email']
         user.first_name = data['first_name']
         # user.last_name = data['last_name']
+        user.username = user.username.lower()
         user.save()
         profile = Profile(user=user, name=data.get('name', data['username']))
         if not location.id:

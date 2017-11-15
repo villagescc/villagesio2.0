@@ -25,6 +25,11 @@ DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 class FeedFilterForm(forms.Form):
     d = forms.DateTimeField(
         label="Up to date", required=False, input_formats=[DATE_FORMAT])
+
+    blow = forms.DecimalField(required=False)
+
+    bhigh = forms.DecimalField(required=False)
+
     q = forms.CharField(
         label="Search", required=False, widget=forms.TextInput(
             attrs={'class': 'form-control',
@@ -90,7 +95,7 @@ class FeedFilterForm(forms.Form):
         balance_low = balance_low
 
         while True:
-            items, count = FeedItem.objects.get_feed_and_remaining(
+            items, count, total = FeedItem.objects.get_feed_and_remaining(
                 self.profile, location=self.location, tsearch=tsearch,
                 radius=query_radius, item_type=self.item_type,
                 trusted_only=trusted, up_to_date=date, poster=self.poster,
@@ -107,7 +112,7 @@ class FeedFilterForm(forms.Form):
                     query_radius = None
                 continue
             break
-        return items, count
+        return items, count, total
         
     def update_sticky_filter_prefs(self):
         """

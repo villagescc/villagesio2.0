@@ -21,10 +21,8 @@ from django.conf.urls.static import static
 
 # all apps urls import
 from accounts import urls as accounts_urls
-from accounts.sign_in import urls as accounts_signin_urls
 from frontend import urls as frontend_urls
 from about import urls as about_urls
-from payment_raja import urls as payment_urls
 from feed import urls as feed_urls
 from geo import urls as geo_urls
 from profile import urls as profile_urls
@@ -35,7 +33,6 @@ from listings import urls as listings_urls
 from notification import urls as notification_urls
 from categories import urls as categories_urls
 from management import urls as management_urls
-from pre_transactions import urls as pre_transactions_urls
 from relate.views import get_profiles
 
 urlpatterns = [
@@ -54,7 +51,5 @@ urlpatterns = [
     url('^management/', include(management_urls, namespace='management')),
     url(r'^get_profiles/', get_profiles, name='get_profiles'),
     url(r'', include(geo_urls)),
-    url(r'^payment_raja/', include(payment_urls, namespace='payment_raja')),
-    url('', include('social_django.urls', namespace='social')),
-    url(r'^pre/', include(pre_transactions_urls, namespace='pre_transactions'))
+    url('', include('social_django.urls', namespace='social'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

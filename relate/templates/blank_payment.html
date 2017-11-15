@@ -61,7 +61,7 @@
 
                 <button type="submit" id="save-payment" class=" btn btn-success gradient save-button">
                     <i class="fa fa-check"></i> Save</button>
-                <button class="btn btn-danger"><i class="fa fa-sign-out"></i> Back</button>
+                <a href="{% url 'frontend:home' %}" class="btn btn-danger"><i class="fa fa-sign-out"></i> Back</a>
             </div>
         </div>
     </form>
@@ -245,7 +245,13 @@
                 if($("#id_recipient").val() == '') {
                     modal.find('.modal-body').html('Recipient is invalid');
                     modal.modal();
-                } else {
+                }
+                if($("#id_amount").val() == '') {
+                    modal.find('.modal-body').html('Amount cannot be 0. Please verify');
+                    modal.find('.modal-footer').html('<button type="button" class="btn btn-secondary" id="not-refer" data-dismiss="modal"><i class="fa fa-arrow-left"></i>Close</button>');
+                    modal.modal();
+                }
+                else {
                     if($("#boolean-referral").attr("data-referral") === "true") {
                         $("#form-submit-checker").attr("data-submit-checker", true);
                         $("#blank-payment-form").submit();

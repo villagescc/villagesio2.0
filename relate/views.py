@@ -190,16 +190,18 @@ def pay_user_ajax(request, recipient_username):
                 request.profile, recipient)
             create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
             has_referral = Referral.objects.filter(referrer=request.profile, recipient=recipient).all()
-            # send_acknowledgement_notification(acknowledgement)
+            send_acknowledgement_notification(acknowledgement)
             messages.info(request, MESSAGES['acknowledgement_sent'])
             data['stat'] = 'ok'
             data['recipient'] = recipient_username
             data['refer'] = True if has_referral else False
             return JsonResponse({'data': data})
+        else:
+            data['stat'] = 'error'
+            data['errors'] = form.errors
+            return JsonResponse({'data': data})
     else:
         form = AcknowledgementForm(max_ripple=max_amount, initial=request.GET)
-    can_ripple = max_amount > 0
-    profile = recipient  # For profile_base.html.
     data['stat'] = 'error'
     return JsonResponse({'data': data})
 
@@ -361,7 +363,7 @@ def blank_payment(request):
                                                                  'listing_form': listing_form})
         payment = form.send_payment(request.profile, recipient, request.POST)
         create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
-        # send_payment_notification(payment)
+        send_payment_notification(payment)
         messages.add_message(request, messages.INFO, 'Payment sent.')
         return HttpResponseRedirect(reverse('blank_payment_user'))
     else:

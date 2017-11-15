@@ -10,8 +10,10 @@ from tags.models import Tag
 
 
 def view_listings(request):
+    listing_form = ListingsForms()
     listings = Listings.objects.filter(user_id=request.user.id).all()
-    return render(request, 'listing_management/manage_listings.html', {'listings': listings})
+    return render(request, 'listing_management/manage_listings.html',
+                  {'listings': listings, 'listing_form': listing_form})
 
 
 def edit_listing(request, listing_id):
@@ -63,7 +65,7 @@ def edit_listing(request, listing_id):
                 return HttpResponseRedirect(reverse('listing_management:manage_listings'))
         else:
             messages.add_message(request, messages.ERROR, 'An error has occurred, please try again later.')
-            return render(request, 'listing_management/manage_listings.html', {'form': form, 'listings_form': listing})
+            return render(request, 'listing_management/manage_listings.html', {'form': form, 'listing_form': listing_form})
     else:
         tags_to_template = ''
         tags = listing.tag.all().values('name')
@@ -77,7 +79,8 @@ def edit_listing(request, listing_id):
                                       'price': listing.price,
                                       'subcategories': listing.subcategories,
                                       'tag': tags_to_template})
-        return render(request, 'listing_management/edit_listing.html', {'form': form, 'listing_id': listing_id})
+        return render(request, 'listing_management/edit_listing.html', {'form': form, 'listing_id': listing_id,
+                                                                        'listing_form': listing_form})
 
     messages.add_message(request, messages.ERROR, form.errors)
     form = ListingsForms(initial={'listing_type': listing.listing_type,
@@ -86,7 +89,7 @@ def edit_listing(request, listing_id):
                                   'price': listing.price,
                                   'subcategories': listing.subcategories,
                                   'photo': listing.photo})
-    return render(request, 'listing_management/edit_listing.html', {'form': form, 'listings_form': listing})
+    return render(request, 'listing_management/edit_listing.html', {'form': form, 'listing_form': listing_form})
 
 
 @transaction.atomic

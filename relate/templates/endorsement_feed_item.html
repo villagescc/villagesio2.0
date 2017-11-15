@@ -7,9 +7,9 @@
 {% profile_display item.endorser request _("You endorsed") item.endorser %}
 {% profile_display item.recipient request _("endorsed you") item.recipient %}
 {% blocktrans count hearts=item.weight %}
-	with {{ hearts }} heart.
+	with {{ hearts }} hour credit limit
 {% plural %}
-	with {{ hearts }} hearts.
+	with {{ hearts }} hours credit limit
 {% endblocktrans %}
 
 {% endblock %}

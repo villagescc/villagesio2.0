@@ -54,7 +54,7 @@
                         {% plural %} {{ hours }} hours</p>{% endblocktrans %}
 
                     <p><i class="fa fa-pencil" aria-hidden="true"></i>Job: {% if profile.job %}{{ profile.job }} {% else %} -- {% endif %}</p>
-                    <p><i class="fa fa-heart" aria-hidden="true"></i> Total Hearts: {{ profile.endorsement_sum }}</p>
+                    <p><i class="fa fa-heart" aria-hidden="true"></i> Total Hours: {{ profile.endorsement_sum }}</p>
                     <p data-toggle="tooltip" title="{{ profile.location.full_name }}"><i class="fa fa-home" aria-hidden="true" data-toggle="tooltip" title="{{ profile.location.full_name }}"></i>{{ profile.location.full_name|slice:":50" }}</p>
                     <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ profile.user.date_joined|naturalday }}</p>
                 </div>

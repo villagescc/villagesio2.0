@@ -83,22 +83,23 @@ class FeedManager(GeoManager):
         """
         count_kwargs = kwargs.copy()
         count_kwargs.pop('limit', None)
-        count = self.get_feed_count(*args, **count_kwargs)
+        total = self.get_feed_count(*args, **count_kwargs)
+        count = len(total)
         if count > 0:
             items = self.get_feed(*args, **kwargs)
         else:
             items = []
-        return items, count - len(items)
+        return items, count - len(items), total
 
     def get_feed_count(self, *args, **kwargs):
         if kwargs.get('referral'):
-            return len(self._feed_query(*args, **kwargs))
+            return self._feed_query(*args, **kwargs)
         elif kwargs.get('balance_low'):
-            return len(self._feed_query(*args, **kwargs))
+            return self._feed_query(*args, **kwargs)
         elif kwargs.get('balance_high'):
-            return len(self._feed_query(*args, **kwargs))
+            return self._feed_query(*args, **kwargs)
         else:
-            return self._feed_query(*args, **kwargs).count()
+            return self._feed_query(*args, **kwargs)
 
     def get_feed(self, *args, **kwargs):
         """
@@ -162,13 +163,13 @@ class FeedManager(GeoManager):
                 where=["tsearch @@ plainto_tsquery(%s)"],
                 params=[tsearch])
         if referral:
-            query = query.filter(item_type='profile').order_by('-referral_count')
+            query = query.filter(item_type='profile').order_by('-referral_count', '-date')
 
         if balance_low:
-            query = query.filter(item_type='profile').order_by('balance')
+            query = query.filter(item_type='profile').order_by('balance', '-date')
 
         if balance_high:
-            query = query.filter(item_type='profile').order_by('-balance')
+            query = query.filter(item_type='profile').order_by('-balance', '-date')
         return query
 
     def create_from_item(self, item):
