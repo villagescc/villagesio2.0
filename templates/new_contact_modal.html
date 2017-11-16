@@ -10,6 +10,7 @@
     {% csrf_token %}
     <div id="new-contact-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <input type="text" id="profile-username" hidden>
+        <input type="text" id="listing-title" name="listing_title" hidden>
         <div class="modal-dialog">
             <div class="modal-content" id="payment-modal-content">
                 <div class="modal-header">
@@ -55,6 +56,7 @@
 <script>
     $("#send-contact").click(function (e) {
        $("#send-contact").attr("disabled", true);
+       debugger;
        var profile_username = $("#profile-username").val();
        $("#id_contact_recipient_name").val(profile_username);
        var url = '/contact/'+profile_username+'/';

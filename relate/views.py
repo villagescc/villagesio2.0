@@ -18,6 +18,7 @@ from notification.utils import create_notification
 from general.mail import send_notification
 from django.utils.translation import ugettext as _
 from feed.models import FeedItem
+from django.contrib.gis.db.models import Q
 
 
 MESSAGES = {
@@ -165,7 +166,7 @@ def acknowledge_user(request, recipient_username):
             acknowledgement = form.send_acknowledgement(
                 request.profile, recipient)
             create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
-            send_acknowledgement_notification(acknowledgement)
+            # send_acknowledgement_notification(acknowledgement)
             messages.info(request, MESSAGES['acknowledgement_sent'])
             return HttpResponseRedirect(acknowledgement.get_absolute_url())
     else:
@@ -282,7 +283,8 @@ def get_recipients_data(request):
         if not request.GET['query']:
             recipient_info = Profile.objects.all()[:50]
         else:
-            recipient_info = Profile.objects.filter(name__icontains=request.GET['query'])
+            recipient_info = Profile.objects.filter(Q(name__icontains=request.GET['query']) |
+                                                    Q(user__username__icontains=request.GET['query']))
         for recipient in recipient_info:
             result.append({'name': recipient.name, 'profile_id': recipient.id,
                            'username': recipient.username})

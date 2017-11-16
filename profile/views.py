@@ -407,7 +407,6 @@ def profile_endorsements(request, username):
                 extra_context={'profile': profile})
 
 
-@render()
 def contact(request, username):
     profile = get_object_or_404(Profile, user__username=username)
     if request.method == 'POST':
@@ -435,7 +434,11 @@ def undefined_contact(request, username=None):
         form = ContactForm(request.POST)
         if form.is_valid():
             profile = Profile.objects.get(user__username=form.cleaned_data['contact_recipient_name'])
-            form.send(sender=request.profile, recipient=profile)
+            try:
+                form.send(sender=request.profile, recipient=profile, subject='In reply to Villages.cc post: '+form.data.get('listing_title'))
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, 'Error sending message')
+                return JsonResponse({'msg': 'Success'})
             messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
             return JsonResponse({'msg': 'Success'})
     return django_render(request, 'contact.html', {'form': form})

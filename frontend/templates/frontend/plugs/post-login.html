@@ -1,8 +1,6 @@
 {% load staticfiles profile relate i18n %}
 {% load tag_utils %}
 
-<script src="{% static 'js/pagination/jquery.twbsPagination.js' %}"></script>
-
 <style>
     .thumbnail .listing-modal{
         width : 300px;
@@ -303,7 +301,8 @@
                         <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
                             <i class="fa fa-money" aria-hidden="true"></i>
                         </button>
-                        <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
+                        <button type="button" class="btn btn-default btn-primary contact-modal"
+                                title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
                             <i class="fa fa-envelope" aria-hidden="true"></i>
                         </button>
                     </div>
@@ -445,7 +444,10 @@
                                 <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
                                     <i class="fa fa-money" aria-hidden="true"></i>
                                 </button>
-                                <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
+                                <button type="button" class="btn btn-default btn-primary contact-modal"
+                                        title="Contact the owner"
+                                        data-profile-username="{{ each.user.profile.username }}"
+                                        data-listing-title="{{ each.title }}">
                                     <i class="fa fa-envelope" aria-hidden="true"></i>
                                 </button>
                             </div>
@@ -630,7 +632,9 @@
     $(".contact-modal").click(function (e) {
         $('#spin-modal').fadeIn();
         var profile_username = $(this).attr('data-profile-username');
+        var listing_title = $(this).attr('data-listing-title');
         $("#profile-username").val(profile_username);
+        $("#listing-title").val(listing_title);
         $('#contact-modal-title').text('Contact '+profile_username);
         $('#spin-modal').fadeOut();
         $("#new-contact-modal").modal("show");

@@ -12,7 +12,7 @@ from profile.forms import ContactForm
 from frontend.forms import FormListingsSettings
 from django_user_agents.utils import get_user_agent
 # models
-
+from django.contrib.gis.db.models import Q
 from listings.models import Listings
 from categories.models import Categories, SubCategories
 

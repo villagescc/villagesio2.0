@@ -67,60 +67,98 @@
     </form>
 
     {% if received_payments %}
-        <div class="container"><h3>Received payments</h3>
-        <table id="table-received-payments" class="table table-striped table-hover">
+        <div class="container">
+        <h3>Transaction history</h3><p class="text-right">
+            <a id="table-filter-all" class="text-right" href="#">All </a>|
+            <a id="table-filter-sent" href="#">Sent</a> |
+            <a id="table-filter-received" href="#">Received</a></p>
+        <table id="table-payments-all" class="table table-striped table-hover">
             <thead>
             <tr>
                 <th>Payer</th>
                 <th>Recipient</th>
                 <th>Amount</th>
                 <th>Date</th>
+                <th>Memo</th>
+                <th>Operation</th>
             </tr>
             </thead>
             <tbody>
             {% for received in received_payments %}
                 <tr>
-                    <td width="25%">{{ received.item.payer }}</td>
-                    <td width="25%">{{ received.item.recipient }}</td>
-                    <td width="25%">{{ received.item.amount }}</td>
-                    <td width="25%">{{ received.item.date }}</td>
+                    <td width="16.66%">{{ received.item.payer }}</td>
+                    <td width="16.66%">{{ received.item.recipient }}</td>
+                    <td width="16.66%">{{ received.item.amount }}</td>
+                    <td width="16.66%">{{ received.item.date }}</td>
+                    <td width="16.66%">{{ received.item.memo }}</td>
+                    <td width="16.66%" title="received"><i class="fa fa-arrow-up"></i></td>
+                </tr>
+            {% endfor %}
+            {% for made in made_payments %}
+                <tr>
+                    <td width="16.66%">{{ made.item.payer }}</td>
+                    <td width="16.66%">{{ made.item.recipient }}</td>
+                    <td width="16.66%">{{ made.item.amount }}</td>
+                    <td width="16.66%">{{ made.item.date }}</td>
+                    <td width="16.66%">{{ made.item.memo }}</td>
+                    <td width="16.66%" title="made"><i class="fa fa-arrow-down"></i></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        <table id="table-received-payments" class="table table-striped table-hover hidden">
+            <thead>
+            <tr>
+                <th>Payer</th>
+                <th>Recipient</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Memo</th>
+                <th>Operation</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for received in received_payments %}
+                <tr>
+                    <td width="16.66%">{{ received.item.payer }}</td>
+                    <td width="16.66%">{{ received.item.recipient }}</td>
+                    <td width="16.66%">{{ received.item.amount }}</td>
+                    <td width="16.66%">{{ received.item.date }}</td>
+                    <td width="16.66%">{{ received.item.memo }}</td>
+                    <td width="16.66%" title="received"><i class="fa fa-arrow-up"></i></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <table id="table-made-payments" class="table table-striped table-hover hidden">
+            <thead>
+            <tr>
+                <th>Payer</th>
+                <th>Recipient</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Memo</th>
+                <th>Operation</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for made in made_payments %}
+                <tr>
+                    <td width="16.66%">{{ made.item.payer }}</td>
+                    <td width="16.66%">{{ made.item.recipient }}</td>
+                    <td width="16.66%">{{ made.item.amount }}</td>
+                    <td width="16.66%">{{ made.item.date }}</td>
+                    <td width="16.66%">{{ made.item.memo }}</td>
+                    <td width="16.66%" title="received"><i class="fa fa-arrow-up"></i></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
     {% else %}
         <br>
         <div class="container" style="padding: 0;">
         <p>No received payments until now.</p>
-        </div>
-    {% endif %}
-
-    {% if made_payments %}
-        <h3>Payments made</h3>
-            <table id="table-made-payments" class="table table-striped table-hover">
-                <thead>
-                <tr>
-                    <th>Payer</th>
-                    <th>Recipient</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for made in made_payments %}
-                    <tr>
-                        <td width="25%">{{ made.item.payer }}</td>
-                        <td width="25%">{{ made.item.recipient }}</td>
-                        <td width="25%">{{ made.item.amount }}</td>
-                        <td width="25%">{{ made.item.date }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <div class="container" style="padding: 0;">
-            <p>No payments made until now.</p>
-            </div>
         </div>
     {% endif %}
 
@@ -306,6 +344,25 @@
     $("#not-refer").click(function (e) {
         $("#form-submit-checker").attr("data-submit-checker", true);
         $("#blank-payment-form").submit();
+    });
+
+    $("#table-filter-all").click(function (e) {
+        $("#table-payments-all").removeClass("hidden");
+        $("#table-made-payments").addClass("hidden");
+        $("#table-received-payments").addClass("hidden");
+    });
+
+    $("#table-filter-sent").click(function (e) {
+        $("#table-payments-all").addClass("hidden");
+        $("#table-made-payments").removeClass("hidden");
+        $("#table-received-payments").addClass("hidden");
+    });
+
+
+    $("#table-filter-received").click(function (e) {
+        $("#table-payments-all").addClass("hidden");
+        $("#table-made-payments").addClass("hidden");
+        $("#table-received-payments").removeClass("hidden");
     })
 </script>
 
