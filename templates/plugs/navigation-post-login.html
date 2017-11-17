@@ -2,82 +2,80 @@
 {% load i18n %}
 {% load staticfiles %}
 
-
-{% include 'new_post_modal.html' %}
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <img class="navbar-brand" id="navbar-logo" src="{% static 'images/logo.png' %}" alt="Brand">
-                <a href="{% url 'frontend:home' %}" class="navbar-brand navbar-title navtop">VILLAGES.CC</a>
-                <div class="beta"></div>
-            </div>
-
-            <form class="navbar-form navbar-left">
-            </form>
-
-            <div id="navbar" class="navbar-collapse collapse navtop navbar-right">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="{% url 'locator' %}" data-toggle="tooltip" title="{{request.location}}"><i class="fa fa-location-arrow"></i>&nbsp&nbsp{{ request.location|truncatechars:"42" }}</a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About Us<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{% url 'how_it_works' %}">How it works</a></li>
-                            <li><a href="{% url 'motivation' %}">Motivation</a></li>
-                            <li><a href="{% url 'privacy' %}">Privacy</a></li>
-                            <li role="separator" class="divider"></li>
-{#                            <li><a href="{% url 'developers' %}">Developers</a></li>#}
-{#                            <li><a href="{% url 'donate' %}">Donate</a></li>#}
-                            <li><a href="{% url 'contact_us' %}">Feedback</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="padding-left: 10px;">
-
-                            <button id="add-posting" type="button" class="btn btn-default btn-warning" data-toggle="modal" data-target="#new-posting-modal" title="New Post">
-                                <i class="fa fa-plus label-add-post" aria-hidden="true"></i>
-                            </button>
-                            <a id="blank-trust-id" type="button" href="{% url 'blank_trust_user' %}" class="btn btn-default btn-danger trust-blank" title="Add & View Trusted Connections">
-                                <i class="fa fa-heart" aria-hidden="true"></i>
-                            </a>
-                            <a href="{% url 'blank_payment_user' %}" type="button" class="btn btn-default btn-success payment-blank" title="Send & View Payments">
-                                <i class="fa fa-money" aria-hidden="true"></i>
-                            </a>
-                            <a href="{% url 'undefined_contact' %}" type="button" class="btn btn-default btn-primary contact-blank" title="Contact Another User">
-                                <i class="fa fa-envelope" aria-hidden="true"></i>
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav">
-                    <li><a href="{% url 'notification:notification' %}"><i class="fa fa-bell fa-2x" aria-hidden="true"><span class="badge" style="background-color: #08abec">{{ notification_number }}</span></i></a></li>
-                    <li>
-                        {% if request.user.profile.photo %}
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top: 12px"><img src="{% profile_image_url request.profile '150x200' %}" width=38px height=38px class="img-circle"/></a>
-                        {% else %}
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top: 12px"><img src="{% static 'images/logo.png'  %}" width=38px height=38px class="img-circle"/></a>
-                        {% endif %}
-                        <ul class="dropdown-menu">
-                            {% if request.profile %}
-                                <li><a href="{% url 'my_profile' %}">Profile</a></li>
-                                <li><a href="{% url 'listing_management:manage_listings' %}">Manage Listing</a></li>
-                                <li><a href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a></li>
-                                <li><a href="{% url 'accounts:settings' %}">Settings</a></li>
-                                {% if request.user.is_staff %}
-                                <li><a href="{% url 'management:management' %}">Management</a></li>
-                                {% endif %}
-                            {% endif %}
-                            <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <img class="navbar-brand" id="navbar-logo" src="{% static 'images/logo.png' %}" alt="Brand">
+            <a href="{% url 'frontend:home' %}" class="navbar-brand navbar-title navtop">VILLAGES.CC</a>
+            <div class="beta"></div>
         </div>
-    </nav>
+
+        <form class="navbar-form navbar-left">
+        </form>
+
+        <div id="navbar" class="navbar-collapse collapse navtop navbar-right">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="{% url 'locator' %}" data-toggle="tooltip" title="{{request.location}}"><i class="fa fa-location-arrow"></i>&nbsp&nbsp{{ request.location|truncatechars:"42" }}</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About Us<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'how_it_works' %}">How it works</a></li>
+                        <li><a href="{% url 'motivation' %}">Motivation</a></li>
+                        <li><a href="{% url 'privacy' %}">Privacy</a></li>
+                        <li role="separator" class="divider"></li>
+                        {#                            <li><a href="{% url 'developers' %}">Developers</a></li>#}
+                        {#                            <li><a href="{% url 'donate' %}">Donate</a></li>#}
+                        <li><a href="{% url 'contact_us' %}">Feedback</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="padding-left: 10px;">
+
+                        <button id="add-posting" type="button" class="btn btn-default btn-warning" data-toggle="modal" data-target="#new-posting-modal" title="New Post">
+                            <i class="fa fa-plus label-add-post" aria-hidden="true"></i>
+                        </button>
+                        <a id="blank-trust-id" type="button" href="{% url 'blank_trust_user' %}" class="btn btn-default btn-danger trust-blank" title="Add & View Trusted Connections">
+                            <i class="fa fa-heart" aria-hidden="true"></i>
+                        </a>
+                        <a href="{% url 'blank_payment_user' %}" type="button" class="btn btn-default btn-success payment-blank" title="Send & View Payments">
+                            <i class="fa fa-money" aria-hidden="true"></i>
+                        </a>
+                        <a href="{% url 'undefined_contact' %}" type="button" class="btn btn-default btn-primary contact-blank" title="Contact Another User">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'notification:notification' %}"><i class="fa fa-bell fa-2x" aria-hidden="true"><span class="badge" style="background-color: #08abec">{{ notification_number }}</span></i></a></li>
+                <li>
+                    {% if request.user.profile.photo %}
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top: 12px"><img src="{% profile_image_url request.profile '150x200' %}" width=38px height=38px class="img-circle"/></a>
+                    {% else %}
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top: 12px"><img src="{% static 'images/logo.png'  %}" width=38px height=38px class="img-circle"/></a>
+                    {% endif %}
+                    <ul class="dropdown-menu">
+                        {% if request.profile %}
+                            <li><a href="{% url 'my_profile' %}">Profile</a></li>
+                            <li><a href="{% url 'listing_management:manage_listings' %}">Manage Listing</a></li>
+                            <li><a href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a></li>
+                            <li><a href="{% url 'accounts:settings' %}">Settings</a></li>
+                            {% if request.user.is_staff %}
+                                <li><a href="{% url 'management:management' %}">Management</a></li>
+                            {% endif %}
+                        {% endif %}
+                        <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

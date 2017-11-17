@@ -19,7 +19,7 @@
                     <div class="form-group">
                     <div class="col-sm-12">
                         {% for field in listing_form %}
-                            <label for="{{ field.auto_id }}">{{ field.label }}</label>
+                            <label for="{{ field.auto_id }}">{{ field.label }}</label><br>
                             {{ field }}
                             <div class="alert alert-warning collapse" id="error_{{ field.name }}"></div>
                         {% endfor %}
@@ -40,7 +40,7 @@
 </form>
 
 <script>
-    $('#add-posting-modal').submit(function (e) {
+    $('#lalala').click(function (e) {
         e.preventDefault();
         $('#save-post').attr("disabledd", true);
         debugger;
@@ -62,6 +62,58 @@
                 showFormErrors(d['responseJSON']['errors'])
             }
         });
+    });
+</script>
+
+<script>
+    $('#lalala').click(function (e) {
+        e.preventDefault();
+        $('#save-post').attr("disabledd", true);
+        debugger;
+        var postData = new FormData($('#add-posting-modal')[0]);
+{#        $.ajax({#}
+{#            url: '{% url 'new_listing' %}',#}
+{#            type: 'POST',#}
+{#            data: postData,#}
+{#            processData: false,#}
+{#            contentType: false,#}
+{#            success: function (data) {#}
+{#                debugger;#}
+{#                $('#new-posting-modal').modal("hide");#}
+{#                showSuccessMessage('Listing added successfully!');#}
+{#                $('#save-post').attr("disabled", false);#}
+{#                location.reload();#}
+{#            },#}
+{#            error: function (d) {#}
+{#                showFormErrors(d['responseJSON']['errors'])#}
+{#            }#}
+{#        });#}
+    });
+</script>
+
+<script>
+    $('#save-post2').click(function (e) {
+        e.preventDefault();
+        $('#save-post').attr("disabledd", true);
+        debugger;
+        var postData = new FormData($('#add-posting-modal')[0]);
+{#        $.ajax({#}
+{#            url: '{% url 'new_listing' %}',#}
+{#            type: 'POST',#}
+{#            data: postData,#}
+{#            processData: false,#}
+{#            contentType: false,#}
+{#            success: function (data) {#}
+{#                debugger;#}
+{#                $('#new-posting-modal').modal("hide");#}
+{#                showSuccessMessage('Listing added successfully!');#}
+{#                $('#save-post').attr("disabled", false);#}
+{#                location.reload();#}
+{#            },#}
+{#            error: function (d) {#}
+{#                showFormErrors(d['responseJSON']['errors'])#}
+{#            }#}
+{#        });#}
     });
 
     $("#id_categories").on('change', function (e) {
