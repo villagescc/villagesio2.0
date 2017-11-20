@@ -18,7 +18,7 @@
         <form class="col-lg-4" action="" method="post">
             {% csrf_token %}
 
-            <a class="btn btn-primary" href="{% url 'social:begin' 'facebook' %}?next=/settings/"><i class="fa fa-facebook-official">&nbsp; Login with facebook</i></a>
+            <a class="btn btn-primary" href="{% url 'social:begin' 'facebook' %}?next=/"><i class="fa fa-facebook-official">&nbsp; Login with facebook</i></a>
                 {% for field in form %}
                     {% if field.errors %}
                         <div class="form-group">

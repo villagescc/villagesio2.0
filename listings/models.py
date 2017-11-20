@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from categories.models import Categories, SubCategories
 from django.contrib.gis.db.models import GeoManager, Q
+from django.contrib import admin
 
 OFFER = 'OFFER'
 REQUEST = 'REQUEST'
@@ -65,8 +66,6 @@ class ListingsManager(GeoManager):
             for each_trusting in trusting_profiles:
                 profile_obj_list.append(each_trusting.to_profile)
             query = query.filter(profile_id__in=profile_obj_list)
-            # query = query.extra(select={
-            #     "trusted_listings": "select list.id from listings_listings list where list.profile_id in (select profile_profile_trusted_profiles.to_profile_id from profile_profile_trusted_profiles where profile_profile_trusted_profiles.from_profile_id = {0} limit 1)".format(request_profile.id)})
         if up_to_date:
             query = query.filter(updated__lt=up_to_date)
         if location and radius:
@@ -75,8 +74,10 @@ class ListingsManager(GeoManager):
                 Q(user__profile__location__isnull=True))
 
         if tsearch:
+            # Searching by TAGs
             query = query.filter(Q(title__icontains=tsearch) |
-                                 Q(description__icontains=tsearch))
+                                 Q(description__icontains=tsearch) |
+                                 Q(tag__name=tsearch))
 
         if type_filter:
             if type_filter in LISTING_TYPE_CHECK:
@@ -89,6 +90,7 @@ class ListingsManager(GeoManager):
         if listing_type:
             query = query.filter(listing_type=listing_type).order_by('-updated')
 
+        query = query.filter()
         return query
 
 
@@ -112,3 +114,6 @@ class Listings(models.Model):
     @property
     def date(self):
         return self.updated
+
+    def __str__(self):
+        return self.title

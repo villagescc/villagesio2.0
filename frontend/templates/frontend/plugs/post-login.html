@@ -1,8 +1,6 @@
 {% load staticfiles profile relate i18n %}
 {% load tag_utils %}
 
-<script src="{% static 'js/pagination/jquery.twbsPagination.js' %}"></script>
-
 <style>
     .thumbnail .listing-modal{
         width : 300px;
@@ -303,7 +301,8 @@
                         <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
                             <i class="fa fa-money" aria-hidden="true"></i>
                         </button>
-                        <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
+                        <button type="button" class="btn btn-default btn-primary contact-modal"
+                                title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
                             <i class="fa fa-envelope" aria-hidden="true"></i>
                         </button>
                     </div>
@@ -445,7 +444,10 @@
                                 <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
                                     <i class="fa fa-money" aria-hidden="true"></i>
                                 </button>
-                                <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
+                                <button type="button" class="btn btn-default btn-primary contact-modal"
+                                        title="Contact the owner"
+                                        data-profile-username="{{ each.user.profile.username }}"
+                                        data-listing-title="{{ each.title }}">
                                     <i class="fa fa-envelope" aria-hidden="true"></i>
                                 </button>
                             </div>
@@ -468,9 +470,9 @@
 <script>
   window.fbAsyncInit = function() {
     FB.init({
-      appId      : '527732490904454',
+      appId      : '1199641510163736',
       xfbml      : true,
-      version    : 'v2.11'
+      version    : 'v2.9'
     });
     FB.AppEvents.logPageView();
   };
@@ -482,11 +484,13 @@
      js.src = "https://connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
+</script>
 
+<script>
     $(".listing-facebook-share").click(function () {
         debugger;
         var listing_id = $(".listing-modal").attr("data-listing-id");
-        var url = 'https://villages.cc/listing_details/'+listing_id;
+        var url = 'http://f792ecb6.ngrok.io/listing_details/'+listing_id;
         FB.ui({
             method: 'share',
             display: 'popup',
@@ -630,7 +634,9 @@
     $(".contact-modal").click(function (e) {
         $('#spin-modal').fadeIn();
         var profile_username = $(this).attr('data-profile-username');
+        var listing_title = $(this).attr('data-listing-title');
         $("#profile-username").val(profile_username);
+        $("#listing-title").val(listing_title);
         $('#contact-modal-title').text('Contact '+profile_username);
         $('#spin-modal').fadeOut();
         $("#new-contact-modal").modal("show");
