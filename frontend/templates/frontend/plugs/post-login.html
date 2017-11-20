@@ -490,11 +490,10 @@
     $(".listing-facebook-share").click(function () {
         debugger;
         var listing_id = $(".listing-modal").attr("data-listing-id");
-        var url = 'http://f792ecb6.ngrok.io/listing_details/'+listing_id;
+        var url = 'https://villages.cc/listing_details/'+listing_id;
         FB.ui({
             method: 'share',
             display: 'popup',
-            mobile_iframe: true,
             href: url
         }, function (response){});
     });
