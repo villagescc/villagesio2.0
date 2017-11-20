@@ -2,10 +2,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta property="og:title" content="Stuffed Cookies" />
-    <meta property="og:image" content="http://fbwerks.com:8000/zhen/cookie.jpg" />
-    <meta property="og:description" content="The Turducken of Cookies" />
-    <meta property="og:url" content="http://fbwerks.com:8000/zhen/cookie.html">
+    <meta property="fb:app_id" content="1199641510163736" />
+    <meta property="og:url" content="https://villages.cc" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="VILLAGES.CC - Barter Exchange Network" />
+    <meta property="og:description" content="Exchange Trading System and Marketplace. Trade in 'Village Hours'. Credit Backed by Your Network's Services. Everyone has value to exchange!"/>
+
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -71,25 +73,12 @@
         });
     </script>
 
-</head>
-<body>
-
-{% include 'listing_modal.html' %}
-{% include 'new_post_modal.html' %}
-{% include 'new_trust_modal.html' %}
-{% include 'new_payment_modal.html' %}
-{% include 'new_contact_modal.html' %}
-{% include 'payment-loading-modal.html' %}
-{% include 'error-modal.html' %}
-{% include 'templates.html' %}
-
-
 <script>
   window.fbAsyncInit = function() {
     FB.init({
-      appId      : '527732490904454',
+      appId      : '1199641510163736',
       xfbml      : true,
-      version    : 'v2.11'
+      version    : 'v2.9'
     });
     FB.AppEvents.logPageView();
   };
@@ -103,6 +92,21 @@
    }(document, 'script', 'facebook-jssdk'));
 </script>
 
+</head>
+<body>
+
+{% include 'listing_modal.html' %}
+{% include 'new_post_modal.html' %}
+{% include 'new_trust_modal.html' %}
+{% include 'new_payment_modal.html' %}
+{% include 'new_contact_modal.html' %}
+{% include 'payment-loading-modal.html' %}
+{% include 'error-modal.html' %}
+{% include 'templates.html' %}
+
+
+
+
 <div id="fb-root"></div>
 {#<script>(function(d, s, id) {#}
 {#  var js, fjs = d.getElementsByTagName(s)[0];#}
@@ -110,7 +114,7 @@
 {#  js = d.createElement(s); js.id = id;#}
 {#  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9&appId=527732490904454";#}
 {#  fjs.parentNode.insertBefore(js, fjs);#}
-{#}(document, 'script', 'facebook-jssdk'));#}
+{#{(document, 'script', 'facebook-jssdk'));#}
 {#</script>#}
 
 {% if request.user.is_authenticated %}
