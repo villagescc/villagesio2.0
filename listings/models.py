@@ -74,7 +74,6 @@ class ListingsManager(GeoManager):
                 Q(user__profile__location__isnull=True))
 
         if tsearch:
-
             # Searching by TAGs
             query = query.filter(Q(title__icontains=tsearch) |
                                  Q(description__icontains=tsearch) |
