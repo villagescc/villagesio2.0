@@ -1,4 +1,5 @@
 {% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,14 +7,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    # Facebook Meta Tags
-    <meta property="fb:app_id" content="1199641510163736" />
-    <meta property="og:url" content="https://villages.cc" />
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content="VILLAGES.CC - Barter Exchange Network" />
-    <meta property="og:description" content="Exchange Trading System and Marketplace. Trade in 'Village Hours'. Credit Backed by Your Network's Services. Everyone has value to exchange!"/>
+{#    {{ meta.og_description }}#}
+{#    {% include "meta/meta.html" %}#}
+
+{#    # Facebook Meta Tags#}
+{#    <meta property="fb:app_id" content="1199641510163736" />#}
+{#    <meta property="og:url" content="https://villages.cc" />#}
+{#    <meta property="og:type" content="article" />#}
+{#    <meta property="og:title" content="VILLAGES.CC - Barter Exchange Network" />#}
+{#    <meta property="og:description" content="Exchange Trading System and Marketplace. Trade in 'Village Hours'. Credit Backed by Your Network's Services. Everyone has value to exchange!"/>#}
 
     <title>Villages.cc</title>
+
     <!-- Bootstrap -->
     <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'assets/tether/css/tether.css' %}">

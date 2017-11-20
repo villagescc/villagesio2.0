@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, JsonResponse
-
 from categories.models import SubCategories
 from listings.models import Listings
 from tags.models import Tag
@@ -89,6 +88,11 @@ def listing_details(request, listing_id):
     trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
     payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
     contact_form = ContactForm()
+
+
+    context = super(listing_details, self).get_context_data(self, **kwargs)
+    context['meta'] = self.get_object().as_meta(self.request)
+
     if listing:
         return render(request, 'listing_details.html', {'listing': listing,
                                                         'trust_form': trust_form,
