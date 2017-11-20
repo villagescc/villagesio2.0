@@ -5,9 +5,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from categories.models import Categories, SubCategories
 from django.contrib.gis.db.models import GeoManager, Q
-from django.contrib import admin
-from django.db import models
-from meta.models import ModelMeta
+
 
 OFFER = 'OFFER'
 REQUEST = 'REQUEST'
@@ -119,13 +117,3 @@ class Listings(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class MyModel(ModelMeta, models.Model):
-    name = models.CharField(max_length=20)
-    abstract = models.TextField()
-
-    _metadata = {
-        'title': 'name',
-        'description': 'abstract',
-    }
