@@ -468,42 +468,39 @@
 </section>
 
 <script>
+    var listing_id = $(".listing-modal").attr("data-listing-id");
+    var url = 'https://villages.cc/listing_details/' + listing_id;
 
-    var fbAppId = '1199641510163736';
-    var objectToLike = 'https://villages.cc/listing_details/411/';
-
-    if (fbAppId === 'replace me') {
-        alert('Please set the fbAppId in the sample.');
-    }
-
-    {#    $(".listing-facebook-share").click(function () {#}
-    {#        debugger;#}
-    {#        var listing_id = $(".listing-modal").attr("data-listing-id");#}
-    {#        var url = 'https://villages.cc/listing_details/' + listing_id;#}
-
-    function postLike() {
-        FB.api(
-            'https://graph.facebook.com/me/og.likes',
-            'post',
-            {
-                object: objectToLike,
-                privacy: {'value': 'SELF'}
-            },
-            function (response) {
-                if (!response) {
-                    alert('Error occured.');
-                } else if (response.error) {
-                    document.getElementById('result').innerHTML = 'Error: ' + response.error.message;
-                } else {
-                    document.getElementById('result').innerHTML = '<a href=\"https://www.facebook.com/me/activity/' +
-                        response.id + '\">' +
-                        'Story created. ID is ' +
-                        response.id + '</a>';
+    function shareOverrideOGMeta(overrideLink, overrideTitle, overrideDescription, overrideImage)
+    {
+        FB.ui({
+            method: 'share_open_graph',
+            action_type: 'og.shares',
+            action_properties: JSON.stringify({
+                object: {
+                    'og:url': overrideLink,
+                    'og:title': overrideTitle,
+                    'og: description': overrideDescription,
+                    'og:image': overrideImage
                 }
-            }
-        );
+            })
+        },
+        function (response) {
+            console.log(response)
+        });
     }
-</script>
+    shareOverrideOGMeta(window.location.href,
+            'VILLAGES.CC - Barter Exchange Network',
+            'Exchange Trading System and Marketplace. Trade in "Village Hours"',
+            'http://www.telegraph.co.uk/content/dam/Travel/2016/August/Orta%20San%20Giulio-AP-TRAVEL.jpg');
+
+
+
+{#    $(".listing-facebook-share").click(shareOverrideOGMeta(window.location.href,#}
+{#            'VILLAGES.CC - Barter Exchange Network',#}
+{#            'Exchange Trading System and Marketplace. Trade in "Village Hours"',#}
+{#            'http://www.telegraph.co.uk/content/dam/Travel/2016/August/Orta%20San%20Giulio-AP-TRAVEL.jpg'));#}
+    </script>
 
 <!--
   Login Button
