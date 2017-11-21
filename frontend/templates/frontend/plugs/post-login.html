@@ -468,36 +468,79 @@
 </section>
 
 <script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '1199641510163736',
-      xfbml      : true,
-      version    : 'v2.9'
-    });
-    FB.AppEvents.logPageView();
-  };
 
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "https://connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
+    var fbAppId = '1199641510163736';
+    var objectToLike = 'https://villages.cc/listing_details/411/';
+
+    if (fbAppId === 'replace me') {
+        alert('Please set the fbAppId in the sample.');
+    }
+
+    {#    $(".listing-facebook-share").click(function () {#}
+    {#        debugger;#}
+    {#        var listing_id = $(".listing-modal").attr("data-listing-id");#}
+    {#        var url = 'https://villages.cc/listing_details/' + listing_id;#}
+
+    function postLike() {
+        FB.api(
+            'https://graph.facebook.com/me/og.likes',
+            'post',
+            {
+                object: objectToLike,
+                privacy: {'value': 'SELF'}
+            },
+            function (response) {
+                if (!response) {
+                    alert('Error occured.');
+                } else if (response.error) {
+                    document.getElementById('result').innerHTML = 'Error: ' + response.error.message;
+                } else {
+                    document.getElementById('result').innerHTML = '<a href=\"https://www.facebook.com/me/activity/' +
+                        response.id + '\">' +
+                        'Story created. ID is ' +
+                        response.id + '</a>';
+                }
+            }
+        );
+    }
 </script>
 
-<script>
-    $(".listing-facebook-share").click(function () {
-        debugger;
-        var listing_id = $(".listing-modal").attr("data-listing-id");
-        var url = 'https://villages.cc/listing_details/'+listing_id;
-        FB.ui({
-            method: 'share',
-            display: 'popup',
-            href: url
-        }, function (response){});
-    });
-</script>
+<!--
+  Login Button
+
+  https://developers.facebook.com/docs/reference/plugins/login
+
+  This example needs the 'publish_actions' permission in
+  order to publish an action.  The scope parameter below
+  is what prompts the user for that permission.
+-->
+
+<div
+        class="fb-login-button"
+        data-show-faces="true"
+        data-width="200"
+        data-max-rows="1"
+        data-scope="publish_actions">
+</div>
+
+<div>
+    This example creates a story on Facebook using the
+    <a href="https://developers.facebook.com/docs/reference/ogaction/og.likes">
+        <code>og.likes</code></a> API.  That story will just say
+    that you like an
+    <a href="http://techcrunch.com/2013/02/06/facebook-launches-developers-live-video-channel-to-keep-its-developer-ecosystem-up-to-date/">
+        article on TechCrunch</a>.  The story should only
+    be visible to you.
+</div>
+
+<div>
+    <input
+            type="button"
+            value="Create a story with an og.likes action"
+            onclick="postLike();">
+</div>
+
+<div id="result"></div>
 
 <script>
     $(".listing-twitter-share").click(function () {
