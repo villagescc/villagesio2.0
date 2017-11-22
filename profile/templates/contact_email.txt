@@ -2,4 +2,4 @@
 {{ message }}
 
 ----
-{% blocktrans context "email" %}View {{ sender }}:{% endblocktrans %} http://{{ domain }}{{ sender.get_absolute_url }}
+{% blocktrans context "email" %}View {{ sender }}:{% endblocktrans %} https://{{ domain }}{{ sender.get_absolute_url }}
