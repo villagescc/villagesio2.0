@@ -102,6 +102,7 @@ def get_listing_info(request, listing_id):
         listing = get_object_or_404(Listings, id=listing_id)
         data["listing_title"] = listing.title
         data["listing_price"] = listing.price
+        data["listing_type"] = listing.listing_type
         data["listing_photo"] = listing.photo.name
         data["profile_name"] = listing.user.profile.name
         data["job"] = listing.user.profile.job

@@ -482,8 +482,8 @@
             action_properties: JSON.stringify({
                 object: {
                     'og:url': url,
-                    'og:title': 'VILLAGES.CC - Barter Exchange Network',
-                    'og:description': 'Exchange Trading System and Marketplace. Trade in "Village Hours"',
+                    'og:title': $('.listing-modal-title').text()+' - '+$('#label-listing-type').text()+' - '+ 'VILLAGES.CC',
+                    'og:description': $('#label-description').text(),
                     'og:image': listing_image
                 }
             })
@@ -531,6 +531,7 @@
                     $('#listing-id').val(listing_id);
                     $('.listing-modal-title').text(data["data"]["listing_title"]);
                     $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
+                    $('#label-listing-type').text(data["data"]["listing_type"]);
                     $('#label-price').text(data["data"]["listing_price"]);
                     $('#label-profile-name').text(data["data"]["profile_name"]);
                     $('#profile-location').text(data["data"]["profile_location"]);
