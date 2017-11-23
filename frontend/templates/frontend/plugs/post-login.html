@@ -468,13 +468,14 @@
 </section>
 
 <script>
-    var listing_id = $(".listing-modal").attr("data-listing-id");
-    var url = 'https://villages.cc/listing_details/' + listing_id;
-    debugger;
-    var listing_image = 'http://23f2f983.ngrok.io/'+$('.listing-img').attr("src");
-    console.log(listing_image)
+
 
     $(".listing-facebook-share").click(function () {
+        debugger;
+        var listing_id = $(".listing-modal").attr("data-listing-id");
+        var url = 'https://villages.cc/listing_details/' + listing_id;
+        var listing_image = 'https://8d0dd579.ngrok.io'+$('.listing-img').attr("src");
+        console.log(listing_image);
         FB.ui({
             method: 'share_open_graph',
             action_type: 'og.shares',
@@ -483,7 +484,7 @@
                     'og:url': url,
                     'og:title': 'VILLAGES.CC - Barter Exchange Network',
                     'og:description': 'Exchange Trading System and Marketplace. Trade in "Village Hours"',
-                    'og:image': listing_image
+                    'og:image': 'https://8d0dd579.ngrok.io/uploads/listings/mFegKHT.jpg'
                 }
             })
         },
