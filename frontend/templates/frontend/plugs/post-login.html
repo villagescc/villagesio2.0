@@ -470,37 +470,27 @@
 <script>
     var listing_id = $(".listing-modal").attr("data-listing-id");
     var url = 'https://villages.cc/listing_details/' + listing_id;
+    debugger;
+    var listing_image = 'http://23f2f983.ngrok.io/'+$('.listing-img').attr("src");
+    console.log(listing_image)
 
-    function shareOverrideOGMeta(overrideLink, overrideTitle, overrideDescription, overrideImage)
-    {
+    $(".listing-facebook-share").click(function () {
         FB.ui({
-                method: 'share_open_graph',
-                action_type: 'og.shares',
-                action_properties: JSON.stringify({
-                    object: {
-                        'og:url': overrideLink,
-                        'og:title': overrideTitle,
-                        'og: description': overrideDescription,
-                        'og:image': overrideImage
-                    }
-                })
-            },
-            function (response) {
-                console.log(response)
-            });
-    }
-
-    shareOverrideOGMeta(window.location.href,
-            'VILLAGES.CC - Barter Exchange Network',
-            'Exchange Trading System and Marketplace. Trade in "Village Hours"',
-            'http://www.telegraph.co.uk/content/dam/Travel/2016/August/Orta%20San%20Giulio-AP-TRAVEL.jpg');
-
-
-{##}
-{#    $(".listing-facebook-share").click(shareOverrideOGMeta(window.location.href,#}
-{#            'VILLAGES.CC - Barter Exchange Network',#}
-{#            'Exchange Trading System and Marketplace. Trade in "Village Hours"',#}
-{#            'http://www.telegraph.co.uk/content/dam/Travel/2016/August/Orta%20San%20Giulio-AP-TRAVEL.jpg'));#}
+            method: 'share_open_graph',
+            action_type: 'og.shares',
+            action_properties: JSON.stringify({
+                object: {
+                    'og:url': url,
+                    'og:title': 'VILLAGES.CC - Barter Exchange Network',
+                    'og:description': 'Exchange Trading System and Marketplace. Trade in "Village Hours"',
+                    'og:image': listing_image
+                }
+            })
+        },
+        function(response) {
+            console.log(response)
+        })
+    });
     </script>
 
 <!--

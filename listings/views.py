@@ -88,11 +88,6 @@ def listing_details(request, listing_id):
     trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
     payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
     contact_form = ContactForm()
-
-
-    context = super(listing_details, self).get_context_data(self, **kwargs)
-    context['meta'] = self.get_object().as_meta(self.request)
-
     if listing:
         return render(request, 'listing_details.html', {'listing': listing,
                                                         'trust_form': trust_form,
