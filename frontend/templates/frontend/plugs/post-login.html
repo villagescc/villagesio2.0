@@ -383,7 +383,7 @@
     <div class="col-md-10" style="padding-left: 0;">
 
     {% for each in listing_items %}
-        {% if each|check_is_trusted_listing:request.profile %}
+        {% if each|check_is_trusted_listing:request.user.profile %}
             <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">
                 <div class="thumbnail" style="background: #16ba1a">
                     <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}"
