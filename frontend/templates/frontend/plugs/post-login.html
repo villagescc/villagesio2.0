@@ -383,43 +383,43 @@
     <div class="col-md-10" style="padding-left: 0;">
 
     {% for each in listing_items %}
-        {% if each|check_is_trusted_listing:request.user.profile %}
-            <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">
-                <div class="thumbnail" style="background: #16ba1a">
-                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}"
-                         data-listing-title="{{ each.title|slice:":80" }}" alt="...">
-                    <p class="thumbnail-info">{{ each.title }}</p>
-                    <p class="thumbnail-tag" style="left: 70px;">{{ each.listing_type }} | {{ each.price }} VH</p>
-                    <div class="caption" style="height: 115px;">
-                        <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;">
-                            <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}" data-toggle="tooltip" title="{{ each.user.profile.name }}"
-                                 style="margin-right: 10px;" class="img-circle inline"/>
-                        </a>
-
-                        <div style="overflow: hidden;">
-                            {% for each_tag in each.tag.all %}
-                                <span class="label label-info">{{ each_tag.name }}</span>
-                            {% endfor %}
-                        </div>
-
-                        <div class="col-sm-12" style="padding-left: 0; padding-top: 5px;">
-                            <div class="btn-group btn-group-md btn-top-adjust" role="group" aria-label="..." style="display: block;">
-                                <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
-                                    <i class="fa fa-heart" aria-hidden="true"></i>
-                                </button>
-                                <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
-                                    <i class="fa fa-money" aria-hidden="true"></i>
-                                </button>
-                                <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
-                                    <i class="fa fa-envelope" aria-hidden="true"></i>
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% else %}
+{#        {% if each|check_is_trusted_listing:request.user.profile %}#}
+{#            <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">#}
+{#                <div class="thumbnail" style="background: #16ba1a">#}
+{#                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}"#}
+{#                         data-listing-title="{{ each.title|slice:":80" }}" alt="...">#}
+{#                    <p class="thumbnail-info">{{ each.title }}</p>#}
+{#                    <p class="thumbnail-tag" style="left: 70px;">{{ each.listing_type }} | {{ each.price }} VH</p>#}
+{#                    <div class="caption" style="height: 115px;">#}
+{#                        <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;">#}
+{#                            <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}" data-toggle="tooltip" title="{{ each.user.profile.name }}"#}
+{#                                 style="margin-right: 10px;" class="img-circle inline"/>#}
+{#                        </a>#}
+{##}
+{#                        <div style="overflow: hidden;">#}
+{#                            {% for each_tag in each.tag.all %}#}
+{#                                <span class="label label-info">{{ each_tag.name }}</span>#}
+{#                            {% endfor %}#}
+{#                        </div>#}
+{##}
+{#                        <div class="col-sm-12" style="padding-left: 0; padding-top: 5px;">#}
+{#                            <div class="btn-group btn-group-md btn-top-adjust" role="group" aria-label="..." style="display: block;">#}
+{#                                <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">#}
+{#                                    <i class="fa fa-heart" aria-hidden="true"></i>#}
+{#                                </button>#}
+{#                                <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">#}
+{#                                    <i class="fa fa-money" aria-hidden="true"></i>#}
+{#                                </button>#}
+{#                                <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">#}
+{#                                    <i class="fa fa-envelope" aria-hidden="true"></i>#}
+{#                                </button>#}
+{#                            </div>#}
+{##}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        {% else %}#}
             <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">
                 <div class="thumbnail" style="background: grey">
                     <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}"
@@ -455,7 +455,7 @@
                     </div>
                 </div>
             </div>
-        {% endif %}
+{#        {% endif %}#}
     {% endfor %}
 {% else %}
     <div class="col-md-9">
