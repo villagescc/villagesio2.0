@@ -344,6 +344,8 @@ def blank_payment(request):
     listing_form = ListingsForms()
     received_payments = FeedItem.objects.filter(recipient_id=request.profile.id, item_type='acknowledgement').order_by('-date')
     made_payments = FeedItem.objects.filter(poster_id=request.profile.id, item_type='acknowledgement').order_by('-date')
+    all_payments = (FeedItem.objects.filter(recipient_id=request.profile.id, item_type='acknowledgement').
+                    order_by('-date') | FeedItem.objects.filter(poster_id=request.profile.id, item_type='acknowledgement').order_by('-date'))
     form = BlankPaymentForm(max_ripple=None, initial=request.GET)
     if request.method == 'POST':
         if not request.POST['recipient']:
@@ -372,7 +374,8 @@ def blank_payment(request):
         form = BlankPaymentForm(max_ripple=None, initial=request.GET)
         return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,
                                                              'received_payments': received_payments,
-                                                             'made_payments': made_payments})
+                                                             'made_payments': made_payments,
+                                                             'all_payments': all_payments})
 
 
 def send_payment_notification(payment):
