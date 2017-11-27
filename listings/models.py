@@ -77,7 +77,7 @@ class ListingsManager(GeoManager):
             # Searching by TAGs
             query = query.filter(Q(title__icontains=tsearch) |
                                  Q(description__icontains=tsearch) |
-                                 Q(tag__name=tsearch))
+                                 Q(tag__name=tsearch)).distinct()
 
         if type_filter:
             if type_filter in LISTING_TYPE_CHECK:

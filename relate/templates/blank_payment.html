@@ -65,8 +65,7 @@
             </div>
         </div>
     </form>
-
-    {% if received_payments %}
+    {% if all_payments %}
         <div class="container">
         <h3>Transaction history</h3><p class="text-right">
             <a id="table-filter-all" class="text-right" href="#">All </a>|
@@ -84,24 +83,14 @@
             </tr>
             </thead>
             <tbody>
-            {% for received in received_payments %}
+            {% for each_all in all_payments %}
                 <tr>
-                    <td width="16.66%">{{ received.item.payer }}</td>
-                    <td width="16.66%">{{ received.item.recipient }}</td>
-                    <td width="16.66%">{{ received.item.amount }}</td>
-                    <td width="16.66%">{{ received.item.date }}</td>
-                    <td width="16.66%">{{ received.item.memo }}</td>
+                    <td width="16.66%">{{ each_all.item.payer }}</td>
+                    <td width="16.66%">{{ each_all.item.recipient }}</td>
+                    <td width="16.66%">{{ each_all.item.amount }}</td>
+                    <td width="16.66%">{{ each_all.item.date }}</td>
+                    <td width="16.66%">{{ each_all.item.memo }}</td>
                     <td width="16.66%" title="received"><i class="fa fa-arrow-up"></i></td>
-                </tr>
-            {% endfor %}
-            {% for made in made_payments %}
-                <tr>
-                    <td width="16.66%">{{ made.item.payer }}</td>
-                    <td width="16.66%">{{ made.item.recipient }}</td>
-                    <td width="16.66%">{{ made.item.amount }}</td>
-                    <td width="16.66%">{{ made.item.date }}</td>
-                    <td width="16.66%">{{ made.item.memo }}</td>
-                    <td width="16.66%" title="made"><i class="fa fa-arrow-down"></i></td>
                 </tr>
             {% endfor %}
             </tbody>
