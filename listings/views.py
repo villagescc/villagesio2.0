@@ -41,13 +41,13 @@ def add_new_listing(request):
                     listing.save()
 
                     for tag in tags_list:
-                        new_tag = Tag(name=tag)
+                        new_tag = Tag(name=tag.strip())
                         try:
                             new_tag.save()
                             new_tag.listings_set.add(listing)
                             update_profile_tags(new_tag, request.profile, listing)
                         except IntegrityError as e:
-                            existing_tag = Tag.objects.get(name=tag)
+                            existing_tag = Tag.objects.get(name=new_tag.name)
                             existing_tag.listings_set.add(listing)
                             update_profile_tags(existing_tag, request.profile, listing)
                     # save_document(listing)
