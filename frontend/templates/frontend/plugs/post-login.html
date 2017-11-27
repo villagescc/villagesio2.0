@@ -421,7 +421,7 @@
 {#            </div>#}
 {#        {% else %}#}
             <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">
-                <div class="thumbnail" style="background: grey">
+                <div class="thumbnail">
                     <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}"
                          data-listing-title="{{ each.title|slice:":80" }}" alt="...">
                     <p class="thumbnail-info">{{ each.title }}</p>
