@@ -79,18 +79,16 @@
                 <th>Amount</th>
                 <th>Date</th>
                 <th>Memo</th>
-                <th>Operation</th>
             </tr>
             </thead>
             <tbody>
             {% for each_all in all_payments %}
                 <tr>
-                    <td width="16.66%">{{ each_all.item.payer }}</td>
-                    <td width="16.66%">{{ each_all.item.recipient }}</td>
-                    <td width="16.66%">{{ each_all.item.amount }}</td>
-                    <td width="16.66%">{{ each_all.item.date }}</td>
-                    <td width="16.66%">{{ each_all.item.memo }}</td>
-                    <td width="16.66%" title="received"><i class="fa fa-arrow-up"></i></td>
+                    <td width="20%">{{ each_all.item.payer }}</td>
+                    <td width="20%">{{ each_all.item.recipient }}</td>
+                    <td width="20%">{{ each_all.item.amount }}</td>
+                    <td width="20%">{{ each_all.item.date }}</td>
+                    <td width="20%">{{ each_all.item.memo }}</td>
                 </tr>
             {% endfor %}
             </tbody>
