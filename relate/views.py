@@ -345,7 +345,7 @@ def blank_payment(request):
     received_payments = FeedItem.objects.filter(recipient_id=request.profile.id, item_type='acknowledgement').order_by('-date')
     made_payments = FeedItem.objects.filter(poster_id=request.profile.id, item_type='acknowledgement').order_by('-date')
     all_payments = (FeedItem.objects.filter(recipient_id=request.profile.id, item_type='acknowledgement').
-                    order_by('-date') | FeedItem.objects.filter(poster_id=request.profile.id, item_type='acknowledgement').order_by('-date'))
+                    order_by('-date') | FeedItem.objects.filter(poster_id=request.profile.id, item_type='acknowledgement').order_by('-date')).order_by('-date')
     form = BlankPaymentForm(max_ripple=None, initial=request.GET)
     if request.method == 'POST':
         if not request.POST['recipient']:
