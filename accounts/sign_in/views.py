@@ -126,7 +126,8 @@ class SignInUserLogIn(View):
         form = self.form_class()
         form.fields.pop('first_name')
         form.fields.pop('email')
-        return django_render(request, 'accounts/sign_in.html', {'form': form})
+        next_url = request.GET.get('next')
+        return django_render(request, 'accounts/sign_in.html', {'form': form, 'next_url': next_url})
 
     def post(self, request):
         form = UserForm(request.POST)
@@ -147,7 +148,11 @@ class SignInUserLogIn(View):
             if user:
                 # Password matching and user found with authenticate
                 login(request, user)
-                return HttpResponseRedirect(reverse('frontend:home'))
+                next_url = request.GET.get('next')
+                if next_url:
+                    return HttpResponseRedirect(next_url)
+                else:
+                    return HttpResponseRedirect(reverse('frontend:home'))
             else:
                 # Password wrong
                 messages.add_message(request, messages.ERROR, 'Username or Password is wrong')

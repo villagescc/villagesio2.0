@@ -290,7 +290,8 @@ def get_recipients_data(request):
                            'username': recipient.username})
         return JsonResponse({'result': result})
 
-@login_required()
+@login_required
+@render()
 def blank_trust(request):
     listing_form = ListingsForms()
     accounts = ripple.get_user_accounts(request.profile)
@@ -337,6 +338,7 @@ def blank_trust(request):
         form = BlankTrust(instance=None, endorser=request.profile, recipient=None)
         profile = request.profile
         return django_render(request, 'blank_trust.html', {'form': form, 'listing_form': listing_form,
+
                                                            'accounts': accounts, 'profile': profile})
 @login_required()
 def blank_payment(request):
