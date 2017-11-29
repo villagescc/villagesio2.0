@@ -70,7 +70,8 @@
                         <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ profile.username }}">
                             <i class="fa fa-money" aria-hidden="true"></i>
                         </button>
-                        <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ profile.username }}">
+                        <button type="button" class="btn btn-default btn-primary contact-modal"
+                                title="Contact the owner" data-profile-username="{{ profile.username }}">
                             <i class="fa fa-envelope" aria-hidden="true"></i>
                         </button>
                     </div>
@@ -88,7 +89,9 @@
                         {% for each in listings %}
                             <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">
                                 <div class="thumbnail">
-                                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
+                                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}"
+                                         data-listing-id="{{ each.id }}"
+                                         data-listing-title="{{ each.title|slice:":80" }}" alt="...">
                                     <p class="thumbnail-info">{{ each.title }}</p>
                                     <p class="thumbnail-tag" style="left: 70px;">{{ each.listing_type }} | {{ each.price }} VH</p>
                                     <div class="caption" style="height: 115px;">
@@ -103,13 +106,17 @@
                                         {% endfor %}
                                         <div class="col-sm-12" style="padding-left: 0; padding-top: 5px;">
                                             <div class="btn-group btn-group-md btn-top-adjust" role="group" aria-label="..." style="display: block;">
-                                                <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
+                                                <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person"
+                                                        data-profile-username="{{ each.user.profile.username }}">
                                                     <i class="fa fa-heart" aria-hidden="true"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
+                                                <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments"
+                                                        data-profile-username="{{ each.user.profile.username }}">
                                                     <i class="fa fa-money" aria-hidden="true"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
+                                                <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner"
+                                                        data-profile-username="{{ each.user.profile.username }}"
+                                                        data-listing-title="{{ each.title }}">
                                                     <i class="fa fa-envelope" aria-hidden="true"></i>
                                                 </button>
                                             </div>
@@ -458,7 +465,9 @@
             $(".contact-modal").click(function (e) {
                 $('#spin-modal').fadeIn();
                 var profile_username = $(this).attr('data-profile-username');
+                var listing_title = $(this).attr('data-listing-title');
                 $("#profile-username").val(profile_username);
+                $("#listing-title").val(listing_title);
                 $('#contact-modal-title').text('Contact '+profile_username);
                 $('#spin-modal').fadeOut();
                 $("#new-contact-modal").modal("show");
