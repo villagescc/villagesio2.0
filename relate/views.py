@@ -360,12 +360,12 @@ def blank_payment(request):
             return django_render(request, 'blank_payment.html', {'form': form,
                                                                  'listing_form': listing_form})
         can_ripple = max_amount > 0
-        if not can_ripple and request.POST['ripple'] == 'routed':
-            messages.add_message(request, messages.ERROR, 'There are no available paths through the trust network, '
-                                                          'so you can only send direct trust')
-            form = BlankPaymentForm(max_ripple=None, initial=request.GET)
-            return django_render(request, 'blank_payment.html', {'form': form,
-                                                                 'listing_form': listing_form})
+        # if not can_ripple and request.POST['ripple'] == 'routed':
+        #     messages.add_message(request, messages.ERROR, 'There are no available paths through the trust network, '
+        #                                                   'so you can only send direct trust')
+        #     form = BlankPaymentForm(max_ripple=None, initial=request.GET)
+        #     return django_render(request, 'blank_payment.html', {'form': form,
+        #                                                          'listing_form': listing_form})
         payment = form.send_payment(request.profile, recipient, request.POST)
         create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
         send_payment_notification(payment)

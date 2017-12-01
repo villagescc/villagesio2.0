@@ -233,7 +233,8 @@
                 if(!e['data']['can_ripple']) {
                     $('label[for="id_ripple_0"]').closest('li').hide();
                     $('#id_ripple_1').attr('checked', true);
-                    $('.ripple-hours').html("There are no available paths through the trust network to <strong>" + e['data']['recipient'] + "</strong>, so you can only send direct payment.");
+                    $('.ripple-hours').html("You do not have any more credit with this user. Your payment will only be able to be spent directly, with you. If this is not your intent, contact the recipient and ask them to raise your credit limit. This can be done after payment.");
+{#                    $('.ripple-hours').html("There are no available paths through the trust network to <strong>" + e['data']['recipient'] + "</strong>, so you can only send direct payment.");#}
                     $('.ripple-hours').attr("hidden", false);
                 }else if(e['data']['can_ripple']) {
                     if(!$('label[for="id_ripple_0"]').closest('li').is(":visible")){
