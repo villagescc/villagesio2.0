@@ -4,9 +4,9 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Product List | Villages</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <link rel="stylesheet" href="{% static 'new_template/res/css/style.css' %}" type="text/css" media="all" />
     <meta property="fb:app_id" content="1199641510163736" />
     <meta property="og:url" content="https://villages.cc" />
     <meta property="og:type" content="article" />
@@ -20,7 +20,7 @@
     <title>Villages.cc</title>
 
     <!-- Bootstrap -->
-    <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+{#    <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">#}
     <link rel="stylesheet" href="{% static 'assets/tether/css/tether.css' %}">
     <link href="{% static 'stylesheets/main.css' %}" rel="stylesheet">
     <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
@@ -53,9 +53,20 @@
     <!-- bootstrap-slider -->
     <link href="{% static 'seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css' %}" rel="stylesheet">
 
-    <script src="{% static 'assets/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'new_template/node_modules/jquery/dist/jquery.js' %}" type="text/javascript"></script>
+    <!-- jQuery -->
+    <script src="{% static 'new_template/node_modules/popper.js/dist/umd/popper.js' %}" type="text/javascript"></script>
+    <!-- Popper -->
+    <script src="{% static 'new_template/node_modules/bootstrap/dist/js/bootstrap.js' %}" type="text/javascript"></script>
+    <!-- Bootstrap -->
+
+    <!-- Custom jQuery -->
+    <script src="{% static 'new_template/res/js/index.js' %}" type="text/javascript"></script>
+    <!---->
+
+{#    <script src="{% static 'assets/jquery-3.2.1.min.js' %}"></script>#}
 {#    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>#}
-    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+{#    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>#}
     <script src="{% static 'js/app.js' %}"></script>
     <script src="{% static 'js/chart.js' %}"></script>
     <script src="{% static 'js/toastr.js' %}"></script>
@@ -115,7 +126,7 @@
 <div id="fb-root"></div>
 
 {% if request.user.is_authenticated %}
-    {% include 'plugs/navigation-post-login.html' %}
+    {% include 'new_templates/02_ProductList_001c.html' %}
 {% else %}
     {% include 'plugs/navigation-pre-login.html' %}
 {% endif %}

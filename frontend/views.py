@@ -85,7 +85,7 @@ def get_listings_and_remaining(listings):
         return query, count - len(query)
 
 
-def home(request, type_filter=None, item_type=None, template='frontend/home.html', poster=None, recipient=None,
+def home(request, type_filter=None, item_type=None, poster=None, recipient=None,
          extra_context=None, do_filter=False):
     """
 
@@ -143,7 +143,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
                        'form': form, 'listing_form': listing_form,
                        'poster': poster, 'do_filter': do_filter,
                        'remaining_count': remaining_count,
-                       'item_type': item_type, 'template': template,
+                       'item_type': item_type,
                        'url_param_str': url_param_str,
                        'next_page_param_str': next_page_param_str,
                        'extra_context': extra_context,

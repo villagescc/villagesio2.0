@@ -35,7 +35,6 @@ class FormListingsSettings(forms.Form):
 
     q = forms.CharField(label='Search', required=False,
                         widget=forms.TextInput(attrs={
-                            'class': 'form-control',
                             'placeholder': 'Search posts...'}))
 
     radius = forms.TypedChoiceField(
