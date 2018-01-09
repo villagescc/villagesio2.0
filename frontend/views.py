@@ -85,7 +85,73 @@ def get_listings_and_remaining(listings):
         return query, count - len(query)
 
 
-def home(request, type_filter=None, item_type=None, poster=None, recipient=None,
+def people_listing(request, type_filter=None, item_type=None, template=None, poster=None, recipient=None,
+                   extra_context=None, do_filter=False):
+    user_agent = get_user_agent(request)
+    if user_agent.is_mobile:
+        user_agent_type = 'mobile'
+    else:
+        user_agent_type = 'desktop'
+    endorsement = None
+    form = FeedFilterForm(request.GET, request.profile, request.location, item_type,
+                          poster, recipient, do_filter)
+    trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
+    if form.is_valid():
+        feed_items, remaining_count, total_items = form.get_results(form.data.get('radio-low'),
+                                                                    form.data.get('radio-high'),
+                                                                    form.data.get('referral-radio'))
+        if do_filter:
+            form.update_sticky_filter_prefs()
+    else:
+        raise Exception(unicode(form.errors))
+    if feed_items:
+        next_page_date = feed_items[-1].date
+    else:
+        next_page_date = None
+    url_params = request.GET.copy()
+    url_params.pop('d', None)
+    url_param_str = url_params.urlencode()
+    if next_page_date:
+        url_params['d'] = next_page_date.strftime(DATE_FORMAT)
+    next_page_param_str = url_params.urlencode()
+
+    number_of_pages = len(total_items) / settings.FEED_ITEMS_PER_PAGE
+
+    listing_form = ListingsForms()
+    categories_list = Categories.objects.all()
+    item_sub_categories = SubCategories.objects.all().filter(categories=1)
+    services_sub_categories = SubCategories.objects.all().filter(categories=2)
+    rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
+    housing_sub_categories = SubCategories.objects.all().filter(categories=4)
+    trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
+    payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
+    contact_form = ContactForm()
+    notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
+
+    context = locals()
+    context.update(extra_context or {})
+    return render(request, 'new_templates/05_PeopleListing_001a.html',
+                  {'url_params': url_params, 'feed_items': feed_items,
+                   'next_page_date': next_page_date, 'context': context,
+                   'form': form, 'listing_form': listing_form,
+                   'poster': poster, 'do_filter': do_filter,
+                   'remaining_count': remaining_count,
+                   'item_type': item_type,
+                   'url_param_str': url_param_str,
+                   'next_page_param_str': next_page_param_str,
+                   'extra_context': extra_context,
+                   'recipient': recipient, 'user_agent_type': user_agent_type,
+                   'item_sub_categories': item_sub_categories,
+                   'services_sub_categories': services_sub_categories,
+                   'rideshare_sub_categories': rideshare_sub_categories,
+                   'housing_sub_categories': housing_sub_categories,
+                   'categories': categories_list, 'trust_form': trust_form,
+                   'payment_form': payment_form, 'contact_form': contact_form,
+                   'notification_number': notification_number,
+                   'number_of_pages': number_of_pages})
+
+
+def home(request, type_filter=None, item_type=None, template=None, poster=None, recipient=None,
          extra_context=None, do_filter=False):
     """
 

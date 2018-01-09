@@ -127,6 +127,7 @@
 
 {% if request.user.is_authenticated %}
     {% include 'new_templates/02_ProductList_001c.html' %}
+{#    {% include 'frontend/plugs/post-login.html' %}#}
 {% else %}
     {% include 'plugs/navigation-pre-login.html' %}
 {% endif %}

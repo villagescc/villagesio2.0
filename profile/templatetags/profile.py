@@ -15,7 +15,7 @@ def profile_image_url(profile, size):
         return resize(profile.photo, size)
     else:
         square_side = min((int(i) for i in size.split('x')))
-        return '/static/img/generic_user_%dx%d.png' % (square_side, square_side)
+        return '/static/img/generic_user.png'
 
 @register.simple_tag
 def product_image_url(listing, size):
