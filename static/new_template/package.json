@@ -1,0 +1,15 @@
+{
+  "name": "villages",
+  "version": "1.0.0",
+  "description": "villages web app, html project",
+  "main": "index.js",
+  "repository": "https://github.com/RickCardoso/villages",
+  "author": "Rick Cardoso",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "4.0.0-beta.2",
+    "jquery": "^3.2.1",
+    "popper.js": "^1.12.9",
+    "vue": "^2.5.9"
+  }
+}
