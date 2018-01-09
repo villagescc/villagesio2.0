@@ -32,11 +32,10 @@ class FeedFilterForm(forms.Form):
 
     q = forms.CharField(
         label="Search", required=False, widget=forms.TextInput(
-            attrs={'class': 'form-control',
-                   'placeholder': 'Search people...'}))
+            attrs={'placeholder': 'Search people...'}))
     radius = forms.TypedChoiceField(
         required=False, choices=RADIUS_CHOICES, coerce=int, empty_value=None,
-        widget=forms.Select(attrs={'class': 'form-control'}))
+        widget=forms.Select(attrs={}))
 
     trusted = forms.BooleanField(required=False,
                                  widget=forms.CheckboxInput(attrs={
