@@ -1,0 +1,8 @@
+h1, h2, h3, h4, h5, h6,
+p, article,
+body {
+  font-family: $font-open_sans;
+  font-size: 100%; // always use % here; 100% = 16px
+  font-style: normal;
+  font-weight: 400;
+}

@@ -1,0 +1,358 @@
+{% load staticfiles profile tag_utils %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>People Listing | Villages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'new_template/res/css/style.css' %}" type="text/css" media="all" />
+</head>
+
+<body>
+
+  <!-- svg sprites -->
+  <svg style="width:0; height:0; position: absolute; top: -9999px;">
+      <symbol id="balance" viewbox="0 0 21 18">
+      </symbol>
+    </svg>
+  <!---->
+
+  <div class="app-wrapper">
+
+    <header class="app-header">
+      <nav class="navbar navbar-expand-lg">
+
+        <a class="navbar-brand" href="{% url 'frontend:home' %}">
+          <img class="d-none d-sm-block" src="{% static 'new_template/res/img/logo_full.png' %}" alt="villages.io">
+          <img class="d-block d-sm-none" src="{% static 'new_template/res/img/logo.png' %}" alt="villages.io">
+        </a>
+
+        <div class="user-menu d-flex d-lg-none">
+          <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
+          <a class="user-link" href="#">
+            <div class="avatar-wrapper">
+              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width=43px height=44px
+                   class="rounded-circle">
+            </div>
+          </a>
+        </div>
+
+        <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="primary-navbar">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  About Us
+                </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'how_it_works' %}">How it works</a>
+                <a class="dropdown-item" href="{% url 'motivation' %}">Motivation</a>
+                <a class="dropdown-item" href="{% url 'privacy' %}">Privacy</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'contact_us' %}">Feedback</a>
+              </div>
+            </li>
+              {% if request %}
+            <li class="balance-item">
+              <img src="{% static 'new_template/res/img/icons/balance.png' %}" alt="balance">
+              <span id="account-balance">{{ request.profile.overall_balance }}</span>
+              <span id="account-currency">V.H.</span>
+            </li>
+              {% endif %}
+            <li class="nav-item">
+              <a id="add-posting" class="nav-link" href="#"><img src="{% static 'new_template/res/img/icons/plus.png' %}" alt="add" data-toggle="modal" data-target="#new-posting-modal"></a>
+            </li>
+            <li class="nav-item">
+              <a id="blank-trust-id" class="nav-link" href="{% url 'blank_trust_user' %}"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'blank_payment_user' %}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="wallet"></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'undefined_contact' %}"><img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="inbox"></a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="user-menu d-none d-lg-flex">
+          <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
+          <a class="user-link" href="#">
+            <div class="avatar-wrapper">
+              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width=43px height=44px
+                   class="rounded-circle">
+            </div>
+          </a>
+        </div>
+      </nav>
+    </header>
+    <!-- .app-header -->
+
+    <div class="app-view">
+
+      <aside class="app-sidebar">
+
+        <div class="cat-menu">
+          <a class="cat-item active" href="#">
+            <div class="cat-item-icon">
+              <img src="{% static 'new_template/res/img/icons/all_categories.png' %}" alt="All Categories">
+            </div>
+            <span class="cat-item-name">All Categories</span>
+          </a>
+          <a class="cat-item" href="#">
+            <div class="cat-item-icon">
+              <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/services.png' %}" alt="Services">
+            </div>
+            <span class="cat-item-name">Services</span>
+          </a>
+          <a class="cat-item" href="#">
+            <div class="cat-item-icon">
+              <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Products">
+            </div>
+            <span class="cat-item-name">Products</span>
+          </a>
+          <a class="cat-item" href="#">
+            <div class="cat-item-icon">
+              <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Housing">
+            </div>
+            <span class="cat-item-name">Housing</span>
+          </a>
+        </div>
+
+      </aside>
+      <!-- .app-sidebar -->
+
+      <main class="app-main">
+
+        <form id="search-form" class="form-container">
+
+          <div class="row">
+
+            <div class="col-12 col-md-6 col-lg-4 col-xxl-2">
+
+              <select class="filter-input" name="sorting">
+                  <option value="default" selected disabled>Sort by recent visit</option>
+                  <option value="option-1">Option 1</option>
+                  <option value="option-2">Option 2</option>
+                  <option value="option-3">Option 3</option>
+                </select>
+
+            </div>
+
+            <div class="col-12 col-xs-6 col-lg-4 col-xxl-3">
+
+              <div class="custom-group">
+
+                  <label class="custom-radio" for="radio-grid">
+                      <a href="{% url 'frontend:home' %}">
+                          <input id="radio-grid" type="radio" name="view-radio" value="grid" checked>
+                          <span class="btn-input-layout">
+                        <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/grid.png' %}" alt="Grid">
+                      <span class="btn-input-text">Grid</span>
+                    </span>
+                      </a>
+                  </label>
+
+                <label class="custom-radio" for="radio-map">
+                    <a href="{% url 'frontend:map' %}"><input id="radio-map" type="radio" name="view-radio" value="map">
+                    <span class="btn-input-layout">
+                      <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/map.png' %}" alt="Map">
+                      <span class="btn-input-text">Map</span>
+                    </span>
+                        </a>
+                  </label>
+
+              </div>
+
+            </div>
+
+            <div class="col-12 col-xs-6 col-md-4 col-lg-4 col-xxl-2">
+
+              <select class="filter-input" name="place">
+                  <option value="anywhere" selected>Anywhere</option>
+                  <option value="option-2">Option 2</option>
+                  <option value="option-3">Option 3</option>
+                </select>
+
+            </div>
+
+            <div class="col-12 col-sm-8 col-md-8 col-lg-6 col-xxl-3">
+
+              <div class="custom-group">
+
+                <label class="custom-radio" for="radio-posts">
+                    <input id="radio-posts" type="radio" name="type-radio" value="posts">
+                    <span class="btn-input-layout">
+                      <span class="btn-input-icon checkbox">
+                        <svg viewbox="0 0 7 7">
+                          <path d="
+                            M 0.6,3.5
+                            L 2.3,5.25
+                            L 6.4,0.9
+                            l 0.6,0.6
+                            L 2.3,6.15
+                            L 0,4.1
+                            z">
+                        </svg>
+                      </span>
+                      <span class="btn-input-text">View Posts</span>
+                    </span>
+                  </label>
+
+                <label class="custom-radio" for="radio-people">
+                    <input id="radio-people" type="radio" name="type-radio" value="people" checked>
+                    <span class="btn-input-layout">
+                      <span class="btn-input-icon checkbox">
+                        <svg viewbox="0 0 7 7">
+                          <path d="
+                            M 0.6,3.5
+                            L 2.3,5.25
+                            L 6.4,0.9
+                            l 0.6,0.6
+                            L 2.3,6.15
+                            L 0,4.1
+                            z">
+                        </svg>
+                      </span>
+                      <span class="btn-input-text">View People</span>
+                    </span>
+                  </label>
+
+              </div>
+
+            </div>
+
+            <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+
+              <label class="custom-check" for="check-trusted">
+                  <input id="check-trusted" type="checkbox" name="trusted-check" value="trusted">
+                  <span class="btn-input-layout">
+                    <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
+                    <span class="btn-input-text">Trusted</span>
+                  </span>
+                </label>
+
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-12 col-sm-8 col-xxl-5">
+
+              <div class="textbox-with-icon">
+                  {{ form.q }}
+                <img class="textbox-icon" src="{% static 'new_template/res/img/icons/magnifier.png' %}" alt="magnifier">
+              </div>
+
+            </div>
+
+            <div class="col-12 col-sm-4 col-xxl-2">
+
+              <input type="submit" name="search" value="Search">
+
+            </div>
+
+          </div>
+
+        </form>
+
+        <div class="search-results">
+
+          <div class="row">
+
+              {% for each in feed_items %}
+
+            <div class="col-12">
+              <div class="person-box">
+                <div class="avatar-wrapper blue">
+                  <img src="{% profile_image_url each '400x400' %}" alt="avatar" width="70px" height="70px"
+                       class="rounded-circle" style="max-width: 100% !important;">
+                </div>
+
+                <div class="person-id">
+                  <h1>{{ each }}</h1>
+{#                  <div class="tag-container">#}
+{#                    <a class="tag" href="#">Tantric</a>#}
+{#                    <a class="tag" href="#">Therapy</a>#}
+{#                  </div>#}
+                </div>
+
+                <div class="price-container">
+                  <img src="{% static 'new_template/res/img/icons/balance_b.png' %}" alt="balance">
+                  <span class="price">{{ each.overall_balance }}</span>
+                </div>
+
+                <div class="like-container">
+                  <img src="{% static 'new_template/res/img/icons/heart_b.png' %}" alt="balance">
+                  <span class="like-count">128 Hearts</span>
+                </div>
+
+                <div class="location-container">
+                  <img src="{% static 'new_template/res/img/icons/map_b.png' %}" alt="location">
+                  <span class="location">{{ each.location }}</span>
+                </div>
+
+                <div class="date-container">
+                  <img src="{% static 'new_template/res/img/icons/calendar_b.png' %}" alt="date">
+                  <span class="date">{{ each.user.last_login }}</span>
+                </div>
+
+                <div class="person-action">
+
+                  <a class="action-menu-item" href="#"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like"></a>
+                  <a class="action-menu-item" href="#"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy"></a>
+                  <a class="action-menu-item" href="#"><img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="contact"></a>
+
+                </div>
+
+              </div>
+
+            </div>
+              {% endfor %}
+
+          </div>
+
+        </div>
+
+      </main>
+      <!-- .app-main -->
+
+    </div>
+
+  </div>
+
+
+</body>
+
+<script src="{% static 'new_template/node_modules/jquery/dist/jquery.js' %}" type="text/javascript"></script>
+<!-- jQuery -->
+<script src="{% static 'new_template/node_modules/popper.js/dist/umd/popper.js' %}" type="text/javascript"></script>
+<!-- Popper -->
+<script src="{% static 'new_template/node_modules/bootstrap/dist/js/bootstrap.js' %}" type="text/javascript"></script>
+<!-- Bootstrap -->
+
+<!-- Custom jQuery -->
+<script src="{% static 'new_template/res/js/index.js' %}" type="text/javascript"></script>
+<!---->
+
+    <script>
+        $("#radio-people").click(function () {
+            window.location.href = "{% url 'frontend:people_listing' %}"
+        });
+        $("#radio-posts").click(function () {
+            window.location.href = "{% url 'frontend:home' %}"
+        });
+        $("#radio-grid").click(function () {
+            window.location.href = "{% url 'frontend:home' %}"
+        });
+        $("#radio-map").click(function () {
+            window.location.href = "{% url 'frontend:map' %}"
+        })
+    </script>
+
+</html>

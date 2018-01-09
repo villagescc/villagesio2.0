@@ -1,0 +1,117 @@
+/* cross-browser shortcuts */
+@mixin crossTransition($trans) {
+  -webkit-transition: $trans;
+  -moz-transition: $trans;
+  -o-transition: $trans;
+  transition: $trans;
+}
+
+@mixin crossAnimation($anim) {
+  -webkit-animation: $anim;
+  -moz-animation: $anim;
+  -o-animation: $anim;
+  animation: $anim;
+}
+
+@mixin crossTransform($trans) {
+  -webkit-transform: $trans;
+  -moz-transform: $trans;
+  -ms-transform: $trans;
+  -o-transform: $trans;
+  transform: $trans;
+}
+
+@mixin crossFilter($filters) {
+  -webkit-filter: $filters;
+  filter: $filters;
+}
+
+@mixin crossBorder($rad) {
+  -webkit-border-radius: $rad;
+  -moz-border-radius: $rad;
+  border-radius: $rad;
+}
+
+@mixin crossShadow($shadow) {
+  -webkit-box-shadow: $shadow;
+  -moz-box-shadow: $shadow;
+  box-shadow: $shadow;
+}
+
+@mixin crossGradient($gradient) {
+  background: -webkit-$gradient;
+  background: -moz-$gradient;
+  background: -o-$gradient;
+  background: $gradient;
+}
+
+
+/* shortcuts */
+// inspired by bootstrap, media queries using $grid-breakpoints OR values
+@mixin media-width-up($name, $breakpoints: $grid-breakpoints) {
+  @if type-of($name) == number {
+    @media (min-width: $name) {
+      @content;
+    }
+  } @else {
+    $min: breakpoint-min($name, $breakpoints);
+    @if $min {
+      @media (min-width: $min) {
+        @content;
+      }
+    } @else {
+      @content;
+    }
+  }
+}
+
+@mixin media-width-down($name, $breakpoints: $grid-breakpoints) {
+  @if type-of($name) == number {
+    @media (max-width: $name) {
+      @content;
+    }
+  } @else {
+    $max: breakpoint-max($name, $breakpoints);
+    @if $max {
+      @media (max-width: $max) {
+        @content;
+      }
+    } @else {
+      @content;
+    }
+  }
+}
+
+@mixin media-height-up($name, $breakpoints: $grid-breakpoints) {
+  @if type-of($name) == number {
+    @media (min-height: $name) {
+      @content;
+    }
+  } @else {
+    $min: breakpoint-min($name, $breakpoints);
+    @if $min {
+      @media (min-height: $min) {
+        @content;
+      }
+    } @else {
+      @content;
+    }
+  }
+}
+
+@mixin media-height-down($name, $breakpoints: $grid-breakpoints) {
+  @if type-of($name) == number {
+    @media (max-height: $name) {
+      @content;
+    }
+  } @else {
+    $max: breakpoint-max($name, $breakpoints);
+    @if $max {
+      @media (max-height: $max) {
+        @content;
+      }
+    } @else {
+      @content;
+    }
+  }
+}

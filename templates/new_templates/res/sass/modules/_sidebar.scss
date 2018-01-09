@@ -1,0 +1,43 @@
+.app-sidebar {
+  background-color: #085973;
+  flex: 0 0 18.375em;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-flow: row wrap;
+  @include media-width-down(lg) {
+    font-size: 0.9em;
+  }
+  @include media-width-down(md) {
+    font-size: 0.8em;
+  }
+  @include media-width-down(sm) {
+    flex: 0 0 auto;
+  }
+  @include media-width-down(xs) {
+    height: auto;
+    flex: 0 0 100%;
+  }
+
+  & .cat-menu {
+    flex: 0 0 100%;
+  }
+
+  & .social-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto auto 2em;
+    & .social-link {
+      padding: 8px 1.5em;
+      &:hover,
+      &:focus {
+        opacity: 0.5;
+      }
+    }
+    @include media-width-down(xs) {
+      margin-bottom: 0;
+    }
+  }
+}
