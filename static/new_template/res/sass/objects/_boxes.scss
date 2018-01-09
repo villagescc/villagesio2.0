@@ -1,0 +1,13 @@
+/* boxes */
+.avatar-wrapper {
+  border: 4px solid #fff;
+  @include crossBorder(50%);
+  width: 4.8125em;
+  height: 4.8125em;
+  & img {
+    max-width: 100%;
+  }
+  &.blue {
+    border-color: #1d90b5;
+  }
+}

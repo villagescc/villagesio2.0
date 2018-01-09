@@ -1,0 +1,5 @@
+/* buttons */
+.btn-std {
+  @include crossTransition(all .3s);
+  @include crossBorder(3px);
+}
