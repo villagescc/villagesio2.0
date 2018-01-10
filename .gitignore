@@ -13,7 +13,6 @@ __pycache__/
 env/
 build/
 develop-eggs/
-dist/
 .idea/
 uploads/
 sessions/
@@ -23,7 +22,6 @@ eggs/
 lib/
 lib64/
 parts/
-sdist/
 var/
 wheels/
 *.egg-info/
