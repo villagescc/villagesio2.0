@@ -337,7 +337,7 @@ def blank_trust(request):
     else:
         form = BlankTrust(instance=None, endorser=request.profile, recipient=None)
         profile = request.profile
-        return django_render(request, 'blank_trust.html', {'form': form, 'listing_form': listing_form,
+        return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form, 'listing_form': listing_form,
 
                                                            'accounts': accounts, 'profile': profile})
 @login_required()

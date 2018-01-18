@@ -4,7 +4,16 @@
   @include crossBorder(50%);
   width: 4.8125em;
   height: 4.8125em;
+  min-width: 4.8125em;
+  min-height: 4.8125em;
+  max-width: 4.8125em;
+  max-height: 4.8125em;
+  &.big {
+    min-width: 5.6875em;
+    min-height: 5.6875em;
+  }
   & img {
+    width: 100%;
     max-width: 100%;
   }
   &.blue {

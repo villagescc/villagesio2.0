@@ -2,19 +2,15 @@
 .search-results {
   @include make-container;
   padding: 38px 0 10px;
-  & div[class*="col"] {
-    padding-bottom: 30px;
-  }
-  @include media-width-down(xs) {
-    & div[class*="col"] {
-      padding-bottom: 15px;
-    }
-  }
 }
 
 .post-box {
   background-color: #fff;
   @include crossShadow(0 0 16px 0 rgba(119, 119, 119, 0.29));
+  margin-bottom: 30px;
+  @include media-width-down(xs) {
+    margin-bottom: 15px;
+  }
   & .post-cover {
     background-position: center;
     background-repeat: no-repeat;

@@ -73,8 +73,8 @@
     <script src="{% static 'js/bootstrap-switch.min.js' %}"></script>
     <script src="{% static 'js/jquery.metisMenu.js' %}"></script>
     <script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
-    <script src="{% static 'assets/typeahead.js/typeahead.jquery.min.js' %}"></script>
-    <script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>
+{#    <script src="{% static 'assets/typeahead.js/typeahead.jquery.min.js' %}"></script>#}
+{#    <script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>#}
     <script src="{% static 'js/custom.js' %}"></script>
     <script src="{% static 'common.js' %}"></script>
     <script src="{% static 'geo.js' %}"></script>
@@ -115,7 +115,8 @@
 <body>
 
 {% include 'listing_modal.html' %}
-{% include 'new_post_modal.html' %}
+{#{% include 'new_post_modal.html' %}#}
+{% include 'new_templates/03_NewPost_001b.html' %}
 {% include 'new_trust_modal.html' %}
 {% include 'new_payment_modal.html' %}
 {% include 'new_contact_modal.html' %}

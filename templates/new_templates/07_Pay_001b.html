@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Product List | Villages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="res/css/style.css" type="text/css" media="all" />
+</head>
+
+<body>
+
+  <!-- svg sprites -->
+  <svg style="width:0; height:0; position: absolute; top: -9999px;">
+      <symbol id="balance" viewbox="0 0 21 18">
+      </symbol>
+    </svg>
+  <!---->
+
+  <!-- new post modal -->
+  <div class="modal fade" id="new-post-modal" tabindex="-1" role="dialog" aria-labelledby="new-post-modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="new-post-heading">New Post</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <img src="res/img/icons/times.png" alt="close">
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="modal-container">
+            <div class="row">
+              <div class="col-4">
+                <label for="listing-type">Listing Type</label>
+                <select name="listing-type" id="listing-type">
+                  <option value="default" selected disabled>Lorem Ipsum</option>
+                  <option value="option-1">Option 1</option>
+                  <option value="option-2">Option 2</option>
+                  <option value="option-3">Option 3</option>
+                </select>
+              </div>
+              <div class="col-4">
+                <label for="category">Category</label>
+                <select name="category" id="category">
+                  <option value="default" selected disabled>Lorem Ipsum</option>
+                  <option value="option-1">Option 1</option>
+                  <option value="option-2">Option 2</option>
+                  <option value="option-3">Option 3</option>
+                </select>
+              </div>
+              <div class="col-4">
+                <label for="sub-category">Sub-Category</label>
+                <select name="sub-catgegory" id="sub-category">
+                  <option value="default" selected disabled>Lorem Ipsum</option>
+                  <option value="option-1">Option 1</option>
+                  <option value="option-2">Option 2</option>
+                  <option value="option-3">Option 3</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title" placeholder="Lorem Ipsum">
+                <label for="price">Price (in Village Hours)</label>
+                <div class="d-flex">
+                  <input type="number" name="price" id="price" placeholder="Lorem Ipsum">
+                  <span class="currency-wrapper">V.H.</span>
+                </div>
+              </div>
+              <div class="col-5">
+                <label for="description">Description</label>
+                <textarea name="description" id="description" cols="30" rows="10" placeholder="Lorem Ipsum"></textarea>
+              </div>
+              <div class="col-3">
+                <label>&nbsp;</label>
+                <div class="drag-and-drop-container">
+                  <input type="file" name="photo" id="photo">
+                  <img src="res/img/icons/camera.png" alt="photo">
+                  <p class="action-call">drag &amp; drop</p>
+                  <p>your photos, or <label class="inline" for="photo">browse</label></p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-7">
+                <label for="tags">Tags</label>
+                <input type="text" name="tags" id="tags">
+              </div>
+              <div class="col-2">
+                <label>Visibility</label>
+                <div class="d-flex justify-content-center align-items-center mt-3">
+                  <span>Public</span>
+                  <label class="switch mx-2">
+                    <input id="visibility" type="checkbox" checked>
+                    <span class="slider round"></span>
+                  </label>
+                  <span>Private</span>
+                </div>
+              </div>
+              <div class="col-3">
+                <label>&nbsp;</label>
+                <input type="submit" value="POST" id="btn-post">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-wrapper">
+
+    <header class="app-header">
+      <nav class="navbar navbar-expand-lg">
+
+        <a class="navbar-brand" href="#">
+          <img class="d-none d-sm-block" src="res/img/logo_full.png" alt="villages.io">
+          <img class="d-block d-sm-none" src="res/img/logo.png" alt="villages.io">
+        </a>
+
+        <div class="user-menu d-flex d-lg-none">
+          <a class="user-link" href="#"><img src="res/img/icons/bell.png" alt="notifications"></a>
+          <a class="user-link" href="#">
+            <div class="avatar-wrapper blue">
+              <img src="res/img/user/avatar.png" alt="avatar">
+            </div>
+          </a>
+        </div>
+
+        <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="primary-navbar">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  About Us
+                </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </li>
+            <li class="balance-item">
+              <img src="res/img/icons/balance.png" alt="balance">
+              <span id="account-balance">1,200</span>
+              <span id="account-currency">V.H.</span>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" type="button" data-toggle="modal" data-target="#new-post-modal"><img src="res/img/icons/plus.png" alt="add"></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"><img src="res/img/icons/heart.png" alt="favorites"></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"><img src="res/img/icons/wallet.png" alt="wallet"></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"><img src="res/img/icons/mail.png" alt="inbox"></a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="user-menu d-none d-lg-flex">
+          <a class="user-link" href="#"><img src="res/img/icons/bell.png" alt="notifications"></a>
+          <a class="user-link" href="#">
+            <div class="avatar-wrapper blue">
+              <img src="res/img/user/avatar.png" alt="avatar">
+            </div>
+          </a>
+        </div>
+      </nav>
+    </header>
+    <!-- .app-header -->
+
+    <div class="app-view">
+
+      <aside class="app-sidebar">
+
+        <div class="user-menu">
+          <div class="user-cover" style="background-image: url('res/img/posts/conscious-sensuality/cover.png');"></div>
+          <div class="user-id">
+            <div class="avatar-wrapper big">
+              <img src="res/img/people/mikail.png" alt="avatar">
+            </div>
+            <h1>Mikail Jhonson</h1>
+          </div>
+          <div class="user-data">
+            <div class="data-block">
+              <img src="res/img/icons/balance_blue.png" alt="balance">
+              <span>30 hours</span>
+            </div>
+            <div class="data-block">
+              <img src="res/img/icons/briefcase_blue.png" alt="occupation">
+              <span>Tantra Teacher</span>
+            </div>
+            <div class="data-block">
+              <img src="res/img/icons/heart_blue.png" alt="likes">
+              <span>128 Hearts</span>
+            </div>
+            <div class="data-block">
+              <img src="res/img/icons/map_blue.png" alt="location">
+              <span>Grandview-Woodland Vancouver BC, Canada</span>
+            </div>
+            <div class="data-block">
+              <img src="res/img/icons/calendar_blue.png" alt="date">
+              <span>Oct. 24, 2017</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="social-menu">
+
+          <a class="social-link" href="#"><img src="res/img/icons/instagram.png" alt="instagram"></a>
+          <a class="social-link" href="#"><img src="res/img/icons/facebook.png" alt="facebook"></a>
+          <a class="social-link" href="#"><img src="res/img/icons/twitter.png" alt="twitter"></a>
+
+        </div>
+
+      </aside>
+      <!-- .app-sidebar -->
+
+      <main class="app-main">
+
+        <div class="payment-content">
+
+          <div class="row">
+            <div class="col-12 col-xxl-8">
+    
+              <h2>Payment</h2>
+
+              <div class="payment-data">
+                <div class="item-cover" style="background-image: url('res/img/posts/conscious-sensuality/cover-big.png');"></div>
+
+                <form action="" id="payment-form">
+
+                  <div class="transaction">
+                    <div class="avatar-wrapper blue big">
+                      <img src="res/img/people/mikail.png" alt="mikail">
+                    </div>
+                    <img style="padding: 0 0.5em;" src="res/img/icons/arrow-right.png" alt="to">
+                    <div class="avatar-wrapper blue big">
+                      <img src="res/img/people/mikail.png" alt="mikail">
+                    </div>
+                  </div>
+
+                  <div class="purchase-info">
+                    <h3>Conscious Sensuality</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                  </div>
+
+                  <div class="payment-type">
+                    <h4>Send</h4>
+
+                    <div class="custom-group">
+                        
+                      <label class="custom-radio" for="radio-trust">
+                        <input id="radio-trust" type="radio" name="payment-radio" value="trust" checked>
+                        <span class="btn-input-layout">
+                          <span class="btn-input-text">Trust Payment</span>
+                        </span>
+                      </label>
+      
+                      <label class="custom-radio" for="radio-direct">
+                        <input id="radio-direct" type="radio" name="payment-radio" value="direct">
+                        <span class="btn-input-layout">
+                          <span class="btn-input-text">Direct Payment</span>
+                        </span>
+                      </label>
+      
+                    </div>
+                  </div>
+
+                  <div class="payment-rate">
+                    <h4>Hours | Local Rate: 2.00 V.H. ~ 4.00 V.H.</h4>
+                    <div class="d-flex">
+                      <input type="number" name="rate" id="rate" placeholder="2.00">
+                      <span class="currency-wrapper">V.H.</span>
+                      <img src="res/img/icons/info.png" alt="more info" data-toggle="tooltip" data-placement="right" data-html="true" title="&lt;span class='tip-balloon'&gt;according to your local community, this is worth $20&lt;/span&gt;">
+                    </div>
+                  </div>
+
+                  <div class="testimonial">
+                    <h4>Testimonial</h4>
+                    <textarea name="testimonial" id="testimonial" cols="30" rows="10"></textarea>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-6">
+                      <input class="btn btn-std btn-cancel" type="button" value="Cancel">
+                    </div>
+                    <div class="col-6">
+                      <input class="btn btn-std" type="submit" value="Save Payment">
+                    </div>
+                  </div>
+
+                </form>
+              </div>
+
+            </div>
+
+            <div class="col-12 col-xxl-4 mt-5 mt-xxl-0">
+
+              <h2>Last Payments | <a class="small" href="#">View More</a></h2>
+
+              <div class="table-head">
+
+                <span>Payer</span>
+                <span>Recipient</span>
+                <span>Date / Time</span>
+                <span>Amount</span>
+
+              </div>
+
+              <div class="table-row">
+                <div class="transaction">
+                  <div class="avatar-wrapper blue">
+                    <img src="res/img/people/mikail.png" alt="mikail">
+                  </div>
+                  <img style="padding: 0 0.5em;" src="res/img/icons/arrow-right.png" alt="to">
+                  <div class="avatar-wrapper blue">
+                    <img src="res/img/people/mikail.png" alt="mikail">
+                  </div>
+                </div>
+
+                <span class="datetime">Nov. 16, 2017 6:24<span class="small">PM</span></span>
+
+                <span class="amount"><strong><span class="price">2.00</span> V.H.</strong></span>
+              </div>
+              
+              <div class="table-row">
+                <div class="transaction">
+                  <div class="avatar-wrapper blue">
+                    <img src="res/img/people/mikail.png" alt="mikail">
+                  </div>
+                  <img style="padding: 0 0.5em;" src="res/img/icons/arrow-right.png" alt="to">
+                  <div class="avatar-wrapper blue">
+                    <img src="res/img/people/mikail.png" alt="mikail">
+                  </div>
+                </div>
+
+                <span class="datetime">Nov. 16, 2017 6:24<span class="small">PM</span></span>
+
+                <span class="amount"><strong><span class="price">2.00</span> V.H.</strong></span>
+              </div>
+              
+              <div class="table-row">
+                  <div class="transaction">
+                    <div class="avatar-wrapper blue">
+                      <img src="res/img/people/mikail.png" alt="mikail">
+                    </div>
+                    <img style="padding: 0 0.5em;" src="res/img/icons/arrow-right.png" alt="to">
+                    <div class="avatar-wrapper blue">
+                      <img src="res/img/people/mikail.png" alt="mikail">
+                    </div>
+                  </div>
+  
+                  <span class="datetime">Nov. 16, 2017 6:24<span class="small">PM</span></span>
+  
+                  <span class="amount"><strong><span class="price">2.00</span> V.H.</strong></span>
+                </div>
+                
+              <div class="table-row">
+                  <div class="transaction">
+                    <div class="avatar-wrapper blue">
+                      <img src="res/img/people/mikail.png" alt="mikail">
+                    </div>
+                    <img style="padding: 0 0.5em;" src="res/img/icons/arrow-right.png" alt="to">
+                    <div class="avatar-wrapper blue">
+                      <img src="res/img/people/mikail.png" alt="mikail">
+                    </div>
+                  </div>
+  
+                  <span class="datetime">Nov. 16, 2017 6:24<span class="small">PM</span></span>
+  
+                  <span class="amount"><strong><span class="price">2.00</span> V.H.</strong></span>
+                </div>
+                
+              <div class="table-row">
+                  <div class="transaction">
+                    <div class="avatar-wrapper blue">
+                      <img src="res/img/people/mikail.png" alt="mikail">
+                    </div>
+                    <img style="padding: 0 0.5em;" src="res/img/icons/arrow-right.png" alt="to">
+                    <div class="avatar-wrapper blue">
+                      <img src="res/img/people/mikail.png" alt="mikail">
+                    </div>
+                  </div>
+  
+                  <span class="datetime">Nov. 16, 2017 6:24<span class="small">PM</span></span>
+  
+                  <span class="amount"><strong><span class="price">2.00</span> V.H.</strong></span>
+                </div>
+                
+              <div class="table-row">
+                  <div class="transaction">
+                    <div class="avatar-wrapper blue">
+                      <img src="res/img/people/mikail.png" alt="mikail">
+                    </div>
+                    <img style="padding: 0 0.5em;" src="res/img/icons/arrow-right.png" alt="to">
+                    <div class="avatar-wrapper blue">
+                      <img src="res/img/people/mikail.png" alt="mikail">
+                    </div>
+                  </div>
+  
+                  <span class="datetime">Nov. 16, 2017 6:24<span class="small">PM</span></span>
+  
+                  <span class="amount"><strong><span class="price">2.00</span> V.H.</strong></span>
+                </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </main>
+      <!-- .app-main -->
+
+    </div>
+
+  </div>
+
+</body>
+
+<script src="node_modules/jquery/dist/jquery.js" type="text/javascript"></script>
+<!-- jQuery -->
+<script src="node_modules/popper.js/dist/umd/popper.js" type="text/javascript"></script>
+<!-- Popper -->
+<script src="node_modules/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
+<!-- Bootstrap -->
+
+<script>
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>
+
+<!-- Custom jQuery -->
+<script src="res/js/index.js" type="text/javascript"></script>
+<!---->
+
+</html>

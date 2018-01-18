@@ -114,17 +114,16 @@ class BlankTrust(forms.ModelForm):
     }
 
     recipient_name = forms.CharField(label='Choose the trust receiver', required=True,
-                                     widget=forms.TextInput(attrs={'class': 'form-control typeahead'}))
+                                     widget=forms.TextInput(attrs={'class': 'typeahead'}))
 
-    weight = forms.IntegerField(label="Credit Limit (Measured in 'Village Hours'.)", required=True, min_value=0, widget=forms.NumberInput(attrs={
-        'class': 'form-control'}))
+    weight = forms.IntegerField(label="Credit Limit (Measured in 'Village Hours'.)",
+                                required=True, min_value=0, widget=forms.NumberInput(attrs={}))
 
     text = forms.CharField(label='Testimonial (This is a public statement)', required=False,
-                           widget=forms.Textarea(attrs={'class': 'form-control'}))
+                           widget=forms.Textarea(attrs={}))
 
     referral = forms.BooleanField(label="Refer This Person's Services to Friends? (Only refer a person if you have actually worked with them)", required=False,
-                                  widget=forms.CheckboxInput(attrs={'class': 'form-control',
-                                                                    'style': 'width: auto; box-shadow:none;'}))
+                                  widget=forms.CheckboxInput(attrs={'style': 'width: auto; box-shadow:none;'}))
 
     data_profile = forms.CharField(widget=forms.HiddenInput())
 

@@ -63,7 +63,7 @@
             </li>
               {% endif %}
             <li class="nav-item">
-              <a id="add-posting" class="nav-link" href="#"><img src="{% static 'new_template/res/img/icons/plus.png' %}" alt="add" data-toggle="modal" data-target="#new-posting-modal"></a>
+              <a id="add-posting" class="nav-link" href="#"><img src="{% static 'new_template/res/img/icons/plus.png' %}" alt="add" data-toggle="modal" data-target="#new-post-modal"></a>
             </li>
             <li class="nav-item">
               <a id="blank-trust-id" class="nav-link" href="{% url 'blank_trust_user' %}"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
@@ -226,16 +226,14 @@
 
             <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
 
-              <label class="custom-check" for="check-trusted">
-                  <input id="check-trusted" type="checkbox" name="trusted-check" value="trusted">
+              <label class="custom-check" for="id_trusted">
+                  <input id="id_trusted" type="checkbox" name="trusted" value="on">
                   <span class="btn-input-layout">
                     <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
                     <span class="btn-input-text">Trusted</span>
                   </span>
                 </label>
-
             </div>
-
           </div>
 
           <div class="row">
