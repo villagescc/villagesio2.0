@@ -19,6 +19,7 @@ from general.mail import send_notification
 from django.utils.translation import ugettext as _
 from feed.models import FeedItem
 from django.contrib.gis.db.models import Q
+from django.templatetags.static import static
 
 
 MESSAGES = {
@@ -268,7 +269,10 @@ def get_user_photo(request, profile_username):
         data['credit_limit'] = trust.weight
         data['text'] = trust.text
         data['updated'] = trust.updated
-    profile_photo_path = '/uploads/'+str(profile.photo)
+    if not profile.photo:
+        profile_photo_path = static('img/generic_user.png')
+    else:
+        profile_photo_path = '/uploads/'+str(profile.photo)
     data['profile_photo_path'] = profile_photo_path
     data['payment_list'] = payments
     data['max_amount'] = max_amount
@@ -299,13 +303,13 @@ def blank_trust(request):
     if request.method == 'POST':
         if not request.POST['data_profile']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
-            return django_render(request, 'blank_trust.html', {'form': form,
+            return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form,
                                                                'listing_form': listing_form,
                                                                'accounts': accounts})
         recipient = get_object_or_404(Profile, user__username=request.POST['data_profile'])
         if recipient == request.profile:
             messages.add_message(request, messages.ERROR, 'You cant send a trust to yourself')
-            return django_render(request, 'blank_trust.html', {'form': form,
+            return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form,
                                                                'listing_form': listing_form})
         try:
             endorsement = Endorsement.objects.get(endorser=request.profile, recipient=recipient)
@@ -314,7 +318,7 @@ def blank_trust(request):
         if 'delete' in request.POST and endorsement:
             endorsement.delete()
             messages.add_message(request, messages.INFO, 'Trust deleted')
-            return django_render(request, 'blank_trust.html', {'form': form})
+            return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form})
 
         form = BlankTrust(request.POST, instance=endorsement, endorser=request.profile, recipient=recipient)
         if form.is_valid():
@@ -327,19 +331,22 @@ def blank_trust(request):
                     new_referral.referrer = request.profile
                     new_referral.recipient = recipient
                     new_referral.save()
-            send_endorsement_notification(endorsement)
+            else:
+                existing_referral = Referral.objects.filter(referrer=request.profile, recipient=recipient)
+                if existing_referral:
+                    existing_referral.delete()
+            # send_endorsement_notification(endorsement)
             messages.add_message(request, messages.INFO, 'Trust saved!')
-            return django_render(request, 'blank_trust.html', {'form': form,
-                                                               'listing_form': listing_form})
+            return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form,
+                                                                               'listing_form': listing_form})
         else:
             messages.add_message(request, messages.ERROR, 'An error occurred, please verify.')
-            return django_render(request, 'blank_trust.html', {'form': form, 'listing_form': listing_form})
+            return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form, 'listing_form': listing_form})
     else:
         form = BlankTrust(instance=None, endorser=request.profile, recipient=None)
         profile = request.profile
         return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form, 'listing_form': listing_form,
-
-                                                           'accounts': accounts, 'profile': profile})
+                                                                           'accounts': accounts, 'profile': profile})
 @login_required()
 def blank_payment(request):
     listing_form = ListingsForms()
@@ -351,13 +358,13 @@ def blank_payment(request):
     if request.method == 'POST':
         if not request.POST['recipient']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
-            return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form})
+            return django_render(request, 'new_templates/07_Pay_001b.html', {'form': form, 'listing_form': listing_form})
         recipient = get_object_or_404(Profile, user__username=request.POST['recipient'])
         max_amount = ripple.max_payment(request.profile, recipient)
         form = BlankPaymentForm(request.POST, max_ripple=max_amount)
         if recipient == request.profile:
             messages.add_message(request, messages.ERROR, 'You cant send a payment to yourself')
-            return django_render(request, 'blank_payment.html', {'form': form,
+            return django_render(request, 'new_templates/07_Pay_001b.html', {'form': form,
                                                                  'listing_form': listing_form})
         can_ripple = max_amount > 0
         # if not can_ripple and request.POST['ripple'] == 'routed':
@@ -373,10 +380,10 @@ def blank_payment(request):
         return HttpResponseRedirect(reverse('blank_payment_user'))
     else:
         form = BlankPaymentForm(max_ripple=None, initial=request.GET)
-        return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,
-                                                             'received_payments': received_payments,
-                                                             'made_payments': made_payments,
-                                                             'all_payments': all_payments})
+        return django_render(request, 'new_templates/07_Pay_001b.html', {'form': form, 'listing_form': listing_form,
+                                                                         'received_payments': received_payments,
+                                                                         'made_payments': made_payments,
+                                                                         'all_payments': all_payments})
 
 
 def send_payment_notification(payment):

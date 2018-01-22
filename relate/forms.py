@@ -123,7 +123,7 @@ class BlankTrust(forms.ModelForm):
                            widget=forms.Textarea(attrs={}))
 
     referral = forms.BooleanField(label="Refer This Person's Services to Friends? (Only refer a person if you have actually worked with them)", required=False,
-                                  widget=forms.CheckboxInput(attrs={'style': 'width: auto; box-shadow:none;'}))
+                                  widget=forms.CheckboxInput())
 
     data_profile = forms.CharField(widget=forms.HiddenInput())
 

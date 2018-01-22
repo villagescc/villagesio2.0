@@ -102,6 +102,7 @@
           </a>
         </div>
       </nav>
+    {% include 'messages.html' %}
     </header>
     <!-- .app-header -->
 
@@ -150,18 +151,22 @@
               <p>Let your friends know that you trust a promise from them and they can use their credit with your network.</p>
 
               <div class="trust-data">
-                <form action="" id="trust-form">
-
-                  <div class="receiver">
-                    <h4 class="mt-1">Choose Trust Receiver</h4>
+                <form id="trust-form" action="{% url 'blank_trust_user' %}" method="POST">
+                    {% csrf_token %}
                     <div class="receiver-box" id="div-recipient-name">
+                        <h4 class="mt-1">Choose Trust Receiver</h4>
                         {{ form.recipient_name }}
-{#                      <div class="d-flex justify-content-start align-items-center">#}
-{#                        <div class="avatar-wrapper blue big mr-3">#}
-{#                          <img src="{% static 'new_template/res/img/people/mikail.png' %}" alt="mikail">#}
-{#                        </div>#}
-{#                        <span>Mikail Jhonson</span>#}
-{#                      </div>#}
+                        <h4></h4>
+                    </div>
+                  <div class="receiver">
+                    <div class="receiver-box" id="div-profile-photo" hidden>
+                      <div id="div-profile-image" class="d-flex justify-content-start align-items-center">
+                        <div class="avatar-wrapper blue big mr-3">
+                          <img id="profile-image" src="{% static 'new_template/res/img/people/mikail.png' %}" alt="mikail"
+                          class="rounded-circle" width="43px" height="82px">
+                        </div>
+                        <span id="name-profile-image"></span>
+                      </div>
                     </div>
                   </div>
 
@@ -183,10 +188,9 @@
                   <div class="reference">
                     <div class="d-flex justify-content-start align-items-center">
                       <label class="switch mr-3 mb-0">
-                        <input id="visibility" type="checkbox" checked>
+                        {{ form.referral }}
                         <span class="slider round"></span>
                       </label>
-                        {{ form.referral }}
                       <p style="margin-bottom: 0;">Refer This Person's Services to Friends?</p>
                     </div>
                     <p class="note">(Only refer a person if you have actually worked with them)</p>
@@ -197,10 +201,10 @@
                       <input class="btn btn-std btn-cancel" type="button" value="Cancel">
                     </div>
                     <div class="col-6">
-                      <input class="btn btn-std" type="submit" value="Save Payment">
+                      <input class="btn btn-std" id="save-trust" type="submit" value="Save Trust">
                     </div>
                   </div>
-
+                    {{ form.data_profile }}
                 </form>
               </div>
 
@@ -220,71 +224,27 @@
                 <span>Trust from You</span>
 
               </div>
+                {% for account in accounts %}
+                    <div class="table-row">
+                        <div class="avatar-wrapper blue">
+                            <img src="{% profile_image_url account.partner '60x60' %}" class="rounded-circle">
+                        </div>
+                    {{ account.partner }}
 
-              <div class="table-row">
-                <div class="avatar-wrapper blue">
-                  <img src="{% static 'new_template/res/img/people/mikail.png' %}" alt="mikail">
-                </div>
+                        {% if account.partner %}
+                            <span class="health">{{ account.health|default:"X" }}</span>
+                        {% endif %}
 
-                <span class="health">None</span>
+                        <span class="payments">{{ account.owed_to_you|default_if_none:"" }}</span>
 
-                <span class="payments">4.00</span>
-
-                <span class="amount">
-                  <span class="price">30.00</span> V.H.</span>
-              </div>
-
-              <div class="table-row">
-                <div class="avatar-wrapper blue">
-                  <img src="{% static 'new_template/res/img/people/mikail.png' %}" alt="mikail">
-                </div>
-
-                <span class="health">None</span>
-
-                <span class="payments">4.00</span>
-
-                <span class="amount">
-                  <span class="price">30.00</span> V.H.</span>
-              </div>
-
-              <div class="table-row">
-                <div class="avatar-wrapper blue">
-                  <img src="{% static 'new_template/res/img/people/mikail.png' %}" alt="mikail">
-                </div>
-
-                <span class="health">None</span>
-
-                <span class="payments">4.00</span>
-
-                <span class="amount">
-                  <span class="price">30.00</span> V.H.</span>
-              </div>
-
-              <div class="table-row">
-                <div class="avatar-wrapper blue">
-                  <img src="{% static 'new_template/res/img/people/mikail.png' %}" alt="mikail">
-                </div>
-
-                <span class="health">None</span>
-
-                <span class="payments">4.00</span>
-
-                <span class="amount">
-                  <span class="price">30.00</span> V.H.</span>
-              </div>
-
-              <div class="table-row">
-                <div class="avatar-wrapper blue">
-                  <img src="{% static 'new_template/res/img/people/mikail.png' %}" alt="mikail">
-                </div>
-
-                <span class="health">None</span>
-
-                <span class="payments">4.00</span>
-
-                <span class="amount">
-                  <span class="price">30.00</span> V.H.</span>
-              </div>
+                        <span class="amount">
+                    {% if account.endorsement %}
+                        <span class="price">{{ account.in_limit }} V.H.</span>
+                    {% elif account.partner %}
+                        <span class="price">0</span> V.H.</span>
+                    {% endif %}
+                    </div>
+                {% endfor %}
 
             </div>
 
@@ -367,9 +327,10 @@
                           $("#id_referral").prop('checked', true);
                       }
                   }
+                  $('#div-profile-photo').attr("hidden", false);
                   $('#profile-image').attr("src", e['data']['profile_photo_path']);
-                  $('#profile-image').attr("hidden", false);
-                  $('#label-profile-image').attr("hidden", false);
+                  debugger;
+                  $('#name-profile-image').text(e['data']['recipient']);
                   $('#spin-modal').fadeOut();
               },
               error: function (e){
