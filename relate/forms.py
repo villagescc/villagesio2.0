@@ -18,7 +18,7 @@ class EndorseForm(forms.ModelForm):
 
     weight = forms.IntegerField(label="Credit Limit (Measured in 'Village Hours'.)",
                                 required=True, min_value=0,
-                                widget=forms.NumberInput(attrs={'class': 'form-control', 'style': 'width: 82%'}))
+                                widget=forms.NumberInput(attrs={}))
 
     referral = forms.BooleanField(label="Refer This Person's Services to Friends? (Only refer a person if you have actually worked with them)",
                                   required=False,
@@ -32,7 +32,7 @@ class EndorseForm(forms.ModelForm):
         self.endorser = kwargs.pop('endorser')
         self.recipient = kwargs.pop('recipient')
         super(EndorseForm, self).__init__(*args, **kwargs)
-        self.fields['text'].widget = (forms.Textarea(attrs={'class': 'form-control', 'style': 'width: 570px; height: 215px;'}))
+        self.fields['text'].widget = (forms.Textarea(attrs={}))
         self.fields['text'].label = 'Testimonial (This is a public statement)'
 
     @property
@@ -75,7 +75,7 @@ class AcknowledgementForm(forms.Form):
     memo = forms.CharField(
         label=_("Testimonial"),
         required=False,
-        widget=forms.Textarea(attrs={'class': 'form-control'}))
+        widget=forms.Textarea(attrs={'style': 'width: 570px; height: 215px;'}))
 
     ERRORS = {
         'max_ripple': _("This is higher than the maximum possible routed "
@@ -114,7 +114,8 @@ class BlankTrust(forms.ModelForm):
     }
 
     recipient_name = forms.CharField(label='Choose the trust receiver', required=True,
-                                     widget=forms.TextInput(attrs={'class': 'typeahead'}))
+                                     widget=forms.TextInput(attrs={'class': 'typeahead',
+                                                                   'style': 'max-width: 100%'}))
 
     weight = forms.IntegerField(label="Credit Limit (Measured in 'Village Hours'.)",
                                 required=True, min_value=0, widget=forms.NumberInput(attrs={}))
@@ -166,7 +167,7 @@ class BlankPaymentForm(forms.Form):
 
     recipient = forms.ModelChoiceField(queryset=Profile.objects.all(),
                                        label='Choose the payment receiver', required=True,
-                                       widget=forms.TextInput(attrs={'class': 'form-control typeahead'}))
+                                       widget=forms.TextInput(attrs={'class': 'typeahead'}))
 
     ripple = forms.ChoiceField(
         label=_("Send"),
@@ -178,11 +179,11 @@ class BlankPaymentForm(forms.Form):
         label=_("Hours"),
         max_digits=PRECISION, decimal_places=SCALE,
         min_value=D('0.' + '0' * (SCALE - 1) + '1'),
-        widget=forms.NumberInput(attrs={'class': 'form-control'}))
+        widget=forms.NumberInput(attrs={}))
     memo = forms.CharField(
         label=_("Testimonial"),
         required=False,
-        widget=forms.Textarea(attrs={'class': 'form-control'}))
+        widget=forms.Textarea(attrs={'style': 'max-width: 100%; height: 100px;'}))
 
     ERRORS = {
         'max_ripple': _("This is higher than the maximum possible routed "
@@ -205,9 +206,12 @@ class BlankPaymentForm(forms.Form):
                     [self.ERRORS['max_ripple']])
         return data
 
-    def send_payment(self, payer, recipient, data):
-        # data = self.cleaned_data
-        routed = data.get('ripple') == ROUTED
+    @staticmethod
+    def send_payment(payer, recipient, data, can_ripple):
+        if can_ripple:
+            routed = True
+        else:
+            routed = False
         obj = ripple.pay(
             payer, recipient, float(data['amount']), data['memo'], routed=routed)
         # Create feed item

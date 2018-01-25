@@ -95,6 +95,7 @@ class RegistrationForm(UserCreationForm):
     def password(self):
         return self.cleaned_data['password1']
 
+
 RegistrationForm.base_fields.keyOrder = [
     'first_name', 'email', 'username', 'password1', 'password2']
 
@@ -222,9 +223,9 @@ class ProfileForm(forms.ModelForm):
 class ContactForm(forms.Form):
 
     contact_recipient_name = forms.CharField(label='Recipients Name', required=True,
-                                     widget=forms.TextInput(attrs={'class': 'form-control typeahead'}))
+                                     widget=forms.TextInput(attrs={'class': 'typeahead'}))
 
-    message = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
+    message = forms.CharField(widget=forms.Textarea(attrs={'style': 'height:100px;'}))
 
     data_profile = forms.CharField(widget=forms.HiddenInput(), required=False)
 

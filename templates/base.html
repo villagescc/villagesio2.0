@@ -127,7 +127,7 @@
 <div id="fb-root"></div>
 
 {% if request.user.is_authenticated %}
-    {% include 'new_templates/02_ProductList_001c.html' %}
+{#    {% include 'new_templates/02_ProductList_001c.html' %}#}
 {#    {% include 'frontend/plugs/post-login.html' %}#}
 {% else %}
     {% include 'plugs/navigation-pre-login.html' %}
@@ -135,7 +135,7 @@
 <div id="inner-flex-container">
     <header id="top-header">
     </header>
-    <section id="section-padding-base" style="padding-top: 100px;">
+    <section style="padding: 0 !important;">
     {% include 'messages.html' %}
         {% block content %}
         {% endblock %}

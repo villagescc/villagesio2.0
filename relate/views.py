@@ -347,6 +347,8 @@ def blank_trust(request):
         profile = request.profile
         return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form, 'listing_form': listing_form,
                                                                            'accounts': accounts, 'profile': profile})
+
+
 @login_required()
 def blank_payment(request):
     listing_form = ListingsForms()
@@ -373,7 +375,7 @@ def blank_payment(request):
         #     form = BlankPaymentForm(max_ripple=None, initial=request.GET)
         #     return django_render(request, 'blank_payment.html', {'form': form,
         #                                                          'listing_form': listing_form})
-        payment = form.send_payment(request.profile, recipient, request.POST)
+        payment = form.send_payment(request.profile, recipient, request.POST, can_ripple)
         create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
         send_payment_notification(payment)
         messages.add_message(request, messages.INFO, 'Payment sent.')

@@ -1,126 +1,51 @@
-<style>
+{% load staticfiles profile tag_utils %}
 
-.align-check-label {
-  display: block;
-  padding-left: 15px;
-  text-indent: -15px;
-}
-.align-check-input {
-  width: 13px;
-  height: 13px;
-  padding: 0;
-  margin:0;
-  vertical-align: bottom;
-  position: relative;
-  top: -1px;
-  *overflow: hidden;
-}
-
-.modal-body {
-    max-height: 100vh;
-    overflow-y: scroll;
-}
-</style>
-
-<!-- Trust Modal -->
+<!-- new post modal -->
 <form class="form-horizontal" id="new-trust-form" method="POST">
     {% csrf_token %}
-    <div id="new-trust-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <input type="text" id="profile-username" hidden>
-        <div class="modal-dialog">
+    <div class="modal fade" id="new-trust-modal" tabindex="-1" role="dialog" aria-labelledby="new-trust-modal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
-                    <h4 class="modal-title trust-modal-title" id="trust-modal-title"></h4>
+                    <h5 class="modal-title" id="new-trust-heading">New Trust</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="{% static 'new_template/res/img/icons/times.png' %}" alt="close">
+                    </button>
                 </div>
-                <div id="modaltext" class="modal-body">
-                    <div class="form-group">
-                        <div class="container-fluid">
-                            <label for="{{ trust_form.weight.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.weight.label }}</label>
-                            {{ trust_form.weight.errors }}
-                            <div class="input-group">
-                                {{ trust_form.weight }}
+                <div class="modal-body">
+                    <form class="modal-container">
+                        <div class="row">
+                            <div class="credit-limit col-12">
+                                <label>Credit Limit</label>
+                                <div class="d-flex">
+                                    {{ trust_form.weight }}
+                                    <span class="currency-wrapper">V.H.</span>
+                                </div>
                             </div>
-                            <div class="alert alert-warning collapse" id="error_id_weight"></div>
-                            <label for="{{ trust_form.text.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.text.label }}</label>
-                            {{ trust_form.text.errors }}
-                            <div class="input-group">
+                            <div class="testimonial col-12">
+                                <label>Testimonial</label>
                                 {{ trust_form.text }}
                             </div>
-                            <label for="{{ trust_form.referral.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.referral.label }}</label>
-                            {{ trust_form.referral.errors }}
-                            <div class="input-group">
-                                {{ trust_form.referral }}
+
+                            <div class="reference col-12">
+                                <div class="d-flex justify-content-start align-items-center">
+                                    <label class="switch mr-3 mb-0">
+                                        {{ trust_form.referral }}
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <p style="margin-bottom: 0;">Refer This Person's Services to Friends?</p>
+                                </div>
+                                <p class="note">(Only refer a person if you have actually worked with them)</p>
                             </div>
-                            <div class="alert alert-warning collapse" id="error_id_text"></div>
-                            <label for="{{ trust_form.anonymous.label }}" class="align-check-label {% if field.errors %}error{% endif %}"><div class="align-check-input">{{ trust_form.anonymous }}</div>{{ trust_form.anonymous.label }}</label>
-                            {{ trust_form.anonymous.errors }}
+
+                            <div class="col-12 col-sm-6 col-md-12 col-xl-3">
+                                <label>&nbsp;</label>
+                                <input type="submit" value="SEND" id="save-trust">
+                            </div>
                         </div>
-                    </div>
-                    <div class="alert alert-warning collapse" id="trust-msg"></div>
-                    <div class="modal-footer">
-                        <button type="submit" id="save-trust" class=" btn btn-success gradient save-button">
-                            <i class="fa fa-check"></i>Save Trust
-                        </button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </form>
-
-<script>
-    $("#save-trust").click(function(e) {
-        $('#save-trust').attr("disabled", true);
-        var profile_username = $("#profile-username").val();
-        var url = '/endorse/'+profile_username+'/';
-        console.log(url);
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: $('#new-trust-form').serialize(),
-            cache: false,
-            beforeSend: function (xhr) {
-                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            },
-            success: function(data){
-                if(data['data']['stat'] == 'ok'){
-                    var recipient = data['data']['recipient'];
-                    $('#trust-msg').html(data).fadeIn('slow');
-                    $('#trust-msg').html("<strong><p>Successfully sent trust to " +recipient+ "</p></strong>").fadeIn('slow');
-                    $('#trust-msg').delay(2500).fadeOut('slow');
-                    $('#save-trust').attr("disabled", false);
-                    $('#new-trust-modal').modal('hide');
-                    location.reload();
-                }
-                else if(data['data']['stat'] == 'error'){
-                    debugger;
-                    if('weight' in data['data']['errors']) {
-                        var error = data["data"]["errors"]["weight"];
-                        $('#trust-msg').html("<strong><p> Weight: " +error+ " Please verify </strong></p>").fadeIn('slow');
-                        $('#trust-msg').delay(2500).fadeOut('slow');
-                        $("#save-trust").attr("disabled", false);
-                    }
-                }
-            },
-            error: function (resp){
-                if(resp.status === 500) {
-                    showInternalServerError();
-                }
-            }
-        });
-        e.preventDefault();
-    });
-
-    $('#new-trust-modal').on('hidden.bs.modal', function (e) {
-        $(this)
-                .find("input,textarea,select")
-                .val('')
-                .end()
-                .find("input[type=checkbox], input[type=radio]")
-                .prop("checked", "")
-                .end();
-    })
-</script>

@@ -559,44 +559,7 @@
     });
 
 
-    $(".trust-modal").click(function (e) {
-        $('#spin-modal').fadeIn();
-        var profile_username = $(this).attr('data-profile-username');
-        $("#profile-username").val(profile_username);
-        var url = '/trust_ajax/'+profile_username;
-        $.ajax({
-            url: url,
-            type: 'GET',
-            cache: false,
-            success: function (data) {
-                if(data["data"]["stat"] == "error"){
-                    $('#error-modal-alert').text(data["data"]["error_message"]);
-                    $('#spin-modal').fadeOut();
-                    $('#error-modal').modal("show");
-                }
-                else if(data["data"]["stat"] == "ok"){
-                    $('#spin-modal').fadeOut();
-                    $('.trust-modal-title').text('Trust ' +profile_username);
-                    $("#new-trust-modal").modal("show");
-                }
-                else if(data["data"]["stat"] == "existing"){
-                    $('#id_weight').val(data['data']['weight']);
-                    $('#id_text').val(data['data']['text']);
-                    debugger;
-                    if(data["data"]["refer"]) {
-                        $("#id_referral").prop('checked', true)
-                    }
-                    $('#spin-modal').fadeOut();
-                    $('.trust-modal-title').text('Trust ' +profile_username);
-                    $("#new-trust-modal").modal("show");
-                }
-            },
-            error: function (data) {
-                $('#spin-modal').fadeOut();
-                showInternalServerError();
-            }
-        });
-    });
+
 
     $(".payment-modal").click(function (e) {
         $('#payment-loading-modal').modal("show");

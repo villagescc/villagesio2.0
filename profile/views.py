@@ -420,12 +420,12 @@ def contact(request, username):
     return locals()
 
 
-def undefined_contact(request, username=None):
+def undefined_contact(request):
     form = ContactForm()
     if request.method == 'POST' and not request.is_ajax():
         form = ContactForm(request.POST)
         if form.is_valid():
-            profile = Profile.objects.get(user__username=form.cleaned_data['data_profile'])
+            profile = Profile.objects.get(user__username=form.cleaned_data['contact_recipient_name'])
             form.send(sender=request.profile, recipient=profile)
             messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
             form = ContactForm()

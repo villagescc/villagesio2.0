@@ -154,19 +154,22 @@
 
                 <form action="{% url 'blank_payment_user' %}" method="POST" id="payment-form">
                   {% csrf_token %}
-                  <div class="transaction">
+                <div class="receiver-box" id="div-recipient">
+                    <h4>Recipient</h4>
+                    {{ form.recipient }}
+                  <div class="transaction" id="div-transaction-photos" hidden>
                     <div class="avatar-wrapper blue big">
                       <img src="{% profile_image_url request.user.profile '60x60' %}" class="rounded-circle" height="83px">
                     </div>
                     <img style="padding: 0 0.5em;" src="{% static 'new_template/res/img/icons/arrow-right.png' %}" alt="to">
                     <div class="avatar-wrapper blue big">
-                      <img src="{% profile_image_url request.user.profile '60x60' %}" class="rounded-circle" height="83px">
+                      <img id="img-payee" src="{% static 'img/generic_user.png' %}" class="rounded-circle" height="83px">
                     </div>
                   </div>
 
                   <div class="purchase-info">
-                    <h3>Conscious Sensuality</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <h3></h3>
+                    <p></p>
                   </div>
 
 {#                  <div class="payment-type">#}
@@ -191,10 +194,13 @@
 {#                    </div>#}
 {#                  </div>#}
 
+                    <label id="payment-info-message"></label>
+
                   <div class="payment-rate">
                     <h4>Hours | Local Rate: 2.00 V.H. ~ 4.00 V.H.</h4>
                     <div class="d-flex">
-                      <input type="number" name="rate" id="rate" placeholder="2.00">
+                        {{ form.amount }}
+{#                      <input type="number" name="rate" id="rate" placeholder="2.00">#}
                       <span class="currency-wrapper">V.H.</span>
                       <img src="{% static 'new_template/res/img/icons/info.png' %}" alt="more info" data-toggle="tooltip" data-placement="right" data-html="true" title="&lt;span class='tip-balloon'&gt;according to your local community, this is worth $20&lt;/span&gt;">
                     </div>
@@ -202,7 +208,8 @@
 
                   <div class="testimonial">
                     <h4>Testimonial</h4>
-                    <textarea name="testimonial" id="testimonial" cols="30" rows="10"></textarea>
+                      {{ form.memo }}
+{#                    <textarea name="testimonial" id="testimonial" cols="30" rows="10"></textarea>#}
                   </div>
 
                   <div class="row">
@@ -260,7 +267,186 @@
 
   </div>
 
+    <script>
+        var recipients = new Bloodhound({
+            datumTokenizer: function (datum) {
+                return Bloodhound.tokenizers.whitespace(datum.value);
+            },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                wildcard: '%QUERY',
+                url: "{% url 'get_recipients_data' %}?query=%QUERY",
+                transform: function (response) {
+                    return $.map(response.result, function (recipient) {
+                        $('#id_recipient').attr("data-profile-selected", recipient.username);
+                        return {
+                            value: recipient.username,
+                            suggest: recipient
+                        };
+                    });
+                }
+            }
+
+        });
+        $('#id_recipient').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 0
+        },
+        {
+            display: 'value',
+            source: recipients,
+            limit: 20,
+            templates: {
+                suggestion: function (data) {
+                    return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
+                }
+            }
+        });
+        var max_amount_span = $("#max-amount");
+        $("#id_recipient").bind('typeahead:selected', function (e) {
+            $.ajax({
+                url:'/get_user_photo/' + $("#id_recipient").val(),
+                type:'POST',
+                beforeSend: function (xhr) {
+                    $('#spin-modal').fadeIn();
+                    var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (e) {
+                    if(e['data']['has_trust']){
+                        $("#id_weight").val(e['data']['credit_limit']);
+                        $("#id_text").val(e['data']['text'])
+                }
+                debugger;
+                $('#div-transaction-photos').attr('hidden', false);
+                $('#img-payee').attr("src", e['data']['profile_photo_path']);
+                if(!e['data']['can_ripple']) {
+                    $("#payment-info-message").html('You do not have any more credit with this user. Your payment will only be able to be spent directly, with you. If this is not your intent, contact the recipient and ask them to raise your credit limit. This can be done after payment.')
+                }else if(e['data']['can_ripple']) {
+                    $("#payment-info-message").html("You can send a trusted payment of up to " + e['data']['max_amount'] + " hour(s) or a direct payment of any amount.");
+                }
+
+                $('#spin-modal').fadeOut();
+                },
+                error: function (e){
+                    if (e.status === 500) {
+                        showInternalServerError();
+                        $('#spin-modal').fadeOut();
+                    }
+                }
+            });
+        });
+
+        $("#blank-payment-form").submit(function (e) {
+            debugger;
+            if($("#form-submit-checker").attr("data-submit-checker") === "true"){
+                $("#form-submit-checker").attr("data-submit-checker", false);
+            } else {
+                e.preventDefault();
+                debugger;
+                var modal = $('#referralModal');
+                if($("#id_recipient").val() == '') {
+                    modal.find('.modal-body').html('Recipient is invalid');
+                    modal.modal();
+                }
+                if($("#id_amount").val() == '') {
+                    modal.find('.modal-body').html('Amount cannot be 0. Please verify');
+                    modal.find('.modal-footer').html('<button type="button" class="btn btn-secondary" id="not-refer" data-dismiss="modal"><i class="fa fa-arrow-left"></i>Close</button>');
+                    modal.modal();
+                }
+                else {
+                    if($("#boolean-referral").attr("data-referral") === "true") {
+                        $("#form-submit-checker").attr("data-submit-checker", true);
+                        $("#blank-payment-form").submit();
+                    } else {
+                        modal.modal();
+                    }
+                }
+            }
+        });
+
+    $("#save-payment").click(function (e) {
+        debugger;
+        var profile = $('#id_recipient').val();
+        $("#id_recipient").val(profile);
+        var url = '/pay/'+profile;
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: $("#blank-payment-form").serialize(),
+            beforeSend: function (xhr) {
+                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                if (data['referral'] === true) {
+
+                } else {
+                    showSuccessMessage('Payment sent')
+                }
+            },
+            error: function (data) {
+                console.log(data);
+                showFormErrors(data['responseJSON']['errors'])
+            }
+        });
+    });
+
+    $("#saveReferral").click(function () {
+        var profile = $('#id_recipient').val();
+        $.ajax({
+            url: "{% url 'referral_on_payment' %}",
+            data: JSON.stringify({'profile': profile}),
+            contentType: "application/json; charset=utf-8",
+            method: 'POST',
+            success: function() {
+                $("#form-submit-checker").attr("data-submit-checker", true);
+                $("#blank-payment-form").submit();
+            }
+        })
+    });
+
+    $("#not-refer").click(function (e) {
+        $("#form-submit-checker").attr("data-submit-checker", true);
+        $("#blank-payment-form").submit();
+    });
+
+    $("#table-filter-all").click(function (e) {
+        $("#table-payments-all").removeClass("hidden");
+        $("#table-made-payments").addClass("hidden");
+        $("#table-received-payments").addClass("hidden");
+    });
+
+    $("#table-filter-sent").click(function (e) {
+        $("#table-payments-all").addClass("hidden");
+        $("#table-made-payments").removeClass("hidden");
+        $("#table-received-payments").addClass("hidden");
+    });
+
+
+    $("#table-filter-received").click(function (e) {
+        $("#table-payments-all").addClass("hidden");
+        $("#table-made-payments").addClass("hidden");
+        $("#table-received-payments").removeClass("hidden");
+    })
+</script>
+
 </body>
+
+<style>
+    #div-recipient .tt-menu {
+        max-height: 150px;
+        max-width: 100%;
+        overflow-y: auto;
+        border-bottom: 1px solid #ccc;
+        background-color: #ffffff;
+    }
+    .twitter-typeahead {
+        max-width: 100%;
+        display: block !important;
+    }
+</style>
 
 {#<script src="node_modules/jquery/dist/jquery.js" type="text/javascript"></script>#}
 {#<!-- jQuery -->#}

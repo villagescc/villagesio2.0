@@ -1,101 +1,228 @@
-{% extends "profile_base.html" %}
-{% load i18n %}
-{% block content %}
+{% load staticfiles profile tag_utils %}
 
-        <style>
-        #div-recipient-name .tt-menu {
-            max-height: 150px;
-            width: 100%;
-            overflow-y: auto;
-            border-bottom: 1px solid #ccc;
-            background-color: #ffffff;
-        }
-    </style>
+<!DOCTYPE html>
+<html>
 
+<head>
+    <meta charset="utf-8">
+    <title>Product List | Villages</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'new_template/res/css/style.css' %}" type="text/css" media="all" />
+    <script src="{% static 'new_template/node_modules/jquery/dist/jquery.js' %}" type="text/javascript"></script>
+    <!-- jQuery -->
+    <script src="{% static 'new_template/node_modules/popper.js/dist/umd/popper.js' %}" type="text/javascript"></script>
+    <!-- Popper -->
+    <script src="{% static 'new_template/node_modules/bootstrap/dist/js/bootstrap.js' %}" type="text/javascript"></script>
+    <!-- Bootstrap -->
 
-    <form id="blank-contact-form" action="" method="post">
-        {% csrf_token %}
-        <div class="container">
-            <h2>{% blocktrans %}Contact {{ profile }}{% endblocktrans %}</h2>
-            <p class="feature">
-                {% blocktrans %}Your message will be forwarded
-                    to {{ profile }} by email.{% endblocktrans %}</p>
-            {% for field in form %}
-                {% if field.errors %}
-                    <div class="form-group">
-                        <label for="{{ field.label }}" class="error">{{ field.label }}</label>
-                        {{ field }}
-                        <div class="alert alert-warning message">
-                            {% for error in field.errors %}
-                                {{ error }}
-                            {% endfor %}
-                        </div>
+    <!-- Custom jQuery -->
+    <script src="{% static 'new_template/res/js/index.js' %}" type="text/javascript"></script>
+
+    <script src="{% static 'assets/typeahead.js/typeahead.jquery.min.js' %}"></script>
+    <script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>
+    <!---->
+</head>
+
+<body>
+
+<!-- svg sprites -->
+<svg style="width:0; height:0; position: absolute; top: -9999px;">
+    <symbol id="balance" viewbox="0 0 21 18">
+    </symbol>
+</svg>
+<!---->
+
+<div class="app-wrapper">
+
+    <header class="app-header">
+        <nav class="navbar navbar-expand-lg">
+
+            <a class="navbar-brand" href="{% url 'frontend:home' %}">
+                <img class="d-none d-sm-block" src="{% static 'new_template/res/img/logo_full.png' %}" alt="villages.io">
+                <img class="d-block d-sm-none" src="{% static 'new_template/res/img/logo.png' %}" alt="villages.io">
+            </a>
+
+            <div class="user-menu d-flex d-lg-none">
+                <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
+                <a class="user-link" href="#">
+                    <div class="avatar-wrapper">
+                        <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width="43px" height="44px"
+                             class="rounded-circle">
                     </div>
-                {% else %}
-                    <div class="form-group">
-                        {% if field.auto_id == 'id_contact_recipient_name' %}
-                            <div class="form-group" id="div-recipient-name">
-                                <label for="{{ field.label }}">{{ field.label }}</label>
-                                <br>
-                                {{ field }}
-                            </div>
-                        {% else %}
-                            <label for="{{ field.label }}">{{ field.label }}</label>
-                            {{ field }}
+                </a>
+            </div>
+
+            <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="primary-navbar">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            About Us
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'how_it_works' %}">How it works</a>
+                            <a class="dropdown-item" href="{% url 'motivation' %}">Motivation</a>
+                            <a class="dropdown-item" href="{% url 'privacy' %}">Privacy</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'contact_us' %}">Feedback</a>
                         </div>
-                {% endif %}
-                {% endif %}
-            {% endfor %}
+                    </li>
+                    {% if request %}
+                        <li class="balance-item">
+                            <img src="{% static 'new_template/res/img/icons/balance.png' %}" alt="balance">
+                            <span id="account-balance">{{ request.profile.overall_balance }}</span>
+                            <span id="account-currency">V.H.</span>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a id="add-posting" class="nav-link" href="#"><img src="{% static 'new_template/res/img/icons/plus.png' %}" alt="add" data-toggle="modal" data-target="#new-post-modal"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="blank-trust-id" class="nav-link" href="{% url 'blank_trust_user' %}"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blank_payment_user' %}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="wallet"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'undefined_contact' %}"><img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="inbox"></a>
+                    </li>
+                </ul>
+            </div>
 
-            <input id="selected-contact-recipient-value" hidden>
+            <div class="user-menu d-none d-lg-flex">
+                <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
+                <a class="user-link" href="#">
+                    <div class="avatar-wrapper">
+                        <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width=43px height=44px
+                             class="rounded-circle">
+                    </div>
+                </a>
+            </div>
+        </nav>
+        {% include 'messages.html' %}
+    </header>
+    <!-- .app-header -->
 
-            <tr>
-                <td><input type="submit" class="btn btn-primary" value="{% trans 'Send' %}"></td>
-            </tr>
-        </div>
-    </form>
+    <div class="app-view">
 
-    <script>
-        var recipients = new Bloodhound({
-            datumTokenizer: function (datum) {
-                return Bloodhound.tokenizers.whitespace(datum.value);
-            },
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: {
-                wildcard: '%QUERY',
-                url: "{% url 'get_recipients_data' %}?query=%QUERY",
-                transform: function (response) {
-                    return $.map(response.result, function (recipient) {
-                        $('#id_contact_recipient_name').attr("data-profile-selected", recipient.username);
-                        return {
-                            value: recipient.username,
-                            suggest: recipient
-                        };
-                    });
+        <aside class="app-sidebar">
+
+            <div class="cat-menu">
+                <a class="cat-item active" href="#">
+                    <div class="cat-item-icon">
+                        <img src="{% static 'new_template/res/img/icons/all_categories.png' %}" alt="All Categories">
+                    </div>
+                    <span class="cat-item-name">All Categories</span>
+                </a>
+                <a class="cat-item" href="#">
+                    <div class="cat-item-icon">
+                        <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/services.png' %}" alt="Services">
+                    </div>
+                    <span class="cat-item-name">Services</span>
+                </a>
+                <a class="cat-item" href="#">
+                    <div class="cat-item-icon">
+                        <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Products">
+                    </div>
+                    <span class="cat-item-name">Products</span>
+                </a>
+                <a class="cat-item" href="#">
+                    <div class="cat-item-icon">
+                        <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Housing">
+                    </div>
+                    <span class="cat-item-name">Housing</span>
+                </a>
+            </div>
+
+        </aside>
+        <main class="app-main">
+
+            <div class="trust-content">
+                <div class="row">
+                    <div class="col-12 col-xxl-8">
+                        <h2>Trust</h2>
+                        <p>Let your friends know that you trust a promise from them and they can use their credit with your network.</p>
+
+                    <div class="trust-data">
+                        <form id="trust-form" action="" method="POST">
+                            {% csrf_token %}
+                            <div class="receiver-box" id="div-recipient-name">
+                                <h4 class="mt-1">Choose contact receiver</h4>
+                                {{ form.contact_recipient_name }}
+                                <h4></h4>
+                            </div>
+                            <div class="testimonial">
+                                <h4>Message</h4>
+                                {{ form.message }}
+                            </div>
+
+                            <div class="col-3">
+                                <input class="btn btn-std" id="save-trust" type="submit" value="Send Contact">
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<style>
+    #div-recipient-name .tt-menu {
+        max-height: 150px;
+        width: 100%;
+        overflow-y: auto;
+        border-bottom: 1px solid #ccc;
+        background-color: #ffffff;
+    }
+</style>
+
+
+
+
+        <script>
+            var recipients = new Bloodhound({
+                datumTokenizer: function (datum) {
+                    return Bloodhound.tokenizers.whitespace(datum.value);
+                },
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    wildcard: '%QUERY',
+                    url: "{% url 'get_recipients_data' %}?query=%QUERY",
+                    transform: function (response) {
+                        return $.map(response.result, function (recipient) {
+                            $('#id_contact_recipient_name').attr("data-profile-selected", recipient.username);
+                            return {
+                                value: recipient.username,
+                                suggest: recipient
+                            };
+                        });
+                    }
                 }
-            }
 
-        });
-        $('#id_contact_recipient_name').typeahead({
-                hint: true,
-                highlight: true,
-                minLength: 0
-            },
-            {
-                display: 'value',
-                source: recipients,
-                limit: 20,
-                templates: {
-                suggestion: function (data) {
-                    debugger;
-                    return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
-                }
-            }
             });
-        debugger;
-        $("#blank-contact-form").submit(function (e) {
-            $("#id_data_profile").val($('#id_contact_recipient_name').val());
-        })
-    </script>
-
-{% endblock %}
+            $('#id_contact_recipient_name').typeahead({
+                    hint: true,
+                    highlight: true,
+                    minLength: 0
+                },
+                {
+                    display: 'value',
+                    source: recipients,
+                    limit: 20,
+                    templates: {
+                        suggestion: function (data) {
+                            debugger;
+                            return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
+                        }
+                    }
+                });
+            debugger;
+            $("#blank-contact-form").submit(function (e) {
+                $("#id_data_profile").val($('#id_contact_recipient_name').val());
+            })
+        </script>
