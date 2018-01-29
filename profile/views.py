@@ -34,6 +34,7 @@ from geo.models import Location
 from relate.models import Endorsement
 from feed.views import feed
 from general.mail import send_mail_from_system
+from listings.forms import ListingsForms
 
 # Session key to store invite code for later signing up.
 INVITE_CODE_KEY = 'invite_code'
@@ -319,7 +320,7 @@ def my_profile(request):
     else:
         referral_count = None
 
-    return django_render(request, 'my_profile.html',
+    return django_render(request, 'new_templates/04_My_Profile_001b.html',
                          {'profile': request.profile, 'listings': listings, 'endorsements_made': endorsements_made,
                           'endorsements_received': endorsements_received, 'offer_tags': offer_tags,
                           'request_tags': request_tags, 'teach_tags': teach_tags, 'learn_tags': learn_tags,
@@ -373,9 +374,9 @@ def profile(request, username):
             else:
                 referral_count = None
 
-            return django_render(request, 'profile.html',
-                                 {'profile_endorsements_made': profile_endorsements_made,
-                                  'profile_endorsements_received': profile_endorsements_received,
+            return django_render(request, 'new_templates/04_Profile_001b.html',
+                                 {'endorsements_made': profile_endorsements_made,
+                                  'endorsements_received': profile_endorsements_received,
                                   'account': account, 'listing_form': listing_form, 'profile': profile,
                                   'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form,
                                   'offer_tags':offer_tags, 'request_tags': request_tags, 'teach_tags': teach_tags,
@@ -422,6 +423,7 @@ def contact(request, username):
 
 def undefined_contact(request):
     form = ContactForm()
+    listing_form = ListingsForms()
     if request.method == 'POST' and not request.is_ajax():
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -441,7 +443,7 @@ def undefined_contact(request):
                 return JsonResponse({'msg': 'Success'})
             messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
             return JsonResponse({'msg': 'Success'})
-    return django_render(request, 'contact.html', {'form': form})
+    return django_render(request, 'contact.html', {'form': form, 'listing_form': listing_form})
 
 
 @login_required

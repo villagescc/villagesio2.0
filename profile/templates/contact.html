@@ -32,6 +32,11 @@
 </svg>
 <!---->
 
+{% include 'new_templates/03_NewPost_001b.html' %}
+{% include 'payment-loading-modal.html' %}
+{% include 'error-modal.html' %}
+{% include 'templates.html' %}
+
 <div class="app-wrapper">
 
     <header class="app-header">
@@ -93,14 +98,26 @@
             </div>
 
             <div class="user-menu d-none d-lg-flex">
-                <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
-                <a class="user-link" href="#">
-                    <div class="avatar-wrapper">
-                        <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width=43px height=44px
-                             class="rounded-circle">
-                    </div>
-                </a>
-            </div>
+              <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
+              <ul class="nav navbar-nav">
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <div class="avatar-wrapper blue">
+                              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width=43px height=60px
+                                   class="rounded-circle">
+                          </div>
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a>
+                          <a class="dropdown-item" href="{% url 'listing_management:manage_listings' %}">Manage Listing</a>
+                          <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="{% url 'accounts:settings' %}">Settings</a>
+                          <a class="dropdown-item" href="{% url 'management:management' %}">Management</a>
+                      </div>
+                  </li>
+              </ul>
+          </div>
         </nav>
         {% include 'messages.html' %}
     </header>
@@ -143,8 +160,8 @@
             <div class="trust-content">
                 <div class="row">
                     <div class="col-12 col-xxl-8">
-                        <h2>Trust</h2>
-                        <p>Let your friends know that you trust a promise from them and they can use their credit with your network.</p>
+                        <h2>Contact</h2>
+                        <p>Contact any person</p>
 
                     <div class="trust-data">
                         <form id="trust-form" action="" method="POST">

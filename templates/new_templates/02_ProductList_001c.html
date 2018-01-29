@@ -78,14 +78,27 @@
         </div>
 
         <div class="user-menu d-none d-lg-flex">
-          <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
-          <a class="user-link" href="#">
-            <div class="avatar-wrapper blue">
-              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width=43px height=69px
-                   class="rounded-circle">
-            </div>
-          </a>
-        </div>
+              <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
+              <ul class="nav navbar-nav">
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <div class="avatar-wrapper blue">
+                              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width=43px height=60px
+                                   class="rounded-circle">
+                          </div>
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a>
+                          <a class="dropdown-item" href="{% url 'listing_management:manage_listings' %}">Manage Listing</a>
+                          <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="{% url 'accounts:settings' %}">Settings</a>
+                          <a class="dropdown-item" href="{% url 'management:management' %}">Management</a>
+                          <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+                      </div>
+                  </li>
+              </ul>
+          </div>
       </nav>
     </header>
     {% include 'messages.html' %}
@@ -94,34 +107,40 @@
     <div class="app-view">
 
       <aside class="app-sidebar">
-
+      <div class="cat-menu">
         <div class="cat-menu">
-          <a class="cat-item active" href="#">
+          <a class="cat-item active" href="{% url 'frontend:home' %}">
             <div class="cat-item-icon">
               <img src="{% static 'new_template/res/img/icons/all_categories.png' %}" alt="All Categories">
             </div>
             <span class="cat-item-name">All Categories</span>
           </a>
-          <a class="cat-item" href="#">
+          <a class="cat-item" href="{% url 'frontend:home' 'SERVICES' %}">
             <div class="cat-item-icon">
               <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/services.png' %}" alt="Services">
             </div>
             <span class="cat-item-name">Services</span>
           </a>
-          <a class="cat-item" href="#">
+          <a class="cat-item" href="{% url 'frontend:home' 'PRODUCTS' %}">
             <div class="cat-item-icon">
               <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Products">
             </div>
             <span class="cat-item-name">Products</span>
           </a>
-          <a class="cat-item" href="#">
+          <a class="cat-item" href="{% url 'frontend:home' 'HOUSING' %}">
             <div class="cat-item-icon">
-              <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Housing">
+              <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/housing.png' %}" alt="Housing">
             </div>
             <span class="cat-item-name">Housing</span>
           </a>
+            <a class="cat-item" href="{% url 'frontend:home' 'RIDESHARE' %}">
+                <div class="cat-item-icon">
+                    <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Housing">
+                </div>
+                <span class="cat-item-name">Rideshare</span>
+            </a>
         </div>
-
+      </div>
       </aside>
       <!-- .app-sidebar -->
 
@@ -296,8 +315,9 @@
                 <div class="post-action">
 
                   <a class="action-menu-item trust-modal" data-profile-username="{{ each.user.profile.username }}" href="#"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like"></a>
-                  <a class="action-menu-item" href="#"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy"></a>
-                  <a class="action-menu-item" href="#"><img src="{% static 'new_template/res/img/icons/mail.png'%}" alt="contact"></a>
+                  <a class="action-menu-item" href="{% url 'blank_payment_user' %}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy"></a>
+                  <a class="action-menu-item contact-modal" data-profile-username="{{ each.user.profile.username }}"
+                     data-listing-title="{{ each.title }}" href="#"><img src="{% static 'new_template/res/img/icons/mail.png'%}" alt="contact"></a>
 
                 </div>
 

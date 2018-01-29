@@ -37,11 +37,8 @@ class FeedFilterForm(forms.Form):
         required=False, choices=RADIUS_CHOICES, coerce=int, empty_value=None,
         widget=forms.Select(attrs={}))
 
-    trusted = forms.BooleanField(required=False,
-                                 widget=forms.CheckboxInput(attrs={
-                                     'class': 'form-control checkbox-inline',
-                                     'style': 'vertical-align: middle; width: 15px;'
-                                 }))
+    trusted = forms.BooleanField(label='Trusted only', required=False,
+                                 widget=forms.CheckboxInput(attrs={}))
 
     referral_filter = forms.BooleanField(required=False,
                                          widget=forms.CheckboxInput(attrs={

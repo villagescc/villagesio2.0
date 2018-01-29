@@ -6,9 +6,8 @@
 <!-- Like navigation we need to swicth page based on the User auth conditions -->
 {% if request.user.is_authenticated %}
     {% include 'new_templates/02_ProductList_001c.html' %}
-{#    {% include 'frontend/plugs/post-login.html' %}#}
 {% else %}
-  {% include 'frontend/plugs/pre-login.html' %}
+  {% include 'new_templates/01_Homepage_001f.html' %}
 {% endif %}
 
 {% endblock %}

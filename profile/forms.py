@@ -25,27 +25,27 @@ ERRORS = {
 class RegistrationForm(UserCreationForm):
     # Parent class has username, password1, and password2.
 
-    password1 = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={}))
 
-    password2 = forms.CharField(label="Password confirm", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password2 = forms.CharField(label="Password confirm", widget=forms.PasswordInput(attrs={}))
 
     first_name = forms.CharField(
         max_length=100, required=False, label=_("Name"), help_text=_(
             "Name displayed to other users. You can change this later."),
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
+        widget=forms.TextInput(attrs={}))
 
     email = forms.EmailField(
         max_length=EmailField.MAX_EMAIL_LENGTH, label=_("Email"), help_text=_(
             "The address to receive notifications from Villages."),
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
+        widget=forms.TextInput(attrs={}))
     terms_of_service = forms.BooleanField(label='I agree with terms of service', required=True,
-                                          widget=forms.CheckboxInput(attrs={'class': 'form-control', 'style': 'width: auto; box-shadow:none;'}))
+                                          widget=forms.CheckboxInput(attrs={'style': 'width: auto; box-shadow:none;'}))
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         self.fields['username'].help_text = _(
             "Desired login name. You cannot change this.")
-        self.fields['username'].widget = forms.TextInput(attrs={'class': 'form-control'})
+        self.fields['username'].widget = forms.TextInput(attrs={})
         self.fields['username'].validators = [alphanumeric]
         self.fields['password1'].help_text = _("Desired password.")
     
@@ -203,16 +203,9 @@ class ProfileForm(forms.ModelForm):
         fields = ('name', 'photo', 'job', 'description')
 
         widgets = {
-            'name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'style': 'width: 100%',
-            }),
-            'description': forms.Textarea(attrs={
-                'class': 'form-control',
-            }),
-            'job': forms.TextInput(attrs={
-                'class': 'form-control',
-            })
+            'name': forms.TextInput(attrs={'style': 'width: 100%'}),
+            'description': forms.Textarea(attrs={'style': 'height: 150px;'}),
+            'job': forms.TextInput(attrs={})
         }
 
     def save(self):
@@ -225,7 +218,7 @@ class ContactForm(forms.Form):
     contact_recipient_name = forms.CharField(label='Recipients Name', required=True,
                                      widget=forms.TextInput(attrs={'class': 'typeahead'}))
 
-    message = forms.CharField(widget=forms.Textarea(attrs={'style': 'height:100px;'}))
+    message = forms.CharField(widget=forms.Textarea(attrs={'style': 'max-width: 100%; height:100px;'}))
 
     data_profile = forms.CharField(widget=forms.HiddenInput(), required=False)
 
@@ -245,7 +238,7 @@ class SettingsForm(forms.ModelForm):
     # username = forms.CharField(required=True, max_length=30, validators=[alphanumeric],
     #                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     # Email is required.
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}),
+    email = forms.EmailField(widget=forms.EmailInput(attrs={}),
                              max_length=EmailField.MAX_EMAIL_LENGTH)
 
     # endorsement_limited = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
@@ -256,7 +249,6 @@ class SettingsForm(forms.ModelForm):
 
         widgets = {
             'language': forms.Select(attrs={
-                'class': 'form-control',
                 'style': 'width: 100%',
             }),
         }
@@ -273,6 +265,5 @@ class FormProfileTag(forms.Form):
 
     tag = forms.CharField(required=False,
                           widget=forms.TextInput(attrs={
-                              'class': 'form-control',
                               'style': 'width: 100%',
                               'data-role': 'tagsinput'}))

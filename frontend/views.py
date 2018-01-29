@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
 # Forms
+from accounts.forms import UserForm
 from listings.forms import ListingsForms
 from listings.models import LISTING_TYPE_CHECK
 from feed.forms import FeedFilterForm, DATE_FORMAT
@@ -158,7 +159,7 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     url: /home
     """
     # max_amount = ripple.max_payment(request.profile, recipient)
-
+    sign_in_form = UserForm
     user_agent = get_user_agent(request)
     if user_agent.is_mobile:
         user_agent_type = 'mobile'
@@ -221,7 +222,7 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
                        'categories': categories_list, 'trust_form': trust_form,
                        'payment_form': payment_form, 'contact_form': contact_form,
                        'notification_number': notification_number,
-                       'number_of_pages': number_of_pages})
+                       'number_of_pages': number_of_pages, 'sign_in_form': sign_in_form})
     else:
         if request.method == 'POST':
             form = ListingsForms(request.POST, request.FILES)
@@ -288,7 +289,7 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
             'item_type_name': item_type_name, 'is_listing': True, 'url_params': url_params,
             'listing_items': listing_items, 'next_page_date': next_page_date, 'remaining_count': remaining_count,
             'next_page_param_str': next_page_param_str, 'listing_type_filter': type_filter,
-            'notification_number': notification_number})
+            'notification_number': notification_number, 'sign_in_form': sign_in_form})
 
 
 def map_visualization(request):

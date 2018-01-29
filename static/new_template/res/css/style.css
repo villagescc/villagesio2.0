@@ -7979,6 +7979,106 @@ p {
   #new-trust-modal .modal-dialog {
     padding-left: 0; } }
 
+
+/* new-contact-modal */
+#new-contact-modal .modal-dialog {
+  max-width: 650px;
+  width: 100%;
+  padding-left: 17px; }
+  #new-contact-modal .modal-dialog .modal-content {
+    background-color: #f9f9f9;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px; }
+    #new-contact-modal .modal-dialog .modal-content .modal-header {
+      border-bottom: none;
+      padding: 22px 30px; }
+      #new-contact-modal .modal-dialog .modal-content .modal-header .close {
+        padding: 8px;
+        margin: -2px -8px 0 auto; }
+      #new-contact-modal .modal-dialog .modal-content .modal-header h5 {
+        font-size: 1.875em;
+        font-weight: 300;
+        color: #8d8d8d; }
+    #new-contact-modal .modal-dialog .modal-content .modal-body {
+      padding: 30px; }
+      #new-contact-modal .modal-dialog .modal-content .modal-body label.inline {
+        text-decoration: underline;
+        cursor: pointer;
+        -webkit-transition: color 0.3s;
+        -moz-transition: color 0.3s;
+        -o-transition: color 0.3s;
+        transition: color 0.3s; }
+        #new-contact-modal .modal-dialog .modal-content .modal-body label.inline:hover {
+          color: #1d90b5; }
+      #new-contact-modal .modal-dialog .modal-content .modal-body label:not(.inline) {
+        margin-top: 1em;
+        font-size: 1.375em;
+        font-weight: 600;
+        color: #1d90b5; }
+        #new-contact-modal .modal-dialog .modal-content .modal-body label:not(.inline).switch {
+          margin-top: 0;
+          margin-bottom: 0; }
+      #new-contact-modal .modal-dialog .modal-content .modal-body input, #new-post-modal .modal-dialog .modal-content .modal-body select, #new-post-modal .modal-dialog .modal-content .modal-body textarea {
+        font-size: 1.375em;
+        font-weight: 300;
+        height: 3.18181818em; }
+      #new-contact-modal .modal-dialog .modal-content .modal-body #price {
+        width: auto; }
+      #new-contact-modal .modal-dialog .modal-content .modal-body .currency-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        background-color: #e1e1e1;
+        font-size: 1.375em;
+        font-weight: 600;
+        color: #8d8d8d; }
+      #new-contact-modal .modal-dialog .modal-content .modal-body textarea {
+        padding: 0.875em 0.75em;
+        height: 9.2375em; }
+      #new-contact-modal .modal-dialog .modal-content .modal-body .drag-and-drop-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-flow: row wrap;
+        padding: 2.1875em 0;
+        border: 3px dashed #919191;
+        text-align: center;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px; }
+        #new-contact-modal .modal-dialog .modal-content .modal-body .drag-and-drop-container input {
+          display: none; }
+        #new-contact-modal .modal-dialog .modal-content .modal-body .drag-and-drop-container img {
+          display: flex; }
+        #new-contact-modal .modal-dialog .modal-content .modal-body .drag-and-drop-container p {
+          margin-bottom: 0;
+          font-size: 1.125em;
+          color: #b0b0b0;
+          flex: 0 0 100%; }
+        #new-contact-modal .modal-dialog .modal-content .modal-body .drag-and-drop-container .action-call {
+          margin-top: 0.5em;
+          font-size: 1.375em;
+          font-weight: 700;
+          color: #8c99a5;
+          text-transform: uppercase; }
+        #new-contact-modal .modal-dialog .modal-content .modal-body .drag-and-drop-container label {
+          color: #8c99a5; }
+@media (max-width: 1599px) {
+  #new-contact-modal {
+    font-size: 0.9em; } }
+@media (max-width: 1199px) {
+  #new-contact-modal {
+    font-size: 0.8em; } }
+@media (max-width: 991px) {
+  #new-contact-modal {
+    font-size: 0.7em; } }
+@media (max-width: 575px) {
+  #new-contact-modal .modal-dialog {
+    padding-left: 0; } }
+
+
 /* profile-content */
 .profile-content {
   width: 100%;

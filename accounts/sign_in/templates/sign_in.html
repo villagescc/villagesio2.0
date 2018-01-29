@@ -1,6 +1,18 @@
-{% extends 'base.html' %}
-{% block content %}
-    <div class="page-header col-sm-12">
+<main class="app-main">
+
+        <div class="trust-content">
+
+          <div class="row">
+            <div class="col-12 col-xxl-8">
+
+              <h2>Trust</h2>
+              <p>Let your friends know that you trust a promise from them and they can use their credit with your network.</p>
+            </div>
+          </div>
+        </div>
+</main>
+
+<div class="page-header col-sm-12">
     {% if messages %}
         {% for message in messages %}
             {% if message.tags == 'success'%}
@@ -89,4 +101,3 @@
             $('.alert').fadeOut("medium");
         }, 3000);
     </script>
-{% endblock %}

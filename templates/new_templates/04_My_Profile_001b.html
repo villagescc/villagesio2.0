@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Profile | Villages</title>
+    <title>Your Profile | Villages</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'new_template/res/css/style.css' %}" type="text/css" media="all" />
     <script src="{% static 'new_template/node_modules/jquery/dist/jquery.js' %}" type="text/javascript"></script>
@@ -47,6 +47,16 @@
           <img class="d-block d-sm-none" src="{% static 'new_template/res/img/logo.png' %}" alt="villages.io">
         </a>
 
+        <div class="user-menu d-flex d-lg-none">
+          <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
+          <a class="user-link" href="#">
+            <div class="avatar-wrapper blue">
+              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width="43px" height="44px"
+                   class="rounded-circle">
+            </div>
+          </a>
+        </div>
+
         <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -68,7 +78,7 @@
               {% if request %}
             <li class="balance-item">
               <img src="{% static 'new_template/res/img/icons/balance.png' %}" alt="balance">
-              <span id="account-balance">{{ profile.overall_balance }}</span>
+              <span id="account-balance">{{ request.profile.overall_balance }}</span>
               <span id="account-currency">V.H.</span>
             </li>
               {% endif %}
@@ -122,31 +132,31 @@
                 <div class="user-cover" style="background-image: url('{% static 'new_template/res/img/posts/conscious-sensuality/cover.png' %}');"></div>
                 <div class="user-id">
                     <div class="avatar-wrapper big">
-                        <img src="{% profile_image_url profile '60x60' %}" alt="avatar" width="43px"
+                        <img src="{% profile_image_url request.profile '60x60' %}" alt="avatar" width="43px"
                              height="83px" class="rounded-circle">
                     </div>
-                    <h1>{{ profile.name }}</h1>
+                    <h1>{{ request.profile.name }}</h1>
                 </div>
                 <div class="user-data">
                     <div class="data-block">
                         <img src="{% static 'new_template/res/img/icons/balance_blue.png' %}" alt="balance">
-                        <span>{{ profile.overall_balance }}</span>
+                        <span>{{ request.profile.overall_balance }}</span>
                     </div>
                     <div class="data-block">
                         <img src="{% static 'new_template/res/img/icons/briefcase_blue.png' %}" alt="occupation">
-                        <span>{{ profile.job }}</span>
+                        <span>{{ request.profile.job }}</span>
                     </div>
                     <div class="data-block">
                         <img src="{% static 'new_template/res/img/icons/heart_blue.png' %}" alt="likes">
-                        <span>{{ profile.endorsement_count }}</span>
+                        <span>{{ request.profile.endorsement_count }}</span>
                     </div>
                     <div class="data-block">
                         <img src="{% static 'new_template/res/img/icons/map_blue.png' %}" alt="location">
-                        <span>{{ profile.location }}</span>
+                        <span>{{ request.profile.location }}</span>
                     </div>
                     <div class="data-block">
                         <img src="{% static 'new_template/res/img/icons/calendar_blue.png' %}" alt="date">
-                        <span>{{ profile.user.date_joined|naturalday }}</span>
+                        <span>{{ request.profile.user.date_joined|naturalday }}</span>
                     </div>
                 </div>
             </div>
@@ -219,11 +229,10 @@
 
                         <div class="row" style="margin-top: 5em;">
 
-                            {% if listings %}
-                                {% for each in listings %}
-
                             <div class="col-12 col-sm-6 col-md-12 col-lg-6 col-xl-4 col-xxl-3">
 
+                                {% if listings %}
+                                    {% for each in listings %}
                                         <div class="post-box">
 
                                             <div class="post-cover" style="background-image: url('{% product_image_url each '280x280' %}');">
@@ -256,9 +265,10 @@
                                                    data-listing-title="{{ each.title }}" href="#"><img src="{% static 'new_template/res/img/icons/mail.png'%}" alt="contact"></a>
                                             </div>
                                         </div>
-                            </div>
-                              {% endfor %}
+                                    {% endfor %}
                                 {% endif %}
+
+                            </div>
 
                         </div>
 
@@ -273,12 +283,12 @@
                                     <div class="endorsement-block">
 
                                         <div class="avatar-wrapper blue">
-                                            <img src="{% profile_image_url profile '60x60' %}" alt="avatar" width="43px"
+                                            <img src="{% profile_image_url request.profile '60x60' %}" alt="avatar" width="43px"
                                                  height="70px" class="rounded-circle" >
                                         </div>
 
                                         <div class="endorsement">
-                                            <p class="endorsement-flow">From <a href="{{ each_endorsement_received.endorser.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> to <a href="{{ each_endorsement_received.recipient.get_absolute_url }}">{{ profile.name }}</a></p>
+                                            <p class="endorsement-flow">From <a href="{{ each_endorsement_received.endorser.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> to <a href="{{ each_endorsement_received.recipient.get_absolute_url }}">{{ request.profile.name }}</a></p>
                                             <p class="endorsement-text">{{ each_endorsement_received.text }}</p>
                                         </div>
                                     </div>
@@ -298,7 +308,7 @@
                                 </div>
 
                                 <div class="endorsement">
-                                    <p class="endorsement-flow">From <a href="{{ profile.get_absolute_url }}">{{ profile }}</a> to <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">{{ each_endorsement_made.recipient.name }}</a></p>
+                                    <p class="endorsement-flow">From <a href="{{ request.profile.get_absolute_url }}">{{ request.profile }}</a> to <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">{{ each_endorsement_made.recipient.name }}</a></p>
                                     <p class="endorsement-text">{{ each_endorsement_made.text }}</p>
                                 </div>
 
@@ -320,105 +330,6 @@
     </div>
 
 </div>
-
-<script>
-    $(".trust-modal").click(function (e) {
-        $('#spin-modal').fadeIn();
-        var profile_username = $(this).attr('data-profile-username');
-        $("#profile-username").val(profile_username);
-        var url = '/trust_ajax/'+profile_username;
-        $.ajax({
-            url: url,
-            type: 'GET',
-            cache: false,
-            success: function (data) {
-                if(data["data"]["stat"] == "error"){
-                    $('#error-modal-alert').text(data["data"]["error_message"]);
-                    $('#spin-modal').fadeOut();
-                    $('#error-modal').modal("show");
-                }
-                else if(data["data"]["stat"] == "ok"){
-                    $('#spin-modal').fadeOut();
-                    $('#new-trust-heading').text('Trust ' +profile_username);
-                    $("#new-trust-modal").modal("show");
-                }
-                else if(data["data"]["stat"] == "existing"){
-                    $('#id_weight').val(data['data']['weight']);
-                    $('#id_text').val(data['data']['text']);
-                    debugger;
-                    if(data["data"]["refer"]) {
-                        $("#id_referral").prop('checked', true)
-                    }
-                    $('#spin-modal').fadeOut();
-                    $('.trust-modal-title').text('Trust ' +profile_username);
-                    $("#new-trust-modal").modal("show");
-                }
-            },
-            error: function (data) {
-                $('#spin-modal').fadeOut();
-                showInternalServerError();
-            }
-        });
-    });
-
-    $(".payment-modal").click(function (e) {
-        $('#payment-loading-modal').modal("show");
-        $('#spin-modal').fadeIn();
-        var profile_username = $(this).attr('data-profile-username');
-        $("#profile-username").val(profile_username);
-        var url = '/acknowledge_ajax/'+profile_username;
-        console.log(url);
-        $.ajax({
-            url: url,
-            type: 'GET',
-            cache: false,
-            success: function (data) {
-                if(data["data"]["stat"] != "ok"){
-                    $('#error-modal-alert').text(data["data"]["stat"]);
-                    $('#spin-modal').fadeOut();
-                    $('#error-modal-alert').modal("show");
-                }
-                else if(!data['data']['can_ripple']){
-                    $('label[for="id_ripple_0"]').closest('li').hide();
-                    $('#id_ripple_1').attr('checked', true);
-                    $('.ripple-hours').html("There are no available paths through the trust network to <strong>"+data['data']['recipient']+"</strong>, so you can only send direct acknowledgement.")
-                    $('#spin-modal').fadeOut();
-                    $('#payment-loading-modal').modal("hide");
-                    $("#new-payment-modal").modal("show");
-                }else if(data["data"]["can_ripple"]){
-                    $('#id_ripple_0').attr('checked', true);
-                    $('.ripple-hours').html("You can send a trusted acknowledgement of up to " + data['data']['max_amount'] + " hour(s) or a direct acknowledgement of any amount.")
-                    $('#spin-modal').fadeOut();
-                    $('#payment-loading-modal').modal("hide");
-                    $("#new-payment-modal").modal("show");
-                }
-            },
-
-            error: function (data) {
-                debugger;
-                $('#spin-modal').fadeOut();
-                showInternalServerError();
-            }
-        });
-        e.preventDefault();
-    });
-
-    $(".contact-modal").click(function (e) {
-        $('#spin-modal').fadeIn();
-        var profile_username = $(this).attr('data-profile-username');
-        var listing_title = $(this).attr('data-listing-title');
-        $("#profile-username").val(profile_username);
-        $("#listing-title").val(listing_title);
-        $('#contact-modal-title').text('Contact '+profile_username);
-        $('#spin-modal').fadeOut();
-        $("#new-contact-modal").modal("show");
-    });
-
-    $('.menu-group div').click(function () {
-        var menu = $(this).parent().find('ul');
-        menu.slideToggle();
-    });
-</script>
 
 </body>
 
