@@ -31,8 +31,8 @@
           <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
           <a class="user-link" href="#">
             <div class="avatar-wrapper blue">
-              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width="43px" height="44px"
-                   class="rounded-circle">
+              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%" width="200px"
+                   style="position: relative; border-radius: 50%; overflow: hidden;">
             </div>
           </a>
         </div>
@@ -83,8 +83,8 @@
                   <li class="nav-item dropdown">
                       <a class="nav-link dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <div class="avatar-wrapper blue">
-                              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width=43px height=60px
-                                   class="rounded-circle">
+                              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%" width="200px"
+                                   style="position: relative; border-radius: 50%; overflow: hidden;" >
                           </div>
                       </a>
                       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -188,15 +188,16 @@
 
             </div>
 
-{#            <div class="col-12 col-xs-6 col-md-4 col-lg-4 col-xxl-2">#}
-{##}
-{#              <select class="filter-input" name="place">#}
-{#                  <option value="anywhere" selected>Anywhere</option>#}
-{#                  <option value="option-2">Option 2</option>#}
-{#                  <option value="option-3">Option 3</option>#}
-{#                </select>#}
-{##}
-{#            </div>#}
+            <div class="col-12 col-xs-6 col-md-4 col-lg-4 col-xxl-2">
+              <select class="filter-input" id="id_radius" name="radius">
+                  <option value="-1" selected>Anywhere</option>
+                  <option value="1000">Within 1 km</option>
+                  <option value="5000">Within 5 km</option>
+                  <option value="10000">Within 10 km</option>
+                  <option value="50000">Within 50 km</option>
+                </select>
+
+            </div>
 
             <div class="col-12 col-sm-8 col-md-8 col-lg-6 col-xxl-3">
 
@@ -291,14 +292,13 @@
 
                   <span class="type">{{ each.listing_type }}</span>
                   <span class="price">{{ each.price }} VH</span>
-                  <span class="bookmark bookmarked"></span>
 
                 </div>
 
                 <div class="post-content">
 
-                  <div class="avatar-thumbnail" style="background-image: url('{% profile_image_url each.user.profile '60x60' %}')">
-                    <img class="trusted-icon rounded-circle" src="{% static 'new_template/res/img/icons/trusted-icon.png' %}"
+                  <div class="avatar-thumbnail" style="background-image: url('{% profile_image_url each.user.profile '60x60' %}');">
+                    <img class="trusted-icon" src="{% static 'new_template/res/img/icons/trusted-icon.png' %}"
                          alt="trusted">
                   </div>
 

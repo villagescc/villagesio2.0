@@ -47,6 +47,16 @@
           <img class="d-block d-sm-none" src="{% static 'new_template/res/img/logo.png' %}" alt="villages.io">
         </a>
 
+      <div class="user-menu d-flex d-lg-none">
+          <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
+          <a class="user-link" href="#">
+            <div class="avatar-wrapper blue">
+              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%" width="200px"
+                   style="position: relative; border-radius: 50%; overflow: hidden;">
+            </div>
+          </a>
+        </div>
+
         <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -93,8 +103,8 @@
                   <li class="nav-item dropdown">
                       <a class="nav-link dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <div class="avatar-wrapper blue">
-                              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width=43px height=60px
-                                   class="rounded-circle">
+                              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%" width="200px"
+                                   style="position: relative; border-radius: 50%; overflow: hidden;" >
                           </div>
                       </a>
                       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -122,8 +132,8 @@
                 <div class="user-cover" style="background-image: url('{% static 'new_template/res/img/posts/conscious-sensuality/cover.png' %}');"></div>
                 <div class="user-id">
                     <div class="avatar-wrapper big">
-                        <img src="{% profile_image_url profile '60x60' %}" alt="avatar" width="43px"
-                             height="83px" class="rounded-circle">
+                        <img src="{% profile_image_url profile '60x60' %}" alt="avatar" height="100%" width="200px"
+                             style="position: relative; border-radius: 50%; overflow: hidden;">
                     </div>
                     <h1>{{ profile.name }}</h1>
                 </div>
@@ -273,8 +283,8 @@
                                     <div class="endorsement-block">
 
                                         <div class="avatar-wrapper blue">
-                                            <img src="{% profile_image_url profile '60x60' %}" alt="avatar" width="43px"
-                                                 height="70px" class="rounded-circle" >
+                                            <img src="{% profile_image_url each_endorsement_received.endorser '400x400' %}" alt="avatar" height="100%" width="200px"
+                                                 style="position: relative; border-radius: 50%; overflow: hidden;" >
                                         </div>
 
                                         <div class="endorsement">
@@ -293,8 +303,8 @@
                             <div class="endorsement-block">
 
                                 <div class="avatar-wrapper blue">
-                                    <img src="{% profile_image_url each_endorsement_made.recipient '60x60' %}" alt="avatar" width="43px"
-                                         height="70px" class="rounded-circle">
+                                    <img src="{% profile_image_url each_endorsement_made.recipient '60x60' %}" alt="avatar" height="100%" width="200px"
+                                                 style="position: relative; border-radius: 50%; overflow: hidden;">
                                 </div>
 
                                 <div class="endorsement">

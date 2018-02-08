@@ -49,12 +49,25 @@
 
             <div class="user-menu d-flex d-lg-none">
                 <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
-                <a class="user-link" href="#">
-                    <div class="avatar-wrapper">
-                        <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width="43px" height="44px"
-                             class="rounded-circle">
-                    </div>
-                </a>
+                <ul class="nav navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="avatar-wrapper blue">
+                                <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%" width="200px"
+                                     style="position: relative; border-radius: 50%; overflow: hidden;">
+                            </div>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a>
+                            <a class="dropdown-item" href="{% url 'listing_management:manage_listings' %}">Manage Listing</a>
+                            <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'accounts:settings' %}">Settings</a>
+                            <a class="dropdown-item" href="{% url 'management:management' %}">Management</a>
+                            <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+                        </div>
+                    </li>
+                </ul>
             </div>
 
             <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,8 +116,8 @@
                   <li class="nav-item dropdown">
                       <a class="nav-link dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <div class="avatar-wrapper blue">
-                              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width=43px height=60px
-                                   class="rounded-circle">
+                              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%" width="200px"
+                           style="position: relative; border-radius: 50%; overflow: hidden;">
                           </div>
                       </a>
                       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -260,11 +273,13 @@
                         <div class="table-row">
                             <div class="transaction">
                                 <div class="avatar-wrapper blue">
-                                    <img src="{% profile_image_url request.user.profile '60x60' %}" class="rounded-circle">
+                                    <img src="{% profile_image_url request.user.profile '60x60' %}" height="100%" width="200px"
+                                         style="position: relative; border-radius: 50%; overflow: hidden;">
                                 </div>
                                 <img style="padding: 0 0.5em;" src="{% static 'new_template/res/img/icons/arrow-right.png' %}" alt="to">
                                 <div class="avatar-wrapper blue">
-                                    <img src="{% static 'new_template/res/img/people/mikail.png' %}" alt="mikail">
+                                    <img src="{% static 'new_template/res/img/people/mikail.png' %}" alt="mikail" height="100%" width="200px"
+                                         style="position: relative; border-radius: 50%; overflow: hidden;">
                                 </div>
                             </div>
 

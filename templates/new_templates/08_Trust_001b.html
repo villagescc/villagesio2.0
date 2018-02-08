@@ -47,15 +47,15 @@
           <img class="d-block d-sm-none" src="{% static 'new_template/res/img/logo.png' %}" alt="villages.io">
         </a>
 
-        <div class="user-menu d-flex d-lg-none">
-          <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
-          <a class="user-link" href="#">
-            <div class="avatar-wrapper">
-              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width="43px" height="44px"
-                   class="rounded-circle">
-            </div>
-          </a>
-        </div>
+          <div class="user-menu d-flex d-lg-none">
+              <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
+              <a class="user-link" href="#">
+                  <div class="avatar-wrapper blue">
+                      <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%" width="200px"
+                           style="position: relative; border-radius: 50%; overflow: hidden;">
+                  </div>
+              </a>
+          </div>
 
         <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -103,8 +103,8 @@
                   <li class="nav-item dropdown">
                       <a class="nav-link dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <div class="avatar-wrapper blue">
-                              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width=43px height=60px
-                                   class="rounded-circle">
+                              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%" width="200px"
+                                   style="position: relative; border-radius: 50%; overflow: hidden;" >
                           </div>
                       </a>
                       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -245,7 +245,8 @@
                 {% for account in accounts %}
                     <div class="table-row">
                         <div class="avatar-wrapper blue">
-                            <img src="{% profile_image_url account.partner '60x60' %}" class="rounded-circle">
+                            <img src="{% profile_image_url account.partner '60x60' %}" height="100%" width="200px"
+                           style="position: relative; border-radius: 50%; overflow: hidden;">
                         </div>
                     {{ account.partner }}
 

@@ -283,8 +283,8 @@
                                     <div class="endorsement-block">
 
                                         <div class="avatar-wrapper blue">
-                                            <img src="{% profile_image_url request.profile '60x60' %}" alt="avatar" width="43px"
-                                                 height="70px" class="rounded-circle" >
+                                            <img src="{% profile_image_url each_endorsement_received.endorser '60x60' %}" alt="avatar" height="100%" width="200px"
+                                                 style="position: relative; border-radius: 50%; overflow: hidden;" >
                                         </div>
 
                                         <div class="endorsement">

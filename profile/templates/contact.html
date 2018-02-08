@@ -171,6 +171,17 @@
                                 {{ form.contact_recipient_name }}
                                 <h4></h4>
                             </div>
+                            <div class="receiver">
+                                <div class="receiver-box" id="div-profile-photo" hidden>
+                                    <div id="div-profile-image" class="d-flex justify-content-start align-items-center">
+                                        <div class="avatar-wrapper blue big mr-3">
+                                            <img id="profile-image" src="{% static 'new_template/res/img/people/mikail.png' %}" alt="mikail"
+                                                 class="rounded-circle" width="43px" height="82px">
+                                        </div>
+                                        <span id="name-profile-image"></span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="testimonial">
                                 <h4>Message</h4>
                                 {{ form.message }}
@@ -197,10 +208,6 @@
         background-color: #ffffff;
     }
 </style>
-
-
-
-
         <script>
             var recipients = new Bloodhound({
                 datumTokenizer: function (datum) {
@@ -238,7 +245,53 @@
                         }
                     }
                 });
-            debugger;
+
+            $("#id_contact_recipient_name").bind('typeahead:selected', function (e) {
+                $("#id_data_profile").val($("#id_contact_recipient_name").val());
+                $.ajax({
+                    url:'/get_user_photo/' + $("#id_contact_recipient_name").val(),
+                    type:'POST',
+                    data: {'profile_username': $("#id_contact_recipient_name").val()},
+                    beforeSend: function (xhr) {
+                        $('#spin-modal').fadeIn();
+                        var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    },
+                    success: function (e) {
+
+                        $("#id_weight").val('');
+                        $("#id_text").val('');
+                        $("#id_referral").prop('checked', false);
+
+
+                        if(e['data']['error']) {
+                            $('#error-modal-alert').text(e["data"]["error_message"]);
+                            $('#spin-modal').fadeOut();
+                            $('#error-modal').modal("show");
+                            location.reload();
+                        }
+                        if(e['data']['has_trust']){
+                            $("#id_weight").val(e['data']['credit_limit']);
+                            $("#id_text").val(e['data']['text']);
+                            if(e['data']['refer']){
+                                $("#id_referral").prop('checked', true);
+                            }
+                        }
+                        $('#div-profile-photo').attr("hidden", false);
+                        $('#profile-image').attr("src", e['data']['profile_photo_path']);
+                        debugger;
+                        $('#name-profile-image').text(e['data']['recipient']);
+                        $('#spin-modal').fadeOut();
+                    },
+                    error: function (e){
+                        if (e.status === 500) {
+                            showInternalServerError();
+                            $('#spin-modal').fadeOut();
+                        }
+                    }
+                });
+            });
+
             $("#blank-contact-form").submit(function (e) {
                 $("#id_data_profile").val($('#id_contact_recipient_name').val());
             })
