@@ -1,5 +1,4 @@
-{% load relate %}
-<!-- Trust Modal -->
+{% load staticfiles profile tag_utils %}
 
 <style>
 @media (min-width: 1000px)/* The minimum width of the display area, such as a browser window*/
@@ -12,13 +11,15 @@
 
 <form class="form-horizontal" id="new-payment-form" method="POST">
     {% csrf_token %}
-    <div id="new-payment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="new-payment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="new-payment-modal" aria-hidden="true">
         <input type="text" id="profile-username" hidden>
-        <div class="modal-dialog">
+        <div class="modal-dialog" role="document">
             <div class="modal-content" id="payment-modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
-                    <h4 class="modal-title" id="payment-modal-title">Pay this person</h4>
+                    <h5 class="modal-title" id="new-trust-heading">New Trust</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="{% static 'new_template/res/img/icons/times.png' %}" alt="close">
+                    </button>
                 </div>
                 <div id="modaltext" class="modal-body">
                     <div class="form-group">

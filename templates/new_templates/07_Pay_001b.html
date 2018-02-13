@@ -260,7 +260,7 @@
                     <div class="col-12 col-xxl-4 mt-5 mt-xxl-0">
 
                         <h2>Last Payments | <a class="small" href="#">View More</a></h2>
-
+                        {% if all_payments %}
                         <div class="table-head">
 
                             <span>Payer</span>
@@ -269,7 +269,7 @@
                             <span>Amount</span>
 
                         </div>
-
+                        {% for each_all in all_payments %}
                         <div class="table-row">
                             <div class="transaction">
                                 <div class="avatar-wrapper blue">
@@ -278,15 +278,17 @@
                                 </div>
                                 <img style="padding: 0 0.5em;" src="{% static 'new_template/res/img/icons/arrow-right.png' %}" alt="to">
                                 <div class="avatar-wrapper blue">
-                                    <img src="{% static 'new_template/res/img/people/mikail.png' %}" alt="mikail" height="100%" width="200px"
+                                    <img src="{% profile_image_url each_all.item.recipient '60x60' %}" alt="mikail" height="100%" width="200px"
                                          style="position: relative; border-radius: 50%; overflow: hidden;">
                                 </div>
                             </div>
 
-                            <span class="datetime">Nov. 16, 2017 6:24<span class="small">PM</span></span>
+                            <span class="datetime">{{ each_all.item.date }}<span class="small">PM</span></span>
 
-                            <span class="amount"><strong><span class="price">2.00</span> V.H.</strong></span>
+                            <span class="amount"><strong><span class="price">{{ each_all.item.amount }}</span> V.H.</strong></span>
                         </div>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                 </div>
