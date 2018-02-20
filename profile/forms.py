@@ -205,7 +205,8 @@ class ProfileForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'style': 'width: 100%'}),
             'description': forms.Textarea(attrs={'style': 'height: 150px;'}),
-            'job': forms.TextInput(attrs={})
+            'job': forms.TextInput(attrs={}),
+            'photo': forms.FileInput()
         }
 
     def save(self):

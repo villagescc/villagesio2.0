@@ -172,9 +172,7 @@ class SignInUserRegister(View):
     form_class = RegistrationForm
 
     def get(self, request):
-        if not request.location:
-            return HttpResponseRedirect("%s?%s=%s" % (
-                reverse('locator'), REDIRECT_FIELD_NAME, request.path))
+
         form = self.form_class()
         # form.fields.pop('new_password')
         return django_render(request, 'accounts/signup.html', {'form': form})
@@ -214,6 +212,7 @@ class SignInUserRegister(View):
                 initial['email'] = invitation.to_email
             form = RegistrationForm(initial=initial)
         return django_render(request, 'accounts/signup.html', {'form': form})
+
 
 @login_required
 @render()

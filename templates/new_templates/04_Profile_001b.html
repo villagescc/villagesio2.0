@@ -38,15 +38,12 @@
 {% include 'templates.html' %}
 
 <div class="app-wrapper">
-
     <header class="app-header">
       <nav class="navbar navbar-expand-lg">
-
         <a class="navbar-brand" href="{% url 'frontend:home' %}">
           <img class="d-none d-sm-block" src="{% static 'new_template/res/img/logo_full.png' %}" alt="villages.io">
           <img class="d-block d-sm-none" src="{% static 'new_template/res/img/logo.png' %}" alt="villages.io">
         </a>
-
       <div class="user-menu d-flex d-lg-none">
           <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
           <a class="user-link" href="#">
@@ -56,7 +53,6 @@
             </div>
           </a>
         </div>
-
         <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -96,7 +92,6 @@
             </li>
           </ul>
         </div>
-
         <div class="user-menu d-none d-lg-flex">
               <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
               <ul class="nav navbar-nav">
@@ -123,13 +118,10 @@
     </header>
     {% include 'messages.html' %}
     <!-- .app-header -->
-
     <div class="app-view">
-
         <aside class="app-sidebar">
-
             <div class="user-menu">
-                <div class="user-cover" style="background-image: url('{% static 'new_template/res/img/posts/conscious-sensuality/cover.png' %}');"></div>
+                <div class="user-cover" style="background-image: url('{% static 'images/logo.png' %}');" data-toggle="tooltip" title="villages.cc"></div>
                 <div class="user-id">
                     <div class="avatar-wrapper big">
                         <img src="{% profile_image_url profile '60x60' %}" alt="avatar" height="100%" width="200px"

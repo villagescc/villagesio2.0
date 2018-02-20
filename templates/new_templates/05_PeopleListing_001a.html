@@ -345,18 +345,20 @@
 
             <div class="col-12">
               <div class="person-box">
-                <div class="avatar-wrapper blue">
+                <a href="{{ each.get_absolute_url }}"><div class="avatar-wrapper blue">
                   <img src="{% profile_image_url each '400x400' %}" alt="avatar" width="70px" height="70px"
                        class="rounded-circle" style="max-width: 100% !important;">
-                </div>
+                </div></a>
 
-                <div class="person-id">
-                  <h1>{{ each }}</h1>
-{#                  <div class="tag-container">#}
-{#                    <a class="tag" href="#">Tantric</a>#}
-{#                    <a class="tag" href="#">Therapy</a>#}
-{#                  </div>#}
-                </div>
+                  <a href="{{ each.get_absolute_url }}" style="text-decoration: none">
+                      <div class="person-id">
+                          <h1>{{ each }}</h1>
+                          {#                  <div class="tag-container">#}
+                          {#                    <a class="tag" href="#">Tantric</a>#}
+                          {#                    <a class="tag" href="#">Therapy</a>#}
+                          {#                  </div>#}
+                      </div>
+                  </a>
 
                 <div class="price-container">
                   <img src="{% static 'new_template/res/img/icons/balance_b.png' %}" alt="balance">
