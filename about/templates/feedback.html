@@ -1,43 +1,200 @@
-{% extends "base.html" %}
-{% load i18n %}
+{% load staticfiles profile tag_utils %}
 
-{% block title %}{% trans 'Feedback' %}{% endblock %}
+<!DOCTYPE html>
+<html>
 
-{% block content %}
+<head>
+    <meta charset="utf-8">
+    <title>Payment | Villages</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'new_template/res/css/style.css' %}" type="text/css" media="all" />
+    <script src="{% static 'new_template/node_modules/jquery/dist/jquery.js' %}" type="text/javascript"></script>
+    <!-- jQuery -->
+    <script src="{% static 'new_template/node_modules/popper.js/dist/umd/popper.js' %}" type="text/javascript"></script>
+    <!-- Popper -->
+    <script src="{% static 'new_template/node_modules/bootstrap/dist/js/bootstrap.js' %}" type="text/javascript"></script>
+    <!-- Bootstrap -->
+
+    <!-- Custom jQuery -->
+    <script src="{% static 'new_template/res/js/index.js' %}" type="text/javascript"></script>
+
+    <script src="{% static 'assets/typeahead.js/typeahead.jquery.min.js' %}"></script>
+    <script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>
+    <!---->
+</head>
+
+<body>
+
+<!-- svg sprites -->
+<svg style="width:0; height:0; position: absolute; top: -9999px;">
+    <symbol id="balance" viewbox="0 0 21 18">
+    </symbol>
+</svg>
+<!---->
+
+{% include 'new_templates/03_NewPost_001b.html' %}
+{% include 'payment-loading-modal.html' %}
+{% include 'error-modal.html' %}
+{% include 'templates.html' %}
+
+<div class="app-wrapper">
+
+    <header id="masthead" class="site-header">
+
+        <div class="page-wrapper">
+
+            <nav id="site-navigation" class="main-navigation">
+
+                <nav class="navbar navbar-expand-lg">
+
+                    <button class="navbar-toggler hidden-lg-up px-3" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fal fa-bars" aria-hidden="true"></i>
+                    </button>
+
+                    <div class="site-branding">
+                        <a href="{% url 'frontend:home' %}"><img class="img-fluid" src="{% static 'new_template/res/img/home/logo_full.png' %}" alt="Villages"></a>
+                    </div><!-- .site-branding -->
+
+                    <nav id="primary-navbar" class="collapse navbar-collapse">
+                        <ul id="primary-menu" class="navbar-nav">
+
+                            <li class="d-lg-none my-4 mx-3">
+                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                                    <i class="fal fa-arrow-left" aria-hidden="true"></i>
+                                </button>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="{% url 'frontend:home' %}" class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'how_it_works' %}" class="nav-link">About Us</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'contact_us' %}" class="nav-link">Contact Us</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <nav id="social-navbar">
+                        <ul class="nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                            </li>
+
+                        </ul>
+                    </nav>
+
+                    <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" class="btn-std btn-blue">Join Now</a>
+
+                    <a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}" class="btn-std btn-blue outline">Login</a>
+
+                </nav>
+
+            </nav><!-- #site-navigation -->
+
+        </div>
+
+    </header>
+    <!-- .app-header -->
+
+    <div class="app-view">
+        <main class="app-main">
+            <div class="payment-content">
+                <div class="row">
+                    <div class="col-12 col-xxl-8">
+                        <h2>Contact</h2>
+                        <div class="payment-data">
+                            <form action="" method="POST" id="payment-form">
+                                {% csrf_token %}
+                                <div class="receiver-box" id="div-recipient">
+                                    <h4>Feedback</h4>
+                                    {{ form.feedback }}
+                                    <div class="purchase-info">
+                                        <h3></h3>
+                                        <p></p>
+                                    </div>
+                                    <label id="payment-info-message"></label>
+
+                                    <div class="payment-rate">
+                                        <h4>Name</h4>
+                                        <div class="d-flex">
+                                            {{ form.name }}
+                                        </div>
+                                    </div>
+
+                                    <div class="testimonial">
+                                        <h4>Email</h4>
+                                        {{ form.email }}
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <input class="btn btn-std btn-cancel" type="button" value="Cancel">
+                                        </div>
+                                        <div class="col-6">
+                                            <input class="btn btn-std" type="submit" value="Send Feedback">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- .app-main -->
+
+    </div>
+
+</div>
+
+</body>
+
+<script src="{% static 'new_template/node_modules/jquery/dist/jquery.js' %}" type="text/javascript"></script>
+<!-- jQuery -->
+<script src="{% static 'new_template/node_modules/popper.js/dist/umd/popper.js' %}" type="text/javascript"></script>
+<!-- Popper -->
+<script src="{% static 'new_template/node_modules/bootstrap/dist/js/bootstrap.js' %}" type="text/javascript"></script>
+<!-- Bootstrap -->
+
+<!-- Font-Awesome -->
+<script defer src="{% static 'new_template/node_modules/font-awesome/packs/brands.js' %}"></script>
+<script defer src="{% static 'new_template/node_modules/font-awesome/packs/solid.js' %}"></script>
+<script defer src="{% static 'new_template/node_modules/font-awesome/packs/regular.js' %}"></script>
+<script defer src="{% static 'new_template/node_modules/font-awesome/packs/light.js' %}"></script>
+<script defer src="{% static 'new_template/node_modules/font-awesome/fontawesome.js' %}"></script>
+<!-- -->
+
+<!-- Custom jQuery -->
+<script src="{% static 'new_template/res/js/index.js' %}" type="text/javascript"></script>
+<!---->
 
 <script>
-    $("#section-padding-base").css('padding-top', '0')
+    $(document).ready(function() {
+        $("#primary-navbar").on("show.bs.collapse", function() {
+            $(".bg-menu-overlay").addClass("show");
+        });
+        $("#primary-navbar").on("hidden.bs.collapse", function() {
+            $(".bg-menu-overlay").removeClass("show");
+        });
+    });
 </script>
 
-<div align="center" style="text-align: justify; text-justify: inter-word; margin-left: 15px; margin-right: 15px;">
-<br><br><br><br><br>
-<h2>{% trans 'Feedback' %}</h2>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 
-<div class="feature">
-	<p>{% blocktrans %}Please let us know any comments or questions
-		you have about Villages.{% endblocktrans %}</p>
+<!-- Custom jQuery -->
+<script src="{% static 'new_template/res/js/index.js' %}" type="text/javascript"></script>
+<!---->
 
-	<p>{% blocktrans %}You can also email
-		<a href="mailto:web@villages.cc">web@villages.cc</a>.
-		Thanks!{% endblocktrans %}</p>
-</div>
-
-<form action="" method="post">
-	{% csrf_token %}
-	<table class="form">
-	{% if request.profile %}
-		<tr>
-			<th></th>
-			<td>{{ form.feedback.errors }}{{ form.feedback }}</td>
-		</tr>
-	{% else %}
-		{{ form }}
-	{% endif %}
-		<tr>
-			<th></th>
-			<td><input type="submit" value="{% trans 'Send Feedback' %}"></td>
-		</tr>
-	</table>
-</form>
-{% endblock %}
-</div>
+</html>

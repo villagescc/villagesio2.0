@@ -36,7 +36,7 @@
                     </button>
 
                     <div class="site-branding">
-                        <a href="#"><img class="img-fluid" src="{% static 'new_template/res/img/home/logo_full.png' %}" alt="Villages"></a>
+                        <a href="{% url 'frontend:home' %}"><img class="img-fluid" src="{% static 'new_template/res/img/home/logo_full.png' %}" alt="Villages"></a>
                     </div><!-- .site-branding -->
 
                     <nav id="primary-navbar" class="collapse navbar-collapse">
@@ -49,7 +49,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <a href="#" class="nav-link">Home</a>
+                                <a href="{% url 'frontend:home' %}" class="nav-link">Home</a>
                             </li>
                             <li class="nav-item">
                                 <a href="{% url 'how_it_works' %}" class="nav-link">About Us</a>
@@ -87,45 +87,48 @@
 
     </header><!-- #masthead -->
 
-    <div id="content" class="site-content">
-
-        <div class="page-content">
-
-            <section id="how-it-works">
+    <div class="app-view">
+        <main class="app-main">
+            <div class="payment-content">
+                <div class="row">
+                    <div class="col-12 col-xxl-8">
+                        <h2>How it works</h2>
+                        <div class="payment-data">
+                            <section id="how-it-works">
                 <div class="page-wrapper">
                     <div class="padded-container">
-                        <h2 class="section-title">How <strong>it works</strong></h2>
-                        <div class="row">
-                            <div align="center" style="text-align: justify; text-justify: inter-word; margin-left: 15px; margin-right: 15px;">
-                                <p>There are three main activities in
-                                    Villages:</p>
-                                <br>
+                        <div class="col-12">
+                            <div class="flow-wrapper">
+                                <h4 class="section-title"><strong>1. Endorse</strong></h4>
 
-                                <h4>1. Endorse</h4>
-
-                                <p>Endorse users you trust to build the trust network.
+                                <p class="caption">Endorse users you trust to build the trust network.
                                     When you endorse someone, it indicates that you trust them to
                                     provide value to the community.</p>
 
 
-                                <p>You choose a number of hours credit limit to endorse them with.
+                                <p class="caption">You choose a number of hours credit limit to endorse them with.
                                     Each heart allows them and people they trust to send you one hour's
                                     worth of acknowledgement (more on this below). You can also leave a
                                     recommendation message for other users to see.</p>
 
-                                <p>Starting out, you have a limited hours credit limit to give out.
+                                <p class="caption">Starting out, you have a limited hours credit limit to give out.
                                     This helps keep the value of your interactions with the system lower
                                     at first so it's not too big a deal if you screw up. You have five
                                     hours credit limit to give for every person that endorses you.</p>
+                            </div>
+                        </div>
 
-                                <h4>2. Interact</h4>
 
-                                <p>Use the Villages feed to find people and posts that interest you.
+                        <div class="col-12">
+                            <div class="flow-wrapper">
+                                <h4 class="section-title"><strong>2. Interact</strong></h4>
+
+                                <p class="caption">Use the Villages feed to find people and posts that interest you.
                                     Put your skills and interests in your profile so others can find you.
                                     Post items and services you want or have to offer.
                                     Meet up to help each other out.</p>
 
-                                <p>Villages helps you find people who have been endorsed by those you trust,
+                                <p class="caption">Villages helps you find people who have been endorsed by those you trust,
                                     so you can feel secure in knowing you are dealing with good people.
                                     Each user is given a reputation score that helps you know how
                                     trustworthy they are based on how well they are connected to
@@ -133,21 +136,27 @@
                                     and the more hours credit limit that have been given out as endorsements
                                     along those paths, the higher the reputation score.</p>
 
-                                <h4>3. Payment</h4>
+                            </div>
+                        </div>
 
-                                <p>When someone has helped you out, acknowledge that help on Villages.
+                        <div class="col-12">
+                            <div class="flow-wrapper">
+
+                                <h4 class="section-title"><strong>3. Payment</strong></h4>
+
+                                <p class="caption">When someone has helped you out, acknowledge that help on Villages.
                                     Villages acknowledgements are a currency denominated credit limit (In Village hours),
                                     consisting of gentle promises made to the person who helped you out to return the
                                     favour at some point in the future. When you have received acknowledgements, you
                                     can spend them to acknowledge others without having to issue any promises of your own.</p>
 
-                                <p>If there is a connection through the trust network from
+                                <p class="caption">If there is a connection through the trust network from
                                     you to the person you're acknowledging, Villages can transmit the acknowledgement
                                     through the network using <a href="http://ripple-project.org/">Ripple</a>, so that
                                     the person who helped you receives your acknowledgement as promises from someone they
                                     have endorsed, and your promises go to someone who has endorsed you.</p>
 
-                                <p>Sometimes you will be on a path connecting another person
+                                <p class="caption">Sometimes you will be on a path connecting another person
                                     to someone they're acknowledging. For example, your friend Anne, who you
                                     have endorsed, might want to acknowledge Bob, who has endorsed you, but
                                     does not know Anne. In this case, the system will find the path from Anne
@@ -155,7 +164,7 @@
                                     and you acknowledging Bob.
                                 </p>
 
-                                <p>Anne's acknowledgement might not have meant that much to Bob,
+                                <p class="caption">Anne's acknowledgement might not have meant that much to Bob,
                                     since he doesn't know her. Anne's acknowledgement has meaning to you, however,
                                     since you have endorsed her, and your acknowledgement has meaning to Bob,
                                     since you have endorsed him.</p>
@@ -164,7 +173,7 @@
                                 <p>(If anyone want to make a nice picture here, please
                                     <a href="{{ url_feedback }}">let me know</a>.)</p>
 
-                                <p>Acknowledgements are meant to represent that you have
+                                <p class="caption">Acknowledgements are meant to represent that you have
                                     received a gift, and would one day like to return the favour.
                                     They are not a debt to be collected, or an obligation that creates stress or worry.
                                     They are more like a reminder to yourself of something you would like to do, and a way
@@ -174,74 +183,90 @@
                                 <a name="hours"></a>
                                 <h4>A Note About Hours</h4>
 
-                                <p>In Villages, one hour of acknowledgement is meant to represent
+                                <p class="caption">In Villages, one hour of acknowledgement is meant to represent
                                     one hour of basic, unskilled labour, approximately equal in value to minimum wage.
                                     Those offering skills to the community that have taken years of work to develop can
                                     and should be acknowledged with multiple acknowledgement-hours for each hour of their
                                     time given, according to the value of what they have given in that time.</p>
 
-                                <p>If you need a dollar value for hours, our community,
+                                <p class="caption">If you need a dollar value for hours, our community,
                                     in Hawaii, generally agreed at a public community currency meeting that
                                     a 'village hour' is worth $15 USD.
                                     This will vary based on your local community and global economic situations</p>
+
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+                </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- .app-main -->
+
+    </div>
+
+    <div id="content" class="site-content">
+
+        <div class="page-content">
+
+
         </div>
-    </div><!-- #content -->
+    </div>
+</div><!-- #content -->
 
-    <footer id="colophon" class="site-footer">
-        <div class="page-wrapper">
+<footer id="colophon" class="site-footer">
+    <div class="page-wrapper">
 
-            <div class="site-info">
-                <div class="logo-link">
-                    <a href="#">
-                        <img class="img-fluid" src="{% static 'new_template/res/img/home/logo_grayscale.png' %}" alt="Villages">
-                    </a>
-                </div>
-                <div class="footer-nav">
+        <div class="site-info">
+            <div class="logo-link">
+                <a href="#">
+                    <img class="img-fluid" src="{% static 'new_template/res/img/home/logo_grayscale.png' %}" alt="Villages">
+                </a>
+            </div>
+            <div class="footer-nav">
 
-                    <div id="footer-navbar" class="menu-primary-navigation-container">
-                        <ul id="footer-menu" class="menu">
-                            <li class="menu-item">
-                                <a href="#">Home</a>
-                            </li>
-                            <li>
-                                <a href="{% url 'how_it_works' %}">About Us</a>
-                            </li>
-                            <li>
-                                <a href="{% url 'contact_us' %}">Contact Us</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="legal">
-                        <span>&copy; 2017 - Villages</span>
-                        <span>Privacy Policy &bullet; Terms of Service</span>
-                    </div>
-                </div>
-
-                <div class="footer-social">
-                    <ul class="social-navbar">
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="https://www.instagram.com"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                <div id="footer-navbar" class="menu-primary-navigation-container">
+                    <ul id="footer-menu" class="menu">
+                        <li class="menu-item">
+                            <a href="#">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="https://www.twitter.com"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                        <li>
+                            <a href="{% url 'how_it_works' %}">About Us</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="https://www.facebook.com"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                        <li>
+                            <a href="{% url 'contact_us' %}">Contact Us</a>
                         </li>
-
                     </ul>
                 </div>
-            </div><!-- .site-info -->
 
-        </div>
-    </footer><!-- #colophon -->
+                <div class="legal">
+                    <span>&copy; 2017 - Villages</span>
+                    <span>Privacy Policy &bullet; Terms of Service</span>
+                </div>
+            </div>
+
+            <div class="footer-social">
+                <ul class="social-navbar">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://www.instagram.com"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://www.twitter.com"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://www.facebook.com"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                    </li>
+
+                </ul>
+            </div>
+        </div><!-- .site-info -->
+
+    </div>
+</footer><!-- #colophon -->
 
 </div>
 

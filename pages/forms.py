@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from general.models import EmailField
 from general.mail import send_mail_to_admin
 
+
 class FeedbackForm(forms.Form):
     feedback = forms.CharField(label=_("Feedback"), widget=forms.Textarea)
     
@@ -19,13 +20,13 @@ class FeedbackForm(forms.Form):
 
 class AnonymousFeedbackForm(FeedbackForm):
     name = forms.CharField(label=_("Name"), required=False)
-    email = forms.EmailField(label=_("Email"),
-        max_length=EmailField.MAX_EMAIL_LENGTH)
+    email = forms.EmailField(label=_("Email"), max_length=EmailField.MAX_EMAIL_LENGTH)
 
     def get_sender(self):
         data = self.cleaned_data
         return data.get('name'), data['email']
-    
+
+
 AnonymousFeedbackForm.base_fields.keyOrder = ['name', 'email', 'feedback']
 
 class UserFeedbackForm(FeedbackForm):
