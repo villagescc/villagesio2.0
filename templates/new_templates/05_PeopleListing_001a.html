@@ -1,4 +1,4 @@
-{% load staticfiles profile tag_utils %}
+{% load staticfiles profile tag_utils i18n %}
 
 <!DOCTYPE html>
 <html>
@@ -395,6 +395,11 @@
           </div>
 
         </div>
+        {% if remaining_count %}
+            <p><a href="?{{ next_page_param_str }}">
+                {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
+            </a></p>
+        {% endif %}
 
       </main>
       <!-- .app-main -->
