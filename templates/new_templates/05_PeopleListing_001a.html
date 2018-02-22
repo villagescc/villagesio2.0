@@ -23,13 +23,18 @@
     <script src="{% static 'js/bootstrap-switch.min.js' %}"></script>
     <script src="{% static 'js/jquery.metisMenu.js' %}"></script>
     <script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
-{#    <script src="{% static 'assets/typeahead.js/typeahead.jquery.min.js' %}"></script>#}
-{#    <script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>#}
     <script src="{% static 'js/custom.js' %}"></script>
     <script src="{% static 'common.js' %}"></script>
     <script src="{% static 'geo.js' %}"></script>
     <script src="{% static 'assets/bootstrap-tagsinput/dist/bootstrap-tagsinput.js' %}"></script>
     <!---->
+
+    <!-- Custom jQuery -->
+    <script src="/static/res/js/HttpService.js" type="text/javascript"></script>
+    <script src="/static/res/js/Views.js" type="text/javascript"></script>
+    <script src="/static/res/js/PersonApi.js" type="text/javascript"></script>
+    <script src="/static/res/js/Person.js" type="text/javascript"></script>
+    <script src="/static/res/js/index.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -339,7 +344,7 @@
 
         <div class="search-results">
 
-          <div class="row">
+          <div class="row" id="person_list">
 
               {% for each in feed_items %}
 
