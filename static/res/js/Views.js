@@ -29,25 +29,25 @@ class PersonListViews extends Views{
     
                 <div class="person-id">
                   <h1>${data.fullname}</h1>
-                  <div class="tag-container">
-                    ${data['tag'].map(item => `
+                  <div class="tag-container">                  
+                    ${data['tags'].map(item => `
                         <a class="tag" href="#">${item}</a>
                     `)}
                   </div> 
                 </div>
         
                 <div class="price-container">
-                      <img src="/static/res/img/icons/balance_b.png" alt="balance">
+                      <img src="new_template/res/img/icons/balance_b.png" alt="balance">
                       <span class="price">${data.price} hours</span>
                 </div>
     
                 <div class="like-container">
-                  <img src="/static/res/img/icons/heart_b.png" alt="balance">
+                  <img src="new_template/res/img/icons/heart_b.png" alt="balance">
                   <span class="like-count">${data.likes} Hearts</span>
                 </div>
     
                 <div class="location-container">
-                  <img src="/static/res/img/icons/map_b.png" alt="location">
+                  <img src="new_template/res/img/icons/map_b.png" alt="location">
                   <span class="location">${data.address}</span>
                 </div>
     
@@ -76,7 +76,7 @@ class ProductListViews extends Views {
 
     template(data){
         return `
-            <div class="col-12 col-sm-6 col-md-12 col-lg-6 col-xl-4 col-xxl-3" id="div_listing_{{ each.user.profile.username }}">
+            <div class="col-12 col-sm-6 col-md-12 col-lg-6 col-xl-4 col-xxl-3" id="div_listing_${data.profile_username}">
 
               <div class="post-box">
 
@@ -88,14 +88,14 @@ class ProductListViews extends Views {
 
                 <div class="post-content">
                   <div class="avatar-thumbnail" style="background-image: url('/uploads/user/${data.profile_img}');">
-                    <img class="trusted-icon" src="{% static 'new_template/res/img/icons/trusted-icon.png' %}"
-                         alt="trusted">
+                    <!--<img class="trusted-icon" src="/static/new_template/res/img/icons/trusted-icon.png"-->
+                         <!--alt="trusted">-->
                   </div>
 
                   <h1>${data.title}</h1>
                   <p>${data.description}</p>
                   <div class="tag-container">
-                      ${data['tag'].map(item => `)}
+                      ${data['tags'].map(item => `)}
                           <a class="tag" href="#">{item}</a>
                       `)}
                   </div>
@@ -104,10 +104,10 @@ class ProductListViews extends Views {
 
                 <div class="post-action">
 
-                  <a class="action-menu-item trust-modal" data-profile-username="${data.profile_username}" href="#"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like"></a>
-                  <a class="action-menu-item payment-modal" data-profile-username="${data.profile_username}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy"></a>
+                  <a class="action-menu-item trust-modal" data-profile-username="${data.profile_username}" href="#"><img src="/static/new_template/res/img/icons/heart.png" alt="like"></a>
+                  <a class="action-menu-item payment-modal" data-profile-username="${data.profile_username}"><img src="/static/new_template/res/img/icons/wallet.png" alt="buy"></a>
                   <a class="action-menu-item contact-modal" data-profile-username="${data.profile_username}"
-                     data-listing-title="${data.title}" href="#"><img src="{% static 'new_template/res/img/icons/mail.png'%}" alt="contact"></a>
+                     data-listing-title="${data.title}" href="#"><img src="/static/new_template/res/img/icons/mail.png" alt="contact"></a>
 
                 </div>
 

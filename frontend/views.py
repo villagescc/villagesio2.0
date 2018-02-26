@@ -173,7 +173,7 @@ def parse_products(products):
 def product_infinite_scroll(request, offset):
     products = Listings.objects.all()[:int(offset) + 10]
     parsed_products = parse_products(products)
-    return JsonResponse(ujson.dumps(parsed_products), safe=False)
+    return HttpResponse(ujson.dumps(parsed_products), content_type='application/json')
 
 
 def home(request, type_filter=None, item_type=None, template=None, poster=None, recipient=None,

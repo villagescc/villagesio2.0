@@ -8,7 +8,7 @@ class PersonApi{
         return new Promise((resolve, reject) => {
             this.http.get('/product_infinite_scroll/10')
                 .then(data => resolve(data))
-                .catch(err => reject(err))
+                .catch(err => reject(err));
         })
     }
 

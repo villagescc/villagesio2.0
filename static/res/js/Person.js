@@ -6,7 +6,6 @@ class Person{
     }
 
     getPerson(){
-        debugger;
         this.personApi.getPersonList()
             .then(data => data.forEach(item => this.views.update(item)))
             .catch(err => console.log(err))
