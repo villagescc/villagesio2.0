@@ -1,53 +1,36 @@
-<style>
-    .modal-body {
-        max-height: 100vh;
-        overflow-y: scroll;
-    }
-</style>
-
+{% load staticfiles profile tag_utils %}
 
 <form class="form-horizontal" id="contact-form" method="POST">
     {% csrf_token %}
-    <div id="new-contact-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="new-contact-modal" tabindex="-1" role="dialog" aria-labelledby="new-contact-modal" aria-hidden="true">
         <input type="text" id="profile-username" hidden>
         <input type="text" id="listing-title" name="listing_title" hidden>
-        <div class="modal-dialog">
-            <div class="modal-content" id="payment-modal-content">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
-                    <h4 class="modal-title" id="contact-modal-title">Contact this person</h4>
+                    <h5 class="modal-title" id="new-trust-heading">New Contact</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="{% static 'new_template/res/img/icons/times.png' %}" alt="close">
+                    </button>
                 </div>
-                <div id="modaltext" class="modal-body">
-                    <div class="container">
-                        {% for field in contact_form %}
-                            {% if field.errors %}
-                                <div class="form-group">
-                                    <label id="label_{{ field.auto_id }}" for="{{ field.auto_id }}" class="error">{{ field.label }}</label>
-                                    {{ field }}
-                                    <div class="alert alert-warning message">
-                                        {% for error in field.errors %}
-                                            {{ error }}
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% else %}
-                                <div class="form-group">
-                                    <label for="label_{{ field.auto_id }}">{{ field.label }}</label>
-                                    {{ field }}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-
-                        <input id="selected-contact-recipient-value" hidden>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" id="send-contact" class=" btn btn-success gradient save-button">
-                            <i class="fa fa-check"></i>Send
-                        </button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                    </div>
-                    <div id="msg"></div>
+                <div class="modal-body">
+                    <form class="modal-container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h4>Message</h4>
+                                {{ contact_form.contact_recipient_name }}
+                                {{ contact_form.message }}
+                            </div>
+                            <input id="selected-contact-recipient-value" hidden>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-12 col-xl-3">
+                            <label>&nbsp;</label>
+                            <input type="submit" value="SEND" id="send-contact">
+                        </div>
+                        <div id="msg"></div>
+                    </form>
                 </div>
+            </div>
             </div>
         </div>
     </div>
@@ -55,33 +38,34 @@
 
 <script>
     $("#send-contact").click(function (e) {
-       $("#send-contact").attr("disabled", true);
-       debugger;
-       var profile_username = $("#profile-username").val();
-       $("#id_contact_recipient_name").val(profile_username);
-       var url = '/contact/'+profile_username+'/';
-       $.ajax({
-           url: url,
-           type: 'POST',
-           data: $("#contact-form").serialize(),
-           cache: false,
-           beforeSend: function (xhr) {
-               var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
-               xhr.setRequestHeader("X-CSRFToken", csrftoken);
-           },
-           success: function (data) {
-               $('#new-contact-modal').modal("hide");
-               showSuccessMessage('Contact sent');
-               $('#send-contact').attr("disabled", false);
-               location.reload();
-           },
-           error: function (resp) {
-               if (resp.status === 500) {
-                   showInternalServerError();
-               }
-           }
-       });
-       e.preventDefault();
+        $("#send-contact").attr("disabled", true);
+        debugger;
+        var profile_username = $("#profile-username").val();
+        $("#listing-title").val()
+        $("#id_contact_recipient_name").val(profile_username);
+        var url = '/contact/'+profile_username+'/';
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: $("#contact-form").serialize(),
+            cache: false,
+            beforeSend: function (xhr) {
+                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $('#new-contact-modal').modal("hide");
+                showSuccessMessage('Contact sent');
+                $('#send-contact').attr("disabled", false);
+                location.reload();
+            },
+            error: function (resp) {
+                if (resp.status === 500) {
+                    showInternalServerError();
+                }
+            }
+        });
+        e.preventDefault();
     });
     $("#id_contact_recipient_name").val($("#contact-modal-title").val());
     $("#id_contact_recipient_name").hide();

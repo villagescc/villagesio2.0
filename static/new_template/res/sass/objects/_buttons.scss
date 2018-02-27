@@ -1,0 +1,105 @@
+/* buttons */
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+	border: 1px solid;
+	border-color: #bbb;
+	border-radius: 3px;
+	background: #e6e6e6;
+	color: rgba(0, 0, 0, .8);
+	font-size: 0.75em;
+	line-height: 1;
+	padding: .6em 1em .4em;
+
+	&:hover {
+		border-color: #aaa;
+	}
+
+	&:active,
+	&:focus {
+		border-color: #bbb;
+	}
+}
+
+.btn-std {
+	@include crossTransition(all .3s);
+	@include crossBorder(2px);
+	font-size: 0.875rem;
+	font-size: 600;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	&:hover,
+	&:focus {
+		text-decoration: none;
+	}
+	&:focus {
+		outline: none;
+	}
+	position: relative;
+	overflow: hidden;
+	& .left-triangle,
+	& .right-triangle {
+		position: absolute;
+		top: 50%;
+		@include crossTransform(translateY(-50%));
+		display: block;
+		height: calc(100% - 4px);
+		width: 16px;
+		border-top: 33px solid transparent;
+		border-bottom: 33px solid transparent;
+	}
+	& .left-triangle {
+		left: 0;
+		border-left: 16px solid rgba(229, 229, 229, 0.5);
+	}
+	& .right-triangle {
+		right: 0;
+		border-right: 16px solid rgba(229, 229, 229, 0.5);
+	}
+}
+
+.btn-blue {
+	background-color: #1d90b5;
+	border: 2px solid #1d90b5;
+	color: #fff;
+	&:hover,
+	&:focus {
+		background-color: darken($color: #1d90b5, $amount: 10%);
+		border-color: darken($color: #1d90b5, $amount: 10%);
+		color: #fff;
+	}
+	&.outline {
+		background-color: transparent;
+		color: #1d90b5;
+		&:hover,
+		&:focus {
+			background-color: rgba(0, 0, 0, .1);
+			border-color: darken($color: #1d90b5, $amount: 10%);
+			color: #1d90b5;
+		}
+	}
+}
+
+.btn-white {
+	background-color: #fff;
+	border: 2px solid #fff;
+	color: #1d90b5;
+	&:hover,
+	&:focus {
+		background-color: darken($color: #fff, $amount: 10%);
+		border-color: darken($color: #fff, $amount: 10%);
+		color: #1d90b5;
+	}
+	&.outline {
+		background-color: transparent;
+		color: #fff;
+		&:hover,
+		&:focus {
+			background-color: rgba(0, 0, 0, .1);
+			border-color: darken($color: #fff, $amount: 10%);
+			color: #fff;
+		}
+	}
+}

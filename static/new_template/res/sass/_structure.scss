@@ -1,0 +1,59 @@
+/* general structure */
+body {
+  background-color: #f3f2f2;
+}
+
+.app-wrapper { // centralisation container
+  max-width: 1920px;
+  margin: 2.5em auto;
+  @include media-width-down(1920px) {
+    margin-top: 0;
+    margin-bottom: 0;
+  };
+}
+
+.app-view {
+  height: 900px;
+}
+
+.app-main {
+  height: 100%;
+  overflow: auto;
+  padding: 2em 30px;
+  flex: 1;
+  @include media-width-down(sm) {
+    overflow: visible;
+  }
+  @include media-width-down(xs) {
+    flex: 0 0 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+#page {
+  background-color: #fff;
+}
+
+.page-wrapper {
+	max-width: 1230px;
+	margin: auto;
+}
+
+.padded-container {
+	padding: 0 15px;
+}
+
+section {
+	padding: 4em 0;
+}
+
+.v-div {
+	height: 120px;
+	margin: 0 1em;
+	width: 3px;
+	background-color: #eaeaea;
+	@include media-width-down(sm) {
+		display: none;
+	}
+}

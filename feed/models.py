@@ -115,8 +115,9 @@ class FeedManager(GeoManager):
         for feed_item in query:
             item = feed_item.item
             if item:
-                item.trusted = getattr(feed_item, 'trusted', None)
-                items.append(item)
+                if type(feed_item.item) == Profile:
+                    item.trusted = getattr(feed_item, 'trusted', None)
+                    items.append(item)
             else:
                 # Orphan feed item -- delete.
                 # TODO: Move deletion of orphan feed items to cron job.

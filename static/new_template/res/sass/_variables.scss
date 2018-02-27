@@ -1,0 +1,19 @@
+/* colors */
+$color-primary: #000;
+
+
+/* fonts */
+$font-open_sans: 'Open Sans', sans-serif;
+
+
+/* bootstrap overrides */
+$grid-breakpoints: (
+  xxs:  0,
+  xs:   414px,  // iPhone
+  sm:   576px,
+  md:   768px,
+  lg:   992px,
+  xl:   1200px,
+  xxl:  1600px, // larger desktops
+  xxxl: 1920px // largest desktops
+);

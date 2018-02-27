@@ -112,7 +112,6 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'frontend.apps.FrontendConfig',
     'endorsement.apps.EndorsementConfig',
-    'payment_raja.apps.PaymentConfig',
     'categories.apps.CategoriesConfig'
 
 ]

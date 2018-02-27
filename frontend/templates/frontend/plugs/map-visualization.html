@@ -1,372 +1,336 @@
-{% extends 'base.html' %}
-{% load staticfiles profile relate i18n %}
-{% load tag_utils %}
+{% load staticfiles profile relate i18n tag_utils %}
 
-{% block content %}
+<!DOCTYPE html>
+<html>
 
-    <script src="{% static 'maps/oms.min.js' %}"></script>
+<head>
+    <meta charset="utf-8">
+    <title>Map | Villages</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'new_template/res/css/style.css' %}" type="text/css" media="all" />
+    <link href="{% static 'seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css' %}" rel="stylesheet">
     <link href="{% static 'maps/css/listing_map_style.css' %}" rel="stylesheet">
+    <script src="{% static 'maps/oms.min.js' %}"></script>
+    <script src="{% static 'new_template/node_modules/jquery/dist/jquery.js' %}" type="text/javascript"></script>
+    <script src="{% static 'new_template/node_modules/popper.js/dist/umd/popper.js' %}" type="text/javascript"></script>
+    <script src="{% static 'new_template/node_modules/bootstrap/dist/js/bootstrap.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/chart.js' %}"></script>
+    <script src="{% static 'js/toastr.js' %}"></script>
+    <script src="{% static 'geo.js' %}"></script>
+    <script src="{% static 'maps/search_listings_get.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA"></script>
+</head>
 
-    <form id="form-map-listing" method="get">
-        {% if user_agent_type == 'mobile' %}
-            <div class="col-md-2">
-                {% if not listing_items %}
-                    {{ form.radius }}
-                    <div><span><label>{{ form.trusted }}
-            <img src="{% static 'img/heart_icon.png' %}"
-                 alt="{% trans 'Heart icon = trusted user' %}">
-                        {% trans 'Trusted only' %}</label>
-        </span></div>
-                {% else %}
-                    {{ form_listing_settings.radius }}
-                    <span><label>{{ form_listing_settings.trusted }}
-            <img src="{% static 'img/heart_icon.png' %}"
-                 alt="{% trans 'Heart icon = trusted user' %}">
-                        {% trans 'Trusted only' %}</label>
-        </span>
-                {% endif %}
-                <div>
-                    {% if feed_items %}
-                        <a href="{% url 'frontend:home' %}">
-                            <img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
-                    {% elif listing_items %}
-                        <a href="{% url 'frontend:home_people' %}">
-                            <img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
-                    {% endif %}
-                </div>
-                <nav class="sidebar">
+<body>
 
-                    <ul>
-                        <li class="menu-group" style="padding-left: 0">
+  <!-- svg sprites -->
+  <svg style="width:0; height:0; position: absolute; top: -9999px;">
+      <symbol id="balance" viewbox="0 0 21 18">
+      </symbol>
+    </svg>
+  <!---->
 
+    <header class="app-header">
+      <nav class="navbar navbar-expand-lg">
 
-                            <div id="all_categories"><i class="fa fa-globe"></i>ALL CATEGORIES</div>
-                            <ul class="collapse">
-                                {% for each in categories %}
-                                    {% if each.categories_text == 'PRODUCTS' %}
-                                        <li class="menu-group">
-                                            <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
-                                            <ul>
-                                                <li><a href="{% url 'frontend:home' 'PRODUCTS' %}">ALL PRODUCTS</a></li>
-                                                <hr>
-                                                {% for each_sub_category in item_sub_categories %}
-                                                    <li><a href="" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
-                                    {% elif each.categories_text == 'SERVICES' %}
-                                        <li class="menu-group">
-                                            <div><i class="fa fa-truck"></i> {{ each.categories_text }}</div>
-                                            <ul>
-                                                <li><a href="{% url 'frontend:home' 'SERVICES' %}">ALL SERVICES</a></li>
-                                                <hr>
-                                                {% for each_sub_category in services_sub_categories %}
-                                                    <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
-                                    {% elif each.categories_text == 'RIDESHARE' %}
-                                        <li class="menu-group">
-                                            <div><i class="fa fa-bug"></i> {{ each.categories_text }}</div>
-                                            <ul>
-                                                <li><a href="{% url 'frontend:home' 'RIDESHARE' %}">ALL RIDESHARE</a></li>
-                                                <hr>
-                                                {% for each_sub_category in rideshare_sub_categories %}
-                                                    <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
-                                    {% elif each.categories_text == 'HOUSING' %}
-                                        <li class="menu-group">
-                                            <div><i class="fa fa-home"></i> {{ each.categories_text }}</div>
-                                            <ul>
-                                                <li><a href="{% url 'frontend:home' 'HOUSING' %}">ALL HOUSING</a></li>
-                                                <hr>
-                                                {% for each_sub_category in housing_sub_categories %}
-                                                    <li><a href="#">{{ each_sub_category.id }}</a>{{ each_sub_category.sub_categories_text }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </li>
+        <a class="navbar-brand" href="{% url 'frontend:home' %}">
+          <img class="d-none d-sm-block" src="{% static 'new_template/res/img/logo_full.png' %}" alt="villages.io">
+          <img class="d-block d-sm-none" src="{% static 'new_template/res/img/logo.png' %}" alt="villages.io">
+        </a>
 
-                    </ul>
-                </nav>
-                <br>
+        <div class="user-menu d-flex d-lg-none">
+          <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
+          <a class="user-link" href="#">
+            <div class="avatar-wrapper">
+              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width="43px" height="44px"
+                   class="rounded-circle">
             </div>
-        {% else %}
+          </a>
+        </div>
 
-            <div class="col-md-2">
+        <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-                {% if not is_listing %}
-                    {{ form.radius }}
-                {% else %}
-                    {{ form_listing_settings.radius }}
-                    <div></div>
-                {% endif %}
+        <div class="collapse navbar-collapse" id="primary-navbar">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  About Us
+                </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'how_it_works' %}">How it works</a>
+                <a class="dropdown-item" href="{% url 'motivation' %}">Motivation</a>
+                <a class="dropdown-item" href="{% url 'privacy' %}">Privacy</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'contact_us' %}">Feedback</a>
+              </div>
+            </li>
+              {% if request %}
+            <li class="balance-item">
+              <img src="{% static 'new_template/res/img/icons/balance.png' %}" alt="balance">
+              <span id="account-balance">{{ request.profile.overall_balance }}</span>
+              <span id="account-currency">V.H.</span>
+            </li>
+              {% endif %}
+            <li class="nav-item">
+              <a id="add-posting" class="nav-link" href="#"><img src="{% static 'new_template/res/img/icons/plus.png' %}" alt="add" data-toggle="modal" data-target="#new-posting-modal"></a>
+            </li>
+            <li class="nav-item">
+              <a id="blank-trust-id" class="nav-link" href="{% url 'blank_trust_user' %}"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'blank_payment_user' %}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="wallet"></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'undefined_contact' %}"><img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="inbox"></a>
+            </li>
+          </ul>
+        </div>
 
-                <div>
-                    <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People list</a>
-                </div>
-                <hr>
+        <div class="user-menu d-none d-lg-flex">
+          <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
+          <a class="user-link" href="#">
+            <div class="avatar-wrapper">
+              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width=43px height=44px
+                   class="rounded-circle">
+            </div>
+          </a>
+        </div>
+      </nav>
+    </header>
+    <!-- .app-header -->
 
-                <nav class="sidebar">
-                    <ul>
-                        <li>
-                            <div id="all_categories"><i class="fa fa-globe"></i><a href="{% url 'map_search:map' %}">ALL CATEGORIES</a></div>
-                            <ul class="collapse">
-                                <li></li>
-                            </ul>
-                        </li>
-                        {% for each in categories %}
-                            {% if each.categories_text == 'PRODUCTS' %}
-                                <li class="menu-group">
-                                    <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
-                                    <ul class="collapse">
-                                        <li><a href="?category={{ each.id }}&map-price={{ min_price }},{{ max_price }}" name="category">ALL PRODUCTS</a></li>
-                                        <hr>
-                                        {% for each_sub_category in item_sub_categories %}
-                                            <li><a href="?subcategory={{ each_sub_category.id }}&map-price={{ min_price }},{{ max_price }}" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                </li>
-                            {% elif each.categories_text == 'SERVICES' %}
-                                <li class="menu-group">
-                                    <div><i class="fa fa-truck"></i> {{ each.categories_text }}</div>
-                                    <ul class="collapse">
-                                        <li><a href="?category={{ each.id }}&map-price={{ min_price }},{{ max_price }}" name="category">ALL SERVICES</a></li>
-                                        <hr>
-                                        {% for each_sub_category in services_sub_categories %}
-                                            <li><a href="?subcategory={{ each_sub_category.id }}&map-price={{ min_price }},{{ max_price }}" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                </li>
-                            {% elif each.categories_text == 'RIDESHARE' %}
-                                <li class="menu-group">
-                                    <div><i class="fa fa-bug"></i> {{ each.categories_text }}</div>
-                                    <ul class="collapse">
-                                        <li><a href="?category={{ each.id }}&map-price={{ min_price }},{{ max_price }}" name="category">ALL RIDESHARE</a></li>
-                                        <hr>
-                                        {% for each_sub_category in rideshare_sub_categories %}
-                                            <li><a href="?subcategory={{ each_sub_category.id }}&map-price={{ min_price }},{{ max_price }}" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                </li>
-                            {% elif each.categories_text == 'HOUSING' %}
-                                <li class="menu-group">
-                                    <div><i class="fa fa-home"></i> {{ each.categories_text }}</div>
-                                    <ul class="collapse">
-                                        <li><a href="?category={{ each.id }}&map-price={{ min_price }},{{ max_price }}" name="category">ALL HOUSING</a></li>
-                                        <hr>
-                                        {% for each_sub_category in housing_sub_categories %}
-                                            <li><a href="?subcategory={{ each_sub_category.id }}&map-price={{ min_price }}%2C{{ max_price }}" name="subcategory">{{ each_sub_category.sub_categories_text }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                        <hr>
-                        <div id="filters">
-                            <div class="col-12">
-                                <div class="custom-filter-title">
-                                    Price
+    <div class="app-view">
+
+      <aside class="app-sidebar">
+
+        <div class="cat-menu">
+          <a class="cat-item active" href="#">
+            <div class="cat-item-icon">
+              <img src="{% static 'new_template/res/img/icons/all_categories.png' %}" alt="All Categories">
+            </div>
+            <span class="cat-item-name">All Categories</span>
+          </a>
+          <a class="cat-item" href="#">
+            <div class="cat-item-icon">
+              <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/services.png' %}" alt="Services">
+            </div>
+            <span class="cat-item-name">Services</span>
+          </a>
+          <a class="cat-item" href="#">
+            <div class="cat-item-icon">
+              <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Products">
+            </div>
+            <span class="cat-item-name">Products</span>
+          </a>
+          <a class="cat-item" href="#">
+            <div class="cat-item-icon">
+              <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Housing">
+            </div>
+            <span class="cat-item-name">Housing</span>
+          </a>
+        </div>
+
+      </aside>
+      <!-- .app-sidebar -->
+
+      <main class="app-main">
+
+        <form id="search-form" class="form-container">
+
+          <div class="row">
+
+            <div class="col-12 col-md-6 col-lg-4 col-xxl-2">
+
+              <select class="filter-input" id="inputListingType" name="listing_type">
+                  <option value="default" selected disabled>Choose a listing type</option>
+                  <option value="OFFER">Offer</option>
+                  <option value="REQUEST">Request</option>
+                  <option value="TEACH">Teach</option>
+                  <option value="LEARN">Learn</option>
+                </select>
+
+            </div>
+
+            <div class="col-12 col-xs-6 col-lg-4 col-xxl-3">
+
+              <div class="custom-group">
+
+                <label class="custom-radio" for="radio-grid">
+                    <a href="{% url 'frontend:home' %}">
+                    <input id="radio-grid" type="radio" name="view-radio" value="grid">
+                    <span class="btn-input-layout">
+                        <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/grid.png' %}" alt="Grid">
+                      <span class="btn-input-text">Grid</span>
+                    </span>
+                        </a>
+                  </label>
+
+                <label class="custom-radio" for="radio-map">
+                    <input id="radio-map" type="radio" name="view-radio" value="map" checked>
+                    <span class="btn-input-layout">
+                      <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/map.png' %}" alt="Map">
+                      <span class="btn-input-text">Map</span>
+                    </span>
+                  </label>
+
+              </div>
+
+            </div>
+            <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+
+              <label class="custom-check" for="id_trusted_only">
+                  <input id="id_trusted_only" type="checkbox" name="trusted" value="on">
+                  <span class="btn-input-layout">
+                    <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
+                    <span class="btn-input-text">Trusted</span>
+                  </span>
+                </label>
+
+            </div>
+
+          </div>
+
+          <div class="row">
+
+              <div id="filters">
+                  <div class="col-12">
+                      <div class="custom-filter-title">
+                          Price
+                      </div>
+                      <div class="custom-filter-options">
+                              <b>1</b>&nbsp&nbsp&nbsp<input id="price" name="map-price" type="text" class="span2" value=""
+                                              data-slider-min="0"
+                                              data-slider-max="1000"
+                                              data-slider-step="5"
+                                              data-slider-value="[0,100]"/>
+                              <b>1000</b>
+                          </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-12">
+
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-12">
+                          <div class="custom-filter-options">
+                              <div class="custom-filter-checkbox-container">
+
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-12">
+                          <div class="custom-filter-title">
+                              Category
+                          </div>
+                              <div class="custom-filter-options">
+                                <div class="custom-filter-checkbox-container">
+                                    <label class="custom-filter-checkbox-label">
+                                    <input type="radio" name="category" id="id_products" value="2" class="category" style="width: auto;">
+                                      <span class="custom-filter-checkbox-label-text">Products</span>
+                                  </label>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="custom-filter-options">
-                                        <b>1</b> <input id="price" name="map-price" type="text" class="span2" value=""
-                                                        data-slider-min="0"
-                                                        data-slider-max="1000"
-                                                        data-slider-step="5"
-                                                        data-slider-value="[0,100]"/>
-                                        <b>1000</b>
-                                    </div>
+                              </div>
+
+                          <div class="custom-filter-options">
+                                <div class="custom-filter-checkbox-container">
+                                    <label class="custom-filter-checkbox-label">
+                                    <input type="radio" name="category" id="id_services" value="2" class="category" style="width: auto;">
+                                      <span class="custom-filter-checkbox-label-text">Services</span>
+                                  </label>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="custom-filter-options">
-                                        <div class="custom-filter-checkbox-container">
-                                            <label class="custom-filter-checkbox-label">
-                                                <input type="checkbox" name="trusted" id="id_trusted_only" value="on">
-                                                <span class="custom-filter-checkbox-label-text">Trusted only</span>
-                                            </label>
-                                        </div>
-                                    </div>
+                              </div>
+                          <div class="custom-filter-options">
+                                <div class="custom-filter-checkbox-container">
+                                    <label class="custom-filter-checkbox-label">
+                                    <input type="radio" name="category" id="id_rideshare" value="2" class="category" style="width: auto;">
+                                      <span class="custom-filter-checkbox-label-text">Rideshare</span>
+                                  </label>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="custom-filter-title">
-                                        Category
-                                    </div>
-                                    <div class="custom-filter-options">
-                                        <div class="custom-filter-checkbox-container">
-                                            <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="category" id="id_products" value="2" class="category">
-                                                <span class="custom-filter-checkbox-label-text">Products</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="custom-filter-options">
-                                        <div class="custom-filter-checkbox-container">
-                                            <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="category" id="id_services" value="1" class="category">
-                                                <span class="custom-filter-checkbox-label-text">Services</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="custom-filter-options">
-                                        <div class="custom-filter-checkbox-container">
-                                            <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="category" id="id_rideshare" value="4" class="category">
-                                                <span class="custom-filter-checkbox-label-text">Rideshare</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="custom-filter-options">
-                                        <div class="custom-filter-checkbox-container">
-                                            <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="category" id="id_housing" value="3" class="category">
-                                                <span class="custom-filter-checkbox-label-text">Housing</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <button id="btn_clear_cateogry" type="button" class="btn btn-primary btn-sm">clear</button>
+                              </div>
+                          <div class="custom-filter-options">
+                                <div class="custom-filter-checkbox-container">
+                                    <label class="custom-filter-checkbox-label">
+                                    <input type="radio" name="category" id="id_housing" value="2" class="category" style="width: auto;">
+                                      <span class="custom-filter-checkbox-label-text">Housing</span>
+                                  </label>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="custom-filter-title">
-                                        Listing Type
-                                    </div>
-                                    <div class="custom-filter-options">
-                                        <div class="custom-filter-checkbox-container">
-                                            <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="listing_type" id="id_offer_type" value="offer" class="listing_type">
-                                                <span class="custom-filter-checkbox-label-text">Offer</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="custom-filter-options">
-                                        <div class="custom-filter-checkbox-container">
-                                            <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="listing_type" id="id_request_type" value="request" class="listing_type">
-                                                <span class="custom-filter-checkbox-label-text">Request</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="custom-filter-options">
-                                        <div class="custom-filter-checkbox-container">
-                                            <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="listing_type" id="id_teach_type" value="teach" class="listing_type">
-                                                <span class="custom-filter-checkbox-label-text">Teach</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="custom-filter-options">
-                                        <div class="custom-filter-checkbox-container">
-                                            <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="listing_type" id="id_learn_type" value="learn" class="listing_type">
-                                                <span class="custom-filter-checkbox-label-text">Learn</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <button type="button" class="btn btn-primary btn-sm" id="btn_clear_listing">clear</button>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="custom-filter-title">
-                                        Balance Type
-                                    </div>
-                                    <div class="custom-filter-options">
-                                        <div class="custom-filter-checkbox-container">
-                                            <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="balance_type" id="id_negative_balance" value="negative" class="balance_type">
-                                                <span class="custom-filter-checkbox-label-text">Negative balance</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="custom-filter-options">
-                                        <div class="custom-filter-checkbox-container">
-                                            <label class="custom-filter-checkbox-label">
-                                                <input type="radio" name="balance_type" id="id_positive_balance" value="positive" class="balance_type">
-                                                <span class="custom-filter-checkbox-label-text">Positive balance</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <button type="button" class="btn btn-primary btn-sm" id="btn_clear_balance">clear</button>
-                                </div>
-                            </div>
-                                </div>
-                            </div>
-                    </ul>
-                </nav>
-                <br>
-        {% endif %}
+                              </div>
+                          <button id="btn_clear_cateogry" type="button" class="btn btn-primary btn-sm">clear</button>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-12">
+                          <div class="custom-filter-title">
+                              Listing Type
+                          </div>
+                          <div class="custom-filter-options">
+                              <div class="custom-filter-checkbox-container">
+                                  <label class="custom-filter-checkbox-label">
+                                      <input type="radio" name="listing_type" id="id_offer_type" value="offer" class="listing_type" style="width: auto;">
+                                      <span class="custom-filter-checkbox-label-text">Offer</span>
+                                  </label>
+                              </div>
+                          </div>
+                          <div class="custom-filter-options">
+                              <div class="custom-filter-checkbox-container">
+                                  <label class="custom-filter-checkbox-label">
+                                      <input type="radio" name="listing_type" id="id_request_type" value="request" class="listing_type" style="width: auto;">
+                                      <span class="custom-filter-checkbox-label-text">Request</span>
+                                  </label>
+                              </div>
+                          </div>
+                          <div class="custom-filter-options">
+                              <div class="custom-filter-checkbox-container">
+                                  <label class="custom-filter-checkbox-label">
+                                      <input type="radio" name="listing_type" id="id_teach_type" value="teach" class="listing_type" style="width: auto;">
+                                      <span class="custom-filter-checkbox-label-text">Teach</span>
+                                  </label>
+                              </div>
+                          </div>
+                          <div class="custom-filter-options">
+                              <div class="custom-filter-checkbox-container">
+                                  <label class="custom-filter-checkbox-label">
+                                      <input type="radio" name="listing_type" id="id_learn_type" value="learn" class="listing_type" style="width: auto;">
+                                      <span class="custom-filter-checkbox-label-text">Learn</span>
+                                  </label>
+                              </div>
+                          </div>
+                          <button type="button" class="btn btn-primary btn-sm" id="btn_clear_listing">clear</button>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-12">
+                          <div class="custom-filter-title">
+                              Balance Type
+                          </div>
+                          <div class="custom-filter-options">
+                              <div class="custom-filter-checkbox-container">
+                                  <label class="custom-filter-checkbox-label">
+                                      <input type="radio" name="balance_type" id="id_negative_balance" value="negative" class="balance_type" style="width: auto;">
+                                      <span class="custom-filter-checkbox-label-text">Negative balance</span>
+                                  </label>
+                              </div>
+                          </div>
+                          <div class="custom-filter-options">
+                              <div class="custom-filter-checkbox-container">
+                                  <label class="custom-filter-checkbox-label">
+                                      <input type="radio" name="balance_type" id="id_positive_balance" value="positive" class="balance_type" style="width: auto;">
+                                      <span class="custom-filter-checkbox-label-text">Positive balance</span>
+                                  </label>
+                              </div>
+                          </div>
+                          <button type="button" class="btn btn-primary btn-sm" id="btn_clear_balance">clear</button>
+                      </div>
+                  </div>
+              </div>
 
-        <section class="container-fluid" id="home-sub-menu">
-            <div class="row" style="height: 100%">
-                <div class="col-md-6">
-                    <ul style="padding-left: 0;">
-                        <div class="form-group">
-                            <div class="filters-enabled home-toolbar-button-group">
-                                <a class="home-toolbar-button-group-button" title="Grid" href="{% url 'frontend:home' %}"><i class="ss-thumbnails icon-fix home-button-group-icon"></i>
-                                    <span class="home-toolbar-button-text">Grid
-                                </span>
-                                </a>
-                                <a class="home-toolbar-button-group-button selected" title="Map" href="{% url 'frontend:map' %}"><i class="ss-maplocation icon-fix home-button-group-icon"></i>
-                                    <span class="home-toolbar-button-text">Map
-                                </span>
-                                </a>
-                            </div>
-                            <div class="btn-group">
-                                {% if is_listing %}
-
-                                    <select class="form-control" id="inputListingType" name="listing_type">
-                                        <option selected value="">Choose a listing type</option>
-                                        <option value="OFFER">OFFER</option>
-                                        <option value="REQUEST">REQUEST</option>
-                                        <option value="TEACH">TEACH</option>
-                                        <option value="LEARN">LEARN</option>
-                                    </select>
-
-                                    </div>
-                                    </div>
-                                {% endif %}
-                        {% if not is_listing %}
-                            <div class="form-group">
-                                {{ form.q }}
-                            </div>
-                        {% else %}
-                            <div class="form-group">
-                                {{ form_listing_settings.q }}
-                            </div>
-                        {% endif %}
-
-                    </ul>
-                    {% if item_type_name %}
-                        <p style="font-size: 15px; font-weight: 600; padding-bottom: 0;
-                        font-family: 'Open Sans'; color: #000;">{{ item_type_name }}</p>
-                    {% endif %}
-                    <hr>
-                </div>
-
-            {% if request.method == 'POST' %}
-                <script src="{% static 'maps/search_listings_post.js' %}"></script>
-            {% elif request.method == 'GET' %}
-                <script src="{% static 'maps/search_listings_get.js' %}"></script>
-                <script type="text/javascript">
-                    var listings_locations = JSON.parse("{{ listing_locations|escapejs }}");
-                </script>
-            {% endif %}
-
-
-                <div class="col-9" style="padding-left: 0;">
+              <div class="col-9" style="padding-left: 0;">
                     <div class="home-map">
                         <div id="map" class="map" style="height: 600px; position: relative; overflow: hidden"></div>
                     </div>
@@ -542,6 +506,125 @@
                         })
                     </script>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+          </div>
+
+        </form>
+
+        <div class="search-results">
+
+          <div class="row">
+
+          </div>
+
+        </div>
+
+      </main>
+      <!-- .app-main -->
+
+    </div>
+
+    <form id="form-map-listing" method="get">
+        {% if user_agent_type == 'mobile' %}
+            <div class="col-md-2">
+                {% if not listing_items %}
+                    {{ form.radius }}
+                    <div><span><label>{{ form.trusted }}
+            <img src="{% static 'img/heart_icon.png' %}"
+                 alt="{% trans 'Heart icon = trusted user' %}">
+                        {% trans 'Trusted only' %}</label>
+        </span></div>
+                {% else %}
+                    {{ form_listing_settings.radius }}
+                    <span><label>{{ form_listing_settings.trusted }}
+            <img src="{% static 'img/heart_icon.png' %}"
+                 alt="{% trans 'Heart icon = trusted user' %}">
+                        {% trans 'Trusted only' %}</label>
+        </span>
+                {% endif %}
+                <div>
+                    {% if feed_items %}
+                        <a href="{% url 'frontend:home' %}">
+                            <img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
+                    {% elif listing_items %}
+                        <a href="{% url 'frontend:home_people' %}">
+                            <img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
+                    {% endif %}
+                </div>
+                <br>
+            </div>
+        {% else %}
+
+            <div class="col-md-12">
+
+                {% if not is_listing %}
+                    {{ form.radius }}
+                {% else %}
+                    {{ form_listing_settings.radius }}
+                    <div></div>
+                {% endif %}
+
+                            </div>
+                <br>
+        {% endif %}
+
+        <section class="container-fluid" id="home-sub-menu">
+            <div class="row" style="height: 100%">
+                <div class="col-md-6">
+                    <ul style="padding-left: 0;">
+                        <div class="form-group">
+                            <div class="btn-group">
+                                {% if is_listing %}
+                                    <select class="form-control" id="inputListingType" name="listing_type">
+                                        <option selected value="">Choose a listing type</option>
+                                        <option value="OFFER">OFFER</option>
+                                        <option value="REQUEST">REQUEST</option>
+                                        <option value="TEACH">TEACH</option>
+                                        <option value="LEARN">LEARN</option>
+                                    </select>
+
+                                    </div>
+                                    </div>
+                                {% endif %}
+                        {% if not is_listing %}
+                            <div class="form-group">
+                                {{ form.q }}
+                            </div>
+                        {% else %}
+                            <div class="form-group">
+                                {{ form_listing_settings.q }}
+                            </div>
+                        {% endif %}
+
+                    </ul>
+                    {% if item_type_name %}
+                        <p style="font-size: 15px; font-weight: 600; padding-bottom: 0;
+                        font-family: 'Open Sans'; color: #000;">{{ item_type_name }}</p>
+                    {% endif %}
+                    <hr>
+                </div>
+
+            {% if request.method == 'POST' %}
+                <script src="{% static 'maps/search_listings_post.js' %}"></script>
+            {% elif request.method == 'GET' %}
+
+                <script type="text/javascript">
+                    var listings_locations = JSON.parse("{{ listing_locations|escapejs }}");
+                </script>
+            {% endif %}
+
+
+
     </form>
     </section>
     </div>
@@ -701,10 +784,8 @@
         <script>
             var user_lat = "{{request.profile.location.point.coords.1}}";
             var user_lon = "{{request.profile.location.point.coords.0}}";
-            console.log(lat, lon);
         </script>
     {% endif %}
 
-
-
-{% endblock %}
+    </body>
+</html>

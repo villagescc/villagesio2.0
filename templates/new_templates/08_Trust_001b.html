@@ -1,0 +1,379 @@
+{% load staticfiles profile tag_utils %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Trust | Villages</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'new_template/res/css/style.css' %}" type="text/css" media="all" />
+    <script src="{% static 'new_template/node_modules/jquery/dist/jquery.js' %}" type="text/javascript"></script>
+    <!-- jQuery -->
+    <script src="{% static 'new_template/node_modules/popper.js/dist/umd/popper.js' %}" type="text/javascript"></script>
+    <!-- Popper -->
+    <script src="{% static 'new_template/node_modules/bootstrap/dist/js/bootstrap.js' %}" type="text/javascript"></script>
+    <!-- Bootstrap -->
+
+    <!-- Custom jQuery -->
+    <script src="{% static 'new_template/res/js/index.js' %}" type="text/javascript"></script>
+
+    <script src="{% static 'assets/typeahead.js/typeahead.jquery.min.js' %}"></script>
+    <script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>
+    <!---->
+</head>
+
+<body>
+
+  <!-- svg sprites -->
+  <svg style="width:0; height:0; position: absolute; top: -9999px;">
+      <symbol id="balance" viewbox="0 0 21 18">
+      </symbol>
+    </svg>
+  <!---->
+
+{% include 'new_templates/03_NewPost_001b.html' %}
+{% include 'payment-loading-modal.html' %}
+{% include 'error-modal.html' %}
+{% include 'templates.html' %}
+
+  <div class="app-wrapper">
+
+    <header class="app-header">
+      <nav class="navbar navbar-expand-lg">
+
+        <a class="navbar-brand" href="{% url 'frontend:home' %}">
+          <img class="d-none d-sm-block" src="{% static 'new_template/res/img/logo_full.png' %}" alt="villages.io">
+          <img class="d-block d-sm-none" src="{% static 'new_template/res/img/logo.png' %}" alt="villages.io">
+        </a>
+
+          <div class="user-menu d-flex d-lg-none">
+              <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
+              <a class="user-link" href="#">
+                  <div class="avatar-wrapper blue">
+                      <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%" width="200px"
+                           style="position: relative; border-radius: 50%; overflow: hidden;">
+                  </div>
+              </a>
+          </div>
+
+        <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="primary-navbar">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  About Us
+                </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'how_it_works' %}">How it works</a>
+                <a class="dropdown-item" href="{% url 'motivation' %}">Motivation</a>
+                <a class="dropdown-item" href="{% url 'privacy' %}">Privacy</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'contact_us' %}">Feedback</a>
+              </div>
+            </li>
+              {% if request %}
+            <li class="balance-item">
+              <img src="{% static 'new_template/res/img/icons/balance.png' %}" alt="balance">
+              <span id="account-balance">{{ request.profile.overall_balance }}</span>
+              <span id="account-currency">V.H.</span>
+            </li>
+              {% endif %}
+            <li class="nav-item">
+              <a id="add-posting" class="nav-link" href="#"><img src="{% static 'new_template/res/img/icons/plus.png' %}" alt="add" data-toggle="modal" data-target="#new-post-modal"></a>
+            </li>
+            <li class="nav-item">
+              <a id="blank-trust-id" class="nav-link" href="{% url 'blank_trust_user' %}"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'blank_payment_user' %}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="wallet"></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'undefined_contact' %}"><img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="inbox"></a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="user-menu d-none d-lg-flex">
+              <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
+              <ul class="nav navbar-nav">
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <div class="avatar-wrapper blue">
+                              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%" width="200px"
+                                   style="position: relative; border-radius: 50%; overflow: hidden;" >
+                          </div>
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a>
+                          <a class="dropdown-item" href="{% url 'listing_management:manage_listings' %}">Manage Listing</a>
+                          <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="{% url 'accounts:settings' %}">Settings</a>
+                          <a class="dropdown-item" href="{% url 'management:management' %}">Management</a>
+                          <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+      </nav>
+    {% include 'messages.html' %}
+    </header>
+    <!-- .app-header -->
+
+    <div class="app-view">
+
+{#      <aside class="app-sidebar">#}
+{##}
+{#        <div class="cat-menu">#}
+{#          <a class="cat-item active" href="#">#}
+{#            <div class="cat-item-icon">#}
+{#              <img src="{% static 'new_template/res/img/icons/all_categories.png' %}" alt="All Categories">#}
+{#            </div>#}
+{#            <span class="cat-item-name">All Categories</span>#}
+{#          </a>#}
+{#          <a class="cat-item" href="#">#}
+{#            <div class="cat-item-icon">#}
+{#              <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/services.png' %}" alt="Services">#}
+{#            </div>#}
+{#            <span class="cat-item-name">Services</span>#}
+{#          </a>#}
+{#          <a class="cat-item" href="#">#}
+{#            <div class="cat-item-icon">#}
+{#              <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Products">#}
+{#            </div>#}
+{#            <span class="cat-item-name">Products</span>#}
+{#          </a>#}
+{#          <a class="cat-item" href="#">#}
+{#            <div class="cat-item-icon">#}
+{#              <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Housing">#}
+{#            </div>#}
+{#            <span class="cat-item-name">Housing</span>#}
+{#          </a>#}
+{#        </div>#}
+{##}
+{#      </aside>#}
+      <!-- .app-sidebar -->
+
+      <main class="app-main">
+
+        <div class="trust-content">
+
+          <div class="row">
+            <div class="col-12 col-xxl-8">
+
+              <h2>Trust</h2>
+              <p>Let your friends know that you trust a promise from them and they can use their credit with your network.</p>
+
+              <div class="trust-data">
+                <form id="trust-form" action="{% url 'blank_trust_user' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="receiver-box" id="div-recipient-name">
+                        <h4 class="mt-1">Choose Trust Receiver</h4>
+                        {{ form.recipient_name }}
+                        <h4></h4>
+                    </div>
+                  <div class="receiver">
+                    <div class="receiver-box" id="div-profile-photo" hidden>
+                      <div id="div-profile-image" class="d-flex justify-content-start align-items-center">
+                        <div class="avatar-wrapper blue big mr-3">
+                          <img id="profile-image" src="{% static 'new_template/res/img/people/mikail.png' %}" alt="mikail"
+                          class="rounded-circle" width="43px" height="82px">
+                        </div>
+                        <span id="name-profile-image"></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="credit-limit">
+                    <h4>Credit Limit</h4>
+                    <div class="d-flex">
+                        {{ form.weight }}
+{#                      <input type="number" name="rate" id="rate" placeholder="2.00">#}
+                      <span class="currency-wrapper">V.H.</span>
+                    </div>
+                  </div>
+
+                  <div class="testimonial">
+                    <h4>Testimonial</h4>
+                      {{ form.text }}
+{#                    <textarea name="testimonial" id="testimonial" cols="30" rows="10"></textarea>#}
+                  </div>
+
+                  <div class="reference">
+                    <div class="d-flex justify-content-start align-items-center">
+                      <label class="switch mr-3 mb-0">
+                        {{ form.referral }}
+                        <span class="slider round"></span>
+                      </label>
+                      <p style="margin-bottom: 0;">Refer This Person's Services to Friends?</p>
+                    </div>
+                    <p class="note">(Only refer a person if you have actually worked with them)</p>
+                  </div>
+
+                  <div class="row" style="max-width: 600px;">
+                    <div class="col-6">
+                      <input class="btn btn-std btn-cancel" type="button" value="Cancel">
+                    </div>
+                    <div class="col-6">
+                      <input class="btn btn-std" id="save-trust" type="submit" value="Save Trust">
+                    </div>
+                  </div>
+                    {{ form.data_profile }}
+                </form>
+              </div>
+
+            </div>
+
+            <div class="col-12 col-xxl-4 mt-5 mt-xxl-0">
+
+              <h2>Transaction Info |
+                <a class="small" href="#">View More</a>
+              </h2>
+
+              <div class="table-head">
+
+                <span>Name</span>
+                <span>Health</span>
+                <span>Payments from You</span>
+                <span>Trust from You</span>
+
+              </div>
+                {% for account in accounts %}
+                    <div class="table-row">
+                        <div class="avatar-wrapper blue">
+                            <img src="{% profile_image_url account.partner '60x60' %}" height="100%" width="200px"
+                           style="position: relative; border-radius: 50%; overflow: hidden;">
+                        </div>
+                    {{ account.partner }}
+
+                        {% if account.partner %}
+                            <span class="health">{{ account.health|default:"X" }}</span>
+                        {% endif %}
+
+                        <span class="payments">{{ account.owed_to_you|default_if_none:"" }}</span>
+
+                        <span class="amount">
+                    {% if account.endorsement %}
+                        <span class="price">{{ account.in_limit }} V.H.</span>
+                    {% elif account.partner %}
+                        <span class="price">0</span> V.H.</span>
+                    {% endif %}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </main>
+      <!-- .app-main -->
+
+    </div>
+
+  </div>
+
+  <script>
+      var recipients = new Bloodhound({
+          datumTokenizer: function (datum) {
+              return Bloodhound.tokenizers.whitespace(datum.value);
+          },
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          remote: {
+              wildcard: '%QUERY',
+              url: "{% url 'get_recipients_data' %}?query=%QUERY",
+              transform: function (response) {
+                  return $.map(response.result, function (recipient) {
+                      $('#id_recipient_name').attr("data-profile-selected", recipient.username);
+                      return {
+                          value: recipient.username,
+                          suggest: recipient
+                      };
+                  });
+              }
+          }
+
+      });
+      $('#id_recipient_name').typeahead({
+              hint: true,
+              highlight: true,
+              minLength: 0
+          },
+          {
+              display: 'value',
+              source: recipients,
+              limit: 20,
+              templates: {
+                  suggestion: function (data) {
+                      return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
+                  }
+              }
+          });
+
+      $("#id_recipient_name").bind('typeahead:selected', function (e) {
+          $("#id_data_profile").val($("#id_recipient_name").val());
+          $.ajax({
+              url:'/get_user_photo/' + $("#id_recipient_name").val(),
+              type:'POST',
+              data: {'profile_username': $("#id_recipient_name").val()},
+              beforeSend: function (xhr) {
+                  $('#spin-modal').fadeIn();
+                  var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                  xhr.setRequestHeader("X-CSRFToken", csrftoken);
+              },
+              success: function (e) {
+
+                  $("#id_weight").val('');
+                  $("#id_text").val('');
+                  $("#id_referral").prop('checked', false);
+
+
+                  if(e['data']['error']) {
+                      $('#error-modal-alert').text(e["data"]["error_message"]);
+                      $('#spin-modal').fadeOut();
+                      $('#error-modal').modal("show");
+                      location.reload();
+                  }
+                  if(e['data']['has_trust']){
+                      $("#id_weight").val(e['data']['credit_limit']);
+                      $("#id_text").val(e['data']['text']);
+                      if(e['data']['refer']){
+                          $("#id_referral").prop('checked', true);
+                      }
+                  }
+                  $('#div-profile-photo').attr("hidden", false);
+                  $('#profile-image').attr("src", e['data']['profile_photo_path']);
+                  debugger;
+                  $('#name-profile-image').text(e['data']['recipient']);
+                  $('#spin-modal').fadeOut();
+              },
+              error: function (e){
+                  if (e.status === 500) {
+                      showInternalServerError();
+                      $('#spin-modal').fadeOut();
+                  }
+              }
+          });
+      });
+
+
+  </script>
+
+</body>
+
+    <style>
+        #div-recipient-name .tt-menu {
+            max-height: 150px;
+            width: 100%;
+            overflow-y: auto;
+            border-bottom: 1px solid #ccc;
+            background-color: #ffffff;
+        }
+    </style>
+
+</html>

@@ -1,7 +1,7 @@
 
 
 $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
+    // $('[data-toggle="tooltip"]').tooltip();
     initMap();
 });
 
@@ -35,12 +35,12 @@ function initMap() {
             call_area_map();
             add_listener_map();
         }, function() {
-            showErrorMessage('Error: The Geolocation service failed.');
+            console.log('Error: The Geolocation service failed.');
             add_listener_map();
         });
     } else {
         // Browser doesn't support Geolocation
-        showWarningMessage('Error: Your browser doesn\'t support geolocation.');
+        console.log('Error: Your browser doesn\'t support geolocation.');
         add_listener_map();
     }
 

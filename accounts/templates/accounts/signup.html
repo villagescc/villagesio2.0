@@ -2,8 +2,9 @@
 
 
 {% block content %}
-<!-- App page content -->
-        <form class="col-sm-6 col-lg-4" action="" method="post">
+    <!-- App page content -->
+    <div class="trust-data">
+        <form id="trust-form" role="form" action="" method="post">
             {% csrf_token %}
 
             <a class="btn btn-primary" href="{% url 'social:begin' 'facebook' %}?next=/settings/"><i class="fa fa-facebook-official">&nbsp; Register with facebook</i></a>
@@ -27,9 +28,15 @@
                 {% endif %}
             {% endfor %}
 
-            <button type="submit" class="btn btn-primary pull-right">
-                    <i class="fa fa-sign-in"></i>&nbsp;Submit
-                </button>
+            <div class="row" style="max-width: 600px;">
+                <div class="col-3">
+                    <input class="btn btn-std" id="save-trust" type="submit" value="Submit">
+                </div>
+                <div class="col-3">
+                    <input class="btn btn-std btn-cancel" id="save-trust" type="button" value="Cancel"
+                           onclick="window.location='/'">
+                </div>
+            </div>
             {% if not form.is_valid %}
                 <script>
                     setTimeout(function () {
@@ -37,5 +44,6 @@
                     }, 4000);
                 </script>
             {% endif %}
-    </form>
+        </form>
+    </div>
 {% endblock content %}

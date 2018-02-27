@@ -1,0 +1,209 @@
+/* trust-content */
+.trust-content {
+  @include make-container;
+  padding: 12px 0 10px;
+  & h2 {
+    margin-bottom: 1em;
+    font-size: 1.375em;
+    text-transform: uppercase;
+    color: #1d90b5;
+  }
+  .table-head {
+    display: flex;
+    justify-content: flex-start;
+    align-content: flex-end;
+    padding: 0 1em;
+    border-bottom: 1px solid #ebebeb;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #d6d6d6;
+    width: 100%;
+    & span {
+      display: block;
+      text-align: center;
+      &:nth-child(1) {
+        flex: 0 1 20%;
+      }
+      &:nth-child(2) {
+        flex: 0 1 20%;
+      }
+      &:nth-child(3) {
+        flex: 0 1 30%;
+      }
+      &:nth-child(4) {
+        flex: 0 1 30%;
+      }
+    }
+  }
+  
+  .table-row {
+    padding: 1em;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #fff;
+    @include crossShadow(0 0 16px 0 rgba(119, 119, 119, 0.06));
+    font-weight: 300;
+    color: #8d8d8d;
+    margin-top: 1.5em;
+    & > * {
+      text-align: center;
+      &:not(.amount) {
+        font-size: 0.875em;
+      }
+      &:nth-child(1) {
+        flex: 0 1 20%;
+        margin: auto;
+      }
+      &:nth-child(2) {
+        flex: 0 1 20%;
+      }
+      &:nth-child(3) {
+        flex: 0 1 30%;
+      }
+      &:nth-child(4) {
+        flex: 0 1 30%;
+      }
+    }
+    & > span {
+      display: block;
+      &.amount {
+        font-weight: 500;
+        & .price {
+          color: #1d90b5;
+        }
+      }
+    }
+    @include media-width-down(md) {
+      font-size: 0.9em;
+    }
+    @include media-width-down(sm) {
+      font-size: 0.8em;
+    }
+  }
+}
+
+.trust-data {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-flow: row wrap;
+  background-color: #fff;
+  @include crossShadow(0 0 16px 0 rgba(119, 119, 119, 0.06));
+  & #trust-form {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 1.875em;
+    & .transaction {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 1em 12% 2em;
+    }
+    & h3 {
+      font-size: 1.5em;
+      font-weight: 300;
+      color: #8d8d8d;
+    }
+    & p {
+      font-size: 0.875em;
+      font-weight: 300;
+      color: #5c5c5c;
+    }
+    & h4 {
+      margin-top: 3em;
+      font-size: 0.75em;
+      color: #9a9a9a;
+      text-transform: uppercase;
+    }
+    & input,
+    & select,
+    & textarea {
+      font-size: 1.375em;
+      font-weight: 300;
+      height: 2em;
+      border: 1px solid #ebebeb;
+    }
+    & .credit-limit {
+      max-width: 200px;
+      & img {
+        height: auto;
+        margin: auto 0 auto 0.5em;
+      }
+      & .tip-balloon {
+        font-size: 0.625em;
+        color: #ffffff;
+        text-transform: uppercase;
+        line-height: 1.125;
+      }
+    }
+    & .currency-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      background-color: #e1e1e1;
+      font-size: 1.375em;
+      font-weight: 600;
+      color: #8d8d8d;
+    }
+    & .testimonial {
+      padding-bottom: 1em;
+      & #testimonial {
+        height: 10em;
+        font-size: 0.875em;
+        color: #5c5c5c;
+      }
+    }
+    & .reference {
+      font-size: 0.875em;
+      text-transform: uppercase;
+      color: #5c5c5c;
+      margin-bottom: 1em;
+      & p {
+        font-weight: 400;
+        &.note {
+          margin-top: 0.5em;
+          font-size: 0.75em;
+          font-weight: 300;
+          color: #9a9a9a;
+          text-transform: none;
+        }
+      }
+    }
+    & .btn-std {
+      font-size: 1em;
+      height: 3.75em;
+      text-transform: uppercase;
+      &.btn-cancel {
+        background-color: #ebebeb;
+        &:hover,
+        &:focus {
+          background-color: darken(#ebebeb, 10%);
+        }
+      }
+    }
+    @include media-width-down(lg) {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+    @include media-width-down(xs) {
+      & .transaction {
+        padding: 1em 0 2em;
+      }      
+    }
+  }
+}
+
+.receiver {
+  & .receiver-box {
+    padding: 1.5em;
+    border: 1px solid #ebebeb;
+    & span {
+      font-size: 1.5em;
+      font-weight: 300;
+      color: #8d8d8d;
+    }
+  }
+}

@@ -1,8 +1,11 @@
+import ujson
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpRequest
 from django.core.urlresolvers import reverse
 from django.conf import settings
 # Forms
+from accounts.forms import UserForm
 from listings.forms import ListingsForms
 from listings.models import LISTING_TYPE_CHECK
 from feed.forms import FeedFilterForm, DATE_FORMAT
@@ -11,6 +14,8 @@ from relate.forms import Endorsement, EndorseForm, AcknowledgementForm
 from profile.forms import ContactForm
 from frontend.forms import FormListingsSettings
 from django_user_agents.utils import get_user_agent
+from profile.templatetags.profile import *
+from django.core.signals import request_finished
 # models
 from django.contrib.gis.db.models import Q
 from listings.models import Listings
@@ -85,13 +90,11 @@ def get_listings_and_remaining(listings):
         return query, count - len(query)
 
 
-def home(request, type_filter=None, item_type=None, template='frontend/home.html', poster=None, recipient=None,
-         extra_context=None, do_filter=False):
-    """
+def people_listing(request, type_filter=None, item_type=None, template=None, poster=None, recipient=None,
+                   extra_context=None, do_filter=False):
 
-    url: /home
-    """
-    # max_amount = ripple.max_payment(request.profile, recipient)
+    if request.session.get('offset'):
+        request.session['offset'] = 0
 
     user_agent = get_user_agent(request)
     if user_agent.is_mobile:
@@ -99,134 +102,183 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
     else:
         user_agent_type = 'desktop'
     endorsement = None
-    if item_type:
-        form = FeedFilterForm(request.GET, request.profile, request.location, item_type,
-                              poster, recipient, do_filter)
-        trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
-        if form.is_valid():
-            feed_items, remaining_count, total_items = form.get_results(form.data.get('radio-low'),
-                                                           form.data.get('radio-high'),
-                                                           form.data.get('referral-radio'))
-            if do_filter:
-                form.update_sticky_filter_prefs()
-        else:
-            raise Exception(unicode(form.errors))
-        if feed_items:
-            next_page_date = feed_items[-1].date
-        else:
-            next_page_date = None
-        url_params = request.GET.copy()
-        url_params.pop('d', None)
-        url_param_str = url_params.urlencode()
-        if next_page_date:
-            url_params['d'] = next_page_date.strftime(DATE_FORMAT)
-        next_page_param_str = url_params.urlencode()
-
-        number_of_pages = len(total_items)/settings.FEED_ITEMS_PER_PAGE
-
-        listing_form = ListingsForms()
-        categories_list = Categories.objects.all()
-        item_sub_categories = SubCategories.objects.all().filter(categories=1)
-        services_sub_categories = SubCategories.objects.all().filter(categories=2)
-        rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
-        housing_sub_categories = SubCategories.objects.all().filter(categories=4)
-        trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
-        payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
-        contact_form = ContactForm()
-        notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
-
-        context = locals()
-        context.update(extra_context or {})
-        return render(request, 'frontend/home.html',
-                      {'url_params': url_params, 'feed_items': feed_items,
-                       'next_page_date': next_page_date, 'context': context,
-                       'form': form, 'listing_form': listing_form,
-                       'poster': poster, 'do_filter': do_filter,
-                       'remaining_count': remaining_count,
-                       'item_type': item_type, 'template': template,
-                       'url_param_str': url_param_str,
-                       'next_page_param_str': next_page_param_str,
-                       'extra_context': extra_context,
-                       'recipient': recipient, 'user_agent_type': user_agent_type,
-                       'item_sub_categories': item_sub_categories,
-                       'services_sub_categories': services_sub_categories,
-                       'rideshare_sub_categories': rideshare_sub_categories,
-                       'housing_sub_categories': housing_sub_categories,
-                       'categories': categories_list, 'trust_form': trust_form,
-                       'payment_form': payment_form, 'contact_form': contact_form,
-                       'notification_number': notification_number,
-                       'number_of_pages': number_of_pages})
+    form = FeedFilterForm(request.GET, request.profile, request.location, item_type,
+                          poster, recipient, do_filter)
+    trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
+    if form.is_valid():
+        feed_items, remaining_count, total_items = form.get_results(form.data.get('radio-low'),
+                                                                    form.data.get('radio-high'),
+                                                                    form.data.get('referral-radio'))
+        if do_filter:
+            form.update_sticky_filter_prefs()
     else:
-        if request.method == 'POST':
-            form = ListingsForms(request.POST, request.FILES)
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect(reverse('frontend:home'))
-            else:
-                print(form.errors)
+        raise Exception(unicode(form.errors))
+    if feed_items:
+        next_page_date = feed_items[-1].date
+    else:
+        next_page_date = None
+    url_params = request.GET.copy()
+    url_params.pop('d', None)
+    url_param_str = url_params.urlencode()
+    if next_page_date:
+        url_params['d'] = next_page_date.strftime(DATE_FORMAT)
+    next_page_param_str = url_params.urlencode()
 
-        subcategory_name = None
-        people = None
-        trusted_only = None
-        # GET Request
-        form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter,
-                                                     do_filter)
-        if form_listing_settings.is_valid():
-            listing_items, remaining_count = form_listing_settings.get_results()
+    number_of_pages = len(total_items) / settings.FEED_ITEMS_PER_PAGE
 
-        if listing_items:
-            next_page_date = listing_items[-1].date
+    listing_form = ListingsForms()
+    categories_list = Categories.objects.all()
+    item_sub_categories = SubCategories.objects.all().filter(categories=1)
+    services_sub_categories = SubCategories.objects.all().filter(categories=2)
+    rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
+    housing_sub_categories = SubCategories.objects.all().filter(categories=4)
+    trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
+    payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
+    contact_form = ContactForm()
+    notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
+
+    context = locals()
+    context.update(extra_context or {})
+    return render(request, 'new_templates/05_PeopleListing_001a.html',
+                  {'url_params': url_params, 'feed_items': feed_items,
+                   'next_page_date': next_page_date, 'context': context,
+                   'form': form, 'listing_form': listing_form,
+                   'poster': poster, 'do_filter': do_filter,
+                   'remaining_count': remaining_count,
+                   'item_type': item_type,
+                   'url_param_str': url_param_str,
+                   'next_page_param_str': next_page_param_str,
+                   'extra_context': extra_context,
+                   'recipient': recipient, 'user_agent_type': user_agent_type,
+                   'item_sub_categories': item_sub_categories,
+                   'services_sub_categories': services_sub_categories,
+                   'rideshare_sub_categories': rideshare_sub_categories,
+                   'housing_sub_categories': housing_sub_categories,
+                   'categories': categories_list, 'trust_form': trust_form,
+                   'payment_form': payment_form, 'contact_form': contact_form,
+                   'notification_number': notification_number,
+
+                   'number_of_pages': number_of_pages})
+
+
+def parse_products(products):
+    products_list = []
+    for each_product in products:
+        profile_image = profile_image_url(each_product.profile, '80x80')
+        product_image = product_image_url(each_product, '320x320')
+        products_list.append({'listing_id': each_product.id,
+                              'product_image': product_image,
+                              'profile_image': profile_image,
+                              'listing_type': each_product.listing_type,
+                              'profile_username': each_product.user.username,
+                              'price': str(each_product.price) if each_product.price else '0',
+                              'title': each_product.title[:80],
+                              'description': each_product.description[:100],
+                              'tags': each_product.tag.all() if each_product.tag else None})
+    return products_list
+
+
+def product_infinite_scroll(request, offset):
+    if not request.session.get('offset'):
+        request.session['offset'] = 20
+        products = Listings.objects.all().order_by('-updated')[request.session['offset']:request.session['offset'] + 10]
+    elif request.session['offset'] >= 20:
+        request.session['offset'] += 10
+        products = Listings.objects.all().order_by('-updated')[request.session['offset']:request.session['offset'] + 10]
+        if not products:
+            request.session['offset'] = 0
+    parsed_products = parse_products(products)
+    return HttpResponse(ujson.dumps(parsed_products), content_type='application/json')
+
+
+def home(request, type_filter=None, item_type=None, template=None, poster=None, recipient=None,
+         extra_context=None, do_filter=False):
+    """
+
+    url: /home
+    """
+    # max_amount = ripple.max_payment(request.profile, recipient)
+    if request.session.get('offset'):
+        request.session['offset'] = 0
+    sign_in_form = UserForm
+    user_agent = get_user_agent(request)
+    if user_agent.is_mobile:
+        user_agent_type = 'mobile'
+    else:
+        user_agent_type = 'desktop'
+    endorsement = None
+    if request.method == 'POST':
+        form = ListingsForms(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('frontend:home'))
         else:
-            next_page_date = None
-        url_params = request.GET.copy()
-        url_params.pop('d', None)
-        url_param_str = url_params.urlencode()
-        if next_page_date:
-            url_params['d'] = next_page_date.strftime(DATE_FORMAT)
-        next_page_param_str = url_params.urlencode()
+            print(form.errors)
 
-        trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
-        payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
-        contact_form = ContactForm()
+    subcategory_name = None
+    people = None
+    trusted_only = None
+    # GET Request
+    form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter,
+                                                 do_filter)
+    if form_listing_settings.is_valid():
+        listing_items, remaining_count = form_listing_settings.get_results()
 
-        form = ListingsForms()
-        profile = recipient
-        categories_list = Categories.objects.all()
-        subcategories = SubCategories.objects.all()
-        if type_filter in LISTING_TYPE_CHECK:
-            # is listing_type filter
+    if listing_items:
+        next_page_date = listing_items[-1].date
+    else:
+        next_page_date = None
+    url_params = request.GET.copy()
+    url_params.pop('d', None)
+    url_param_str = url_params.urlencode()
+    if next_page_date:
+        url_params['d'] = next_page_date.strftime(DATE_FORMAT)
+    next_page_param_str = url_params.urlencode()
+
+    trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
+    payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
+    contact_form = ContactForm()
+
+    form = ListingsForms()
+    profile = recipient
+    categories_list = Categories.objects.all()
+    subcategories = SubCategories.objects.all()
+    if type_filter in LISTING_TYPE_CHECK:
+        # is listing_type filter
+        item_type_name = type_filter
+    else:
+        try:
+            SubCategories.objects.filter(id=type_filter)
+            # is subcategory id
+            item_type_name = SubCategories.objects.filter(id=type_filter).values('sub_categories_text')[0]['sub_categories_text']
+        except:
+            # is category filter
             item_type_name = type_filter
-        else:
-            try:
-                SubCategories.objects.filter(id=type_filter)
-                # is subcategory id
-                item_type_name = SubCategories.objects.filter(id=type_filter).values('sub_categories_text')[0]['sub_categories_text']
-            except:
-                # is category filter
-                item_type_name = type_filter
 
-        item_sub_categories = SubCategories.objects.all().filter(categories=1)
-        services_sub_categories = SubCategories.objects.all().filter(categories=2)
-        rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
-        housing_sub_categories = SubCategories.objects.all().filter(categories=4)
+    item_sub_categories = SubCategories.objects.all().filter(categories=1)
+    services_sub_categories = SubCategories.objects.all().filter(categories=2)
+    rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
+    housing_sub_categories = SubCategories.objects.all().filter(categories=4)
 
-        notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
+    notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
 
-        return render(request, 'frontend/home.html', {
-            'item_sub_categories': item_sub_categories, 'subcategories': subcategories,
-            'services_sub_categories': services_sub_categories, 'rideshare_sub_categories': rideshare_sub_categories,
-            'housing_sub_categories': housing_sub_categories, 'user_agent_type': user_agent_type,
-            'people': people, 'listing_form': form, 'categories': categories_list,
-            'trusted_only': trusted_only, 'trust_form': trust_form, 'payment_form': payment_form,
-            'contact_form': contact_form, 'form_listing_settings': form_listing_settings,
-            'item_type_name': item_type_name, 'is_listing': True, 'url_params': url_params,
-            'listing_items': listing_items, 'next_page_date': next_page_date, 'remaining_count': remaining_count,
-            'next_page_param_str': next_page_param_str, 'listing_type_filter': type_filter,
-            'notification_number': notification_number})
+    return render(request, 'frontend/home.html', {
+        'item_sub_categories': item_sub_categories, 'subcategories': subcategories,
+        'services_sub_categories': services_sub_categories, 'rideshare_sub_categories': rideshare_sub_categories,
+        'housing_sub_categories': housing_sub_categories, 'user_agent_type': user_agent_type,
+        'people': people, 'listing_form': form, 'categories': categories_list,
+        'trusted_only': trusted_only, 'trust_form': trust_form, 'payment_form': payment_form,
+        'contact_form': contact_form, 'form_listing_settings': form_listing_settings,
+        'item_type_name': item_type_name, 'is_listing': True, 'url_params': url_params,
+        'listing_items': listing_items, 'next_page_date': next_page_date, 'remaining_count': remaining_count,
+        'next_page_param_str': next_page_param_str, 'listing_type_filter': type_filter,
+        'notification_number': notification_number, 'sign_in_form': sign_in_form})
 
 
 def map_visualization(request):
 
+    if request.session.get('offset'):
+        request.session['offset'] = 0
     form = ListingsForms()
     categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)

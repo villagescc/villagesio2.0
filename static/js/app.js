@@ -1,20 +1,6 @@
 /**
  * Created by filipe on 26/04/17.
  */
-function isMalicious(classificationId) {
-    if (5 <= classificationId && classificationId <= 17) {
-        return true;
-    }
-    else if (classificationId === 29) {
-        return true;
-    }
-    return false;
-}
-
-function isTrusted(classificationId) {
-    return (0 < classificationId < 5) || (18 <= classificationId <= 28)
-}
-
 var errorsTimeout = null;
 function showFormErrors(errors) {
     var temporaryClass = 'timeout-fadeout';
