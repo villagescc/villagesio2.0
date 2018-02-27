@@ -1,7 +1,7 @@
 import ujson
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpRequest
 from django.core.urlresolvers import reverse
 from django.conf import settings
 # Forms
@@ -14,6 +14,8 @@ from relate.forms import Endorsement, EndorseForm, AcknowledgementForm
 from profile.forms import ContactForm
 from frontend.forms import FormListingsSettings
 from django_user_agents.utils import get_user_agent
+from profile.templatetags.profile import *
+from django.core.signals import request_finished
 # models
 from django.contrib.gis.db.models import Q
 from listings.models import Listings
@@ -90,6 +92,10 @@ def get_listings_and_remaining(listings):
 
 def people_listing(request, type_filter=None, item_type=None, template=None, poster=None, recipient=None,
                    extra_context=None, do_filter=False):
+
+    if request.session.get('offset'):
+        request.session['offset'] = 0
+
     user_agent = get_user_agent(request)
     if user_agent.is_mobile:
         user_agent_type = 'mobile'
@@ -157,13 +163,15 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
 
 def parse_products(products):
     products_list = []
+    default_profile_image = 'generic_user.png'
     for each_product in products:
+        profile_image = profile_image_url(each_product.profile, '80x80')
         products_list.append({'listing_id': each_product.id,
-                              'product_image': each_product.photo.path if each_product.photo.name != '' else None,
-                              'profile_image': each_product.profile.photo.path if each_product.profile.photo.name != '' else None,
+                              'product_image': each_product.photo.name if each_product.photo.name != '' else None,
+                              'profile_image': profile_image,
                               'listing_type': each_product.listing_type,
-                              'profile_username': each_product.profile.username,
-                              'price': each_product.price,
+                              'profile_username': each_product.user.username,
+                              'price': str(each_product.price) if each_product.price else '0',
                               'title': each_product.title[:80],
                               'description': each_product.description[:100],
                               'tags': each_product.tag.all() if each_product.tag else None})
@@ -171,7 +179,14 @@ def parse_products(products):
 
 
 def product_infinite_scroll(request, offset):
-    products = Listings.objects.all()[:int(offset) + 10]
+    if not request.session.get('offset'):
+        request.session['offset'] = 20
+        products = Listings.objects.all().order_by('-updated')[request.session['offset']:request.session['offset'] + 10]
+    elif request.session['offset'] >= 20:
+        request.session['offset'] += 10
+        products = Listings.objects.all().order_by('-updated')[request.session['offset']:request.session['offset'] + 10]
+        if not products:
+            request.session['offset'] = 0
     parsed_products = parse_products(products)
     return HttpResponse(ujson.dumps(parsed_products), content_type='application/json')
 
@@ -183,6 +198,8 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     url: /home
     """
     # max_amount = ripple.max_payment(request.profile, recipient)
+    if request.session.get('offset'):
+        request.session['offset'] = 0
     sign_in_form = UserForm
     user_agent = get_user_agent(request)
     if user_agent.is_mobile:
@@ -260,6 +277,8 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
 
 def map_visualization(request):
 
+    if request.session.get('offset'):
+        request.session['offset'] = 0
     form = ListingsForms()
     categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)

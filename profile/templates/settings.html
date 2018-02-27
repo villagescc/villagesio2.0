@@ -186,6 +186,11 @@
                                     </div>
                                 {% endif %}
                             {% endfor %}
+
+                            <div class="form-group">
+                                <label>Location</label>
+                                <a href="{% url 'locator' %}" data-toggle="tooltip" title="{{request.location}}"><i class="fa fa-location-arrow"></i>&nbsp&nbsp{{ request.location|truncatechars:"42" }}</a>
+                            </div>
                             <table class="form">
                                 <tr>
                                     <th></th>
@@ -195,6 +200,7 @@
                                     </td>
                                 </tr>
                             </table>
+
                             {% if not form.is_valid %}
                                 <script>
                                     setTimeout(function () {

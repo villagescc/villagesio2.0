@@ -5,10 +5,11 @@ class Person{
         this.views = new ProductListViews($('#product_list'));
     }
 
-    getPerson(){
-        this.personApi.getPersonList()
+    getPerson(offset){
+        debugger;
+        this.personApi.getPersonList(offset)
             .then(data => data.forEach(item => this.views.update(item)))
             .catch(err => console.log(err))
-    }
+    };
 
 }

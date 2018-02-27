@@ -4,9 +4,9 @@ class PersonApi{
         this.http = new HttpService();
     }
 
-    getPersonList(){
+    getPersonList(offset){
         return new Promise((resolve, reject) => {
-            this.http.get('/product_infinite_scroll/10')
+            this.http.get('/product_infinite_scroll/'+offset)
                 .then(data => resolve(data))
                 .catch(err => reject(err));
         })

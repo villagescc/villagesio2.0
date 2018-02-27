@@ -17,6 +17,14 @@ def profile_image_url(profile, size):
         square_side = min((int(i) for i in size.split('x')))
         return '/static/img/generic_user.png'
 
+
+def profile_image_path_infinite_scroll(profile, size):
+    if profile and profile.photo:
+        return resize(profile.photo, size)
+    else:
+        square_side = min((int(i) for i in size.split('x')))
+        return '/static/img/generic_user.png'
+
 @register.simple_tag
 def product_image_url(listing, size):
     if listing and listing.photo:

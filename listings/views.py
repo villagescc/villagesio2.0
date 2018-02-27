@@ -38,6 +38,7 @@ def add_new_listing(request):
                 try:
                     listing = form.save(commit=False)
                     listing.user_id = request.profile.user_id
+                    listing.profile_id = request.profile.id
                     listing.save()
 
                     for tag in tags_list:

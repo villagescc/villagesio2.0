@@ -1,6 +1,6 @@
 $(document).ready(function() {
     let person = new Person();
-    person.getPerson();
+    // person.getPerson();
 
   // smooth scrolling
     $("a").click(function(event) {
@@ -18,8 +18,10 @@ $(document).ready(function() {
     $('#main').scrollWait(function(){
         let main = $('#main');
         let scrollValue = document.getElementById("main").scrollHeight;
+        debugger;
+        let django_objects_scroll_offset = document.getElementById("django_scroll_offset").getAttribute("data-offset");
         if (scrollValue < (main.scrollTop() + main.height() + diffToBottom)){
-            person.getPerson();
+            person.getPerson(django_objects_scroll_offset);
         }
     }, 150);
 });

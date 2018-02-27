@@ -71,6 +71,7 @@ class PersonListViews extends Views{
 class ProductListViews extends Views {
 
     constructor(element){
+
         super(element)
     }
 
@@ -80,14 +81,14 @@ class ProductListViews extends Views {
 
               <div class="post-box">
 
-                <div class="post-cover listing-modal" style="background-image: url("/uploads/listings/${data.product_image}");" data-listing-id="${data.listing_id}">
+                <div class="post-cover listing-modal" style="background-image: url('/uploads/${data.product_image}');" data-listing-id="${data.listing_id}">
                   <span class="type">${data.listing_type}</span>
                   <span class="price">${data.price} VH</span>
 
                 </div>
 
                 <div class="post-content">
-                  <div class="avatar-thumbnail" style="background-image: url('/uploads/user/${data.profile_img}');">
+                  <div class="avatar-thumbnail" style="background-image: url('${data.profile_image}');">
                     <!--<img class="trusted-icon" src="/static/new_template/res/img/icons/trusted-icon.png"-->
                          <!--alt="trusted">-->
                   </div>
@@ -95,8 +96,8 @@ class ProductListViews extends Views {
                   <h1>${data.title}</h1>
                   <p>${data.description}</p>
                   <div class="tag-container">
-                      ${data['tags'].map(item => `)}
-                          <a class="tag" href="#">{item}</a>
+                      ${data['tags'].map(item => `
+                          <a class="tag" href="#">${item.name}</a>
                       `)}
                   </div>
 
