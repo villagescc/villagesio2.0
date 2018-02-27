@@ -163,11 +163,11 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
 
 def parse_products(products):
     products_list = []
-    default_profile_image = 'generic_user.png'
     for each_product in products:
         profile_image = profile_image_url(each_product.profile, '80x80')
+        product_image = product_image_url(each_product, '320x320')
         products_list.append({'listing_id': each_product.id,
-                              'product_image': each_product.photo.name if each_product.photo.name != '' else None,
+                              'product_image': product_image,
                               'profile_image': profile_image,
                               'listing_type': each_product.listing_type,
                               'profile_username': each_product.user.username,
