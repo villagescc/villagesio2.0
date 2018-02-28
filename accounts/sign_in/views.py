@@ -82,27 +82,27 @@ def get_invitation(request):
 def subscribe_mailchimp(profile):
 
     postal_code = ''
+    if profile.location:
+        neighborhood = profile.location.neighborhood.replace(' ', '+').encode('UTF-8')
+        city = profile.location.city.replace(' ', '+').encode('UTF-8')
+        state = profile.location.state
 
-    neighborhood = profile.location.neighborhood.replace(' ', '+').encode('UTF-8')
-    city = profile.location.city.replace(' ', '+').encode('UTF-8')
-    state = profile.location.state
+        lon = profile.location.point.coords[0]
+        lat = profile.location.point.coords[1]
 
-    lon = profile.location.point.coords[0]
-    lat = profile.location.point.coords[1]
+        google_geo_endpoint_address = 'https://maps.googleapis.com/maps/api/geocode/json?address=1+{0},{1},{2}&key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA'.format(
+            neighborhood, city, state)
+        google_geo_endpoint_coords = 'https://maps.googleapis.com/maps/api/geocode/json?latlng={0}, {1}&key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA'.format(
+            lat, lon)
 
-    google_geo_endpoint_address = 'https://maps.googleapis.com/maps/api/geocode/json?address=1+{0},{1},{2}&key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA'.format(
-        neighborhood, city, state)
-    google_geo_endpoint_coords = 'https://maps.googleapis.com/maps/api/geocode/json?latlng={0}, {1}&key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA'.format(
-        lat, lon)
+        response = requests.get(google_geo_endpoint_address).json()
 
-    response = requests.get(google_geo_endpoint_address).json()
-
-    if response["results"][0].get("address_components"):
-        for each_type in response["results"][0]["address_components"]:
-            for type in each_type['types']:
-                if type == 'postal_code':
-                    postal_code = each_type.get('long_name').encode('UTF-8')
-                    break
+        if response["results"][0].get("address_components"):
+            for each_type in response["results"][0]["address_components"]:
+                for type in each_type['types']:
+                    if type == 'postal_code':
+                        postal_code = each_type.get('long_name').encode('UTF-8')
+                        break
 
     API_KEY = settings.MAILCHIMP_APIKEY
     LIST_ID = '063533ab5b'

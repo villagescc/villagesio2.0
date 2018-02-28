@@ -247,6 +247,11 @@
                                     {{ form.description }}
                                 </div>
 
+                                <div class="col-12 col-sm-6">
+                                    <label for="location">Location</label>
+                                    <a href="{% url 'locator' %}" data-toggle="tooltip" title="{{request.location}}"><i class="fa fa-location-arrow"></i>&nbsp&nbsp{{ request.location|truncatechars:"42" }}</a>
+                                </div>
+
                                 <div class="row" style="max-width: 600px;">
                                     <div class="col-6">
                                         <input class="btn btn-std btn-cancel" type="button" value="Cancel">
