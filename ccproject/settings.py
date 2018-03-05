@@ -83,7 +83,9 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
+    'django.contrib.flatpages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'social_django',
@@ -128,6 +130,7 @@ MIDDLEWARE_CLASSES = [
     'profile.middleware.ProfileMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
     'geo.middleware.LocationMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -184,6 +187,8 @@ DATABASES = {
         'PASSWORD': ripple_db_pass
     }
 }
+
+SITE_ID = 1
 
 ELASTICSEARCH = elasticsearch.Elasticsearch(hosts=["127.0.0.1:9200"])
 
