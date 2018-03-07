@@ -219,7 +219,9 @@ class SignInUserRegister(View):
 def edit_profile(request):
     user_agent = get_user_agent(request)
 
-    profile = request.profile
+    p = Profile.objects.filter(user=request.user)
+    profile = p[0] if p else None
+
     if request.method == 'POST':
         if user_agent.device.family == 'iPhone':
             new_photo = rotate_image(request.FILES.get('photo'))
@@ -227,7 +229,13 @@ def edit_profile(request):
                 request.FILES['photo'] = new_photo
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            form.save()
+            if profile:
+                profile.photo = request.FILES.get('photo')
+                profile.name = form.cleaned_data['name']
+                profile.job = form.cleaned_data['job']
+                profile.description = form.cleaned_data['description']
+                profile.save()
+                print(profile.photo.url)
             messages.info(request, MESSAGES['profile_saved'])
             return HttpResponseRedirect(reverse('frontend:home'))
     else:
