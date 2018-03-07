@@ -39,7 +39,7 @@ AUTH_LOCATION = '/home/ubuntu/.villages_auth.json'
 try:
     from ccproject.local_settings import *
 except ImportError:
-    raise Exception("LOCAL SETTINGS NOT FOUND!")
+    print "LOCAL SETTINGS NOT FOUND!"
 
 
 def get_credentials(auth_location):
