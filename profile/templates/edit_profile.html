@@ -236,12 +236,37 @@
                                         <div class="alert alert-warning collapse" id="error_{{ form.photo }}"></div>
                                         {% if form.instance.photo %}
                                             <img src="{{ form.instance.photo.url }}" alt="photo" width="150">
+                                            <p class="action-call"></p>
+                                            <p><label class="inline" for="id_photo">change</label></p>
                                         {% else %}
                                             <img src="{% static 'new_template/res/img/icons/camera.png' %}" alt="photo">
                                             <p class="action-call"></p>
                                             <p><label class="inline" for="id_photo">browse</label></p>
                                         {% endif %}
                                     </div>
+                                </div>
+
+                            <div class="col-12 col-sm-6 col-md-3">
+                                    <label></label>
+                                    <h4>Header image</h4>
+
+                                    <div class="drag-and-drop-container">
+                                        <input id="id_header_image" name="header_image" type="file">
+
+                                        <div class="alert alert-warning collapse" id="error_{{ form.header_image }}"></div>
+                                        {% if form.instance.header_image %}
+                                            <img src="{{ form.instance.header_image.url }}" alt="Header image" width="150">
+                                            <p class="action-call"></p>
+                                            <p><label class="inline" for="id_header_image">change</label></p>
+
+                                        {% else %}
+                                            <img src="{% static 'new_template/res/img/icons/camera.png' %}" alt="Header image">
+                                            <p class="action-call"></p>
+                                            <p><label class="inline" for="id_header_image">browse</label></p>
+                                        {% endif %}
+
+                                    </div>
+
                                 </div>
 
                                 <div class="col-12 col-sm-6">
