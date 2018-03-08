@@ -230,12 +230,16 @@ def edit_profile(request):
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             if profile:
-                profile.photo = request.FILES.get('photo')
+                photo = request.FILES.get('photo')
+                header_image = request.FILES.get('header_image')
+                if photo:
+                    profile.photo = photo
+                if header_image:
+                    profile.header_image = header_image
                 profile.name = form.cleaned_data['name']
                 profile.job = form.cleaned_data['job']
                 profile.description = form.cleaned_data['description']
                 profile.save()
-                print(profile.photo.url)
             messages.info(request, MESSAGES['profile_saved'])
             return HttpResponseRedirect(reverse('frontend:home'))
     else:

@@ -60,6 +60,8 @@ class Profile(models.Model):
     location = models.ForeignKey(Location, null=True, blank=True)
     photo = models.ImageField(_("Photo"),
                               upload_to='user/%Y/%m', max_length=256, blank=True)
+    header_image = models.ImageField(_("Header Image"),
+                              upload_to='user/%Y/%m', max_length=256, blank=True)
     description = models.TextField(_("Description"), blank=True)
 
     job = models.TextField(null=True, blank=True)
