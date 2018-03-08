@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.shortcuts import render as django_render
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
+from django.contrib.gis.geos import Point
 from accounts.forms import UserForm
 from profile.models import Profile, Invitation
 from django.conf import settings
@@ -229,22 +231,54 @@ def edit_profile(request):
                 request.FILES['photo'] = new_photo
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            if profile:
-                photo = request.FILES.get('photo')
-                header_image = request.FILES.get('header_image')
-                if photo:
-                    profile.photo = photo
-                if header_image:
-                    profile.header_image = header_image
-                profile.name = form.cleaned_data['name']
-                profile.job = form.cleaned_data['job']
-                profile.description = form.cleaned_data['description']
-                profile.save()
+            photo = request.FILES.get('photo')
+            header_image = request.FILES.get('header_image')
+            if photo:
+                profile.photo = photo
+            if header_image:
+                profile.header_image = header_image
+            profile.name = form.cleaned_data['name']
+            profile.job = form.cleaned_data['job']
+            profile.description = form.cleaned_data['description']
+            loc = request.POST.get('location')
+            profile.location = build_location(loc)
+            profile.save()
             messages.info(request, MESSAGES['profile_saved'])
             return HttpResponseRedirect(reverse('frontend:home'))
     else:
         form = ProfileForm(instance=profile)
     return locals()
+
+
+def build_location(loc):
+    location = None
+    loc_encode = unicode(loc).encode('utf-8')
+    URL = 'https://maps.googleapis.com/maps/api/geocode/json?' \
+          'address={}&key={}'.format(loc_encode,
+                                     settings.GOOGLE_MAPS_API_KEY)
+    r = requests.get(URL)
+    res_json = r.json()
+    if res_json['status'] == 'OK':
+        lat = res_json['results'][0]['geometry']['location']['lat']
+        lng = res_json['results'][0]['geometry']['location']['lng']
+        address_components = res_json['results'][0]['address_components']
+        city = ''
+        state = ''
+        country = ''
+        for item in address_components:
+            if item['types'][0] == 'locality':
+                city = item['long_name']
+            if item['types'][0] == 'administrative_area_level_1':
+                state = item['long_name']
+            if item['types'][0] == 'country':
+                country = item['long_name']
+
+        location = Location(point=Point(lat, lng),
+                            country=country,
+                            state=state,
+                            city=city)
+        location.save()
+    return location
 
 
 def send_registration_email(profile):
