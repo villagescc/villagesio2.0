@@ -157,7 +157,6 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
                    'categories': categories_list, 'trust_form': trust_form,
                    'payment_form': payment_form, 'contact_form': contact_form,
                    'notification_number': notification_number,
-
                    'number_of_pages': number_of_pages})
 
 
@@ -178,23 +177,23 @@ def parse_products(products):
     return products_list
 
 
-def product_infinite_scroll(request, offset):
-    if not request.session.get('offset'):
-        request.session['offset'] = 20
-        products = Listings.objects.all().order_by('-updated')[request.session['offset']:request.session['offset'] + 10]
-    elif request.session['offset'] >= 20:
-        request.session['offset'] += 10
-        products = Listings.objects.all().order_by('-updated')[request.session['offset']:request.session['offset'] + 10]
-        if not products:
-            request.session['offset'] = 0
+def product_infinite_scroll(request, offset=settings.LISTING_ITEMS_PER_PAGE):
+    session_offset = request.session.get('offset', 0)
+    if session_offset >= settings.LISTING_ITEMS_PER_PAGE:
+        session_offset += 1
+
+    products = Listings.objects.order_by('-updated')[session_offset:session_offset + int(offset)]
     parsed_products = parse_products(products)
+
+    if not products:
+        session_offset = 0
+    request.session['offset'] = session_offset
     return HttpResponse(ujson.dumps(parsed_products), content_type='application/json')
 
 
 def home(request, type_filter=None, item_type=None, template=None, poster=None, recipient=None,
          extra_context=None, do_filter=False):
     """
-
     url: /home
     """
     # max_amount = ripple.max_payment(request.profile, recipient)
