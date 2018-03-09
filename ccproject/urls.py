@@ -51,5 +51,6 @@ urlpatterns = [
     url('^management/', include(management_urls, namespace='management')),
     url(r'^get_profiles/', get_profiles, name='get_profiles'),
     url(r'', include(geo_urls)),
-    url('', include('social_django.urls', namespace='social'))
+    url('', include('social_django.urls', namespace='social')),
+    url(r'^pages/', include('django.contrib.flatpages.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
