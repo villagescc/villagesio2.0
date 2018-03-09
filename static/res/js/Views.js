@@ -81,7 +81,7 @@ class ProductListViews extends Views {
 
               <div class="post-box">
 
-                <div class="post-cover listing-modal" style="background-image: url('/uploads/${data.product_image}');" data-listing-id="${data.listing_id}">
+                <div class="post-cover listing-modal" style="background-image: url('${data.product_image}');" data-listing-id="${data.listing_id}">
                   <span class="type">${data.listing_type}</span>
                   <span class="price">${data.price} VH</span>
 

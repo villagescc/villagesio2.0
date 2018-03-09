@@ -56,7 +56,6 @@ def listing_map(request):
         form = ListingsForms()
         listing_locations = []
 
-        categories_list = Categories.objects.all()
         item_sub_categories = SubCategories.objects.all().filter(categories=1)
         services_sub_categories = SubCategories.objects.all().filter(categories=2)
         rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)

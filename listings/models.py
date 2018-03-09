@@ -50,7 +50,7 @@ class ListingsManager(GeoManager):
         return self._item_query(*args, **kwargs).count()
 
     def get_items(self, *args, **kwargs):
-        limit = kwargs.pop('limit', settings.FEED_ITEMS_PER_PAGE)
+        limit = kwargs.pop('limit', settings.LISTING_ITEMS_PER_PAGE)
         query = self._item_query(*args, **kwargs)[:limit]
         items = []
         for listing_item in query:

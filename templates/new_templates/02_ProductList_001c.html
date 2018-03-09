@@ -270,7 +270,7 @@
 
           <div class="row" id="product_list">
 
-          <div id="django_scroll_offset" data-offset="20" style="display: none"></div>
+          <div id="django_scroll_offset" data-offset="21" style="display: none"></div>
 
               {% for each in listing_items %}
 
@@ -436,7 +436,7 @@
         menu.slideToggle();
     });
 
-    $(".listing-modal").click(function (e) {
+    $("#product_list").on('click','.listing-modal',function (e) {
         $('#spin-modal').fadeIn();
         var listing_id = $(this).attr('data-listing-id');
         var url = '/get_listing_info/'+listing_id;
