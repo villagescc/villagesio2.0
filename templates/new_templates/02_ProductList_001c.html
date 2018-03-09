@@ -436,7 +436,8 @@
         menu.slideToggle();
     });
 
-    $(".listing-modal").click(function (e) {
+    $("#product_list").on('click','.listing-modal',function (e) {
+        console.log('www1');
         $('#spin-modal').fadeIn();
         var listing_id = $(this).attr('data-listing-id');
         var url = '/get_listing_info/'+listing_id;
