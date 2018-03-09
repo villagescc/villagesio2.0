@@ -33,6 +33,7 @@
     <script src="{% static 'geo.js' %}"></script>
     <script src="{% static 'assets/bootstrap-tagsinput/dist/bootstrap-tagsinput.js' %}"></script>
     <!---->
+
 </head>
 
 <style>
@@ -228,13 +229,44 @@
 
                                 <div class="col-12 col-sm-6 col-md-3">
                                     <label>&nbsp;</label>
+
                                     <div class="drag-and-drop-container">
                                         <input id="id_photo" name="photo" type="file">
+
                                         <div class="alert alert-warning collapse" id="error_{{ form.photo }}"></div>
-                                        <img src="{% static 'new_template/res/img/icons/camera.png' %}" alt="photo">
-                                        <p class="action-call"></p>
-                                        <p><label class="inline" for="id_photo">browse</label></p>
+                                        {% if form.instance.photo %}
+                                            <img src="{{ form.instance.photo.url }}" alt="photo" width="150">
+                                            <p class="action-call"></p>
+                                            <p><label class="inline" for="id_photo">change</label></p>
+                                        {% else %}
+                                            <img src="{% static 'new_template/res/img/icons/camera.png' %}" alt="photo">
+                                            <p class="action-call"></p>
+                                            <p><label class="inline" for="id_photo">browse</label></p>
+                                        {% endif %}
                                     </div>
+                                </div>
+
+                            <div class="col-12 col-sm-6 col-md-3">
+                                    <label></label>
+                                    <h4>Header image</h4>
+
+                                    <div class="drag-and-drop-container">
+                                        <input id="id_header_image" name="header_image" type="file">
+
+                                        <div class="alert alert-warning collapse" id="error_{{ form.header_image }}"></div>
+                                        {% if form.instance.header_image %}
+                                            <img src="{{ form.instance.header_image.url }}" alt="Header image" width="150">
+                                            <p class="action-call"></p>
+                                            <p><label class="inline" for="id_header_image">change</label></p>
+
+                                        {% else %}
+                                            <img src="{% static 'new_template/res/img/icons/camera.png' %}" alt="Header image">
+                                            <p class="action-call"></p>
+                                            <p><label class="inline" for="id_header_image">browse</label></p>
+                                        {% endif %}
+
+                                    </div>
+
                                 </div>
 
                                 <div class="col-12 col-sm-6">
@@ -250,6 +282,7 @@
                                 <div class="col-12 col-sm-6">
                                     <label for="location">Location</label>
                                     <a href="{% url 'locator' %}" data-toggle="tooltip" title="{{request.location}}"><i class="fa fa-location-arrow"></i>&nbsp&nbsp{{ request.location|truncatechars:"42" }}</a>
+                                    <input id="autocomplete" name="location" placeholder="Enter your address" onFocus="geolocate()" type="text">
                                 </div>
 
                                 <div class="row" style="max-width: 600px;">
@@ -280,6 +313,7 @@
     var input_choose_file = $("#id_photo");
     input_choose_file.css({height: "3em"});
 </script>
+{% include '_location_autocomplete_script.html' %}
 </body>
 
 </html>

@@ -201,13 +201,12 @@ class RequestInvitationForm(forms.Form):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('name', 'photo', 'job', 'description')
+        fields = ('name', 'photo', 'header_image', 'job', 'description')
 
         widgets = {
             'name': forms.TextInput(attrs={'style': 'width: 100%'}),
             'description': forms.Textarea(attrs={'style': 'height: 150px;'}),
-            'job': forms.TextInput(attrs={}),
-            'photo': forms.FileInput()
+            # 'job': forms.TextInput(attrs={}),
         }
 
     def save(self):

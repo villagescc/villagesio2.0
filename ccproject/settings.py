@@ -36,6 +36,12 @@ LOCALE_PATHS = (
 AUTH_LOCATION = '/home/ubuntu/.villages_auth.json'
 
 
+try:
+    from ccproject.local_settings import *
+except ImportError:
+    print "LOCAL SETTINGS NOT FOUND!"
+
+
 def get_credentials(auth_location):
     """
 
@@ -305,3 +311,5 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 USE_X_FORWARDED_HOST = True
+
+GOOGLE_MAPS_API_KEY = 'AIzaSyBuQbf5nmnkuK8vOlF2STsyqfWeCzL13jA'
