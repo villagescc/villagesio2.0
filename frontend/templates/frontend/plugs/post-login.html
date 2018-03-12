@@ -473,8 +473,8 @@
     $(".listing-facebook-share").click(function () {
         debugger;
         var listing_id = $(".listing-modal").attr("data-listing-id");
-        var url = 'https://villages.cc/listing_details/' + listing_id;
-        var listing_image = 'https://villages.cc'+$('.listing-img').attr("src");
+        var url = 'https://villages.io/listing_details/' + listing_id;
+        var listing_image = 'https://villages.io'+$('.listing-img').attr("src");
         console.log(listing_image);
         FB.ui({
             method: 'share_open_graph',
@@ -482,7 +482,7 @@
             action_properties: JSON.stringify({
                 object: {
                     'og:url': url,
-                    'og:title': $('.listing-modal-title').text()+' - '+$('#label-listing-type').text()+' - '+ 'VILLAGES.CC',
+                    'og:title': $('.listing-modal-title').text()+' - '+$('#label-listing-type').text()+' - '+ 'VILLAGES.IO',
                     'og:description': $('#label-description').text().substr(0, 160),
                     'og:image': listing_image
                 }
@@ -513,7 +513,7 @@
         debugger;
         var listing_id = $(".listing-modal").attr("data-listing-id");
         var listing_title = $(".listing-modal").attr("data-listing-title");
-        var url = 'https://twitter.com/share?url=https%3A%2F%2Fvillages.cc%2Flisting_details%2F'+listing_id+'&via=Villagescc&related=villagesmarketplace%2Ctwitter&hashtags=villagescc%2Clisting&text='+listing_title;
+        var url = 'https://twitter.com/share?url=https%3A%2F%2Fvillages.io%2Flisting_details%2F'+listing_id+'&via=Villagescc&related=villagesmarketplace%2Ctwitter&hashtags=villagescc%2Clisting&text='+listing_title;
         $(".listing-twitter-share").attr("href", url)
     })
 </script>

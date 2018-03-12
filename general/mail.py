@@ -51,7 +51,7 @@ def send_notification(subject, sender, recipient, template, context):
 
 
 def send_mail_from_system(subject, recipient, template, context):
-    send_mail(subject, ("Villages.cc", settings.EMAIL_HOST_USER),
+    send_mail(subject, ("Villages.io", settings.EMAIL_HOST_USER),
               recipient, template, context)
 
 

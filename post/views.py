@@ -46,7 +46,7 @@ def view_post(request, post_id):
             if contact_form.is_valid():
                 contact_form.send(
                     sender=request.profile, recipient=post.user,
-                    subject=_("Villages.cc message "
+                    subject=_("Villages.io message "
                               "from %(from)s Re: %(title)s") % {
                                 'from': request.profile,
                                 'title': post.title},

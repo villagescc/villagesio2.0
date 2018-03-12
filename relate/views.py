@@ -119,7 +119,7 @@ def acknowledge_user_ajax(request, recipient_username):
 
 
 def send_endorsement_notification(endorsement):
-    subject = _("%s has endorsed you on Villages.cc") % endorsement.endorser
+    subject = _("%s has endorsed you on Villages.io") % endorsement.endorser
     send_notification(subject, endorsement.endorser, endorsement.recipient,
                       'endorsement_notification_email.txt',
                       {'endorsement': endorsement})
@@ -209,7 +209,7 @@ def pay_user_ajax(request, recipient_username):
 
 
 def send_acknowledgement_notification(acknowledgement):
-    subject = _("%s has acknowledged you on Villages.cc") % (
+    subject = _("%s has acknowledged you on Villages.io") % (
         acknowledgement.payer)
     send_notification(subject, acknowledgement.payer, acknowledgement.recipient,
                       'acknowledgement_notification_email.txt',
@@ -389,7 +389,7 @@ def blank_payment(request):
 
 
 def send_payment_notification(payment):
-    subject = _("%s has acknowledged you on Villages.cc") % (
+    subject = _("%s has acknowledged you on Villages.io") % (
         payment.payer)
     send_notification(subject, payment.payer, payment.recipient,
                       'acknowledgement_notification_email.txt',

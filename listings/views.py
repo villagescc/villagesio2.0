@@ -130,8 +130,9 @@ def get_subcategories_filter(request):
 
 
 def get_category_by_subcategory(request):
+
     if request.is_ajax():
         result = []
-        category = SubCategories.objects.get(id=request.GET.get("subcategory"))
-        result.append({"id": category.categories.id, "text": category.categories.categories_text})
+        category = SubCategories.objects.get(id=request.GET.get("subcategory")).categories
+        result.append({"id": category.id, "text": category.categories_text})
         return JsonResponse({'result': result})
