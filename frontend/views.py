@@ -178,16 +178,17 @@ def parse_products(products):
 
 
 def product_infinite_scroll(request, offset=settings.LISTING_ITEMS_PER_PAGE):
-    session_offset = request.session.get('offset', 0)
-    if session_offset >= settings.LISTING_ITEMS_PER_PAGE:
-        session_offset += 1
+    start_session_offset = request.session.get('offset')
+    if not start_session_offset:
+        start_session_offset = settings.LISTING_ITEMS_PER_PAGE
+    end_session_offset = start_session_offset + int(offset)
 
-    products = Listings.objects.order_by('-updated')[session_offset:session_offset + int(offset)]
+    products = Listings.objects.order_by('-updated')[start_session_offset:end_session_offset]
     parsed_products = parse_products(products)
 
     if not products:
-        session_offset = 0
-    request.session['offset'] = session_offset
+        end_session_offset = 0
+    request.session['offset'] = end_session_offset
     return HttpResponse(ujson.dumps(parsed_products), content_type='application/json')
 
 
@@ -214,12 +215,10 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
         else:
             print(form.errors)
 
-    subcategory_name = None
     people = None
     trusted_only = None
     # GET Request
-    form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter,
-                                                 do_filter)
+    form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter, do_filter)
     if form_listing_settings.is_valid():
         listing_items, remaining_count = form_listing_settings.get_results()
 
@@ -229,7 +228,6 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
         next_page_date = None
     url_params = request.GET.copy()
     url_params.pop('d', None)
-    url_param_str = url_params.urlencode()
     if next_page_date:
         url_params['d'] = next_page_date.strftime(DATE_FORMAT)
     next_page_param_str = url_params.urlencode()
@@ -239,7 +237,6 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     contact_form = ContactForm()
 
     form = ListingsForms()
-    profile = recipient
     categories_list = Categories.objects.all()
     subcategories = SubCategories.objects.all()
     if type_filter in LISTING_TYPE_CHECK:

@@ -271,7 +271,7 @@ class Invitation(models.Model):
         return 'invitation', (self.code,)
 
     def send(self):
-        send_mail(_("%s Has Invited You To Villages.cc") % self.from_profile,
+        send_mail(_("%s Has Invited You To Villages.io") % self.from_profile,
                   self.from_profile, self.to_email, 'invitation_email.txt',
                   {'invitation': self})
         self.date = datetime.now()
@@ -300,7 +300,7 @@ class PasswordResetLink(models.Model):
         return 'reset_password', (self.code,)
 
     def send(self):
-        subject = _("Villages.cc Password Reset Link")
+        subject = _("Villages.io Password Reset Link")
         send_mail_from_system(subject, self.profile, 'password_reset_email.txt',
                               {'link': self})
 

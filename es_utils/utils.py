@@ -19,7 +19,7 @@ def handle_document(listing_obj):
             'lat': int(listing_obj.user.profile.location.point.coords[0]),
             'lon': int(listing_obj.user.profile.location.point.coords[1]),
         },
-        'listing_url': 'http://www.villages.cc/listing_details/{0}'.format(listing_obj.id)
+        'listing_url': 'http://www.villages.io/listing_details/{0}'.format(listing_obj.id)
     }
     if 'location' in es_doc:
         del es_doc['location']

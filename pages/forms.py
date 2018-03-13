@@ -13,7 +13,7 @@ class FeedbackForm(forms.Form):
 
     def send(self):
         send_mail_to_admin(
-            _("Villages.cc Feedback"),
+            _("Villages.io Feedback"),
             self.get_sender(), 'feedback_email.txt',
             {'feedback': self.cleaned_data['feedback']})
 

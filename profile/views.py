@@ -141,7 +141,7 @@ def register(request):
 
 
 def send_registration_email(profile):
-    subject = _("Welcome to Villages.cc")
+    subject = _("Welcome to Villages.io")
     send_mail_from_system(subject, profile, 'registration_email.txt',
                           {'profile': profile})
 
@@ -249,7 +249,7 @@ def edit_settings(request):
 
 
 def send_new_address_email(settings_obj):
-    subject = _("Your Villages.cc email address has been updated")
+    subject = _("Your Villages.io email address has been updated")
     send_mail_from_system(subject, settings_obj.profile, 'new_email.txt',
                           {'new_email': settings_obj.email})
 
@@ -437,7 +437,7 @@ def undefined_contact(request):
         if form.is_valid():
             profile = Profile.objects.get(user__username=form.cleaned_data['contact_recipient_name'])
             try:
-                form.send(sender=request.profile, recipient=profile, subject='In reply to Villages.cc post: '+form.data.get('listing_title'))
+                form.send(sender=request.profile, recipient=profile, subject='In reply to Villages.io post: '+form.data.get('listing_title'))
             except Exception as e:
                 messages.add_message(request, messages.ERROR, 'Error sending message')
                 return JsonResponse({'msg': 'Success'})

@@ -1,5 +1,5 @@
 {% load i18n %}
-{% blocktrans %}Thanks for registering at Villages.cc! We hope you find our system useful.{% endblocktrans %}
+{% blocktrans %}Thanks for registering at Villages.io! We hope you find our system useful.{% endblocktrans %}
 
 {% blocktrans %}Begin by making sure you've filled out your profile to include a picture and a description of your skills and things you'd like to offer to the community:{% endblocktrans %}
 

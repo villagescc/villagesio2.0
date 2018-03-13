@@ -187,7 +187,7 @@ class RequestInvitationForm(forms.Form):
     
     def send(self, to_profile=None):
         data = self.cleaned_data
-        subject = "Villages.cc Invitation Request"
+        subject = "Villages.io Invitation Request"
         context = {'text': data['text'],
                    'email': data['email']}
         if to_profile:
@@ -226,7 +226,7 @@ class ContactForm(forms.Form):
     def send(self, sender, recipient, subject=None,
              template='contact_email.txt', extra_context=None):
         if not subject:
-            subject = _("Villages.cc message from %s") % sender
+            subject = _("Villages.io message from %s") % sender
         context = {'message': self.cleaned_data['message'],
                    'sender': sender}
         if extra_context:

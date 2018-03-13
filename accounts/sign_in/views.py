@@ -57,7 +57,7 @@ MESSAGES = {
     'invitation_sent': _("Invitation sent to %s."),
     'invitation_deleted': _("Invitation deleted."),
     'invitation_request_sent': _("Invitation request sent."),
-    'invitation_landing': _("%s has invited you to Villages.cc. "
+    'invitation_landing': _("%s has invited you to Villages.io. "
                             "Please take a look around and then use the "
                             "<em>Join</em> link on the right to register."),
     'password_link_sent': _("A password reset link has been emailed to you."),
@@ -282,7 +282,7 @@ def build_location(loc):
 
 
 def send_registration_email(profile):
-    subject = _("Welcome to Villages.cc")
+    subject = _("Welcome to Villages.io")
     send_mail_from_system(subject, profile, 'registration_email.txt',
                           {'profile': profile})
 
