@@ -35,35 +35,26 @@ LOCALE_PATHS = (
 
 AUTH_LOCATION = '/home/ubuntu/.villages_auth.json'
 
+if os.path.exists(AUTH_LOCATION):
+    auth_data = ujson.loads(open(AUTH_LOCATION).read())
+
+    villages_db_user = auth_data['villages']['db_user']
+    villages_db_pass = auth_data['villages']['db_pass']
+    villages_db_name = auth_data['villages']['db_name']
+    ripple_db_user = auth_data['ripple']['db_user']
+    ripple_db_pass = auth_data['ripple']['db_pass']
+    ripple_db_name = auth_data['ripple']['db_name']
+    mail_user = auth_data['mail']['mail_user']
+    mail_password = auth_data['mail']['mail_pass']
+    secret_key = auth_data['secret_key']
+    mailchimp_apikey = auth_data['mailchimp_apikey']
+
 
 try:
     from ccproject.local_settings import *
 except ImportError:
-    print "LOCAL SETTINGS NOT FOUND!"
+    pass
 
-
-def get_credentials(auth_location):
-    """
-
-    :param auth_location:
-    :return:
-    """
-    if os.path.exists(auth_location):
-        auth_data = ujson.loads(open(auth_location).read())
-        return auth_data['villages']['db_user'], \
-               auth_data['villages']['db_pass'], \
-               auth_data['villages']['db_name'], \
-               auth_data['ripple']['db_user'], \
-               auth_data['ripple']['db_pass'], \
-               auth_data['ripple']['db_name'], \
-               auth_data['mail']['mail_user'], \
-               auth_data['mail']['mail_pass'], \
-               auth_data['secret_key'], \
-               auth_data['mailchimp_apikey']
-
-
-villages_db_user, villages_db_pass, villages_db_name, ripple_db_user, ripple_db_pass, ripple_db_name, \
-mail_user, mail_password, secret_key, mailchimp_apikey = get_credentials(AUTH_LOCATION)
 
 MAILCHIMP_APIKEY = mailchimp_apikey
 
@@ -78,7 +69,7 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = mail_user
 EMAIL_HOST_USER = mail_user
 EMAIL_HOST_PASSWORD = mail_password
-SITE_DOMAIN = 'villages.cc'
+SITE_DOMAIN = 'villages.io'
 HELP_EMAIL = mail_user
 EMAIL_SUBJECT_PREFIX = "[Villages] "
 

@@ -77,7 +77,6 @@
 
     $(document).ready(function (data) {
         var subcategory = $("#id_subcategories").val();
-        console.log('!!!', $("#id_subcategories"));
         $.ajax({
             url: "{% url 'get_category' %}",
             type: "GET",
