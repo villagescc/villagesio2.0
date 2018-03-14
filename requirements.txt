@@ -11,3 +11,4 @@ elasticsearch
 social-auth-app-django
 ujson
 mailchimp
+RandomWords==0.2.1
