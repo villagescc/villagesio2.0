@@ -77,6 +77,7 @@ def edit_listing(request, listing_id):
                                       'title': listing.title,
                                       'description': listing.description,
                                       'price': listing.price,
+                                      'categories': listing.subcategories.categories,
                                       'subcategories': listing.subcategories,
                                       'tag': tags_to_template})
         return render(request, 'listing_management/edit_listing.html', {'form': form, 'listing_id': listing_id,
@@ -87,6 +88,7 @@ def edit_listing(request, listing_id):
                                   'title': listing.title,
                                   'description': listing.description,
                                   'price': listing.price,
+                                  'categories': listing.subcategories.categories,
                                   'subcategories': listing.subcategories,
                                   'photo': listing.photo})
     return render(request, 'listing_management/edit_listing.html', {'form': form, 'listing_form': listing_form})
