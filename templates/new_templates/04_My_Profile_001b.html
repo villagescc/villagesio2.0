@@ -38,25 +38,21 @@
 {% include 'templates.html' %}
 
 <div class="app-wrapper">
-
     <header class="app-header">
       <nav class="navbar navbar-expand-lg">
-
         <a class="navbar-brand" href="{% url 'frontend:home' %}">
           <img class="d-none d-sm-block" src="{% static 'new_template/res/img/logo_full.png' %}" alt="villages.io">
           <img class="d-block d-sm-none" src="{% static 'new_template/res/img/logo.png' %}" alt="villages.io">
         </a>
-
-        <div class="user-menu d-flex d-lg-none">
+      <div class="user-menu d-flex d-lg-none">
           <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
           <a class="user-link" href="#">
             <div class="avatar-wrapper blue">
-              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width="43px" height="44px"
-                   class="rounded-circle">
+              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%" width="200px"
+                   style="position: relative; border-radius: 50%; overflow: hidden;">
             </div>
           </a>
         </div>
-
         <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -96,15 +92,14 @@
             </li>
           </ul>
         </div>
-
         <div class="user-menu d-none d-lg-flex">
               <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications"></a>
               <ul class="nav navbar-nav">
                   <li class="nav-item dropdown">
                       <a class="nav-link dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <div class="avatar-wrapper blue">
-                              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" width=43px height=60px
-                                   class="rounded-circle">
+                              <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%" width="200px"
+                                   style="position: relative; border-radius: 50%; overflow: hidden;">
                           </div>
                       </a>
                       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -132,8 +127,8 @@
                 <div class="user-cover" style="background-image: url('{% static 'images/logo.png' %}');" data-toggle="tooltip" title="villages.io"></div>
                 <div class="user-id">
                     <div class="avatar-wrapper big">
-                        <img src="{% profile_image_url request.profile '60x60' %}" alt="avatar" width="43px"
-                             height="83px" class="rounded-circle">
+                        <img src="{% profile_image_url request.profile '60x60' %}" alt="avatar" height="100%" width="200px"
+                             style="position: relative; border-radius: 50%; overflow: hidden;">
                     </div>
                     <h1>{{ request.profile.name }}</h1>
                 </div>
@@ -227,15 +222,14 @@
 
                         </div>
 
-                        <div class="row" style="margin-top: 5em;">
+                        <div class="row" id="product_list" style="margin-top: 5em;">
 
-                            <div class="col-12 col-sm-6 col-md-12 col-lg-6 col-xl-4 col-xxl-3">
+                            {% if listings %}
+                                {% for each in listings %}
+                                    <div class="col-12 col-sm-6 col-md-12 col-lg-6 col-xl-4 col-xxl-3">
+                                            <div class="post-box">
 
-                                {% if listings %}
-                                    {% for each in listings %}
-                                        <div class="post-box">
-
-                                            <div class="post-cover" style="background-image: url('{% product_image_url each '280x280' %}');">
+                                            <div class="post-cover listing-modal" data-listing-id="{{ each.id }}" style="background-image: url('{% product_image_url each '280x280' %}');">
 
                                                 <span class="type">{{ each.listing_type }}</span>
                                                 <span class="price">{{ each.price }} VH</span>
@@ -265,10 +259,9 @@
                                                    data-listing-title="{{ each.title }}" href="#"><img src="{% static 'new_template/res/img/icons/mail.png'%}" alt="contact"></a>
                                             </div>
                                         </div>
-                                    {% endfor %}
-                                {% endif %}
-
-                            </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
 
                         </div>
 
@@ -331,6 +324,46 @@
 
 </div>
 
+<script>
+    $("#product_list").on('click','.listing-modal',function (e) {
+        $('#spin-modal').fadeIn();
+        var listing_id = $(this).attr('data-listing-id');
+        var url = '/get_listing_info/'+listing_id;
+        var listing_picture_path = '/uploads/';
+        $.ajax({
+            url: url,
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                if(data["data"]["stat"] == "ok"){
+                    $('#listing-id').val(listing_id);
+                    $('.listing-modal-title').text(data["data"]["listing_title"]);
+                    $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
+                    $('#label-listing-type').text(data["data"]["listing_type"]);
+                    $('#label-price').text(data["data"]["listing_price"]);
+                    $('#label-profile-name').text(data["data"]["profile_name"]);
+                    $('#profile-location').text(data["data"]["profile_location"]);
+                    $('#listing-created-at').text(data["data"]["created_at"]);
+                    $('#listing-created-at').attr("href", "/listing_details/"+listing_id);
+                    $('#label-description').text(data["data"]["description"]);
+                    $('#listing-profile-username').text(data["data"]["username"]);
+                    $("#listing-profile-username").attr("href", "/profiles/"+data["data"]["username"]);
+                    $('#label-profile-balance').text(data["data"]["balance"]);
+                    $('#label-profile-occupation').text(data["data"]["job"]);
+                    $('#trust-btn').attr('data-profile-username', data["data"]["username"]);
+                    $('#payment-btn').attr('data-profile-username', data["data"]["username"]);
+                    $('#contact-btn').attr('data-profile-username', data["data"]["username"]);
+                    $('#spin-modal').fadeOut();
+                    $("#listing-modal").modal("show");
+                }
+            },
+            error: function (data) {
+                $('#spin-modal').fadeOut();
+                showInternalServerError();
+            }
+        });
+    });
+</script>
 </body>
 
 </html>

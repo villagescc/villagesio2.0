@@ -57,6 +57,7 @@
 </form>
 
 <script>
+    $('#add-posting-modal').remove();
     $("#div_id_categories").on('change', "#id_categories", function (e) {
         var selected_category = $(this).val();
         $.ajax({

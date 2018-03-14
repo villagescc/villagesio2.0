@@ -219,16 +219,16 @@
 
                         </div>
 
-                        <div class="row" style="margin-top: 5em;">
+                        <div class="row" id="product_list" style="margin-top: 5em;">
 
                             {% if listings %}
                                 {% for each in listings %}
 
-                            <div class="col-12 col-sm-6 col-md-12 col-lg-6 col-xl-4 col-xxl-3">
+                                    <div class="col-12 col-sm-6 col-md-12 col-lg-6 col-xl-4 col-xxl-3">
 
                                         <div class="post-box">
 
-                                            <div class="post-cover" style="background-image: url('{% product_image_url each '280x280' %}');">
+                                            <div class="post-cover listing-modal" data-listing-id="{{ each.id }}" style="background-image: url('{% product_image_url each '280x280' %}');">
 
                                                 <span class="type">{{ each.listing_type }}</span>
                                                 <span class="price">{{ each.price }} VH</span>
@@ -419,6 +419,45 @@
     $('.menu-group div').click(function () {
         var menu = $(this).parent().find('ul');
         menu.slideToggle();
+    });
+
+    $("#product_list").on('click','.listing-modal',function (e) {
+        $('#spin-modal').fadeIn();
+        var listing_id = $(this).attr('data-listing-id');
+        var url = '/get_listing_info/'+listing_id;
+        var listing_picture_path = '/uploads/';
+        $.ajax({
+            url: url,
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                if(data["data"]["stat"] == "ok"){
+                    $('#listing-id').val(listing_id);
+                    $('.listing-modal-title').text(data["data"]["listing_title"]);
+                    $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
+                    $('#label-listing-type').text(data["data"]["listing_type"]);
+                    $('#label-price').text(data["data"]["listing_price"]);
+                    $('#label-profile-name').text(data["data"]["profile_name"]);
+                    $('#profile-location').text(data["data"]["profile_location"]);
+                    $('#listing-created-at').text(data["data"]["created_at"]);
+                    $('#listing-created-at').attr("href", "/listing_details/"+listing_id);
+                    $('#label-description').text(data["data"]["description"]);
+                    $('#listing-profile-username').text(data["data"]["username"]);
+                    $("#listing-profile-username").attr("href", "/profiles/"+data["data"]["username"]);
+                    $('#label-profile-balance').text(data["data"]["balance"]);
+                    $('#label-profile-occupation').text(data["data"]["job"]);
+                    $('#trust-btn').attr('data-profile-username', data["data"]["username"]);
+                    $('#payment-btn').attr('data-profile-username', data["data"]["username"]);
+                    $('#contact-btn').attr('data-profile-username', data["data"]["username"]);
+                    $('#spin-modal').fadeOut();
+                    $("#listing-modal").modal("show");
+                }
+            },
+            error: function (data) {
+                $('#spin-modal').fadeOut();
+                showInternalServerError();
+            }
+        });
     });
 </script>
 

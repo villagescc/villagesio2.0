@@ -45,5 +45,3 @@ class ListingsForms(ModelForm):
             # }),
             'photo': forms.FileInput()
         }
-
-
