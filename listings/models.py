@@ -1,10 +1,12 @@
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.utils.encoding import python_2_unicode_compatible
+from django.db import models
+from django.contrib.gis.db.models import GeoManager, Q
+
+from categories.models import Categories, SubCategories
 from tags.models import Tag
 from profile.models import Profile
-from django.contrib.auth.models import User
-from django.db import models
-from categories.models import Categories, SubCategories
-from django.contrib.gis.db.models import GeoManager, Q
 
 
 OFFER = 'OFFER'
@@ -94,6 +96,7 @@ class ListingsManager(GeoManager):
         return query
 
 
+@python_2_unicode_compatible
 class Listings(models.Model):
     user = models.ForeignKey(User, null=True, blank=True)
     profile = models.ForeignKey(Profile, null=True, blank=True)
