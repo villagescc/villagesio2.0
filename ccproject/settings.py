@@ -265,7 +265,7 @@ MEDIA_URL = '/uploads/'
 
 MEDIA_ROOT = 'uploads'
 
-GEOIP_PATH = '/usr/share/GeoIP'
+GEOIP_PATH = BASE_DIR
 
 LOGIN_URL = '/accounts/sign_in/log_in'
 

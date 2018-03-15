@@ -50,7 +50,7 @@
     position: relative;
     text-align: center;
     padding: 4em 7% 1.5em;
-    & .avatar-thumbnail {
+    .avatar-thumbnail {
       position: absolute;
       top: -1.5em;
       left: 50%;
@@ -61,7 +61,7 @@
       @include crossTransform(translateX(-50%));
       background-position: center;
       background-repeat: no-repeat;
-      background-size: auto;
+      background-size: cover;
       & .trusted-icon {
         position: absolute;
         bottom: 0;

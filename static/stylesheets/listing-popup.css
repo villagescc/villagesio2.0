@@ -1,0 +1,7 @@
+#listing-modal .modal-body .item-holder {
+    max-height: 400px
+}
+
+#listing-modal .modal-body .item-holder img {
+    object-fit: cover;
+}
