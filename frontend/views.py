@@ -196,8 +196,7 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     url: /home
     """
     # max_amount = ripple.max_payment(request.profile, recipient)
-    if request.session.get('offset'):
-        request.session['offset'] = settings.LISTING_ITEMS_PER_PAGE
+    request.session['offset'] = settings.LISTING_ITEMS_PER_PAGE
     sign_in_form = UserForm
     user_agent = get_user_agent(request)
     if user_agent.is_mobile:
