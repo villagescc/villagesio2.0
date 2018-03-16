@@ -128,7 +128,7 @@
                 <div class="user-id">
                     <div class="avatar-wrapper big">
                         <img src="{% profile_image_url request.profile '60x60' %}" alt="avatar" height="100%" width="200px"
-                             style="position: relative; border-radius: 50%; overflow: hidden;">
+                             style="position: relative; border-radius: 50%; overflow: hidden; object-fit: cover;">
                     </div>
                     <h1>{{ request.profile.name }}</h1>
                 </div>
@@ -231,14 +231,14 @@
 
                                             <div class="post-cover listing-modal" data-listing-id="{{ each.id }}" style="background-image: url('{% product_image_url each '280x280' %}');">
 
-                                                <span class="type">{{ each.listing_type }}</span>
-                                                <span class="price">{{ each.price }} VH</span>
+                                                <span class="type" style="text-shadow: 0 0 10px #111;">{{ each.listing_type }}</span>
+                                                <span class="price" style="text-shadow: 0 0 10px #111;">{{ each.price }} VH</span>
 
                                             </div>
 
                                             <div class="post-content">
 
-                                                <div class="avatar-thumbnail" style="background-image: url('{% profile_image_url each.user.profile '60x60' %}')">
+                                                <div class="avatar-thumbnail" style="background-image: url('{% profile_image_url each.user.profile '60x60' %}'); background-size: cover;">
                                                     <img class="trusted-icon" src="{% static 'new_template/res/img/icons/trusted-icon.png' %}" alt="trusted">
                                                 </div>
 

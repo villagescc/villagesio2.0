@@ -97,9 +97,9 @@
       <aside class="app-sidebar">
       <div class="cat-menu">
         <div class="cat-menu">
-          <a class="cat-item active" href="{% url 'frontend:home' %}">
+          <a class="cat-item {% if request.resolver_match.view_name == 'frontend:home' %}active{% endif %}" href="{% url 'frontend:home' %}">
             <div class="cat-item-icon">
-              <img src="{% static 'new_template/res/img/icons/all_categories.png' %}" alt="All Categories">
+               <img src="{% static 'new_template/res/img/icons/all_categories.png' %}" alt="All Categories">
             </div>
             <span class="cat-item-name">All Categories</span>
           </a>
@@ -325,6 +325,15 @@
     </div>
 
     <script>
+        // change Active MenuItem
+        $(document).ready(function () {
+            // console.log(window.location.href);
+            if ((window.location.href === '/') || (window.location.href == "{% url 'frontend:home' %}")) {
+                console.log(window.location.href);
+            }
+        })
+
+
         $("#radio-people").click(function () {
             window.location.href = "{% url 'frontend:people_listing' %}"
         });

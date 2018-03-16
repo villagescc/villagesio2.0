@@ -352,7 +352,7 @@
               <div class="person-box">
                 <a href="{{ each.get_absolute_url }}"><div class="avatar-wrapper blue">
                   <img src="{% profile_image_url each '400x400' %}" alt="avatar" width="70px" height="70px"
-                       class="rounded-circle" style="max-width: 100% !important;">
+                       class="rounded-circle" style="max-width: 100% !important; object-fit: cover;">
                 </div></a>
 
                   <a href="{{ each.get_absolute_url }}" style="text-decoration: none">

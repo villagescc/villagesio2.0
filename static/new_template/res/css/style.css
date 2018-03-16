@@ -7070,10 +7070,13 @@ p {
 
 /* header */
 .app-header {
+  position: relative;
   background-color: #fff;
   -webkit-box-shadow: 0 3px 2px 0 rgba(119, 119, 119, 0.9);
   -moz-box-shadow: 0 3px 2px 0 rgba(119, 119, 119, 0.9);
-  box-shadow: 0 3px 2px 0 rgba(119, 119, 119, 0.9); }
+  box-shadow: 0 3px 2px 0 rgba(119, 119, 119, 0.9);
+  z-index: 1;
+}
 
 .app-view {
   display: flex;

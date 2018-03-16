@@ -175,13 +175,15 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': villages_db_name,
         'USER': villages_db_user,
-        'PASSWORD': villages_db_pass
+        'PASSWORD': villages_db_pass,
+        'HOST': 'localhost'
     },
     'ripple': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': ripple_db_name,
         'USER': ripple_db_user,
-        'PASSWORD': ripple_db_pass
+        'PASSWORD': ripple_db_pass,
+        'HOST': 'localhost'
     }
 }
 

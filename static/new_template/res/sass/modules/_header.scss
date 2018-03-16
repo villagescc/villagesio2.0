@@ -1,7 +1,9 @@
 /* header */
 .app-header {
+  position: relative;
   background-color: #fff;
   @include crossShadow(0 3px 2px 0 rgba(119, 119, 119, 0.9));
+  z-index: 1;
 }
 
 .app-view {

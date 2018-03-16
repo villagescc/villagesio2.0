@@ -23,6 +23,7 @@
 {#    <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">#}
     <link rel="stylesheet" href="{% static 'assets/tether/css/tether.css' %}">
     <link href="{% static 'stylesheets/main.css' %}" rel="stylesheet">
+    <link href="{% static 'stylesheets/listing-popup.css' %}" rel="stylesheet">
     <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
     <link href="{% static 'assets/bootstrap-tagsinput/dist/bootstrap-tagsinput.css' %}" rel="stylesheet">
     <link type="text/css" media="screen" rel="stylesheet" href="{% static 'css/responsive-tables.css' %}" />
@@ -87,6 +88,57 @@
             init_feed_items();
         });
     </script>
+
+    <style>
+        .app-header {
+            position: relative;
+            z-index: 1;
+        }
+        .search-results .post-box .post-content .avatar-thumbnail,
+        .profile-content .post-box .post-content .avatar-thumbnail {
+            background-size: cover;
+        }
+        .trust-data.register-form {
+            max-width: 600px;
+            margin: 50px auto;
+            box-shadow: 0 0 60px -10px #999;
+        }
+        @media (max-width: 640px) {
+            .trust-data.register-form {
+                max-width: 94%;
+            }
+        }
+
+        .trust-data.register-form .fb-reg-btn {
+            margin-bottom: 20px;
+        }
+
+        .app-main .trust-content.signin-form {
+            max-width: 600px;
+            margin: 50px auto;
+        }
+        @media (max-width: 640px) {
+            .app-main .trust-content.signin-form {
+                max-width: 100%;
+            }
+            .app-main .trust-content.signin-form form#trust-form {
+                padding: 40px 20px;
+            }
+        }
+        .app-main .trust-content.signin-form form#trust-form .receiver-box {
+            overflow: hidden;
+        }
+        .app-main .trust-content.signin-form form#trust-form input {
+            margin-bottom: 10px;
+        }
+
+        .app-view .search-results .post-box .post-cover span {
+            text-shadow: 0 0 10px #111
+        }
+        #product_list .post-box .post-cover span {
+            text-shadow: 0 0 10px #111;
+        }
+    </style>
 
 <script>
   window.fbAsyncInit = function() {
