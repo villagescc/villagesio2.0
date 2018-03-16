@@ -13,7 +13,7 @@
 {% block content %}
     <main class="app-main">
 
-        <div class="trust-content">
+        <div class="trust-content signin-form">
 
             <div class="row">
                 <div class="col-12 col-xxl-8">
@@ -44,14 +44,14 @@
                             </div>
                             <h4></h4>
                             <div class="row" style="max-width: 600px;">
-                                <div class="col-3">
+                                <div class="col-12 col-sm-6">
                                     <input class="btn btn-std" id="save-trust" type="submit" value="Submit">
                                 </div>
-                                <div class="col-3">
+                                <div class="col-12 col-sm-6">
                                     <input class="btn btn-std btn-cancel" id="save-trust" type="button" value="Cancel"
                                     onclick="window.location='/'">
                                 </div>
-                                <div class="col-3">
+                                <div class="col-12 ">
                                     <a class="btn btn-primary" href="{% url 'social:begin' 'facebook' %}?next={{ next_url }}"><i class="fa fa-facebook-official">&nbsp; Login with facebook</i></a>
                                 </div>
                             </div>
