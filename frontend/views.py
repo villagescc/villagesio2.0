@@ -178,9 +178,7 @@ def parse_products(products):
 
 
 def product_infinite_scroll(request, offset=settings.LISTING_ITEMS_PER_PAGE):
-    start_session_offset = request.session.get('offset')
-    if not start_session_offset:
-        start_session_offset = settings.LISTING_ITEMS_PER_PAGE
+    start_session_offset = request.session.get('offset', 0)
     end_session_offset = start_session_offset + int(offset)
 
     products = Listings.objects.order_by('-updated')[start_session_offset:end_session_offset]
@@ -199,7 +197,7 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     """
     # max_amount = ripple.max_payment(request.profile, recipient)
     if request.session.get('offset'):
-        request.session['offset'] = 0
+        request.session['offset'] = settings.LISTING_ITEMS_PER_PAGE
     sign_in_form = UserForm
     user_agent = get_user_agent(request)
     if user_agent.is_mobile:
