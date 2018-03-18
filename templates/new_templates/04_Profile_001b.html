@@ -435,6 +435,11 @@
                     $('#listing-id').val(listing_id);
                     $('.listing-modal-title').text(data["data"]["listing_title"]);
                     $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
+                    if(data["data"]["listing_photo"]) {
+                        $('.listing-img').show();
+                    } else {
+                        $('.listing-img').hide();
+                    }
                     $('#label-listing-type').text(data["data"]["listing_type"]);
                     $('#label-price').text(data["data"]["listing_price"]);
                     $('#label-profile-name').text(data["data"]["profile_name"]);
