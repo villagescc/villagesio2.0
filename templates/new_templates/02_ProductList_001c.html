@@ -101,7 +101,7 @@
             <div class="cat-item-icon">
                <img src="{% static 'new_template/res/img/icons/all_categories.png' %}" alt="All Categories">
             </div>
-            <span class="cat-item-name">All Categories {{ request.path }}</span>
+            <span class="cat-item-name">All Categories</span>
           </a>
           <a class="cat-item {% if '/SERVICES' in request.path %}active{% endif %}" href="{% url 'frontend:home' 'SERVICES' %}">
             <div class="cat-item-icon">
