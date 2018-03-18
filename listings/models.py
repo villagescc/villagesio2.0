@@ -4,6 +4,8 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.contrib.gis.db.models import GeoManager, Q
 
+from decimal import Decimal
+
 from categories.models import Categories, SubCategories
 from tags.models import Tag
 from profile.models import Profile
@@ -102,7 +104,7 @@ class Listings(models.Model):
     profile = models.ForeignKey(Profile, null=True, blank=True)
     title = models.CharField(max_length=70)
     description = models.CharField(max_length=5000, null=True, blank=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0'))
     subcategories = models.ForeignKey(SubCategories, null=True, blank=True)
     # tag = models.ForeignKey(TagListing, null=True, blank=True)
 
@@ -110,7 +112,7 @@ class Listings(models.Model):
     photo = models.ImageField(upload_to='listings', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    tag = models.ManyToManyField(Tag)
+    tag = models.ManyToManyField(Tag, blank=True)
 
     objects = ListingsManager()
 
