@@ -74,7 +74,7 @@
               {% if request %}
             <li class="balance-item">
               <img src="{% static 'new_template/res/img/icons/balance.png' %}" alt="balance">
-              <span id="account-balance">{{ profile.overall_balance }}</span>
+              <span id="account-balance">{{ request.profile.overall_balance }}</span>
               <span id="account-currency">V.H.</span>
             </li>
               {% endif %}
