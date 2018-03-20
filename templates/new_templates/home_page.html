@@ -1,0 +1,183 @@
+{% extends "new_templates/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    <div id="content" class="site-content">
+
+        <div class="page-content">
+
+            <section class="jumbotron jumbotron-fluid mb-0" id="hero"
+                     style="background-image: url('{% static 'new_template/res/img/home/couch-kids.jpg' %}');">
+                <div class="hero-container text-center">
+                    <h1 class="hero-heading">
+                        <img class="img-fluid px-5" src="{% static 'new_template/res/img/home/everyone.png' %}"
+                             alt="EVERYONE">
+                        <span>has value</span>
+                        <span>to share!</span>
+                    </h1>
+                    <form id="sign-form" action="" method="post">
+                        {#                {{ sign_in_form.username }}#}
+                        {#              <input id="name" type="text" placeholder="Email">#}
+                        <div class="mx-0 mx-sm-3"></div>
+                        {#                {{ sign_in_form.password }}#}
+                        {#              <input id="password" type="password" name="password" placeholder="Password">#}
+                        <p class="smallprint">By clicking Sign Up, I agree to the Terms of Service and Privacy
+                            Policy.</p>
+                        <div class="btn-wrapper">
+                            <a href="{% url 'accounts:sign_in_user:sign_in_register' %}"
+                               class="btn-std btn-white mr-0 mr-sm-4">Join Now</a>
+                            <a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}"
+                               class="btn-std btn-white outline mr-0 mr-sm-4">Login</a>
+                            {#                <input class="" type="submit" value="Login">#}
+                            {#                <div class="fb-login-button" data-width="179" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>#}
+                        </div>
+                    </form>
+                    <a href="#how-it-works">
+                        <img src="{% static 'new_template/res/img/home/mouse.png' %}" alt="scroll down">
+                    </a>
+                </div>
+            </section>
+
+            <section id="how-it-works">
+                <div class="page-wrapper">
+                    <div class="padded-container">
+                        <h2 class="section-title">How <strong>it works</strong></h2>
+                        <div class="row">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                                <div class="flow-wrapper">
+                                    <img src="{% static 'new_template/res/img/home/flow-1.png' %}" alt="">
+                                    <p class="caption">Sign Up</p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                                <div class="flow-wrapper">
+                                    <img src="{% static 'new_template/res/img/home/flow-2.png' %}" alt="">
+                                    <p class="caption">Create Profile</p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                                <div class="flow-wrapper">
+                                    <img src="{% static 'new_template/res/img/home/flow-3.png' %}" alt="">
+                                    <p class="caption">Post an Ad</p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                                <div class="flow-wrapper">
+                                    <img src="{% static 'new_template/res/img/home/flow-4.png' %}" alt="">
+                                    <p class="caption">Extend your web of trust by inviting and endorsing your
+                                        friends</p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                                <div class="flow-wrapper">
+                                    <img src="{% static 'new_template/res/img/home/flow-5.png' %}" alt="">
+                                    <p class="caption">Send credit (IOU's) to those who trust you</p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                                <div class="flow-wrapper">
+                                    <img src="{% static 'new_template/res/img/home/flow-6.png' %}" alt="">
+                                    <p class="caption">Accept payments from others, to balance your credit</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="what-they-say"
+                     style="background-image: url('{% static 'new_template/res/img/home/testimonials-bg.png' %}');">
+                <div class="page-wrapper">
+                    <div class="padded-container">
+                    </div>
+                </div>
+            </section>
+
+            <section id="full-cycle">
+                <div class="page-wrapper">
+                    <div class="padded-container">
+                        <h2 class="section-title"><strong>Full cycle</strong> of credit</h2>
+                        <p class="section-subtitle">Money is an agreement within a community to encourage collaboration
+                            by keeping track of checks and balances. </p>
+                        <img class="img-fluid" src="{% static 'new_template/res/img/home/cycle-of-credit.png' %}"
+                             alt="">
+                    </div>
+                </div>
+            </section>
+
+            <section id="villages-hours">
+                <div class="page-wrapper">
+                    <div class="padded-container">
+                        <h2 class="section-title"><strong>Villages Hours</strong></h2>
+                        <p class="section-subtitle">Backed by a Sustainable Hour's Wage</p>
+                        <div class="row">
+                            <div class="col-12 col-sm-6 mb-3 mb-sm-0">
+                                <div class="framed-box">
+                                    <img class="img-fluid" src="{% static 'new_template/res/img/home/box-1.png' %}"
+                                         alt="">
+                                    <div class="v-div"></div>
+                                    <p>A sustainable hour's wage is different in every community but it always remains a
+                                        stable measure of value.</p>
+                                    <p>
+                                        From this base, members negotiate a fair price for their products and
+                                        services</p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="framed-box">
+                                    <img class="img-fluid" src="{% static 'new_template/res/img/home/box-2.png' %}"
+                                         alt="">
+                                    <div class="v-div"></div>
+                                    <p>This is an effective and useful complementary currency system that can be used
+                                        anywhere in the world.
+                                    </p>
+                                    <p>What is a sustainable wage in your community?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="social-graph">
+                <div class="page-wrapper">
+                    <div class="padded-container">
+                        <h2 class="section-title"><strong>Social</strong> Graph</h2>
+                        <p class="section-subtitle">Create your own financial network and watch your web of trust
+                            expand.</p>
+                        <img class="img-fluid" src="{% static 'new_template/res/img/home/social-graph.png' %}"
+                             alt="social-graph">
+                    </div>
+                </div>
+            </section>
+
+            <section id="join-call"
+                     style="background-image: url('{% static 'new_template/res/img/home/call-bg.png' %}');">
+                <a class="btn-std btn-white" href="{% url 'accounts:sign_in_user:sign_in_register' %}"><span
+                        class="left-triangle"></span>Join Now<span class="right-triangle"></span></a>
+            </section>
+
+        </div><!-- .page-content -->
+
+    </div><!-- #content -->
+
+    {% include 'new_templates/footer.html' %}
+
+{% endblock content %}
+
+
+{% block extra_js %}
+    <script src="{% static 'new_template/node_modules/jquery/dist/jquery.js' %}" type="text/javascript"></script>
+    <!-- jQuery -->
+    <script src="{% static 'new_template/node_modules/popper.js/dist/umd/popper.js' %}" type="text/javascript"></script>
+    <!-- Popper -->
+    <script src="{% static 'new_template/node_modules/bootstrap/dist/js/bootstrap.js' %}"
+            type="text/javascript"></script>
+    <!-- Bootstrap -->
+
+    <!-- Font-Awesome -->
+    <script defer src="{% static 'new_template/node_modules/font-awesome/packs/solid.js' %}"></script>
+    <script defer src="{% static 'new_template/node_modules/font-awesome/packs/regular.js' %}"></script>
+    <script defer src="{% static 'new_template/node_modules/font-awesome/packs/light.js' %}"></script>
+    <script defer src="{% static 'new_template/node_modules/font-awesome/fontawesome.js' %}"></script>
+{% endblock extra_js %}
