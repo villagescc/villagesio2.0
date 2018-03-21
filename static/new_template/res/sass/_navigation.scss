@@ -1,5 +1,7 @@
 /* navigation */
 .app-header {
+  position: relative;
+  z-index: 1;
   & .navbar {
     padding-right: 1.4375em;
     padding-left: 1.4375em;

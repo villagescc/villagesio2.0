@@ -35,16 +35,15 @@
                                             <div class="post-cover listing-modal" data-listing-id="{{ each.id }}"
                                                  style="background-image: url('{% product_image_url each '280x280' %}');">
 
-                                                <span class="type"
-                                                      style="text-shadow: 0 0 10px #111;">{{ each.listing_type }}</span>
-                                                <span class="price" style="text-shadow: 0 0 10px #111;">{{ each.price }} VH</span>
+                                                <span class="type">{{ each.listing_type }}</span>
+                                                <span class="price">{{ each.price }} VH</span>
 
                                             </div>
 
                                             <div class="post-content">
 
                                                 <div class="avatar-thumbnail"
-                                                     style="background-image: url('{% profile_image_url each.user.profile '60x60' %}'); background-size: cover;">
+                                                     style="background-image: url('{% profile_image_url each.user.profile '60x60' %}');">
                                                     <img class="trusted-icon"
                                                          src="{% static 'new_template/res/img/icons/trusted-icon.png' %}"
                                                          alt="trusted">
@@ -61,19 +60,31 @@
                                             </div>
 
                                             <div class="post-action">
-                                                <a class="action-menu-item trust-modal"
-                                                   data-profile-username="{{ each.user.profile.username }}"
+                                                <a class="action-menu-item"
+                                                   data-toggle="modal"
+                                                   data-target="#new-post-modal"
                                                    href="#"><img
-                                                        src="{% static 'new_template/res/img/icons/heart.png' %}"
+                                                        src="{% static 'new_template/res/img/icons/edit.svg' %}"
                                                         alt="like"></a>
-                                                <a class="action-menu-item" href="{% url 'blank_payment_user' %}"><img
-                                                        src="{% static 'new_template/res/img/icons/wallet.png' %}"
-                                                        alt="buy"></a>
-                                                <a class="action-menu-item contact-modal"
-                                                   data-profile-username="{{ each.user.profile.username }}"
-                                                   data-listing-title="{{ each.title }}" href="#"><img
-                                                        src="{% static 'new_template/res/img/icons/mail.png' %}"
-                                                        alt="contact"></a>
+                                                <a class="action-menu-item"
+                                                   data-toggle="modal"
+                                                   data-target="#new-post-modal"
+                                                   href="#"><img
+                                                        src="{% static 'new_template/res/img/icons/trash-alt.svg' %}"
+                                                        alt="like"></a>
+                                                <!--<a class="action-menu-item trust-modal"-->
+                                                   <!--data-profile-username="{{ each.user.profile.username }}"-->
+                                                   <!--href="#"><img-->
+                                                        <!--src="{% static 'new_template/res/img/icons/heart.png' %}"-->
+                                                        <!--alt="like"></a>-->
+                                                <!--<a class="action-menu-item" href="{% url 'blank_payment_user' %}"><img-->
+                                                        <!--src="{% static 'new_template/res/img/icons/wallet.png' %}"-->
+                                                        <!--alt="buy"></a>-->
+                                                <!--<a class="action-menu-item contact-modal"-->
+                                                   <!--data-profile-username="{{ each.user.profile.username }}"-->
+                                                   <!--data-listing-title="{{ each.title }}" href="#"><img-->
+                                                        <!--src="{% static 'new_template/res/img/icons/mail.png' %}"-->
+                                                        <!--alt="contact"></a>-->
                                             </div>
                                         </div>
                                     </div>

@@ -23,6 +23,7 @@
       left: 1rem;
       color: #fff;
       text-transform: uppercase;
+      text-shadow: 0 0 10px #111;
     }
     & .type {
       top: 0.875em;
@@ -93,6 +94,15 @@
       justify-content: center;
       align-items: center;
       height: 3.5em;
+      outline: none;
+      .profile-content & {
+        flex: 0 0 50%;
+        img {
+          width: 24px;
+          height: 24px;
+          fill: grey;
+        }
+      }
       &:not(:first-of-type) {
         border-left: 1px solid #f3f2f2;
       }
