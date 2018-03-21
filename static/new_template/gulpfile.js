@@ -2,10 +2,8 @@ var gulp = require('gulp');
 var connect = require('gulp-connect');
 // var livereload = require('gulp-livereload');
 var sass = require('gulp-sass');
-var concatCss = require('gulp-concat-css')
-// var rigger = require('gulp-rigger');
+// var concatCss = require('gulp-concat-css');
 // var sourcemaps = require('gulp-sourcemaps');
-// var babel = require('gulp-babel');
 
 
 // var path = require('./path');
@@ -38,7 +36,7 @@ gulp.task('css', function () {
 // });
 
 gulp.task('watch', function () {
-	gulp.watch('./res/sass/*', ['css']);
+	gulp.watch('./res/sass/**/*', ['css']);
 });
 
 gulp.task('default', [ 'css', 'watch']);

@@ -16,6 +16,15 @@
       font-size: 0.6em;
     }
   }
+  .navbar-collapse .navbar-nav {
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    @include media-width-down(xs) {
+      height: auto;
+      flex: 0 0 100%;
+    }
+  }
   & a.navbar-brand {
     margin-right: 0;
     padding: 8px;
@@ -44,10 +53,6 @@
     &:focus {
       opacity: 0.5;
     }
-    @include media-width-down(md) {
-      margin: 0;
-      text-align: center;
-    }
   }
   & .custom-toggler {
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,102,203, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
@@ -62,7 +67,13 @@
 #primary-navbar {
   padding-right: 0.25em;
   font-size: 1rem;
+  & .dropdown {
+    @include media-width-down(xs) {
+      width: 120px;
+    }
+  }
   & .dropdown-menu {
+    position: absolute;
     font-size: 0.875em;
     & .dropdown-item {
       padding: 0.25em 1.25em;
@@ -94,6 +105,9 @@
     @include media-width-down(md) {
       padding: 0;
       justify-content: center;
+    }
+    @include media-width-down(xs) {
+      width: calc(100% - 120px);
     }
   }
 }
