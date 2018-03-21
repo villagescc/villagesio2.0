@@ -11,5 +11,13 @@
     "jquery": "^3.2.1",
     "popper.js": "^1.12.9",
     "vue": "^2.5.9"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat-css": "^3.1.0",
+    "gulp-connect": "^5.5.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.4"
   }
 }
