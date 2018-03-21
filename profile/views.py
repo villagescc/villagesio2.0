@@ -320,7 +320,7 @@ def my_profile(request):
     else:
         referral_count = None
 
-    return django_render(request, 'new_templates/04_My_Profile_001b.html',
+    return django_render(request, 'new_templates/my_profile.html',
                          {'profile': request.profile, 'listings': listings, 'endorsements_made': endorsements_made,
                           'endorsements_received': endorsements_received, 'offer_tags': offer_tags,
                           'request_tags': request_tags, 'teach_tags': teach_tags, 'learn_tags': learn_tags,
@@ -374,7 +374,7 @@ def profile(request, username):
             else:
                 referral_count = None
 
-            return django_render(request, 'new_templates/04_Profile_001b.html',
+            return django_render(request, 'new_templates/profile.html',
                                  {'endorsements_made': profile_endorsements_made,
                                   'endorsements_received': profile_endorsements_received,
                                   'account': account, 'listing_form': listing_form, 'profile': profile,

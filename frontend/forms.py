@@ -48,6 +48,8 @@ class FormListingsSettings(forms.Form):
             default_radius = (profile and profile.settings.feed_radius or DEFAULT_RADIUS)
             data['radius'] = default_radius
             self._explicit_radius = False
+        else:
+            self._explicit_radius = True
         super(FormListingsSettings, self).__init__(data, *args, **kwargs)
 
     def get_results(self):

@@ -271,8 +271,7 @@
             if ((window.location.href === '/') || (window.location.href == "{% url 'frontend:home' %}")) {
                 console.log(window.location.href);
             }
-        })
-
+        });
 
         $("#radio-people").click(function () {
             window.location.href = "{% url 'frontend:people_listing' %}"
@@ -287,146 +286,9 @@
             window.location.href = "{% url 'frontend:map' %}"
         });
 
-        $(".trust-modal").click(function (e) {
-            $('#spin-modal').fadeIn();
-            var profile_username = $(this).attr('data-profile-username');
-            $("#profile-username").val(profile_username);
-            var url = '/trust_ajax/' + profile_username;
-            $.ajax({
-                url: url,
-                type: 'GET',
-                cache: false,
-                success: function (data) {
-                    if (data["data"]["stat"] == "error") {
-                        $('#error-modal-alert').text(data["data"]["error_message"]);
-                        $('#spin-modal').fadeOut();
-                        $('#error-modal').modal("show");
-                    }
-                    else if (data["data"]["stat"] == "ok") {
-                        $('#spin-modal').fadeOut();
-                        $('#new-trust-heading').text('Trust ' + profile_username);
-                        $("#new-trust-modal").modal("show");
-                    }
-                    else if (data["data"]["stat"] == "existing") {
-                        $('#id_weight').val(data['data']['weight']);
-                        $('#id_text').val(data['data']['text']);
-                        debugger;
-                        if (data["data"]["refer"]) {
-                            $("#id_referral").prop('checked', true)
-                        }
-                        $('#spin-modal').fadeOut();
-                        $('.trust-modal-title').text('Trust ' + profile_username);
-                        $("#new-trust-modal").modal("show");
-                    }
-                },
-                error: function (data) {
-                    $('#spin-modal').fadeOut();
-                    showInternalServerError();
-                }
-            });
-        });
-
-        $(".payment-modal").click(function (e) {
-            $('#payment-loading-modal').modal("show");
-            $('#spin-modal').fadeIn();
-            var profile_username = $(this).attr('data-profile-username');
-            $("#profile-username").val(profile_username);
-            var url = '/acknowledge_ajax/' + profile_username;
-            console.log(url);
-            $.ajax({
-                url: url,
-                type: 'GET',
-                cache: false,
-                success: function (data) {
-                    debugger;
-                    if (data["data"]["stat"] != "ok") {
-                        $('#error-modal-alert').text(data["data"]["stat"]);
-                        $('#spin-modal').fadeOut();
-                        $('#error-modal-alert').modal("show");
-                    }
-                    else if (!data['data']['can_ripple']) {
-                        $('label[for="id_ripple_0"]').closest('li').hide();
-                        $('#id_ripple_1').attr('checked', true);
-                        $('.ripple-hours').html("There are no available paths through the trust network to <strong>" + data['data']['recipient'] + "</strong>, so you can only send direct acknowledgement.")
-                        $('#spin-modal').fadeOut();
-                        $('#payment-loading-modal').modal("hide");
-                        $("#new-payment-modal").modal("show");
-                    } else if (data["data"]["can_ripple"]) {
-                        $('#id_ripple_0').attr('checked', true);
-                        $('.ripple-hours').html("You can send a trusted acknowledgement of up to " + data['data']['max_amount'] + " hour(s) or a direct acknowledgement of any amount.")
-                        $('#spin-modal').fadeOut();
-                        $('#payment-loading-modal').modal("hide");
-                        $("#new-payment-modal").modal("show");
-                    }
-                },
-
-                error: function (data) {
-                    debugger;
-                    $('#spin-modal').fadeOut();
-                    showInternalServerError();
-                }
-            });
-            e.preventDefault();
-        });
-
-        $(".contact-modal").click(function (e) {
-            $('#spin-modal').fadeIn();
-            var profile_username = $(this).attr('data-profile-username');
-            var listing_title = $(this).attr('data-listing-title');
-            $("#profile-username").val(profile_username);
-            $("#listing-title").val(listing_title);
-            $('#contact-modal-title').text('Contact ' + profile_username);
-            $('#spin-modal').fadeOut();
-            $("#new-contact-modal").modal("show");
-        });
-
         $('.menu-group div').click(function () {
             var menu = $(this).parent().find('ul');
             menu.slideToggle();
-        });
-
-        $("#product_list").on('click', '.listing-modal', function (e) {
-            $('#spin-modal').fadeIn();
-            var listing_id = $(this).attr('data-listing-id');
-            var url = '/get_listing_info/' + listing_id;
-            var listing_picture_path = '/uploads/';
-            $.ajax({
-                url: url,
-                type: 'GET',
-                cache: false,
-                success: function (data) {
-                    if (data["data"]["stat"] == "ok") {
-                        $('#listing-id').val(listing_id);
-                        $('.listing-modal-title').text(data["data"]["listing_title"]);
-                        $('.listing-img').attr("src", listing_picture_path + data["data"]["listing_photo"]);
-                        if (data["data"]["listing_photo"]) {
-                            $('.listing-img').show();
-                        } else {
-                            $('.listing-img').hide();
-                        }
-                        $('#label-listing-type').text(data["data"]["listing_type"]);
-                        $('#label-price').text(data["data"]["listing_price"]);
-                        $('#label-profile-name').text(data["data"]["profile_name"]);
-                        $('#profile-location').text(data["data"]["profile_location"]);
-                        $('#listing-created-at').text(data["data"]["created_at"]);
-                        $('#listing-created-at').attr("href", "/listing_details/" + listing_id);
-                        $('#label-description').text(data["data"]["description"]);
-                        $('#listing-profile-username').text(data["data"]["username"]);
-                        $("#listing-profile-username").attr("href", "/profiles/" + data["data"]["username"]);
-                        $('#label-profile-balance').text(data["data"]["balance"]);
-                        $('#label-profile-occupation').text(data["data"]["job"]);
-                        $('#trust-btn').attr('data-profile-username', data["data"]["username"]);
-                        $('#payment-btn').attr('data-profile-username', data["data"]["username"]);
-                        $('#contact-btn').attr('data-profile-username', data["data"]["username"]);
-                        $('#spin-modal').fadeOut();
-                        $("#listing-modal").modal("show");
-                    }
-                },
-                error: function (data) {
-                    $('#spin-modal').fadeOut();
-                    showInternalServerError();
-                }
-            });
         });
 
     </script>

@@ -221,7 +221,7 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter, do_filter)
     if form_listing_settings.is_valid():
         listing_items, remaining_count = form_listing_settings.get_results()
-        next_page_date = listing_items[-1].date
+        next_page_date = listing_items[-1].date if listing_items else None
     else:
         listing_items = remaining_count = next_page_date = None
     url_params = request.GET.copy()
@@ -274,7 +274,6 @@ def map_visualization(request):
     if request.session.get('offset'):
         request.session['offset'] = 0
     form = ListingsForms()
-    categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)
     services_sub_categories = SubCategories.objects.all().filter(categories=2)
     rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
