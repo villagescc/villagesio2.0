@@ -7,6 +7,7 @@ from django.db import models
 @python_2_unicode_compatible
 class Categories(models.Model):
     categories_text = models.CharField(max_length=200)
+    icon = models.ImageField(blank=True, null=True)
 
     def __str__(self):
         return "{}".format(self.categories_text)

@@ -8,53 +8,7 @@
 
     <div class="app-view">
 
-        <aside class="app-sidebar">
-            <div class="cat-menu">
-                <div class="cat-menu">
-                    <a class="cat-item {% if request.path == '/' or request.path == '/home' or request.path == '/home/' %}active{% endif %}"
-                       href="{% url 'frontend:home' %}">
-                        <div class="cat-item-icon">
-                            <img src="{% static 'new_template/res/img/icons/all_categories.png' %}"
-                                 alt="All Categories">
-                        </div>
-                        <span class="cat-item-name">All Categories</span>
-                    </a>
-                    <a class="cat-item {% if '/SERVICES' in request.path %}active{% endif %}"
-                       href="{% url 'frontend:home' 'SERVICES' %}">
-                        <div class="cat-item-icon">
-                            <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/services.png' %}"
-                                 alt="Services">
-                        </div>
-                        <span class="cat-item-name">Services</span>
-                    </a>
-                    <a class="cat-item {% if '/PRODUCTS' in request.path %}active{% endif %}"
-                       href="{% url 'frontend:home' 'PRODUCTS' %}">
-                        <div class="cat-item-icon">
-                            <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}"
-                                 alt="Products">
-                        </div>
-                        <span class="cat-item-name">Products</span>
-                    </a>
-                    <a class="cat-item {% if '/HOUSING' in request.path %}active{% endif %}"
-                       href="{% url 'frontend:home' 'HOUSING' %}">
-                        <div class="cat-item-icon">
-                            <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/housing.png' %}"
-                                 alt="Housing">
-                        </div>
-                        <span class="cat-item-name">Housing</span>
-                    </a>
-                    <a class="cat-item  {% if '/RIDESHARE' in request.path %}active{% endif %}"
-                       href="{% url 'frontend:home' 'RIDESHARE' %}">
-                        <div class="cat-item-icon">
-                            <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}"
-                                 alt="Housing">
-                        </div>
-                        <span class="cat-item-name">Rideshare</span>
-                    </a>
-                </div>
-            </div>
-        </aside>
-        <!-- .app-sidebar -->
+    {% include 'new_templates/categories_sidebar.html' %}
 
         <main class="app-main" id="main">
 
