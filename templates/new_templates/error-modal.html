@@ -1,0 +1,30 @@
+<style>
+    .modal-body {
+        max-height: 100vh;
+        overflow-y: scroll;
+    }
+</style>
+
+<div id="error-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
+                <h4 class="modal-title trust-modal-title" id="error-modal-title">Error</h4>
+            </div>
+            <div id="modaltext" class="modal-body">
+                <div class="form-group">
+                    <div class="container-fluid">
+                        <div class="alert alert-danger" id="error-modal-alert">
+                            <strong>Oops!</strong> You can't send an trust to yourself
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="msg"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

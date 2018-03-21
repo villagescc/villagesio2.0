@@ -1,0 +1,52 @@
+{% load staticfiles profile tag_utils %}
+
+<!-- new post modal -->
+<form class="form-horizontal" id="new-trust-form" method="POST">
+    {% csrf_token %}
+    <div class="modal fade" id="new-trust-modal" tabindex="-1" role="dialog" aria-labelledby="new-trust-modal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="new-trust-heading">New Trust</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="{% static 'new_template/res/img/icons/times.png' %}" alt="close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="modal-container">
+                        <div class="row">
+                            <div class="credit-limit col-12">
+                                <label>Credit Limit</label>
+                                <div class="d-flex">
+                                    {{ trust_form.weight }}
+                                    <span class="currency-wrapper">V.H.</span>
+                                </div>
+                            </div>
+                            <div class="testimonial col-12">
+                                <label>Testimonial</label>
+                                {{ trust_form.text }}
+                            </div>
+
+                            <div class="reference col-12">
+                                <div class="d-flex justify-content-start align-items-center">
+                                    <label class="switch mr-3 mb-0">
+                                        {{ trust_form.referral }}
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <p style="margin-bottom: 0;">Refer This Person's Services to Friends?</p>
+                                </div>
+                                <p class="note">(Only refer a person if you have actually worked with them)</p>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-md-12 col-xl-3">
+                                <label>&nbsp;</label>
+                                <input type="submit" value="SEND" id="save-trust">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
