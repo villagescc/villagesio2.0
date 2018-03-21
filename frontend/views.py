@@ -235,15 +235,13 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     contact_form = ContactForm()
 
     form = ListingsForms()
-    categories_list = Categories.objects.all()
+    categories_list = Categories.objects.order_by('id')
     subcategories = SubCategories.objects.all()
     if type_filter in LISTING_TYPE_CHECK:
         # is listing_type filter
         item_type_name = type_filter
     else:
         try:
-            SubCategories.objects.filter(id=type_filter)
-            # is subcategory id
             item_type_name = SubCategories.objects.filter(id=type_filter).values('sub_categories_text')[0]['sub_categories_text']
         except:
             # is category filter
