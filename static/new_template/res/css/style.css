@@ -6361,6 +6361,10 @@ a {
     margin-left: 2.75em; }
     .user-menu a.user-link:hover, .user-menu a.user-link:focus {
       opacity: 0.5; }
+  .user-menu .navbar-nav .nav-link.dropdown {
+    margin: 0 2em; }
+  .user-menu .navbar-nav .dropdown-menu {
+    font-size: 14px; }
   .user-menu .avatar-wrapper {
     width: 3.75em;
     height: 3.75em; }

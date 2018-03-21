@@ -126,6 +126,12 @@
       opacity: 0.5;
     }
   }
+  & .navbar-nav .nav-link.dropdown {
+    margin: 0 2em;
+  }
+  & .navbar-nav .dropdown-menu {
+    font-size: 14px;
+  }
   & .avatar-wrapper {
     width: 3.75em;
     height: 3.75em;
