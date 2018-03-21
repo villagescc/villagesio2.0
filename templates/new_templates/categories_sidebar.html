@@ -3,31 +3,29 @@
 <!-- Categories-sidebar -->
 <aside class="app-sidebar">
     <div class="cat-menu">
-        <div class="cat-menu">
-            {% url 'frontend:home' as home_url %}
-            <a class="cat-item {% if home_url == request.path %}active{% endif %}"
-               href="{{ home_url }}">
-                <div class="cat-item-icon">
-                    <img src="{% static 'new_template/res/img/icons/all_categories.png' %}"
-                         alt="All Categories">
-                </div>
-                <span class="cat-item-name">All Categories</span>
-            </a>
+        {% url 'frontend:home' as home_url %}
+        <a class="cat-item {% if home_url == request.path %}active{% endif %}"
+           href="{{ home_url }}">
+            <div class="cat-item-icon">
+                <img src="{% static 'new_template/res/img/icons/all_categories.png' %}"
+                     alt="All Categories">
+            </div>
+            <span class="cat-item-name">All Categories</span>
+        </a>
 
-            {% for category in categories %}
-                {% url 'frontend:home' type_filter=category.categories_text as category_url %}
-                <a class="cat-item {% if category_url == request.path %}active{% endif %}"
-                   href="{% url 'frontend:home' type_filter=category.categories_text %}">
-                    <div class="cat-item-icon">
-                        <img class="cat-item-icon" src="{% if category.icon %}{{ category.icon.url }}
+        {% for category in categories %}
+        {% url 'frontend:home' type_filter=category.categories_text as category_url %}
+        <a class="cat-item {% if category_url == request.path %}active{% endif %}"
+           href="{% url 'frontend:home' type_filter=category.categories_text %}">
+            <div class="cat-item-icon">
+                <img class="cat-item-icon" src="{% if category.icon %}{{ category.icon.url }}
                             {% else %}{% static 'new_template/res/img/icons/products.png' %}{% endif %}"
-                             alt="{{ category.categories_text }}">
-                    </div>
-                    <span class="cat-item-name">{{ category.categories_text }}</span>
-                </a>
-            {% endfor %}
+                     alt="{{ category.categories_text }}">
+            </div>
+            <span class="cat-item-name">{{ category.categories_text }}</span>
+        </a>
+        {% endfor %}
 
-        </div>
     </div>
 </aside>
 

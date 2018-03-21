@@ -2,50 +2,52 @@
 
 <!-- Profile-sidebar -->
 <aside class="app-sidebar">
-    <div class="user-menu">
-        <div class="user-cover"
-             style="background-image: url('{% if profile.header_image %}{{ profile.header_image.url }}{% else %}{% static 'images/logo.png' %}{% endif %}');"
-             data-toggle="tooltip" title="villages.cc"></div>
-        <div class="user-id">
-            <div class="avatar-wrapper big">
-                <img src="{% profile_image_url profile '60x60' %}" alt="avatar" height="100%" width="200px"
-                     style="position: relative; border-radius: 50%; overflow: hidden; object-fit: cover;">
+    <div class="user-sidebar">
+        <div class="user-statistics">
+            <div class="user-cover"
+                 style="background-image: url('{% if profile.header_image %}{{ profile.header_image.url }}{% else %}{% static 'images/logo.png' %}{% endif %}');"
+                 data-toggle="tooltip" title="villages.cc"></div>
+            <div class="user-avatar">
+                <div class="avatar-wrapper big">
+                    <img src="{% profile_image_url profile '60x60' %}" alt="avatar" height="100%" width="200px"
+                         style="position: relative; border-radius: 50%; overflow: hidden; object-fit: cover;">
+                </div>
+                <h1>{{ profile.name }}</h1>
             </div>
-            <h1>{{ profile.name }}</h1>
+            <div class="user-data">
+                <div class="data-block balance">
+                    <img src="{% static 'new_template/res/img/icons/balance_blue.png' %}" alt="balance">
+                    <span>{{ profile.overall_balance }}</span>
+                </div>
+                <div class="data-block">
+                    <img src="{% static 'new_template/res/img/icons/briefcase_blue.png' %}" alt="occupation">
+                    <span>{{ profile.job }}</span>
+                </div>
+                <div class="data-block">
+                    <img src="{% static 'new_template/res/img/icons/heart_blue.png' %}" alt="likes">
+                    <span>{{ profile.endorsement_count }}</span>
+                </div>
+                <div class="data-block location">
+                    <img src="{% static 'new_template/res/img/icons/map_blue.png' %}" alt="location">
+                    <span>{{ profile.location }}</span>
+                </div>
+                <div class="data-block">
+                    <img src="{% static 'new_template/res/img/icons/calendar_blue.png' %}" alt="date">
+                    <span>{{ profile.user.date_joined|naturalday }}</span>
+                </div>
+            </div>
         </div>
-        <div class="user-data">
-            <div class="data-block">
-                <img src="{% static 'new_template/res/img/icons/balance_blue.png' %}" alt="balance">
-                <span>{{ profile.overall_balance }}</span>
-            </div>
-            <div class="data-block">
-                <img src="{% static 'new_template/res/img/icons/briefcase_blue.png' %}" alt="occupation">
-                <span>{{ profile.job }}</span>
-            </div>
-            <div class="data-block">
-                <img src="{% static 'new_template/res/img/icons/heart_blue.png' %}" alt="likes">
-                <span>{{ profile.endorsement_count }}</span>
-            </div>
-            <div class="data-block">
-                <img src="{% static 'new_template/res/img/icons/map_blue.png' %}" alt="location">
-                <span>{{ profile.location }}</span>
-            </div>
-            <div class="data-block">
-                <img src="{% static 'new_template/res/img/icons/calendar_blue.png' %}" alt="date">
-                <span>{{ profile.user.date_joined|naturalday }}</span>
-            </div>
+
+        <div class="social-menu">
+
+            <a class="social-link" href="#"><img src="{% static 'new_template/res/img/icons/instagram.png' %}"
+                                                 alt="instagram"></a>
+            <a class="social-link" href="#"><img src="{% static 'new_template/res/img/icons/facebook.png' %}"
+                                                 alt="facebook"></a>
+            <a class="social-link" href="#"><img src="{% static 'new_template/res/img/icons/twitter.png' %}"
+                                                 alt="twitter"></a>
+
         </div>
-    </div>
-
-    <div class="social-menu">
-
-        <a class="social-link" href="#"><img src="{% static 'new_template/res/img/icons/instagram.png' %}"
-                                             alt="instagram"></a>
-        <a class="social-link" href="#"><img src="{% static 'new_template/res/img/icons/facebook.png' %}"
-                                             alt="facebook"></a>
-        <a class="social-link" href="#"><img src="{% static 'new_template/res/img/icons/twitter.png' %}"
-                                             alt="twitter"></a>
-
     </div>
 
 </aside>
