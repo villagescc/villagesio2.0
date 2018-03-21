@@ -32,7 +32,7 @@ from relate import urls as relate_urls
 from listings import urls as listings_urls
 from notification import urls as notification_urls
 from categories import urls as categories_urls
-from management import urls as management_urls
+# from management import urls as management_urls
 from relate.views import get_profiles
 
 urlpatterns = [
@@ -48,7 +48,7 @@ urlpatterns = [
     url('^', include(relate_urls), name='relate'),
     url('^notifications/', include(notification_urls, namespace='notification')),
     url('^categories_manager/', include(categories_urls, namespace='categories')),
-    url('^management/', include(management_urls, namespace='management')),
+    # url('^management/', include(management_urls, namespace='management')),
     url(r'^get_profiles/', get_profiles, name='get_profiles'),
     url(r'', include(geo_urls)),
     url('', include('social_django.urls', namespace='social')),

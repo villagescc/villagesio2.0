@@ -1,0 +1,201 @@
+{% extends "new_templates/base.html" %}
+{% load staticfiles profile humanize %}
+
+{% block content %}
+    {% include 'messages.html' %}
+    <!-- .app-header -->
+
+    <div class="app-view">
+
+        <aside class="app-sidebar">
+
+            <div class="user-menu">
+                <div class="user-cover" style="background-image: url('{% static 'images/logo.png' %}');"
+                     data-toggle="tooltip" title="villages.io"></div>
+                <div class="user-id">
+                    <div class="avatar-wrapper big">
+                        <img src="{% profile_image_url request.profile '60x60' %}" alt="avatar" height="100%"
+                             width="200px"
+                             style="position: relative; border-radius: 50%; overflow: hidden; object-fit: cover;">
+                    </div>
+                    <h1>{{ request.profile.name }}</h1>
+                </div>
+                <div class="user-data">
+                    <div class="data-block">
+                        <img src="{% static 'new_template/res/img/icons/balance_blue.png' %}" alt="balance">
+                        <span>{{ request.profile.overall_balance }}</span>
+                    </div>
+                    <div class="data-block">
+                        <img src="{% static 'new_template/res/img/icons/briefcase_blue.png' %}" alt="occupation">
+                        <span>{{ request.profile.job }}</span>
+                    </div>
+                    <div class="data-block">
+                        <img src="{% static 'new_template/res/img/icons/heart_blue.png' %}" alt="likes">
+                        <span>{{ request.profile.endorsement_count }}</span>
+                    </div>
+                    <div class="data-block">
+                        <img src="{% static 'new_template/res/img/icons/map_blue.png' %}" alt="location">
+                        <span>{{ request.profile.location }}</span>
+                    </div>
+                    <div class="data-block">
+                        <img src="{% static 'new_template/res/img/icons/calendar_blue.png' %}" alt="date">
+                        <span>{{ request.profile.user.date_joined|naturalday }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="social-menu">
+
+                <a class="social-link" href="#"><img src="{% static 'new_template/res/img/icons/instagram.png' %}"
+                                                     alt="instagram"></a>
+                <a class="social-link" href="#"><img src="{% static 'new_template/res/img/icons/facebook.png' %}"
+                                                     alt="facebook"></a>
+                <a class="social-link" href="#"><img src="{% static 'new_template/res/img/icons/twitter.png' %}"
+                                                     alt="twitter"></a>
+
+            </div>
+
+        </aside>
+        <!-- .app-sidebar -->
+
+        <main class="app-main">
+
+            <div class="profile-content">
+
+                <div class="row">
+                    <div class="col-12 col-xxl-7">
+
+                        <div class="row">
+
+                            <div class="col-12">
+                                <h2>Profile Description</h2>
+                                <p>{{ profile.description }}</p>
+                            </div>
+
+                        </div>
+
+                        <div class="row" id="product_list" style="margin-top: 5em;">
+
+                            {% if listings %}
+                                {% for each in listings %}
+                                    <div class="col-12 col-sm-6 col-md-12 col-lg-6 col-xl-4 col-xxl-3">
+                                        <div class="post-box">
+
+                                            <div class="post-cover listing-modal" data-listing-id="{{ each.id }}"
+                                                 style="background-image: url('{% product_image_url each '280x280' %}');">
+
+                                                <span class="type"
+                                                      style="text-shadow: 0 0 10px #111;">{{ each.listing_type }}</span>
+                                                <span class="price" style="text-shadow: 0 0 10px #111;">{{ each.price }} VH</span>
+
+                                            </div>
+
+                                            <div class="post-content">
+
+                                                <div class="avatar-thumbnail"
+                                                     style="background-image: url('{% profile_image_url each.user.profile '60x60' %}'); background-size: cover;">
+                                                    <img class="trusted-icon"
+                                                         src="{% static 'new_template/res/img/icons/trusted-icon.png' %}"
+                                                         alt="trusted">
+                                                </div>
+
+                                                <h1>{{ each.title }}</h1>
+                                                <p>{{ each.description }}</p>
+                                                <div class="tag-container">
+                                                    {% for each_tag in each.tag.all %}
+                                                        <a class="tag" href="#">{{ each_tag.name }}</a>
+                                                    {% endfor %}
+                                                </div>
+
+                                            </div>
+
+                                            <div class="post-action">
+                                                <a class="action-menu-item trust-modal"
+                                                   data-profile-username="{{ each.user.profile.username }}"
+                                                   href="#"><img
+                                                        src="{% static 'new_template/res/img/icons/heart.png' %}"
+                                                        alt="like"></a>
+                                                <a class="action-menu-item" href="{% url 'blank_payment_user' %}"><img
+                                                        src="{% static 'new_template/res/img/icons/wallet.png' %}"
+                                                        alt="buy"></a>
+                                                <a class="action-menu-item contact-modal"
+                                                   data-profile-username="{{ each.user.profile.username }}"
+                                                   data-listing-title="{{ each.title }}" href="#"><img
+                                                        src="{% static 'new_template/res/img/icons/mail.png' %}"
+                                                        alt="contact"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 col-xxl-5">
+
+                        <div class="endorsement-box">
+                            <h2>Endorsed By</h2>
+                            {% if endorsements_received %}
+                                {% for each_endorsement_received in endorsements_received %}
+                                    <div class="endorsement-block">
+
+                                        <div class="avatar-wrapper blue">
+                                            <img src="{% profile_image_url each_endorsement_received.endorser '60x60' %}"
+                                                 alt="avatar" height="100%" width="200px"
+                                                 style="position: relative; border-radius: 50%; overflow: hidden;">
+                                        </div>
+
+                                        <div class="endorsement">
+                                            <p class="endorsement-flow">From <a
+                                                    href="{{ each_endorsement_received.endorser.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a>
+                                                to
+                                                <a href="{{ each_endorsement_received.recipient.get_absolute_url }}">{{ request.profile.name }}</a>
+                                            </p>
+                                            <p class="endorsement-text">{{ each_endorsement_received.text }}</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="endorsement-box">
+                            <h2>Endorsements Made</h2>
+                            {% if endorsements_made %}
+                                {% for each_endorsement_made in endorsements_made %}
+                                    <div class="endorsement-block">
+
+                                        <div class="avatar-wrapper blue">
+                                            <img src="{% profile_image_url each_endorsement_made.recipient '60x60' %}"
+                                                 alt="avatar" width="43px"
+                                                 height="70px" class="rounded-circle">
+                                        </div>
+
+                                        <div class="endorsement">
+                                            <p class="endorsement-flow">From <a
+                                                    href="{{ request.profile.get_absolute_url }}">{{ request.profile }}</a>
+                                                to
+                                                <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">{{ each_endorsement_made.recipient.name }}</a>
+                                            </p>
+                                            <p class="endorsement-text">{{ each_endorsement_made.text }}</p>
+                                        </div>
+
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+        <!-- .app-main -->
+
+    </div>
+
+{% endblock content %}

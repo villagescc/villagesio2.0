@@ -33,7 +33,8 @@ class UserForm(ModelForm):
     User form to update the user information in the settings page
     """
 
-    username = forms.CharField(widget=forms.TextInput(attrs={'style': 'width:auto;', 'placeholder': 'Username'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'style': 'width:auto;',
+                                                             'placeholder': 'Email or username'}))
 
     password = forms.CharField(widget=forms.PasswordInput(attrs={'style': 'width:auto;', 'placeholder': 'Password'}))
 

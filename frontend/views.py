@@ -195,6 +195,9 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     """
     url: /home
     """
+    if not request.user.is_authenticated():
+        return render(request, 'new_templates/home_page.html')
+
     # max_amount = ripple.max_payment(request.profile, recipient)
     request.session['offset'] = settings.LISTING_ITEMS_PER_PAGE
     sign_in_form = UserForm
@@ -218,11 +221,9 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter, do_filter)
     if form_listing_settings.is_valid():
         listing_items, remaining_count = form_listing_settings.get_results()
-
-    if listing_items:
-        next_page_date = listing_items[-1].date
+        next_page_date = listing_items[-1].date if listing_items else None
     else:
-        next_page_date = None
+        listing_items = remaining_count = next_page_date = None
     url_params = request.GET.copy()
     url_params.pop('d', None)
     if next_page_date:
@@ -255,7 +256,7 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
 
     notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
 
-    return render(request, 'frontend/home.html', {
+    return render(request, 'new_templates/product_list.html', {
         'item_sub_categories': item_sub_categories, 'subcategories': subcategories,
         'services_sub_categories': services_sub_categories, 'rideshare_sub_categories': rideshare_sub_categories,
         'housing_sub_categories': housing_sub_categories, 'user_agent_type': user_agent_type,
@@ -273,7 +274,6 @@ def map_visualization(request):
     if request.session.get('offset'):
         request.session['offset'] = 0
     form = ListingsForms()
-    categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)
     services_sub_categories = SubCategories.objects.all().filter(categories=2)
     rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)

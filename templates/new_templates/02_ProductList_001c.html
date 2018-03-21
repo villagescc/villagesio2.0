@@ -81,7 +81,7 @@
                           <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a>
                           <div class="dropdown-divider"></div>
                           <a class="dropdown-item" href="{% url 'accounts:settings' %}">Settings</a>
-                          <a class="dropdown-item" href="{% url 'management:management' %}">Management</a>
+{#                          <a class="dropdown-item" href="{% url 'management:management' %}">Management</a>#}
                           <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
                       </div>
                   </li>
@@ -97,31 +97,31 @@
       <aside class="app-sidebar">
       <div class="cat-menu">
         <div class="cat-menu">
-          <a class="cat-item {% if request.resolver_match.view_name == 'frontend:home' %}active{% endif %}" href="{% url 'frontend:home' %}">
+          <a class="cat-item {% if request.path == '/' or request.path == '/home' or request.path == '/home/' %}active{% endif %}" href="{% url 'frontend:home' %}">
             <div class="cat-item-icon">
                <img src="{% static 'new_template/res/img/icons/all_categories.png' %}" alt="All Categories">
             </div>
             <span class="cat-item-name">All Categories</span>
           </a>
-          <a class="cat-item" href="{% url 'frontend:home' 'SERVICES' %}">
+          <a class="cat-item {% if '/SERVICES' in request.path %}active{% endif %}" href="{% url 'frontend:home' 'SERVICES' %}">
             <div class="cat-item-icon">
               <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/services.png' %}" alt="Services">
             </div>
             <span class="cat-item-name">Services</span>
           </a>
-          <a class="cat-item" href="{% url 'frontend:home' 'PRODUCTS' %}">
+          <a class="cat-item {% if '/PRODUCTS' in request.path %}active{% endif %}" href="{% url 'frontend:home' 'PRODUCTS' %}">
             <div class="cat-item-icon">
               <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Products">
             </div>
             <span class="cat-item-name">Products</span>
           </a>
-          <a class="cat-item" href="{% url 'frontend:home' 'HOUSING' %}">
+          <a class="cat-item {% if '/HOUSING' in request.path %}active{% endif %}" href="{% url 'frontend:home' 'HOUSING' %}">
             <div class="cat-item-icon">
               <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/housing.png' %}" alt="Housing">
             </div>
             <span class="cat-item-name">Housing</span>
           </a>
-            <a class="cat-item" href="{% url 'frontend:home' 'RIDESHARE' %}">
+            <a class="cat-item  {% if '/RIDESHARE' in request.path %}active{% endif %}" href="{% url 'frontend:home' 'RIDESHARE' %}">
                 <div class="cat-item-icon">
                     <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Housing">
                 </div>
@@ -459,6 +459,11 @@
                     $('#listing-id').val(listing_id);
                     $('.listing-modal-title').text(data["data"]["listing_title"]);
                     $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
+                    if(data["data"]["listing_photo"]) {
+                        $('.listing-img').show();
+                    } else {
+                        $('.listing-img').hide();
+                    }
                     $('#label-listing-type').text(data["data"]["listing_type"]);
                     $('#label-price').text(data["data"]["listing_price"]);
                     $('#label-profile-name').text(data["data"]["profile_name"]);

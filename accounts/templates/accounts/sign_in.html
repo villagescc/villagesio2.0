@@ -5,6 +5,7 @@
     #messages span {
         margin: 0 25px 0 15px;
     }
+
     #messages i {
         margin-right: 25px;
     }
@@ -17,6 +18,24 @@
 
             <div class="row">
                 <div class="col-12 col-xxl-8">
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if message.tags == 'success' %}
+                                <div {% if message.tags %} data-dismiss="alert"
+                                                           class="alert alert-personalized alert-{{ message.tags }} margin-top pointer"{% endif %}>
+                                    <i class="fa fa-check"></i>{{ message }}
+                                </div>
+                            {% else %}
+                                <div {% if message.tags %} data-dismiss="alert"
+                                                           class="alert alert-personalized alert-danger pointer"{% endif %}>
+                                    <i class="fa fa-meh-o"></i>{{ message }}
+                                </div>
+                            {% endif %}
+                            <script> setTimeout(function () {
+                                $(".alert-personalized").fadeOut('slow');
+                            }, 3000); </script>
+                        {% endfor %}
+                    {% endif %}
 
                     <h2>Login</h2>
                     <p>Please autheticate to proceed</p>
@@ -25,23 +44,32 @@
                         <form id="trust-form" role="form" action="" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="receiver-box" id="div-recipient-name">
-                                <h4 class="mt-1">Username</h4>
-                                {% if form.username.errors %}
-                                    <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                                <h4 class="mt-1">Email | Username</h4>
+                                <div class="form-group">
                                     {{ form.username }}
-                                {% else %}
-                                    {{ form.username }}
-                                {% endif %}
+                                    {% if form.username.errors %}
+                                        <div class="alert alert-warning message">
+                                            {% for error in form.username.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
                             <div class="receiver-box" id="div-recipient-name">
                                 <h4 class="mt-1">Password</h4>
-                                {% if form.password.errors %}
-                                    <label for="{{ form.password.label }}" class="error">{{ form.password.label }}</label>
+                                <div class="form-group">
                                     {{ form.password }}
-                                {% else %}
-                                    {{ form.password }}
-                                {% endif %}
+                                    {% if form.password.errors %}
+                                        <div class="alert alert-warning message">
+                                            {% for error in form.password.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
+                            <a href="{% url 'forgot_password' %}">Forgot password</a>
                             <h4></h4>
                             <div class="row" style="max-width: 600px;">
                                 <div class="col-12 col-sm-6">
@@ -49,10 +77,12 @@
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <input class="btn btn-std btn-cancel" id="save-trust" type="button" value="Cancel"
-                                    onclick="window.location='/'">
+                                           onclick="window.location='/'">
                                 </div>
                                 <div class="col-12 ">
-                                    <a class="btn btn-primary" href="{% url 'social:begin' 'facebook' %}?next={{ next_url }}"><i class="fa fa-facebook-official">&nbsp; Login with facebook</i></a>
+                                    <a class="btn btn-primary"
+                                       href="{% url 'social:begin' 'facebook' %}?next={{ next_url }}"><i
+                                            class="fa fa-facebook-official">&nbsp; Login with facebook</i></a>
                                 </div>
                             </div>
                         </form>
@@ -63,11 +93,3 @@
     </main>
 
 {% endblock %}
-
-<script>
-    setInterval(function () {
-        $('.alert').fadeOut("medium");
-    }, 3000);
-
-</script>
-
