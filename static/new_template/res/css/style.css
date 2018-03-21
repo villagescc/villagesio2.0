@@ -6384,7 +6384,7 @@ a {
       padding-left: 2em; } }
   @media (max-width: 575px) {
     .cat-menu .cat-item {
-      flex: 0 0 25%;
+      flex: 0 0 20%;
       padding: 1em;
       border-bottom: none; }
       .cat-menu .cat-item:not(:first-of-type) {

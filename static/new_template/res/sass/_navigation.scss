@@ -150,7 +150,7 @@
       padding-left: 2em;
     }
     @include media-width-down(xs) {
-      flex: 0 0 25%;
+      flex: 0 0 20%;
       padding: 1em;
       border-bottom: none;
       &:not(:first-of-type) {
