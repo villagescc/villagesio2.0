@@ -7937,3 +7937,52 @@ p {
       font-weight: 600; }
     .transaction-history .transaction-box .action-menu-item {
       margin: 0 0.5em; }
+
+.modal#listing-modal .modal-dialog {
+  max-width: 1000px; }
+  @media (max-width: 767px) {
+    .modal#listing-modal .modal-dialog {
+      max-width: 500px; } }
+
+.modal#listing-modal .modal-content {
+  padding: 40px; }
+  @media (max-width: 767px) {
+    .modal#listing-modal .modal-content {
+      padding: 20px; } }
+
+.modal#listing-modal .modal-header h5 {
+  font-size: 27px;
+  font-weight: normal;
+  color: #8d8d8d; }
+
+.modal#listing-modal .modal-body label {
+  margin-right: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #1d90b5; }
+  @media (max-width: 767px) {
+    .modal#listing-modal .modal-body label {
+      font-size: 16px; } }
+
+.modal#listing-modal .modal-body span {
+  font-size: 18px;
+  font-weight: normal;
+  color: #8d8d8d; }
+  @media (max-width: 767px) {
+    .modal#listing-modal .modal-body span {
+      font-size: 14px; } }
+
+.modal#listing-modal .modal-body a {
+  font-size: 18px; }
+  @media (max-width: 767px) {
+    .modal#listing-modal .modal-body a {
+      font-size: 14px; } }
+
+.modal#listing-modal .modal-body .item-holder {
+  max-height: 400px;
+  margin-bottom: 40px; }
+  .modal#listing-modal .modal-body .item-holder img {
+    object-fit: cover; }
+
+.modal#listing-modal .modal-body .col-12 {
+  min-height: 40px; }
