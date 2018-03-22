@@ -155,6 +155,18 @@
 {% include 'new_templates/header.html' %}
 
 {% block content %}{% endblock content %}
+<div id="spin-modal" class="collapse">
+    <div class="back-spin">
+        <i class="fa fa-refresh fa-spin fa-4x" style="z-index: 10"></i>
+    </div>
+</div>
+<script>
+    $(document).ready(function (){
+        $('.spin').click(function () {
+            $('#spin-modal').fadeIn();
+        });
+    });
+</script>
 
 <script>
     window.intergramId = "-164920727";
