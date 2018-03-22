@@ -87,7 +87,7 @@ class ProductListViews extends Views {
 
                 </div>
 
-                <div class="post-content">
+                <div class="post-content listing-modal" data-listing-id="${data.listing_id}">
                   <div class="avatar-thumbnail" style="background-image: url('${data.profile_image}');">
                     <!--<img class="trusted-icon" src="/static/new_template/res/img/icons/trusted-icon.png"-->
                          <!--alt="trusted">-->
