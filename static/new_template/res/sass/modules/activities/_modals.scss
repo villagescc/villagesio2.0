@@ -1,4 +1,14 @@
 .modal {
+  &#error-modal {
+    .modal-header h4 {
+      font-weight: bold;
+      color: $red;
+    }
+    .modal-body {
+      overflow-y: auto;
+    }
+  }
+
   &#listing-modal {
     .modal-dialog {
       max-width: 1000px;

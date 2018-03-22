@@ -7938,6 +7938,12 @@ p {
     .transaction-history .transaction-box .action-menu-item {
       margin: 0 0.5em; }
 
+.modal#error-modal .modal-header h4 {
+  color: #d97271; }
+
+.modal#error-modal .modal-body {
+  overflow-y: auto; }
+
 .modal#listing-modal .modal-dialog {
   max-width: 1000px; }
   @media (max-width: 767px) {

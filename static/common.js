@@ -129,16 +129,14 @@ function init_payment_modal() {
         var profile_username = $(this).attr('data-profile-username');
         $("#profile-username").val(profile_username);
         var url = '/acknowledge_ajax/' + profile_username;
-        console.log(url);
         $.ajax({
             url: url,
             type: 'GET',
             cache: false,
             success: function (data) {
                 if (data["data"]["stat"] != "ok") {
-                    $('#error-modal-alert').text(data["data"]["stat"]);
+                    $('#payment-error-modal-alert').text(data["data"]["stat"]);
                     $('#spin-modal').fadeOut();
-                    $('#error-modal-alert').modal("show");
                 }
                 else if (!data['data']['can_ripple']) {
                     $('label[for="id_ripple_0"]').closest('li').hide();
