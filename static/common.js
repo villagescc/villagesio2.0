@@ -230,12 +230,16 @@ function init_listing_modal() {
     });
 }
 
-$(document).ready(function () {
-    init_feed_filter_form();
-    init_instruction_input();
-    init_feed_items();
+function initModals () {
     init_listing_modal();
     init_contact_modal();
     init_payment_modal();
     init_trust_modal();
+}
+
+$(document).ready(function () {
+    init_feed_filter_form();
+    init_instruction_input();
+    init_feed_items();
+    initModals();
 });
