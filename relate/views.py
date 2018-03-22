@@ -303,14 +303,12 @@ def blank_trust(request):
     if request.method == 'POST':
         if not request.POST['data_profile']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
-            return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form,
-                                                               'listing_form': listing_form,
-                                                               'accounts': accounts})
+            return django_render(request, 'new_templates/trust.html', {'form': form, 'listing_form': listing_form,
+                                                                       'accounts': accounts})
         recipient = get_object_or_404(Profile, user__username=request.POST['data_profile'])
         if recipient == request.profile:
             messages.add_message(request, messages.ERROR, 'You cant send a trust to yourself')
-            return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form,
-                                                               'listing_form': listing_form})
+            return django_render(request, 'new_templates/trust.html', {'form': form, 'listing_form': listing_form})
         try:
             endorsement = Endorsement.objects.get(endorser=request.profile, recipient=recipient)
         except Endorsement.DoesNotExist:
@@ -318,7 +316,7 @@ def blank_trust(request):
         if 'delete' in request.POST and endorsement:
             endorsement.delete()
             messages.add_message(request, messages.INFO, 'Trust deleted')
-            return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form})
+            return django_render(request, 'new_templates/trust.html', {'form': form})
 
         form = BlankTrust(request.POST, instance=endorsement, endorser=request.profile, recipient=recipient)
         if form.is_valid():
@@ -337,16 +335,15 @@ def blank_trust(request):
                     existing_referral.delete()
             # send_endorsement_notification(endorsement)
             messages.add_message(request, messages.INFO, 'Trust saved!')
-            return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form,
-                                                                               'listing_form': listing_form})
+            return django_render(request, 'new_templates/trust.html', {'form': form, 'listing_form': listing_form})
         else:
             messages.add_message(request, messages.ERROR, 'An error occurred, please verify.')
-            return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form, 'listing_form': listing_form})
+            return django_render(request, 'new_templates/trust.html', {'form': form, 'listing_form': listing_form})
     else:
         form = BlankTrust(instance=None, endorser=request.profile, recipient=None)
         profile = request.profile
-        return django_render(request, 'new_templates/08_Trust_001b.html', {'form': form, 'listing_form': listing_form,
-                                                                           'accounts': accounts, 'profile': profile})
+        return django_render(request, 'new_templates/trust.html', {'form': form, 'listing_form': listing_form,
+                                                                   'accounts': accounts, 'profile': profile})
 
 
 @login_required()
@@ -360,14 +357,13 @@ def blank_payment(request):
     if request.method == 'POST':
         if not request.POST['recipient']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
-            return django_render(request, 'new_templates/07_Pay_001b.html', {'form': form, 'listing_form': listing_form})
+            return django_render(request, 'new_templates/pay.html', {'form': form, 'listing_form': listing_form})
         recipient = get_object_or_404(Profile, user__username=request.POST['recipient'])
         max_amount = ripple.max_payment(request.profile, recipient)
         form = BlankPaymentForm(request.POST, max_ripple=max_amount)
         if recipient == request.profile:
             messages.add_message(request, messages.ERROR, 'You cant send a payment to yourself')
-            return django_render(request, 'new_templates/07_Pay_001b.html', {'form': form,
-                                                                 'listing_form': listing_form})
+            return django_render(request, 'new_templates/pay.html', {'form': form, 'listing_form': listing_form})
         can_ripple = max_amount > 0
         # if not can_ripple and request.POST['ripple'] == 'routed':
         #     messages.add_message(request, messages.ERROR, 'There are no available paths through the trust network, '
@@ -382,10 +378,10 @@ def blank_payment(request):
         return HttpResponseRedirect(reverse('blank_payment_user'))
     else:
         form = BlankPaymentForm(max_ripple=None, initial=request.GET)
-        return django_render(request, 'new_templates/07_Pay_001b.html', {'form': form, 'listing_form': listing_form,
-                                                                         'received_payments': received_payments,
-                                                                         'made_payments': made_payments,
-                                                                         'all_payments': all_payments})
+        return django_render(request, 'new_templates/pay.html', {'form': form, 'listing_form': listing_form,
+                                                                 'received_payments': received_payments,
+                                                                 'made_payments': made_payments,
+                                                                 'all_payments': all_payments})
 
 
 def send_payment_notification(payment):
