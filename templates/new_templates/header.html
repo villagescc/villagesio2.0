@@ -118,9 +118,9 @@
                     </button>
 
                     <div class="site-branding">
-                        <a href="#"><img class="img-fluid"
-                                         src="{% static 'new_template/res/img/home/logo_full.png' %}"
-                                         alt="Villages"></a>
+                        <a href="{% url 'frontend:home' %}"><img class="img-fluid"
+                                                                 src="{% static 'new_template/res/img/home/logo_full.png' %}"
+                                                                 alt="Villages"></a>
                     </div><!-- .site-branding -->
 
                     <nav id="primary-navbar" class="collapse navbar-collapse">
@@ -135,7 +135,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <a href="#" class="nav-link">Home</a>
+                                <a href="{% url 'frontend:home' %}" class="nav-link">Home</a>
                             </li>
                             <li class="nav-item">
                                 <a href="{% url 'how_it_works' %}" class="nav-link">About Us</a>

@@ -129,7 +129,7 @@ class SignInUserLogIn(View):
         form.fields.pop('first_name')
         form.fields.pop('email')
         next_url = request.GET.get('next')
-        return django_render(request, 'accounts/sign_in.html', {'form': form, 'next_url': next_url})
+        return django_render(request, 'new_templates/sign_in.html', {'form': form, 'next_url': next_url})
 
     def post(self, request):
         form = UserForm(request.POST)
@@ -163,7 +163,7 @@ class SignInUserLogIn(View):
             form.fields.pop('first_name')
             form.fields.pop('email')
             messages.add_message(request, messages.WARNING, 'This user is not registered yet')
-            return django_render(request, 'accounts/sign_in.html', {'form': form})
+            return django_render(request, 'new_templates/sign_in.html', {'form': form})
         except Exception as e:
             messages.add_message(request, messages.ERROR, " User not found")
             # return django_render(request, 'accounts/sign_in.html', {'form': form})
@@ -177,7 +177,7 @@ class SignInUserRegister(View):
 
         form = self.form_class()
         # form.fields.pop('new_password')
-        return django_render(request, 'accounts/signup.html', {'form': form})
+        return django_render(request, 'new_templates/sign_up.html', {'form': form})
 
     def post(self, request):
         invitation = get_invitation(request)
@@ -213,7 +213,7 @@ class SignInUserRegister(View):
             if invitation:
                 initial['email'] = invitation.to_email
             form = RegistrationForm(initial=initial)
-        return django_render(request, 'accounts/signup.html', {'form': form})
+        return django_render(request, 'new_templates/sign_up.html', {'form': form})
 
 
 @login_required
