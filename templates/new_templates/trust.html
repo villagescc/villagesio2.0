@@ -101,7 +101,6 @@
                         <div class="table-head">
 
                             <span>Name</span>
-                            <span>Health</span>
                             <span>Payments from You</span>
                             <span>Trust from You</span>
 
@@ -114,10 +113,6 @@
                                          style="position: relative; border-radius: 50%; overflow: hidden;">
                                 </div>
                                 {{ account.partner }}
-
-                                {% if account.partner %}
-                                    <span class="health">{{ account.health|default:"X" }}</span>
-                                {% endif %}
 
                                 <span class="payments">{{ account.owed_to_you|default_if_none:"" }}</span>
 

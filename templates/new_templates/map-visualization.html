@@ -1,0 +1,540 @@
+{% extends 'new_templates/base.html' %}
+{% load staticfiles i18n %}
+
+{% block extra_css %}
+    <link href="{% static 'maps/css/listing_map_style.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="app-view">
+        {% include 'new_templates/categories_sidebar.html' %}
+
+        <main class="app-main">
+
+            <form id="search-form" class="form-container">
+
+                <div class="row">
+
+                    <div class="col-12 col-md-6 col-lg-4 col-xxl-2">
+
+                        <select class="filter-input" id="inputListingType" name="listing_type">
+                            <option value="default" selected disabled>Choose a listing type</option>
+                            <option value="OFFER">Offer</option>
+                            <option value="REQUEST">Request</option>
+                            <option value="TEACH">Teach</option>
+                            <option value="LEARN">Learn</option>
+                        </select>
+
+                    </div>
+
+                    <div class="col-12 col-xs-6 col-lg-4 col-xxl-3">
+
+                        <div class="custom-group">
+
+                            <label class="custom-radio" for="radio-grid">
+                                <a href="{% url 'frontend:home' %}">
+                                    <input id="radio-grid" type="radio" name="view-radio" value="grid">
+                                    <span class="btn-input-layout">
+                        <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/grid.png' %}" alt="Grid">
+                      <span class="btn-input-text">Grid</span>
+                    </span>
+                                </a>
+                            </label>
+
+                            <label class="custom-radio" for="radio-map">
+                                <input id="radio-map" type="radio" name="view-radio" value="map" checked>
+                                <span class="btn-input-layout">
+                      <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/map.png' %}" alt="Map">
+                      <span class="btn-input-text">Map</span>
+                    </span>
+                            </label>
+
+                        </div>
+
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+
+                        <label class="custom-check" for="id_trusted_only">
+                            <input id="id_trusted_only" type="checkbox" name="trusted" value="on">
+                            <span class="btn-input-layout">
+                    <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
+                    <span class="btn-input-text">Trusted</span>
+                  </span>
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div id="filters">
+                        <div class="col-12">
+                            <div class="custom-filter-title">
+                                Price
+                            </div>
+                            <div class="custom-filter-options">
+                                <b>1</b>&nbsp&nbsp&nbsp<input id="price" name="map-price" type="text" class="span2"
+                                                              value=""
+                                                              data-slider-min="0"
+                                                              data-slider-max="1000"
+                                                              data-slider-step="5"
+                                                              data-slider-value="[0,100]"/>
+                                <b>1000</b>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="custom-filter-options">
+                                    <div class="custom-filter-checkbox-container">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="custom-filter-title">
+                                    Category
+                                </div>
+                                <div class="custom-filter-options">
+                                    <div class="custom-filter-checkbox-container">
+                                        <label class="custom-filter-checkbox-label">
+                                            <input type="radio" name="category" id="id_products" value="2"
+                                                   class="category"
+                                                   style="width: auto;">
+                                            <span class="custom-filter-checkbox-label-text">Products</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="custom-filter-options">
+                                    <div class="custom-filter-checkbox-container">
+                                        <label class="custom-filter-checkbox-label">
+                                            <input type="radio" name="category" id="id_services" value="2"
+                                                   class="category"
+                                                   style="width: auto;">
+                                            <span class="custom-filter-checkbox-label-text">Services</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="custom-filter-options">
+                                    <div class="custom-filter-checkbox-container">
+                                        <label class="custom-filter-checkbox-label">
+                                            <input type="radio" name="category" id="id_rideshare" value="2"
+                                                   class="category"
+                                                   style="width: auto;">
+                                            <span class="custom-filter-checkbox-label-text">Rideshare</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="custom-filter-options">
+                                    <div class="custom-filter-checkbox-container">
+                                        <label class="custom-filter-checkbox-label">
+                                            <input type="radio" name="category" id="id_housing" value="2"
+                                                   class="category"
+                                                   style="width: auto;">
+                                            <span class="custom-filter-checkbox-label-text">Housing</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <button id="btn_clear_cateogry" type="button" class="btn btn-primary btn-sm">clear
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="custom-filter-title">
+                                    Listing Type
+                                </div>
+                                <div class="custom-filter-options">
+                                    <div class="custom-filter-checkbox-container">
+                                        <label class="custom-filter-checkbox-label">
+                                            <input type="radio" name="listing_type" id="id_offer_type" value="offer"
+                                                   class="listing_type" style="width: auto;">
+                                            <span class="custom-filter-checkbox-label-text">Offer</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="custom-filter-options">
+                                    <div class="custom-filter-checkbox-container">
+                                        <label class="custom-filter-checkbox-label">
+                                            <input type="radio" name="listing_type" id="id_request_type" value="request"
+                                                   class="listing_type" style="width: auto;">
+                                            <span class="custom-filter-checkbox-label-text">Request</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="custom-filter-options">
+                                    <div class="custom-filter-checkbox-container">
+                                        <label class="custom-filter-checkbox-label">
+                                            <input type="radio" name="listing_type" id="id_teach_type" value="teach"
+                                                   class="listing_type" style="width: auto;">
+                                            <span class="custom-filter-checkbox-label-text">Teach</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="custom-filter-options">
+                                    <div class="custom-filter-checkbox-container">
+                                        <label class="custom-filter-checkbox-label">
+                                            <input type="radio" name="listing_type" id="id_learn_type" value="learn"
+                                                   class="listing_type" style="width: auto;">
+                                            <span class="custom-filter-checkbox-label-text">Learn</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm" id="btn_clear_listing">clear
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="custom-filter-title">
+                                    Balance Type
+                                </div>
+                                <div class="custom-filter-options">
+                                    <div class="custom-filter-checkbox-container">
+                                        <label class="custom-filter-checkbox-label">
+                                            <input type="radio" name="balance_type" id="id_negative_balance"
+                                                   value="negative" class="balance_type" style="width: auto;">
+                                            <span class="custom-filter-checkbox-label-text">Negative balance</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="custom-filter-options">
+                                    <div class="custom-filter-checkbox-container">
+                                        <label class="custom-filter-checkbox-label">
+                                            <input type="radio" name="balance_type" id="id_positive_balance"
+                                                   value="positive" class="balance_type" style="width: auto;">
+                                            <span class="custom-filter-checkbox-label-text">Positive balance</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm" id="btn_clear_balance">clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-9" style="padding-left: 0;">
+                        <div class="home-map">
+                            <div id="map" class="map" style="height: 600px; position: relative; overflow: hidden"></div>
+                        </div>
+
+                        <script src="{% static 'seiyria-bootstrap-slider/dist/bootstrap-slider.min.js' %}"
+                                charset="utf-8"></script>
+                        <script>
+
+                            $(function () {
+                                var trusted_only = localStorage.trusted_only === "true";
+                                $("#id_trusted_only").prop('checked', trusted_only);
+
+                                var offer_type = localStorage.offer_type === "true";
+                                $("#id_offer_type").prop('checked', offer_type);
+
+                                var request_type = localStorage.request_type === "true";
+                                $("#id_request_type").prop('checked', request_type);
+
+                                var teach_type = localStorage.teach_type === "true";
+                                $("#id_teach_type").prop('checked', teach_type);
+
+                                var learn_type = localStorage.learn_type === "true";
+                                $("#id_learn_type").prop('checked', learn_type);
+
+                                var category_products = localStorage.products === "true";
+                                $("#id_products").prop('checked', category_products);
+
+                                var category_services = localStorage.services === "true";
+                                $("#id_services").prop('checked', category_services);
+
+                                var category_rideshare = localStorage.rideshare === "true";
+                                $("#id_rideshare").prop('checked', category_rideshare);
+
+                                var category_housing = localStorage.housing === "true";
+                                $("#id_housing").prop('checked', category_housing);
+
+                                var negative_balance = localStorage.negative_balance === "true";
+                                $("#id_negative_balance").prop('checked', negative_balance);
+
+                                var positive_balance = localStorage.positive_balance === "true";
+                                $("#id_positive_balance").prop('checked', positive_balance);
+                            });
+
+                            $('#btn_clear_cateogry').click(function () {
+                                $("input:radio[class^='category']").each(function (i) {
+                                    this.checked = false;
+                                });
+                                $(this).closest('form').submit()
+                            });
+
+                            $('#btn_clear_listing').click(function () {
+                                $("input:radio[class^='listing_type']").each(function (i) {
+                                    this.checked = false;
+                                });
+                                $(this).closest('form').submit()
+                            });
+
+                            $('#btn_clear_balance').click(function () {
+                                $("input:radio[class^='balance_type']").each(function (i) {
+                                    this.checked = false;
+                                });
+                                $(this).closest('form').submit()
+                            });
+
+                            // Without JQuery
+                            var priceSlider = $("#price").slider();
+                            priceSlider.on('slideStop', function () {
+                                mapCentre = map.getCenter();
+                                localStorage.mapLat = mapCentre.lat();
+                                localStorage.mapLng = mapCentre.lng();
+                                localStorage.mapZoom = map.getZoom();
+                                $(this).closest('form').submit()
+                            });
+
+                            $("#id_trusted_only").on("change", function () {
+                                localStorage.trusted_only = $(this).is(':checked');
+                                mapCentre = map.getCenter();
+                                localStorage.mapLat = mapCentre.lat();
+                                localStorage.mapLng = mapCentre.lng();
+                                localStorage.mapZoom = map.getZoom();
+                                $(this).closest('form').submit()
+                            });
+
+                            $("#id_offer_type").on("change", function () {
+                                localStorage.offer_type = $(this).is(':checked');
+                                mapCentre = map.getCenter();
+                                localStorage.mapLat = mapCentre.lat();
+                                localStorage.mapLng = mapCentre.lng();
+                                localStorage.mapZoom = map.getZoom();
+                                $(this).closest('form').submit()
+                            });
+
+                            $("#id_request_type").on("change", function () {
+                                localStorage.request_type = $(this).is(':checked');
+                                mapCentre = map.getCenter();
+                                localStorage.mapLat = mapCentre.lat();
+                                localStorage.mapLng = mapCentre.lng();
+                                localStorage.mapZoom = map.getZoom();
+                                $(this).closest('form').submit()
+                            });
+
+                            $("#id_teach_type").on("change", function () {
+                                localStorage.teach_type = $(this).is(':checked');
+                                $(this).closest('form').submit()
+                            });
+
+                            $("#id_learn_type").on("change", function () {
+                                localStorage.learn_type = $(this).is(':checked');
+                                mapCentre = map.getCenter();
+                                localStorage.mapLat = mapCentre.lat();
+                                localStorage.mapLng = mapCentre.lng();
+                                localStorage.mapZoom = map.getZoom();
+                                $(this).closest('form').submit()
+                            });
+
+                            $("#id_products").on("change", function () {
+                                localStorage.products = $(this).is(':checked');
+                                mapCentre = map.getCenter();
+                                localStorage.mapLat = mapCentre.lat();
+                                localStorage.mapLng = mapCentre.lng();
+                                localStorage.mapZoom = map.getZoom();
+                                $(this).closest('form').submit();
+                            });
+
+                            $("#id_services").on("change", function () {
+                                localStorage.services = $(this).is(':checked');
+                                mapCentre = map.getCenter();
+                                localStorage.mapLat = mapCentre.lat();
+                                localStorage.mapLng = mapCentre.lng();
+                                localStorage.mapZoom = map.getZoom();
+                                $(this).closest('form').submit();
+                            });
+
+                            $("#id_rideshare").on("change", function () {
+                                localStorage.rideshare = $(this).is(':checked');
+                                mapCentre = map.getCenter();
+                                localStorage.mapLat = mapCentre.lat();
+                                localStorage.mapLng = mapCentre.lng();
+                                localStorage.mapZoom = map.getZoom();
+                                $(this).closest('form').submit();
+                            });
+
+                            $("#id_housing").on("change", function () {
+                                localStorage.housing = $(this).is(':checked');
+                                mapCentre = map.getCenter();
+                                localStorage.mapLat = mapCentre.lat();
+                                localStorage.mapLng = mapCentre.lng();
+                                localStorage.mapZoom = map.getZoom();
+                                $(this).closest('form').submit();
+                            });
+
+                            $("#id_negative_balance").on("change", function () {
+                                localStorage.negative_balance = $(this).is(':checked');
+                                mapCentre = map.getCenter();
+                                localStorage.mapLat = mapCentre.lat();
+                                localStorage.mapLng = mapCentre.lng();
+                                localStorage.mapZoom = map.getZoom();
+                                $(this).closest('form').submit()
+                            });
+
+                            $("#id_positive_balance").on("change", function () {
+                                localStorage.positive_balance = $(this).is(':checked');
+                                mapCentre = map.getCenter();
+                                localStorage.mapLat = mapCentre.lat();
+                                localStorage.mapLng = mapCentre.lng();
+                                localStorage.mapZoom = map.getZoom();
+                                $(this).closest('form').submit()
+                            });
+                        </script>
+
+                        <script>
+                            $(document).ready(function () {
+                                localStorage.clear()
+                            })
+                        </script>
+                    </div>
+
+                </div>
+
+            </form>
+
+            <div class="search-results">
+
+                <div class="row">
+
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+    <form id="form-map-listing" method="get" style="display: none;">
+        {% if user_agent_type == 'mobile' %}
+            <div class="col-md-2">
+                {% if not listing_items %}
+                    {{ form.radius }}
+                    <div><span><label>{{ form.trusted }}
+            <img src="{% static 'img/heart_icon.png' %}"
+                 alt="{% trans 'Heart icon = trusted user' %}">
+                        {% trans 'Trusted only' %}</label>
+        </span></div>
+                {% else %}
+                    {{ form_listing_settings.radius }}
+                    <span><label>{{ form_listing_settings.trusted }}
+            <img src="{% static 'img/heart_icon.png' %}"
+                 alt="{% trans 'Heart icon = trusted user' %}">
+                        {% trans 'Trusted only' %}</label>
+        </span>
+                {% endif %}
+                <div>
+                    {% if feed_items %}
+                        <a href="{% url 'frontend:home' %}">
+                            <img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
+                    {% elif listing_items %}
+                        <a href="{% url 'frontend:home_people' %}">
+                            <img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
+                    {% endif %}
+                </div>
+                <br>
+            </div>
+        {% else %}
+
+            <div class="col-md-12">
+
+                {% if not is_listing %}
+                    {{ form.radius }}
+                {% else %}
+                    {{ form_listing_settings.radius }}
+                    <div></div>
+                {% endif %}
+
+            </div>
+            <br>
+        {% endif %}
+
+        <section class="container-fluid" id="home-sub-menu">
+            <div class="row" style="height: 100%">
+                <div class="col-md-6">
+                    <ul style="padding-left: 0;">
+                        <div class="form-group">
+                            <div class="btn-group">
+                                {% if is_listing %}
+                                    <select class="form-control" id="inputListingType" name="listing_type">
+                                        <option selected value="">Choose a listing type</option>
+                                        <option value="OFFER">OFFER</option>
+                                        <option value="REQUEST">REQUEST</option>
+                                        <option value="TEACH">TEACH</option>
+                                        <option value="LEARN">LEARN</option>
+                                    </select>
+
+                                    </div>
+                                    </div>
+                                {% endif %}
+                        {% if not is_listing %}
+                            <div class="form-group">
+                                {{ form.q }}
+                            </div>
+                        {% else %}
+                            <div class="form-group">
+                                {{ form_listing_settings.q }}
+                            </div>
+                        {% endif %}
+
+                    </ul>
+                    {% if item_type_name %}
+                        <p style="font-size: 15px; font-weight: 600; padding-bottom: 0;
+                        font-family: 'Open Sans'; color: #000;">{{ item_type_name }}</p>
+                    {% endif %}
+                    <hr>
+                </div>
+
+                {% if request.method == 'POST' %}
+                    <script src="{% static 'maps/search_listings_post.js' %}"></script>
+                {% elif request.method == 'GET' %}
+
+                    <script type="text/javascript">
+                        var listings_locations = JSON.parse("{{ listing_locations|escapejs }}");
+                    </script>
+                {% endif %}
+
+
+    </form>
+
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'maps/search_listings_get.js' %}"></script>
+    <script src="{% static 'maps/oms.min.js' %}"></script>
+    <script>
+        $(".listing-facebook-share").click(function () {
+            var listing_id = $(".listing-modal").attr("data-listing-id");
+            var url = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvillages.io%2Flisting_details%2F' + listing_id;
+            $(".listing-facebook-share").attr("href", url)
+        });
+
+
+        $(".listing-twitter-share").click(function () {
+            var listing_id = $(".listing-modal").attr("data-listing-id");
+            var url = 'https://twitter.com/share?url=https%3A%2F%2Fvillages.io%2Flisting_details%2F' + listing_id + '&via=Villagescc&related=villagesmarketplace%2Ctwitter&hashtags=villagescc%2Clisting&text=Listing%20share%20';
+            $(".listing-twitter-share").attr("href", url)
+        })
+    </script>
+    <script>
+        $('.menu-group div').click(function () {
+            var menu = $(this).parent().find('ul');
+            menu.slideToggle();
+        });
+    </script>
+    {% if request.profile.location %}
+        <script>
+            var user_lat = "{{request.profile.location.point.coords.1}}";
+            var user_lon = "{{request.profile.location.point.coords.0}}";
+        </script>
+    {% endif %}
+{% endblock extra_js %}
+

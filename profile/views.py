@@ -3,7 +3,7 @@ from datetime import datetime
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as django_login
@@ -16,7 +16,6 @@ from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from general.util import render, deflect_logged_in
 from django.shortcuts import render as django_render
-from listings.forms import ListingsForms
 from listings.models import Listings
 from listings.views import update_profile_tags
 from relate.forms import AcknowledgementForm
@@ -29,6 +28,7 @@ from profile.forms import (
 from profile.models import Profile, Invitation, PasswordResetLink, ProfilePageTag
 from relate.models import Referral
 from post.models import Post
+from categories.models import Categories
 from geo.util import location_required
 from geo.models import Location
 from relate.models import Endorsement
@@ -214,10 +214,9 @@ def reset_password(request, code):
 
 
 @login_required
-@render('settings.html')
 def edit_settings(request):
     request.session['from_settings'] = True
-    social_auth = request.user.social_auth.filter(provider="facebook")
+    # social_auth = request.user.social_auth.filter(provider="facebook")
     if request.method == 'POST':
         if 'change_settings' in request.POST:
             old_email = request.profile.settings.email
@@ -241,11 +240,14 @@ def edit_settings(request):
                 return redirect(edit_settings)
         
     if 'change_settings' not in request.POST:
-        tag_list = []
         settings_form = SettingsForm(instance=request.profile.settings)
     if 'change_password' not in request.POST:
         password_form = PasswordChangeForm(request.user)
-    return locals()
+    all_categories = Categories.objects.order_by('id')
+
+    return django_render(request, 'new_templates/profile_settings.html', {'settings_form': settings_form,
+                                                                          'password_form': password_form,
+                                                                          'categories': all_categories})
 
 
 def send_new_address_email(settings_obj):
