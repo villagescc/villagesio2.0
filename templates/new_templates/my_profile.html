@@ -11,7 +11,7 @@
 
         <main class="app-main">
 
-            <div class="profile-content">
+            <div class="profile-content my-profile">
 
                 <div class="row">
                     <div class="col-12 col-xxl-7">
@@ -25,7 +25,7 @@
 
                         </div>
 
-                        <div class="row" id="product_list"">
+                        <div class="row" id="product_list">
 
                             {% if listings %}
                                 {% for each in listings %}
@@ -60,29 +60,16 @@
                                             </div>
 
                                             <div class="post-action">
-                                                <a class="action-menu-item"
+                                                <a class="action-menu-item edit-post-button"
                                                    data-toggle="modal"
                                                    data-target="#new-post-modal"
                                                    href="#"><img
                                                         src="{% static 'new_template/res/img/icons/edit.svg' %}"
                                                         alt="like"></a>
-                                                <a class="action-menu-item"
+                                                <a class="action-menu-item delete-post-button"
                                                    href="#"><img
                                                         src="{% static 'new_template/res/img/icons/trash-alt.svg' %}"
                                                         alt="like"></a>
-                                                <!--<a class="action-menu-item trust-modal"-->
-                                                   <!--data-profile-username="{{ each.user.profile.username }}"-->
-                                                   <!--href="#"><img-->
-                                                        <!--src="{% static 'new_template/res/img/icons/heart.png' %}"-->
-                                                        <!--alt="like"></a>-->
-                                                <!--<a class="action-menu-item" href="{% url 'blank_payment_user' %}"><img-->
-                                                        <!--src="{% static 'new_template/res/img/icons/wallet.png' %}"-->
-                                                        <!--alt="buy"></a>-->
-                                                <!--<a class="action-menu-item contact-modal"-->
-                                                   <!--data-profile-username="{{ each.user.profile.username }}"-->
-                                                   <!--data-listing-title="{{ each.title }}" href="#"><img-->
-                                                        <!--src="{% static 'new_template/res/img/icons/mail.png' %}"-->
-                                                        <!--alt="contact"></a>-->
                                             </div>
                                         </div>
                                     </div>

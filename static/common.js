@@ -229,6 +229,44 @@ function init_listing_modal() {
     });
 }
 
+function init_edit_post() {
+
+    // $('.my-profile').on('click', '.edit-post-button', function () {
+    //     var postId = $(this).parents('.post-box').find('.post-cover').data().listingId;
+    //     var url = '/get_listing_info/' + postId;
+    //     var listing_picture_path = '/uploads/';
+    //     var postModal = $('#add-posting-modal').find('.modal-content');
+    //     // new Modal header
+    //     $('#new-post-heading').text('Edit Post');
+    //     $.ajax({
+    //         url: url,
+    //         type: 'GET',
+    //         cache: false,
+    //         success: function (data) {
+    //             if (data["data"]["stat"] == "ok") {
+    //                 postModal.find('#id_listing_type option')
+    //                     .filter('option[value=' + data.data.listing_type + ']')
+    //                     .attr('selected', true);
+    //
+    //                 postModal.find('#id_categories option')
+    //                     .filter('option[value=' + data.data.listing_type + ']')
+    //                     .attr('selected', true);
+    //
+    //                 postModal.find('#id_title')
+    //                     .val(data.data.listing_title);
+    //
+    //                 postModal.find('#id_description')
+    //                     .val(data.data.description);
+    //             }
+    //         },
+    //         error: function (data) {
+    //             $('#spin-modal').fadeOut();
+    //             showInternalServerError();
+    //         }
+    //     });
+    // });
+}
+
 function initModals () {
     init_listing_modal();
     init_contact_modal();
@@ -240,5 +278,6 @@ $(document).ready(function () {
     init_feed_filter_form();
     init_instruction_input();
     init_feed_items();
+    init_edit_post();
     initModals();
 });

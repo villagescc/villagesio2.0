@@ -7175,9 +7175,9 @@ p {
       align-items: center;
       height: 3.5em;
       outline: none; }
-      .profile-content .post-box .post-action .action-menu-item {
+      .my-profile .post-box .post-action .action-menu-item {
         flex: 0 0 50%; }
-        .profile-content .post-box .post-action .action-menu-item img {
+        .my-profile .post-box .post-action .action-menu-item img {
           width: 24px;
           height: 24px;
           fill: grey; }
@@ -7939,6 +7939,7 @@ p {
       margin: 0 0.5em; }
 
 .modal#error-modal .modal-header h4 {
+  font-weight: bold;
   color: #d97271; }
 
 .modal#error-modal .modal-body {
