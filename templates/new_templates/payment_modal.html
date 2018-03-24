@@ -16,7 +16,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content" id="payment-modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="new-trust-heading">New Trust</h5>
+                    <h5 class="modal-title" id="new-trust-heading">New Payment</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <img src="{% static 'new_template/res/img/icons/times.png' %}" alt="close">
                     </button>
@@ -92,6 +92,7 @@
 <script>
     function confirm_text() {
         var can_ripple = {% if can_ripple %}true{% else %}false{% endif %};
+
         var hours = $("#id_amount").val();
         var ack_type = "direct";
         if (can_ripple) {

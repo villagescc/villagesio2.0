@@ -124,6 +124,7 @@ function init_trust_modal() {
 
 function init_payment_modal() {
     $(".payment-modal").click(function (e) {
+        $('#payment-error-modal-alert').html("<strong>Hold on,</strong> We are discovering trust pathways");
         $('#payment-loading-modal').modal("show");
         $('#spin-modal').fadeIn();
         var profile_username = $(this).attr('data-profile-username');
