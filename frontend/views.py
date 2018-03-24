@@ -139,7 +139,7 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
 
     context = locals()
     context.update(extra_context or {})
-    return render(request, 'new_templates/05_PeopleListing_001a.html',
+    return render(request, 'new_templates/people_listing.html',
                   {'url_params': url_params, 'feed_items': feed_items,
                    'next_page_date': next_page_date, 'context': context,
                    'form': form, 'listing_form': listing_form,

@@ -2,8 +2,6 @@
 {% load staticfiles profile %}
 
 {% block content %}
-    {% include 'messages.html' %}
-    <!-- .app-header -->
 
     <div class="app-view">
 
@@ -20,7 +18,7 @@
 
                             <div class="col-12">
                                 <h2>Profile Description</h2>
-                                <p>{{ profile.description }}</p>
+                                <p>{{ profile.description|linebreaks }}</p>
                             </div>
 
                         </div>

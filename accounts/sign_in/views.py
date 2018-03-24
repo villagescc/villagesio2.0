@@ -5,7 +5,6 @@ from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.shortcuts import render as django_render
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 from django.contrib.gis.geos import Point
 from accounts.forms import UserForm
 from profile.models import Profile, Invitation
@@ -13,14 +12,13 @@ from django.conf import settings
 from django.contrib.auth import login
 from relate.models import Endorsement
 from general.mail import send_mail_from_system
-from general.util import render
 from django.contrib.auth.models import User
 from profile.models import Settings
+from categories.models import Categories
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as django_login
 from geo.models import Location
 from profile.forms import RegistrationForm, ProfileForm
-from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.exceptions import ObjectDoesNotExist
 from django_user_agents.utils import get_user_agent
 from ccproject.utils import rotate_image
@@ -129,7 +127,7 @@ class SignInUserLogIn(View):
         form.fields.pop('first_name')
         form.fields.pop('email')
         next_url = request.GET.get('next')
-        return django_render(request, 'accounts/sign_in.html', {'form': form, 'next_url': next_url})
+        return django_render(request, 'new_templates/sign_in.html', {'form': form, 'next_url': next_url})
 
     def post(self, request):
         form = UserForm(request.POST)
@@ -163,7 +161,7 @@ class SignInUserLogIn(View):
             form.fields.pop('first_name')
             form.fields.pop('email')
             messages.add_message(request, messages.WARNING, 'This user is not registered yet')
-            return django_render(request, 'accounts/sign_in.html', {'form': form})
+            return django_render(request, 'new_templates/sign_in.html', {'form': form})
         except Exception as e:
             messages.add_message(request, messages.ERROR, " User not found")
             # return django_render(request, 'accounts/sign_in.html', {'form': form})
@@ -177,7 +175,7 @@ class SignInUserRegister(View):
 
         form = self.form_class()
         # form.fields.pop('new_password')
-        return django_render(request, 'accounts/signup.html', {'form': form})
+        return django_render(request, 'new_templates/sign_up.html', {'form': form})
 
     def post(self, request):
         invitation = get_invitation(request)
@@ -213,11 +211,10 @@ class SignInUserRegister(View):
             if invitation:
                 initial['email'] = invitation.to_email
             form = RegistrationForm(initial=initial)
-        return django_render(request, 'accounts/signup.html', {'form': form})
+        return django_render(request, 'new_templates/sign_up.html', {'form': form})
 
 
 @login_required
-@render()
 def edit_profile(request):
     user_agent = get_user_agent(request)
 
@@ -247,7 +244,8 @@ def edit_profile(request):
             return HttpResponseRedirect(reverse('frontend:home'))
     else:
         form = ProfileForm(instance=profile)
-    return locals()
+    all_categories = Categories.objects.order_by('id')
+    return django_render(request, 'new_templates/profile_edit.html', {'form': form, 'categories': all_categories})
 
 
 def build_location(loc):

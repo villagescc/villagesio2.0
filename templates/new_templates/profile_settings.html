@@ -1,0 +1,107 @@
+{% extends 'new_templates/base.html' %}
+{% load staticfiles  i18n %}
+
+{% block content %}
+
+    <div class="app-view">
+
+        {% include 'new_templates/categories_sidebar.html' %}
+
+        <main class="app-main">
+
+            <div class="trust-content">
+
+                <div class="row">
+                    <div class="col-12 col-xxl-8">
+
+                        <h2>Account Settings</h2>
+
+                        <form action="" method="post">
+                            {% csrf_token %}
+
+                            {% if not social_auth %}
+                                <a class="btn btn-primary"
+                                   href="{% url 'social:begin' 'facebook' %}?next=/settings/?settings=true"><i
+                                        class="fa fa-facebook-official">&nbsp; Bind account to facebook</i></a>
+                            {% endif %}
+
+                            {% for field in settings_form %}
+                                {% if field.errors %}
+                                    <div class="form-group">
+                                        <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                                        {{ field }}
+                                        <div class="alert alert-warning message">
+                                            {% for error in field.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="form-group">
+                                        <label for="{{ field.label }}">{{ field.label }}</label>
+                                        {{ field }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+
+                            <table class="form">
+                                <tr>
+                                    <th></th>
+                                    <td>
+                                        <input class="btn btn-submit btn-success" type="submit" name="change_settings"
+                                               value="Save Settings">
+                                    </td>
+                                </tr>
+                            </table>
+
+                            {% if not form.is_valid %}
+                                <script>
+                                    setTimeout(function () {
+                                        $('.message').slideUp("fast");
+                                    }, 4000);
+                                </script>
+                            {% endif %}
+                        </form>
+
+                        <hr>
+
+                        <h3>Change Password</h3>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <table class="form">
+                                {% for field in password_form %}
+                                    {% if field.errors %}
+                                        <div class="form-group">
+                                            <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                                            {{ field }}
+                                            <div class="alert alert-warning message">
+                                                {% for error in field.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="form-group">
+                                            <label for="{{ field.label }}">{{ field.label }}</label>
+                                            {{ field }}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                                <tr>
+                                    <th></th>
+                                    <td>
+                                        <input class="btn btn-danger" type="submit" name="change_password"
+                                               value="Change Password">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+{% endblock content %}

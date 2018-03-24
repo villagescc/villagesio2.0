@@ -1,31 +1,16 @@
 {% extends "new_templates/base.html" %}
-{% load staticfiles profile %}
+{% load staticfiles profile i18n %}
 
 {% block content %}
-
-    <!-- .app-header -->
-
     <div class="app-view">
 
-    {% include 'new_templates/categories_sidebar.html' %}
+        {% include 'new_templates/categories_sidebar.html' %}
 
-        <main class="app-main" id="main">
+        <main class="app-main">
 
             <form id="search-form" class="form-container">
 
                 <div class="row">
-
-                    <div class="col-12 col-md-6 col-lg-4 col-xxl-2">
-
-                        <select class="filter-input" id="inputListingType" name="listing_type">
-                            <option value="default" selected disabled>Choose a listing type</option>
-                            <option value="OFFER">Offer</option>
-                            <option value="REQUEST">Request</option>
-                            <option value="TEACH">Teach</option>
-                            <option value="LEARN">Learn</option>
-                        </select>
-
-                    </div>
 
                     <div class="col-12 col-xs-6 col-lg-4 col-xxl-3">
 
@@ -42,25 +27,16 @@
                             </label>
 
                             <label class="custom-radio" for="radio-map">
-                                <input id="radio-map" type="radio" name="view-radio" value="map">
-                                <span class="btn-input-layout">
+                                <a href="{% url 'frontend:map' %}"><input id="radio-map" type="radio" name="view-radio"
+                                                                          value="map">
+                                    <span class="btn-input-layout">
                       <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/map.png' %}" alt="Map">
                       <span class="btn-input-text">Map</span>
                     </span>
+                                </a>
                             </label>
 
                         </div>
-
-                    </div>
-
-                    <div class="col-12 col-xs-6 col-md-4 col-lg-4 col-xxl-2">
-                        <select class="filter-input" id="id_radius" name="radius">
-                            <option value="-1" selected>Anywhere</option>
-                            <option value="1000">Within 1 km</option>
-                            <option value="5000">Within 5 km</option>
-                            <option value="10000">Within 10 km</option>
-                            <option value="50000">Within 50 km</option>
-                        </select>
 
                     </div>
 
@@ -69,7 +45,7 @@
                         <div class="custom-group">
 
                             <label class="custom-radio" for="radio-posts">
-                                <input id="radio-posts" type="radio" name="type-radio" value="posts" checked>
+                                <input id="radio-posts" type="radio" name="type-radio" value="posts">
                                 <span class="btn-input-layout">
                       <span class="btn-input-icon checkbox">
                         <svg viewbox="0 0 7 7">
@@ -88,7 +64,7 @@
                             </label>
 
                             <label class="custom-radio" for="radio-people">
-                                <input id="radio-people" type="radio" name="type-radio" value="people">
+                                <input id="radio-people" type="radio" name="type-radio" value="people" checked>
                                 <span class="btn-input-layout">
                       <span class="btn-input-icon checkbox">
                         <svg viewbox="0 0 7 7">
@@ -113,6 +89,7 @@
                     <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
 
                         <label class="custom-check" for="id_trusted">
+                            {{ form.trusted }}
                             <input id="id_trusted" type="checkbox" name="trusted" value="on">
                             <span class="btn-input-layout">
                     <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
@@ -120,6 +97,37 @@
                   </span>
                         </label>
                     </div>
+
+                    <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+                        <label class="custom-check" for="id_referral_filter">
+                            <input id="id_referral_filter" name="referral-radio" type="checkbox" value="on">
+                            <span class="btn-input-layout">
+                    <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
+                    <span class="btn-input-text">Referral filter</span>
+                  </span>
+                        </label>
+                    </div>
+
+                    <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+                        <label class="custom-check" for="balance-high">
+                            <input id="balance-high" name="radio-high" type="checkbox" value="on">
+                            <span class="btn-input-layout">
+                    <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
+                    <span class="btn-input-text">Higher balance</span>
+                  </span>
+                        </label>
+                    </div>
+
+                    <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+                        <label class="custom-check" for="balance-low">
+                            <input id="balance-low" name="radio-low" type="checkbox" value="on">
+                            <span class="btn-input-layout">
+                    <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
+                    <span class="btn-input-text">Lower balance</span>
+                  </span>
+                        </label>
+                    </div>
+
                 </div>
 
                 <div class="row">
@@ -127,7 +135,7 @@
                     <div class="col-12 col-sm-8 col-xxl-5">
 
                         <div class="textbox-with-icon">
-                            {{ form_listing_settings.q }}
+                            {{ form.q }}
                             <img class="textbox-icon" src="{% static 'new_template/res/img/icons/magnifier.png' %}"
                                  alt="magnifier">
                         </div>
@@ -146,77 +154,77 @@
 
             <div class="search-results">
 
-                <div class="row" id="product_list">
+                <div class="row" id="person_list">
 
-                    <div id="django_scroll_offset" data-offset="21" style="display: none"></div>
+                    {% for each in feed_items %}
 
-                    {% for each in listing_items %}
+                        <div class="col-12">
+                            <div class="person-box">
+                                <a href="{{ each.get_absolute_url }}">
+                                    <div class="avatar-wrapper blue">
+                                        <img src="{% profile_image_url each '400x400' %}" alt="avatar" width="70px"
+                                             height="70px"
+                                             class="rounded-circle"
+                                             style="max-width: 100% !important; object-fit: cover;">
+                                    </div>
+                                </a>
 
-                        <div class="col-12 col-sm-6 col-md-12 col-lg-6 col-xl-4 col-xxl-3"
-                             id="div_listing_{{ each.user.profile.username }}">
+                                <a href="{{ each.get_absolute_url }}" style="text-decoration: none">
+                                    <div class="person-id">
+                                        <h1>{{ each }}</h1>
+                                    </div>
+                                </a>
 
-                            <div class="post-box">
-
-                                <div class="post-cover listing-modal"
-                                     style="background-image: url('{% product_image_url each '320x320' %}');"
-                                     data-listing-id="{{ each.id }}">
-                                    <span class="type">{{ each.listing_type }}</span>
-                                    <span class="price">{{ each.price }} VH</span>
-
+                                <div class="price-container">
+                                    <img src="{% static 'new_template/res/img/icons/balance_b.png' %}" alt="balance">
+                                    <span class="price">{{ each.overall_balance }}</span>
                                 </div>
 
-                                <div class="post-content listing-modal"
-                                     data-listing-id="{{ each.id }}"
-                                >
-                                    <div class="avatar-thumbnail"
-                                         style="background-image: url('{% profile_image_url each.user.profile '80x80' %}');">
-                                        <img class="trusted-icon"
-                                             src="{% static 'new_template/res/img/icons/trusted-icon.png' %}"
-                                             alt="trusted">
-                                    </div>
-
-                                    <h1>{{ each.title|slice:":80" }}</h1>
-                                    <p>{{ each.description|truncatechars:100 }}</p>
-                                    <div class="tag-container">
-                                        {% for each_tag in each.tag.all %}
-                                            <a class="tag" href="#">{{ each_tag.name }}</a>
-                                        {% endfor %}
-                                    </div>
-
+                                <div class="like-container">
+                                    <img src="{% static 'new_template/res/img/icons/heart_b.png' %}" alt="balance">
+                                    <span class="like-count">{{ each.endorsement_count }}</span>
                                 </div>
 
-                                <div class="post-action">
+                                <div class="location-container">
+                                    <img src="{% static 'new_template/res/img/icons/map_b.png' %}" alt="location">
+                                    <span class="location">{{ each.location }}</span>
+                                </div>
 
+                                <div class="date-container">
+                                    <img src="{% static 'new_template/res/img/icons/calendar_b.png' %}" alt="date">
+                                    <span class="date">{{ each.user.last_login }}</span>
+                                </div>
+
+                                <div class="person-action">
                                     <a class="action-menu-item trust-modal"
                                        data-profile-username="{{ each.user.profile.username }}" href="#"><img
                                             src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like"></a>
-                                    <a class="action-menu-item payment-modal"
-                                       data-profile-username="{{ each.user.profile.username }}"><img
+                                    <a class="action-menu-item" href="{% url 'blank_payment_user' %}"><img
                                             src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy"></a>
                                     <a class="action-menu-item contact-modal"
                                        data-profile-username="{{ each.user.profile.username }}"
                                        data-listing-title="{{ each.title }}" href="#"><img
                                             src="{% static 'new_template/res/img/icons/mail.png' %}" alt="contact"></a>
-
                                 </div>
 
                             </div>
 
                         </div>
-
                     {% endfor %}
 
                 </div>
 
             </div>
+            {% if remaining_count %}
+                <p><a href="?{{ next_page_param_str }}">
+                    {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
+                </a></p>
+            {% endif %}
 
         </main>
-        <!-- .app-main -->
-
     </div>
 
 {% endblock content %}
-
 
 {% block extra_js %}
     <script>

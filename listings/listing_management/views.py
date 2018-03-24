@@ -1,9 +1,9 @@
 from django.core.urlresolvers import reverse
-from django.db import IntegrityError
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
+
 from listings.models import Listings
 from listings.forms import ListingsForms
 from tags.models import Tag
@@ -18,15 +18,8 @@ def view_listings(request):
 
 def edit_listing(request, listing_id):
     listing_form = ListingsForms()
-    listing = Listings.objects.get(id=listing_id, user_id=request.user.id)
+    listing = get_object_or_404(Listings, id=listing_id, user_id=request.user.id)
 
-    if not request.user.id == listing.user_id:
-        messages.add_message(request, messages.ERROR, 'You are not allowed to do this')
-        return HttpResponseRedirect(reverse('listing_management:manage_listings'))
-
-    if not listing:
-        messages.add_message(request, messages.ERROR, 'No listing has been found with this id')
-        return HttpResponseRedirect(reverse('listing_management:manage_listings'))
     if request.method == 'POST':
         form = ListingsForms(request.POST, request.FILES)
         if form.is_valid():

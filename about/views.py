@@ -8,15 +8,15 @@ MESSAGES = {
 }
 
 def how_it_works(request):
-    return render(request, 'how_it_works.html')
+    return render(request, 'new_templates/how_it_works.html')
 
 
 def motivation(request):
-    return render(request, 'motivation.html')
+    return render(request, 'new_templates/motivation.html')
 
 
 def privacy(request):
-    return render(request, 'privacy.html')
+    return render(request, 'new_templates/privacy.html')
 
 
 def developers(request):
@@ -42,4 +42,4 @@ def contact_us(request):
             form = UserFeedbackForm(request.profile)
         else:
             form = AnonymousFeedbackForm()
-    return render(request, 'feedback.html', {'form': form})
+    return render(request, 'new_templates/feedback.html', {'form': form})
