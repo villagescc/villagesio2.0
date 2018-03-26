@@ -5950,7 +5950,8 @@ section {
   min-width: 4.8125em;
   min-height: 4.8125em;
   max-width: 4.8125em;
-  max-height: 4.8125em; }
+  max-height: 4.8125em;
+  overflow: hidden; }
   .avatar-wrapper.big {
     min-width: 5.6875em;
     min-height: 5.6875em; }
@@ -7206,6 +7207,10 @@ p {
   -webkit-box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06);
   -moz-box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06);
   box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06); }
+  .person-box .avatar-wrapper img {
+    height: 100%;
+    max-width: 100% !important;
+    object-fit: cover; }
   .person-box .person-id {
     flex: 0 0 13.5em;
     padding-right: 1em;

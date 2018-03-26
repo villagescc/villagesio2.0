@@ -122,6 +122,13 @@
   background-color: #fff;
   padding: 12px 1.3125em;
   @include crossShadow(0 0 16px 0 rgba(119, 119, 119, 0.06));
+  .avatar-wrapper {
+    img {
+      height: 100%;
+      max-width: 100% !important;
+      object-fit: cover;
+    }
+  }
 
   & .person-id {
     flex: 0 0 13.5em;
