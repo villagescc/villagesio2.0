@@ -7598,8 +7598,8 @@ p {
         max-width: 100%;
         padding-top: 50%; } }
   .payment-data #payment-form {
-    flex: 0 0 50%;
-    max-width: 50%;
+    flex: 0 0 100%;
+    max-width: 100%;
     padding: 1.875em; }
     .payment-data #payment-form .transaction {
       display: flex;
