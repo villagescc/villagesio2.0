@@ -6617,15 +6617,21 @@ p {
         -ms-transform: translateX(-50%);
         -o-transform: translateX(-50%);
         transform: translateX(-50%);
-        font-size: 0.75em;
-        color: #203234;
-        opacity: 0.34;
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center; }
-        .site-footer .site-info .footer-nav .legal span {
+        .site-footer .site-info .footer-nav .legal span,
+        .site-footer .site-info .footer-nav .legal a {
+          font-size: 0.75em;
+          color: #203234;
+          opacity: 0.34;
           padding: 0 1em; }
+        .site-footer .site-info .footer-nav .legal a {
+          transition: all 0.2s ease; }
+          .site-footer .site-info .footer-nav .legal a:hover {
+            opacity: 1;
+            color: #166d89; }
     .site-footer .site-info .footer-social {
       flex: 0 0 auto; }
       .site-footer .site-info .footer-social .social-navbar {
