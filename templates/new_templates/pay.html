@@ -27,9 +27,10 @@
             <div class="payment-content">
 
                 <div class="row">
-                    <div class="col-12 col-xxl-8">
-
+                    <div class="col-12">
                         <h2>Payment</h2>
+                    </div>
+                    <div class="col-xs-12 col-lg-6">
 
                         <div class="payment-data">
                             <form action="{% url 'blank_payment_user' %}" method="POST" id="payment-form">
@@ -84,13 +85,13 @@
                                             <input class="btn btn-std" type="submit" value="Save Payment">
                                         </div>
                                     </div>
-
+                                </div>
                             </form>
                         </div>
 
                     </div>
 
-                    <div class="col-12 col-xxl-4 mt-5 mt-xxl-0">
+                    <div class="col-xs-12 col-lg-6 mt-5 mt-lg-0">
 
                         <h2>Last Payments | <a class="small" href="#">View More</a></h2>
                         {% if all_payments %}
