@@ -6758,14 +6758,15 @@ p {
       #sign-form .btn-wrapper .btn-std.outline {
         border: 2px solid #fff; }
 
-#how-it-works .section-title {
-  margin-bottom: 2.5em; }
-
-#how-it-works .flow-wrapper {
-  margin-top: 1em;
-  text-align: center; }
-  #how-it-works .flow-wrapper img {
-    padding-left: 18px; }
+#how-it-works {
+  background-color: #fff; }
+  #how-it-works .section-title {
+    margin-bottom: 2.5em; }
+  #how-it-works .flow-wrapper {
+    margin-top: 1em;
+    text-align: center; }
+    #how-it-works .flow-wrapper img {
+      padding-left: 18px; }
 
 #what-they-say {
   background-position: center;
@@ -6888,10 +6889,13 @@ p {
   background-size: 100% 100%;
   background-position: center; }
 
-#social-graph img,
-#full-cycle img {
-  display: block;
-  margin: auto; }
+#social-graph,
+#full-cycle {
+  background-color: #fff; }
+  #social-graph img,
+  #full-cycle img {
+    display: block;
+    margin: auto; }
 
 #join-call {
   padding-top: 4.75em;
