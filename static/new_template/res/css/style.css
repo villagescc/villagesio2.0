@@ -7624,8 +7624,14 @@ p {
     .payment-data #payment-form textarea {
       font-size: 1.375em;
       font-weight: 300;
-      height: 2em;
       border: 1px solid #ebebeb; }
+    .payment-data #payment-form input,
+    .payment-data #payment-form select {
+      height: 2em; }
+    .payment-data #payment-form textarea {
+      overflow: auto;
+      max-height: 400px;
+      resize: none; }
     .payment-data #payment-form .payment-rate img {
       height: auto;
       margin: auto 0 auto 0.5em; }

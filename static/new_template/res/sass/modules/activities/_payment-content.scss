@@ -63,8 +63,16 @@
     & textarea {
       font-size: 1.375em;
       font-weight: 300;
-      height: 2em;
       border: 1px solid #ebebeb;
+    }
+    & input,
+    & select {
+      height: 2em;
+    }
+    textarea {
+      overflow: auto;
+      max-height: 400px;
+      resize: none;
     }
     & .payment-rate {
       & img {
