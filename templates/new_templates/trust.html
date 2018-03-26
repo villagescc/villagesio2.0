@@ -23,12 +23,12 @@
             <div class="trust-content">
 
                 <div class="row">
-                    <div class="col-12 col-xxl-8">
-
+                    <div class="col-12">
                         <h2>Trust</h2>
                         <p>Let your friends know that you trust a promise from them and they can use their credit with
                             your network.</p>
-
+                    </div>
+                    <div class="col-xs-12 col-lg-6">
                         <div class="trust-data">
                             <form id="trust-form" action="{% url 'blank_trust_user' %}" method="POST">
                                 {% csrf_token %}
@@ -45,7 +45,7 @@
                                                 <img id="profile-image"
                                                      src="{% static 'new_template/res/img/people/mikail.png' %}"
                                                      alt="mikail"
-                                                     class="rounded-circle" width="43px" height="82px">
+                                                     class="rounded-circle">
                                             </div>
                                             <span id="name-profile-image"></span>
                                         </div>
@@ -92,7 +92,7 @@
 
                     </div>
 
-                    <div class="col-12 col-xxl-4 mt-5 mt-xxl-0">
+                    <div class="col-xs-12 col-lg-6 mt-5 mt-lg-0">
 
                         <h2>Transaction Info |
                             <a class="small" href="#">View More</a>
@@ -112,7 +112,7 @@
                                          width="200px"
                                          style="position: relative; border-radius: 50%; overflow: hidden;">
                                 </div>
-                                {{ account.partner }}
+                                <span>{{ account.partner }}</span>
 
                                 <span class="payments">{{ account.owed_to_you|default_if_none:"" }}</span>
 

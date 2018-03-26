@@ -23,16 +23,13 @@
       display: block;
       text-align: center;
       &:nth-child(1) {
-        flex: 0 1 20%;
+        flex: 0 1 50%;
       }
       &:nth-child(2) {
-        flex: 0 1 20%;
+        flex: 0 1 25%;
       }
       &:nth-child(3) {
-        flex: 0 1 30%;
-      }
-      &:nth-child(4) {
-        flex: 0 1 30%;
+        flex: 0 1 25%;
       }
     }
   }
@@ -57,13 +54,14 @@
         margin: auto;
       }
       &:nth-child(2) {
-        flex: 0 1 20%;
+        font-size: 16px;
+        flex: 0 1 30%;
       }
       &:nth-child(3) {
-        flex: 0 1 30%;
+        flex: 0 1 25%;
       }
       &:nth-child(4) {
-        flex: 0 1 30%;
+        flex: 0 1 25%;
       }
     }
     & > span {
@@ -122,8 +120,16 @@
     & textarea {
       font-size: 1.375em;
       font-weight: 300;
-      height: 2em;
       border: 1px solid #ebebeb;
+    }
+    & input,
+    & select {
+      height: 2em;
+    }
+    & textarea {
+      min-height: 100px;
+      max-height: 300px;
+      resize: none;
     }
     & .credit-limit {
       max-width: 200px;

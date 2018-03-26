@@ -138,8 +138,9 @@ div.textbox-with-icon {
 .switch input {display:none;}
 
 /* The slider */
-.slider {
-  position: absolute;
+.slider,
+.reference .slider {
+  position: absolute !important;
   cursor: pointer;
   top: 0;
   left: 0;

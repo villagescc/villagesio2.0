@@ -6207,8 +6207,9 @@ div.textbox-with-icon {
   display: none; }
 
 /* The slider */
-.slider {
-  position: absolute;
+.slider,
+.reference .slider {
+  position: absolute !important;
   cursor: pointer;
   top: 0;
   left: 0;
@@ -7767,13 +7768,11 @@ p {
       display: block;
       text-align: center; }
       .trust-content .table-head span:nth-child(1) {
-        flex: 0 1 20%; }
+        flex: 0 1 50%; }
       .trust-content .table-head span:nth-child(2) {
-        flex: 0 1 20%; }
+        flex: 0 1 25%; }
       .trust-content .table-head span:nth-child(3) {
-        flex: 0 1 30%; }
-      .trust-content .table-head span:nth-child(4) {
-        flex: 0 1 30%; }
+        flex: 0 1 25%; }
   .trust-content .table-row {
     padding: 1em;
     display: flex;
@@ -7794,11 +7793,12 @@ p {
         flex: 0 1 20%;
         margin: auto; }
       .trust-content .table-row > *:nth-child(2) {
-        flex: 0 1 20%; }
+        font-size: 16px;
+        flex: 0 1 30%; }
       .trust-content .table-row > *:nth-child(3) {
-        flex: 0 1 30%; }
+        flex: 0 1 25%; }
       .trust-content .table-row > *:nth-child(4) {
-        flex: 0 1 30%; }
+        flex: 0 1 25%; }
     .trust-content .table-row > span {
       display: block; }
       .trust-content .table-row > span.amount {
@@ -7848,8 +7848,14 @@ p {
     .trust-data #trust-form textarea {
       font-size: 1.375em;
       font-weight: 300;
-      height: 2em;
       border: 1px solid #ebebeb; }
+    .trust-data #trust-form input,
+    .trust-data #trust-form select {
+      height: 2em; }
+    .trust-data #trust-form textarea {
+      min-height: 100px;
+      max-height: 300px;
+      resize: none; }
     .trust-data #trust-form .credit-limit {
       max-width: 200px; }
       .trust-data #trust-form .credit-limit img {
