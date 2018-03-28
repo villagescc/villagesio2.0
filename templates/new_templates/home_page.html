@@ -164,19 +164,3 @@
     {% include 'new_templates/footer.html' %}
 
 {% endblock content %}
-
-
-{% block extra_js %}
-    <script src="{% static 'new_template/node_modules/jquery/dist/jquery.js' %}" type="text/javascript"></script>
-    <!-- jQuery -->
-    <script src="{% static 'new_template/node_modules/popper.js/dist/umd/popper.js' %}" type="text/javascript"></script>
-    <!-- Popper -->
-    <script src="{% static 'new_template/node_modules/bootstrap/dist/js/bootstrap.js' %}"
-            type="text/javascript"></script>
-    <!-- Bootstrap -->
-
-    <!-- Font-Awesome -->
-    <script defer src="{% static 'new_template/node_modules/font-awesome/packs/solid.js' %}"></script>
-    <script defer src="{% static 'new_template/node_modules/font-awesome/packs/regular.js' %}"></script>
-    <script defer src="{% static 'new_template/node_modules/font-awesome/packs/light.js' %}"></script>
-{% endblock extra_js %}
