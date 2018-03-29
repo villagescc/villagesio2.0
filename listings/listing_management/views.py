@@ -45,25 +45,26 @@ def edit_listing(request, listing_id):
         form = ListingsForms(instance=listing,
                              initial={'categories': listing.subcategories.categories if listing.subcategories else None,
                                       'tag': tags_to_template})
-    return render(request, 'new_templates/add_post.html', {'form': form, 'listing_id': listing_id})
+    return render(request, 'new_templates/add_post.html', {'form': form, 'listing_id': listing_id,
+                                                           'form_title': 'Edit Post'})
 
 
 @transaction.atomic
-def delete_listing(request, listing_id=''):
-    if request.method == 'POST' and request.is_ajax():
-        list_listings_to_remove = []
-        for listing_id in request.POST.getlist('ids[]'):
-            list_listings_to_remove.append(int(listing_id))
-        listing_to_remove = Listings.objects.filter(id__in=list_listings_to_remove)
-        try:
-            for listings in listing_to_remove:
-                Listings.objects.filter(id=listings.id).delete()
-        except Exception as e:
-            messages.add_message(request, messages.ERROR, 'An error occurred, please try again later.')
-    elif listing_id:
-        try:
-            Listings.objects.filter(id=listing_id).delete()
-            messages.add_message(request, messages.SUCCESS, 'Successfully deleted listing')
-        except Exception as e:
-            messages.add_message(request, messages.ERROR, 'Error deleting this listing')
-    return HttpResponseRedirect(reverse('listing_management:manage_listings'))
+def delete_listing(request, listing_id):
+    listing = get_object_or_404(Listings, id=listing_id, user_id=request.user.id)
+    if request.method == 'POST':
+        if "cancel" in request.POST:
+            messages.info(request, 'Deletion canceled.')
+            return HttpResponseRedirect(reverse('my_profile'))
+        else:
+            try:
+                listing.delete()
+            except Exception as e:
+                messages.error(request, 'A server error occurred, please try again later.')
+            else:
+                messages.success(request, 'Successfully deleted post.')
+        return HttpResponseRedirect(reverse('my_profile'))
+
+    else:
+        return render(request, 'new_templates/delete_form.html', {'listing': listing, 'profile': request.user.profile,
+                                                                  'form_title': 'Delete Post'})

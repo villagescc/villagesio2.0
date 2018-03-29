@@ -50,7 +50,7 @@ def add_new_listing(request):
                         existing_tag = Tag.objects.get(name=new_tag.name)
                         existing_tag.listings_set.add(listing)
                         update_profile_tags(existing_tag, request.profile, listing)
-                        messages.success(request, 'Post successfully added!')
+                        messages.success(request, 'Post successfully added.')
                 return HttpResponseRedirect(reverse('frontend:home'))
 
             except Exception as e:
