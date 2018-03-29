@@ -5957,7 +5957,8 @@ section {
     min-height: 5.6875em; }
   .avatar-wrapper img {
     width: 100%;
-    max-width: 100%; }
+    height: 100%;
+    object-fit: cover; }
   .avatar-wrapper.blue {
     border-color: #1d90b5; }
 

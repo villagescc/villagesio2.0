@@ -108,8 +108,7 @@
                         {% for account in accounts %}
                             <div class="table-row">
                                 <div class="avatar-wrapper blue">
-                                    <img src="{% profile_image_url account.partner '60x60' %}" height="100%"
-                                         width="200px"
+                                    <img src="{% profile_image_url account.partner '60x60' %}"
                                          style="position: relative; border-radius: 50%; overflow: hidden;">
                                 </div>
                                 <span>{{ account.partner }}</span>
@@ -182,12 +181,20 @@
 
         $("#id_recipient_name").bind('typeahead:change typeahead:selected', function (e) {
 
+            var selectedUser;
+
+            if (e.type === 'typeahead:selected') {
+                selectedUser = $("#id_recipient_name").val();
+            } else {
+                selectedUser = $("#id_recipient_name").attr("data-profile-selected");
+            }
+
             if (!$("#id_recipient_name").attr("data-profile-selected")) return;
 
             $.ajax({
-                url: '/get_user_photo/' + $("#id_recipient_name").attr("data-profile-selected"),
+                url: '/get_user_photo/' + selectedUser,
                 type: 'POST',
-                data: {'profile_username': $("#id_recipient_name").attr("data-profile-selected")},
+                data: {'profile_username': selectedUser},
                 beforeSend: function (xhr) {
                     $('#spin-modal').fadeIn();
                     var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
