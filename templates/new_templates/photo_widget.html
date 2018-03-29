@@ -1,0 +1,8 @@
+{% load static %}
+
+
+<div class="alert alert-warning collapse" id="error_{{ listing_form.photo }}"></div>
+{% if widget.value %}<p>Current: <a href="{{ widget.value.url }}">{{ widget.value }}</a></p>{% endif %}
+<img src="{% static 'new_template/res/img/icons/camera.png' %}" alt="photo">
+<p class="action-call"></p>
+<p><label class="inline" for="id_photo">browse</label></p>

@@ -287,7 +287,7 @@ def my_profile(request):
     other_tags = []
 
     listing_form = ListingsForms()
-    listings = Listings.objects.filter(user_id=request.profile.user_id)
+    listings = Listings.objects.filter(user_id=request.profile.user_id).order_by('-id')
     endorsements_received = request.profile.endorsements_received.all()
     endorsements_made = request.profile.endorsements_made.all()
     profile_tags = ProfilePageTag.objects.filter(profile_id=request.profile.id)
@@ -353,7 +353,7 @@ def profile(request, username):
             account = profile.account(request.profile)
             trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
             payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
-            listings = Listings.objects.filter(user_id=profile.user_id)
+            listings = Listings.objects.filter(user_id=profile.user_id).order_by('-id')
             contact_form = ContactForm()
 
             profile_tags = ProfilePageTag.objects.filter(profile_id=profile.id)
@@ -381,7 +381,7 @@ def profile(request, username):
                                   'endorsements_received': profile_endorsements_received,
                                   'account': account, 'listing_form': listing_form, 'profile': profile,
                                   'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form,
-                                  'offer_tags':offer_tags, 'request_tags': request_tags, 'teach_tags': teach_tags,
+                                  'offer_tags': offer_tags, 'request_tags': request_tags, 'teach_tags': teach_tags,
                                   'learn_tags': learn_tags, 'other_tags': other_tags, 'listings': listings,
                                   'referral': referral, 'referral_count': referral_count})
     return locals(), template

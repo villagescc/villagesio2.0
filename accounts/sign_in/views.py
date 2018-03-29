@@ -240,7 +240,7 @@ def edit_profile(request):
             loc = request.POST.get('location')
             profile.location = build_location(loc)
             profile.save()
-            messages.info(request, MESSAGES['profile_saved'])
+            messages.success(request, MESSAGES['profile_saved'])
             return HttpResponseRedirect(reverse('frontend:home'))
     else:
         form = ProfileForm(instance=profile)
