@@ -63,7 +63,7 @@
                                                         src="{% static 'new_template/res/img/icons/edit.svg' %}"
                                                         alt="edit"></a>
                                                 <a class="action-menu-item delete-post-button"
-                                                   href="#"><img
+                                                   href="{% url 'listing_management:delete' each.id %}"><img
                                                         src="{% static 'new_template/res/img/icons/trash-alt.svg' %}"
                                                         alt="like"></a>
                                             </div>
