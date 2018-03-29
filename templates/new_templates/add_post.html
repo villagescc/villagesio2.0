@@ -2,7 +2,64 @@
 {% load staticfiles %}
 
 {% block content %}
-    <div class="col-8 col-xxl-8">
-        {% include 'new_templates/form.html' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-tab-12 col-lg-8 offset-lg-2">
+                {% include 'new_templates/form.html' %}
+            </div>
+        </div>
     </div>
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+    // Filereader for image upload
+    var $input = $('.image-input');
+
+    $input.on('change', function(e) {
+        //hide error
+        $('.upload-error').text('');
+        $('.upload-error').css('opacity', '0');
+        //get FileList
+        var files = e.target.files;
+
+        //if files are chosen
+        if (files.length) {
+            var file = files[0];
+            var fileSize = Math.round(file.size / 1024 / 1024  * 100) / 100;
+            var img, reader;
+
+            if (fileSize > 10) {
+                $('.upload-error').text('Please, load image less than 10MB.');
+                $('.upload-error').css('opacity', '1');
+                return;
+            }
+
+            //get file data
+            reader = new FileReader();
+
+            reader.onload = function(e) {
+                console.log(e);
+
+                var fileData = e.target.result;
+
+                if (file.type.substr(0, 5) === 'image') {
+                    var $imagePreview = $('.image-preview');
+
+                    if ($imagePreview) {
+                        $imagePreview.attr('src', fileData);
+                    } else {
+                        img = '<img class="image-preview" src="' + fileData + '" alt="preview">'
+                        $('.input-block').append(img);
+                    }
+                } else {
+                    $('.upload-error').text('You should load an image here.');
+                    $('.upload-error').css('opacity', '1');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+</script>
+{% endblock extra_js %}
