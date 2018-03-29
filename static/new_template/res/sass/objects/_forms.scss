@@ -185,3 +185,19 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+// Autoselect Typehead
+.receiver-box {
+  &#div-recipient-name .tt-menu,
+  &#div-recipient .tt-menu{
+    max-height: 150px;
+    width: 100%;
+    overflow-y: auto;
+    border-bottom: 1px solid #ccc;
+    background-color: #ffffff;
+  }
+  .twitter-typeahead {
+    max-width: 100%;
+    display: block !important;
+  }
+}

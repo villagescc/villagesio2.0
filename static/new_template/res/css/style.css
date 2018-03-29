@@ -6249,6 +6249,18 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%; }
 
+.receiver-box#div-recipient-name .tt-menu,
+.receiver-box#div-recipient .tt-menu {
+  max-height: 150px;
+  width: 100%;
+  overflow-y: auto;
+  border-bottom: 1px solid #ccc;
+  background-color: #ffffff; }
+
+.receiver-box .twitter-typeahead {
+  max-width: 100%;
+  display: block !important; }
+
 /* links */
 a {
   -webkit-transition: all 0.3s;

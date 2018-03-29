@@ -1,23 +1,6 @@
 {% extends "new_templates/base.html" %}
 {% load staticfiles profile %}
 
-{% block extra_css %}
-    <style>
-        #div-recipient .tt-menu {
-            max-height: 150px;
-            max-width: 100%;
-            overflow-y: auto;
-            border-bottom: 1px solid #ccc;
-            background-color: #ffffff;
-        }
-
-        .twitter-typeahead {
-            max-width: 100%;
-            display: block !important;
-        }
-    </style>
-{% endblock extra_css %}
-
 {% block content %}
 
     <div class="app-view">
@@ -41,13 +24,13 @@
                                     <div class="transaction" id="div-transaction-photos" hidden>
                                         <div class="avatar-wrapper blue big">
                                             <img src="{% profile_image_url request.user.profile '60x60' %}"
-                                                 class="rounded-circle" height="83px">
+                                                 class="rounded-circle">
                                         </div>
                                         <img style="padding: 0 0.5em;"
                                              src="{% static 'new_template/res/img/icons/arrow-right.png' %}" alt="to">
                                         <div class="avatar-wrapper blue big">
                                             <img id="img-payee" src="{% static 'img/generic_user.png' %}"
-                                                 class="rounded-circle" height="83px">
+                                                 class="rounded-circle">
                                         </div>
                                     </div>
 
@@ -181,9 +164,19 @@
                 }
             });
         var max_amount_span = $("#max-amount");
-        $("#id_recipient").bind('typeahead:selected', function (e) {
+        $(".receiver-box #id_recipient").on('typeahead:change typeahead:selected', function (e) {
+            var selectedUser;
+
+            if (e.type === 'typeahead:selected') {
+                selectedUser = $("#id_recipient").val();
+                $("#id_recipient").attr("data-profile-selected", selectedUser)
+            } else {
+                selectedUser = $("#id_recipient").attr("data-profile-selected");
+            }
+
+            if (!$("#id_recipient").attr("data-profile-selected")) return;
             $.ajax({
-                url: '/get_user_photo/' + $("#id_recipient").val(),
+                url: '/get_user_photo/' + selectedUser,
                 type: 'POST',
                 beforeSend: function (xhr) {
                     $('#spin-modal').fadeIn();
@@ -193,18 +186,20 @@
                 success: function (e) {
                     if (e['data']['has_trust']) {
                         $("#id_weight").val(e['data']['credit_limit']);
-                        $("#id_text").val(e['data']['text'])
+                        $("#id_text").val(e['data']['text']);
                     }
-                    debugger;
-                    $('#div-transaction-photos').attr('hidden', false);
-                    $('#img-payee').attr("src", e['data']['profile_photo_path']);
+
+                    $('.transaction#div-transaction-photos').attr('hidden', false);
+
+                    $('.receiver-box #img-payee').attr("src", e['data']['profile_photo_path']);
                     if (!e['data']['can_ripple']) {
-                        $("#payment-info-message").html('You do not have any more credit with this user. Your payment will only be able to be spent directly, with you. If this is not your intent, contact the recipient and ask them to raise your credit limit. This can be done after payment.')
+                        $(".receiver-box #payment-info-message").html('You do not have any more credit with this user. Your payment will only be able to be spent directly, with you. If this is not your intent, contact the recipient and ask them to raise your credit limit. This can be done after payment.');
                     } else if (e['data']['can_ripple']) {
-                        $("#payment-info-message").html("You can send a trusted payment of up to " + e['data']['max_amount'] + " hour(s) or a direct payment of any amount.");
+                        $(".receiver-box #payment-info-message").html("You can send a trusted payment of up to " + e['data']['max_amount'] + " hour(s) or a direct payment of any amount.");
                     }
 
                     $('#spin-modal').fadeOut();
+
                 },
                 error: function (e) {
                     if (e.status === 500) {

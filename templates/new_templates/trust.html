@@ -1,18 +1,6 @@
 {% extends "new_templates/base.html" %}
 {% load staticfiles profile %}
 
-{% block extra_css %}
-    <style>
-        #div-recipient-name .tt-menu {
-            max-height: 150px;
-            width: 100%;
-            overflow-y: auto;
-            border-bottom: 1px solid #ccc;
-            background-color: #ffffff;
-        }
-    </style>
-{% endblock extra_css %}
-
 {% block content %}
 
 
@@ -185,6 +173,7 @@
 
             if (e.type === 'typeahead:selected') {
                 selectedUser = $("#id_recipient_name").val();
+                $("#id_recipient_name").attr("data-profile-selected", selectedUser)
             } else {
                 selectedUser = $("#id_recipient_name").attr("data-profile-selected");
             }
@@ -205,7 +194,6 @@
                     $("#id_weight").val('');
                     $("#id_text").val('');
                     $("#id_referral").prop('checked', false);
-
 
                     if (e['data']['error']) {
                         $('#error-modal-alert').text(e["data"]["error_message"]);
