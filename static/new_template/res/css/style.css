@@ -6321,6 +6321,25 @@ input:checked + .slider:before {
     background-color: transparent;
     z-index: 4; }
 
+.confirm-block {
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 20px;
+  font-family: "Open Sans", sans-serif; }
+  @media (min-width: 576px) {
+    .confirm-block {
+      padding: 40px; } }
+  .confirm-block .form-title {
+    font-size: 18px;
+    color: #1d90b5; }
+    @media (min-width: 576px) {
+      .confirm-block .form-title {
+        font-size: 24px; } }
+  .confirm-block p {
+    color: #8d8d8d; }
+  .confirm-block input {
+    margin-bottom: 10px; }
+
 /* links */
 a {
   -webkit-transition: all 0.3s;

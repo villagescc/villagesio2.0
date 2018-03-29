@@ -6,13 +6,15 @@
     <div class="app-view">
         {% include 'new_templates/profile_sidebar.html' %}
 
-        <h5 class="form-title">{{ form_title }}</h5>
+        <div class="confirm-block">
+            <h5 class="form-title">{{ form_title }}</h5>
 
-        <form action="{% url "listing_management:delete" listing_id=listing.id %}" method="post">
-            {% csrf_token %}
-            <p> Are you sure to delete "{{ listing.title }}"?</p>
-            <input type="submit" value="Confirm delete" name="delete_button"/>
-            <input type="submit" value="Cancel" name="cancel" />
-        </form>
+            <form action="{% url 'listing_management:delete' listing_id=listing.id %}" method="post">
+                {% csrf_token %}
+                <p> Are you sure to delete "{{ listing.title }}"?</p>
+                <input type="submit" value="Confirm delete" name="delete_button"/>
+                <input type="submit" value="Cancel" name="cancel" />
+            </form>
+        </div>
     </div>
 {% endblock content %}

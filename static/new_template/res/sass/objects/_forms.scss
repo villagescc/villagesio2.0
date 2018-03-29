@@ -271,3 +271,27 @@ input:checked + .slider:before {
   }
 }
 
+// Delete Post
+.confirm-block {
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 20px;
+  font-family: "Open Sans", sans-serif;
+  @include media-width-up(sm) {
+    padding: 40px;
+  }
+  .form-title {
+    font-size: 18px;
+    color: $lightblue;
+    @include media-width-up(sm) {
+      font-size: 24px;
+    }
+  }
+  p {
+    color: $lightgrey;
+  }
+  input {
+    margin-bottom: 10px;
+  }
+}
+
