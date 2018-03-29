@@ -61,7 +61,7 @@
                                                 <a class="action-menu-item edit-post-button"
                                                    data-toggle="modal"
                                                    data-target="#new-post-modal"
-                                                   href="#"><img
+                                                   href="{% url 'listing_management:edit' each.id %} "><img
                                                         src="{% static 'new_template/res/img/icons/edit.svg' %}"
                                                         alt="like"></a>
                                                 <a class="action-menu-item delete-post-button"

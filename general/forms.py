@@ -1,4 +1,6 @@
 from django import forms
+from django.template import loader
+from django.utils.safestring import mark_safe
 
 # *** HACK ALERT ***
 # Monkeypatch some form things so the defaults are nicer:
@@ -20,3 +22,16 @@ forms.CharField.clean = strip_input(forms.CharField.clean)
 
 # Set required rows to class="required".
 forms.BaseForm.required_css_class = "required"
+
+
+class PhotoInput(forms.FileInput):
+    template_name = 'new_templates/photo_widget.html'
+
+    def get_context(self, name, value, attrs=None):
+        return {'widget': {'name': name, 'value': value, 'attrs': attrs}}
+
+    def render(self, name, value, attrs=None):
+        rendered = super(PhotoInput, self).render(name, None, attrs=attrs)
+        context = self.get_context(name, value, attrs)
+        template = loader.get_template(self.template_name).render(context)
+        return mark_safe(rendered+template)

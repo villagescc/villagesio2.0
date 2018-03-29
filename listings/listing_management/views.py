@@ -17,35 +17,15 @@ def view_listings(request):
 
 
 def edit_listing(request, listing_id):
-    listing_form = ListingsForms()
     listing = get_object_or_404(Listings, id=listing_id, user_id=request.user.id)
-
     if request.method == 'POST':
-        form = ListingsForms(request.POST, request.FILES)
+        form = ListingsForms(request.POST, request.FILES, instance=listing)
         if form.is_valid():
-            listing.listing_type = form.cleaned_data['listing_type']
-            listing.title = form.cleaned_data['title']
-            listing.description = form.cleaned_data['description']
-            listing.price = form.cleaned_data['price']
-            listing.subcategories = form.cleaned_data['subcategories']
-            if form.cleaned_data["photo"]:
-                listing.photo = form.cleaned_data['photo']
-            elif listing.photo:
-                listing.photo = listing.photo
-            else:
-                listing.photo = ""
-            listing.save()
+            tags_list = form.cleaned_data.pop('tag').split(',')
+            form.save()
 
-            tags_list = form.cleaned_data['tag'].split(',')
-            if tags_list and tags_list[0] == u'':
-                tags_to_delete = listing.tag.all()
-                if tags_to_delete:
-                    for each_tag_delete in tags_to_delete:
-                        Tag.objects.filter(id=each_tag_delete.id).delete()
-                    messages.add_message(request, messages.SUCCESS, 'Listing edited with success.')
-                    return HttpResponseRedirect(reverse('listing_management:manage_listings'))
-            else:
-                listing.tag.all().delete()
+            listing.tag.all().delete()
+            if tags_list and tags_list[0] != u'':
                 for tag in tags_list:
                     new_tag = Tag(name=tag)
                     try:
@@ -54,11 +34,8 @@ def edit_listing(request, listing_id):
                     except IntegrityError as e:
                         existing_tag = Tag.objects.get(name=tag)
                         existing_tag.listings_set.add(listing)
-                messages.add_message(request, messages.SUCCESS, 'Listing edited with success.')
-                return HttpResponseRedirect(reverse('listing_management:manage_listings'))
-        else:
-            messages.add_message(request, messages.ERROR, 'An error has occurred, please try again later.')
-            return render(request, 'listing_management/manage_listings.html', {'form': form, 'listing_form': listing_form})
+            messages.success(request, 'Listing successfully edited.')
+            return HttpResponseRedirect(reverse('my_profile'))
     else:
         tags_to_template = ''
         tags = listing.tag.all().values('name')
@@ -66,25 +43,9 @@ def edit_listing(request, listing_id):
             for each_tag in tags:
                 tags_to_template = tags_to_template + each_tag['name'].encode() + ','
         form = ListingsForms(instance=listing,
-                             initial={'listing_type': listing.listing_type,
-                                      'title': listing.title,
-                                      'description': listing.description,
-                                      'price': listing.price,
-                                      'categories': listing.subcategories.categories,
-                                      'subcategories': listing.subcategories,
+                             initial={'categories': listing.subcategories.categories if listing.subcategories else None,
                                       'tag': tags_to_template})
-        return render(request, 'listing_management/edit_listing.html', {'form': form, 'listing_id': listing_id,
-                                                                        'listing_form': listing_form})
-
-    messages.add_message(request, messages.ERROR, form.errors)
-    form = ListingsForms(initial={'listing_type': listing.listing_type,
-                                  'title': listing.title,
-                                  'description': listing.description,
-                                  'price': listing.price,
-                                  'categories': listing.subcategories.categories,
-                                  'subcategories': listing.subcategories,
-                                  'photo': listing.photo})
-    return render(request, 'listing_management/edit_listing.html', {'form': form, 'listing_form': listing_form})
+    return render(request, 'new_templates/add_post.html', {'form': form, 'listing_id': listing_id})
 
 
 @transaction.atomic
