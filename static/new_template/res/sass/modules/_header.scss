@@ -12,3 +12,42 @@
   align-items: flex-start;
   flex-flow: row wrap;
 }
+
+// Responsive Profile Menu
+.user-link.responsive-toggle {
+  position: relative;
+}
+.responsive-profile-menu {
+  display: none;
+  position: absolute;
+  padding: 20px 0;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  @include crossShadow(0 3px 2px 0 rgba(119, 119, 119, 0.9));
+  @include media-width-up(sm) {
+    top: 70px;
+  }
+  @include media-width-up(md) {
+    top: 88px;
+  }
+  &.open {
+    display: block;
+  }
+  .dropdown-item {
+    display: block;
+    padding: 10px 20px;
+    width: 100%;
+    font-family: "Open Sans", sans-serif;
+    font-size: 18px;
+    text-align: center;
+    background-color: #fff;
+    color: $lightgrey;
+    transition: all 0.2s ease;
+    &:hover {
+      background-color: #eee;
+      color: $lightblue;
+    }
+  }
+}
