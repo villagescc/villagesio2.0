@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages
 from django.http import JsonResponse
 from general.util import render
-from django.shortcuts import render as django_render
+from django.shortcuts import render as django_render, redirect
 from listings.forms import ListingsForms
 from profile.models import Profile
 from relate.forms import EndorseForm, AcknowledgementForm, BlankTrust, BlankPaymentForm
@@ -297,53 +297,46 @@ def get_recipients_data(request):
 @login_required
 @render()
 def blank_trust(request):
-    listing_form = ListingsForms()
+    profile = request.profile
     accounts = ripple.get_user_accounts(request.profile)
-    form = BlankTrust(endorser=request.profile, recipient=None)
+    form = BlankTrust(endorser=profile, recipient=None)
     if request.method == 'POST':
-        if not request.POST['data_profile']:
+        if not request.POST['recipient_name']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
-            return django_render(request, 'new_templates/trust.html', {'form': form, 'listing_form': listing_form,
-                                                                       'accounts': accounts})
-        recipient = get_object_or_404(Profile, user__username=request.POST['data_profile'])
-        if recipient == request.profile:
-            messages.add_message(request, messages.ERROR, 'You cant send a trust to yourself')
-            return django_render(request, 'new_templates/trust.html', {'form': form, 'listing_form': listing_form})
-        try:
-            endorsement = Endorsement.objects.get(endorser=request.profile, recipient=recipient)
-        except Endorsement.DoesNotExist:
-            endorsement = None
-        if 'delete' in request.POST and endorsement:
-            endorsement.delete()
-            messages.add_message(request, messages.INFO, 'Trust deleted')
-            return django_render(request, 'new_templates/trust.html', {'form': form})
-
-        form = BlankTrust(request.POST, instance=endorsement, endorser=request.profile, recipient=recipient)
-        if form.is_valid():
-            endorsement = form.save()
-            create_notification(notifier=request.profile, recipient=recipient, type=Notification.TRUST)
-            if form.cleaned_data['referral']:
-                existing_referral = Referral.objects.filter(referrer=request.profile, recipient=recipient)
-                if not existing_referral:
-                    new_referral = Referral()
-                    new_referral.referrer = request.profile
-                    new_referral.recipient = recipient
-                    new_referral.save()
-            else:
-                existing_referral = Referral.objects.filter(referrer=request.profile, recipient=recipient)
-                if existing_referral:
-                    existing_referral.delete()
-            # send_endorsement_notification(endorsement)
-            messages.add_message(request, messages.INFO, 'Trust saved!')
-            return django_render(request, 'new_templates/trust.html', {'form': form, 'listing_form': listing_form})
         else:
-            messages.add_message(request, messages.ERROR, 'An error occurred, please verify.')
-            return django_render(request, 'new_templates/trust.html', {'form': form, 'listing_form': listing_form})
+            recipient = get_object_or_404(Profile, user__username=request.POST['recipient_name'])
+            if recipient == profile:
+                messages.add_message(request, messages.ERROR, 'You cant send a trust to yourself')
+            else:
+                try:
+                    endorsement = Endorsement.objects.get(endorser=profile, recipient=recipient)
+                except Endorsement.DoesNotExist:
+                    endorsement = None
+                if 'delete' in request.POST and endorsement:
+                    endorsement.delete()
+                    messages.add_message(request, messages.INFO, 'Trust deleted')
+                    return django_render(request, 'new_templates/trust.html', {'form': form})
+
+                form = BlankTrust(request.POST, instance=endorsement, endorser=profile, recipient=recipient)
+                if form.is_valid():
+                    form.save()
+                    create_notification(notifier=profile, recipient=recipient, type=Notification.TRUST)
+                    if form.cleaned_data['referral']:
+                        existing_referral = Referral.objects.filter(referrer=profile, recipient=recipient)
+                        if not existing_referral:
+                            new_referral = Referral()
+                            new_referral.referrer = profile
+                            new_referral.recipient = recipient
+                            new_referral.save()
+                    else:
+                        existing_referral = Referral.objects.filter(referrer=profile, recipient=recipient)
+                        if existing_referral:
+                            existing_referral.delete()
+                    # send_endorsement_notification(endorsement)
+                    messages.add_message(request, messages.INFO, 'Trust saved!')
     else:
-        form = BlankTrust(instance=None, endorser=request.profile, recipient=None)
-        profile = request.profile
-        return django_render(request, 'new_templates/trust.html', {'form': form, 'listing_form': listing_form,
-                                                                   'accounts': accounts, 'profile': profile})
+        form = BlankTrust(instance=None, endorser=profile, recipient=None)
+    return django_render(request, 'new_templates/trust.html', {'form': form, 'accounts': accounts, 'profile': profile})
 
 
 @login_required()
@@ -354,34 +347,34 @@ def blank_payment(request):
     all_payments = (FeedItem.objects.filter(recipient_id=request.profile.id, item_type='acknowledgement').
                     order_by('-date') | FeedItem.objects.filter(poster_id=request.profile.id, item_type='acknowledgement').order_by('-date'))
     form = BlankPaymentForm(max_ripple=None, initial=request.GET)
+
     if request.method == 'POST':
         if not request.POST['recipient']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
-            return django_render(request, 'new_templates/pay.html', {'form': form, 'listing_form': listing_form})
-        recipient = get_object_or_404(Profile, user__username=request.POST['recipient'])
-        max_amount = ripple.max_payment(request.profile, recipient)
-        form = BlankPaymentForm(request.POST, max_ripple=max_amount)
-        if recipient == request.profile:
-            messages.add_message(request, messages.ERROR, 'You cant send a payment to yourself')
-            return django_render(request, 'new_templates/pay.html', {'form': form, 'listing_form': listing_form})
-        can_ripple = max_amount > 0
-        # if not can_ripple and request.POST['ripple'] == 'routed':
-        #     messages.add_message(request, messages.ERROR, 'There are no available paths through the trust network, '
-        #                                                   'so you can only send direct trust')
-        #     form = BlankPaymentForm(max_ripple=None, initial=request.GET)
-        #     return django_render(request, 'blank_payment.html', {'form': form,
-        #                                                          'listing_form': listing_form})
-        payment = form.send_payment(request.profile, recipient, request.POST, can_ripple)
-        create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
-        send_payment_notification(payment)
-        messages.add_message(request, messages.INFO, 'Payment sent.')
-        return HttpResponseRedirect(reverse('blank_payment_user'))
+        else:
+            recipient = get_object_or_404(Profile, user__username=request.POST['recipient'])
+            max_amount = ripple.max_payment(request.profile, recipient)
+            form = BlankPaymentForm(request.POST, max_ripple=max_amount)
+            if recipient == request.profile:
+                messages.add_message(request, messages.ERROR, 'You cant send a payment to yourself')
+            else:
+                can_ripple = max_amount > 0
+                # if not can_ripple and request.POST['ripple'] == 'routed':
+                #     messages.add_message(request, messages.ERROR, 'There are no available paths through the trust network, '
+                #                                                   'so you can only send direct trust')
+                #     form = BlankPaymentForm(max_ripple=None, initial=request.GET)
+                #     return django_render(request, 'blank_payment.html', {'form': form,
+                #                                                          'listing_form': listing_form})
+                payment = form.send_payment(request.profile, recipient, request.POST, can_ripple)
+                create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
+                send_payment_notification(payment)
+                messages.add_message(request, messages.INFO, 'Payment sent.')
     else:
         form = BlankPaymentForm(max_ripple=None, initial=request.GET)
-        return django_render(request, 'new_templates/pay.html', {'form': form, 'listing_form': listing_form,
-                                                                 'received_payments': received_payments,
-                                                                 'made_payments': made_payments,
-                                                                 'all_payments': all_payments})
+    return django_render(request, 'new_templates/pay.html', {'form': form, 'listing_form': listing_form,
+                                                             'received_payments': received_payments,
+                                                             'made_payments': made_payments,
+                                                             'all_payments': all_payments})
 
 
 def send_payment_notification(payment):

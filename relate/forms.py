@@ -126,8 +126,6 @@ class BlankTrust(forms.ModelForm):
     referral = forms.BooleanField(label="Refer This Person's Services to Friends? (Only refer a person if you have actually worked with them)", required=False,
                                   widget=forms.CheckboxInput())
 
-    data_profile = forms.CharField(widget=forms.HiddenInput())
-
     class Meta:
         model = Endorsement
         fields = ['recipient_name', 'weight', 'text']
