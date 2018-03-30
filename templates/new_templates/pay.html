@@ -23,14 +23,18 @@
                                     {{ form.recipient }}
                                     <div class="transaction" id="div-transaction-photos" hidden>
                                         <div class="avatar-wrapper blue big">
-                                            <img src="{% profile_image_url request.user.profile '60x60' %}"
-                                                 class="rounded-circle">
+                                            <a href="/profiles/my_profile">
+                                                <img src="{% profile_image_url request.user.profile '60x60' %}"
+                                                     class="rounded-circle">
+                                            </a>
                                         </div>
                                         <img style="padding: 0 0.5em;"
                                              src="{% static 'new_template/res/img/icons/arrow-right.png' %}" alt="to">
                                         <div class="avatar-wrapper blue big">
-                                            <img id="img-payee" src="{% static 'img/generic_user.png' %}"
-                                                 class="rounded-circle">
+                                            <a class="recipient-link" href="#">
+                                                <img id="img-payee" src="{% static 'img/generic_user.png' %}"
+                                                     class="rounded-circle">
+                                            </a>
                                         </div>
                                     </div>
 
@@ -190,6 +194,8 @@
                     }
 
                     $('.transaction#div-transaction-photos').attr('hidden', false);
+
+                    $('.receiver-box .recipient-link').attr('href', '/profiles/' + selectedUser);
 
                     $('.receiver-box #img-payee').attr("src", e['data']['profile_photo_path']);
                     if (!e['data']['can_ripple']) {

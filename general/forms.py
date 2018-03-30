@@ -31,7 +31,6 @@ class PhotoInput(forms.FileInput):
         return {'widget': {'name': name, 'value': value, 'attrs': attrs}}
 
     def render(self, name, value, attrs=None):
-        rendered = super(PhotoInput, self).render(name, None, attrs=attrs)
         context = self.get_context(name, value, attrs)
         template = loader.get_template(self.template_name).render(context)
-        return mark_safe(rendered+template)
+        return mark_safe(template)
