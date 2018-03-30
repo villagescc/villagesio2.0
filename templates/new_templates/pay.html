@@ -23,7 +23,7 @@
                                     {{ form.recipient }}
                                     <div class="transaction" id="div-transaction-photos" hidden>
                                         <div class="avatar-wrapper blue big">
-                                            <a href="/profiles/my_profile">
+                                            <a href="{% url 'profile' 'my_profile' %}">
                                                 <img src="{% profile_image_url request.user.profile '60x60' %}"
                                                      class="rounded-circle">
                                             </a>
@@ -94,16 +94,16 @@
                                 <div class="table-row">
                                     <div class="transaction">
                                         <div class="avatar-wrapper blue">
-                                            <img src="{% profile_image_url each_all.item.payer '60x60' %}" height="100%"
-                                                 width="200px"
-                                                 style="position: relative; border-radius: 50%; overflow: hidden;">
+                                            <a href="{% url 'profile' each_all.item.payer.username %}">
+                                                <img src="{% profile_image_url each_all.item.payer '60x60' %}" alt="photo">
+                                            </a>
                                         </div>
                                         <img style="padding: 0 0.5em;"
                                              src="{% static 'new_template/res/img/icons/arrow-right.png' %}" alt="to">
                                         <div class="avatar-wrapper blue">
-                                            <img src="{% profile_image_url each_all.item.recipient '60x60' %}"
-                                                 alt="mikail" height="100%" width="200px"
-                                                 style="position: relative; border-radius: 50%; overflow: hidden;">
+                                            <a href="{% url 'profile' each_all.item.recipient.username %}">
+                                                <img src="{% profile_image_url each_all.item.recipient '60x60' %}" alt="photo">
+                                            </a>
                                         </div>
                                     </div>
 
