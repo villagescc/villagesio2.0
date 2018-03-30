@@ -17,4 +17,9 @@ $(document).ready(function() {
         menu.toggleClass('open');
     });
 
+    // Tooltip Run
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
 });
