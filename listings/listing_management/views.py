@@ -55,7 +55,6 @@ def delete_listing(request, listing_id):
     if request.method == 'POST':
         if "cancel" in request.POST:
             messages.info(request, 'Deletion canceled.')
-            return HttpResponseRedirect(reverse('my_profile'))
         else:
             try:
                 listing.delete()

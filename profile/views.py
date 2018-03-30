@@ -433,7 +433,7 @@ def undefined_contact(request):
             form.send(sender=request.profile, recipient=profile)
             messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
             form = ContactForm()
-            return django_render(request, 'contact.html', {'form': form})
+            return django_render(request, 'new_templates/contact.html', {'form': form})
     elif request.method == 'POST' and request.is_ajax():
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -445,7 +445,7 @@ def undefined_contact(request):
                 return JsonResponse({'msg': 'Success'})
             messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
             return JsonResponse({'msg': 'Success'})
-    return django_render(request, 'contact.html', {'form': form, 'listing_form': listing_form})
+    return django_render(request, 'new_templates/contact.html', {'form': form, 'listing_form': listing_form})
 
 
 @login_required
