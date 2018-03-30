@@ -96,14 +96,14 @@
                                 <div class="table-row">
                                     <div class="transaction">
                                         <div class="avatar-wrapper blue">
-                                            <a href="{% url 'profile' each_all.item.payer.username %}">
+                                            <a href="{{ each_all.item.payer.get_absolute_url }}">
                                                 <img src="{% profile_image_url each_all.item.payer '60x60' %}" alt="photo">
                                             </a>
                                         </div>
                                         <img style="padding: 0 0.5em;"
                                              src="{% static 'new_template/res/img/icons/arrow-right.png' %}" alt="to">
                                         <div class="avatar-wrapper blue">
-                                            <a href="{% url 'profile' each_all.item.recipient.username %}">
+                                            <a href="{{ each_all.item.recipient.get_absolute_url }}">
                                                 <img src="{% profile_image_url each_all.item.recipient '60x60' %}" alt="photo"
                                                      data-toggle="tooltip" data-placement="right"
                                                      data-html="true"

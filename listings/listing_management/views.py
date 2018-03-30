@@ -45,8 +45,7 @@ def edit_listing(request, listing_id):
         form = ListingsForms(instance=listing,
                              initial={'categories': listing.subcategories.categories if listing.subcategories else None,
                                       'tag': tags_to_template})
-    return render(request, 'new_templates/add_post.html', {'form': form, 'listing_id': listing_id,
-                                                           'form_title': 'Edit Post'})
+    return render(request, 'new_templates/edit_post.html', {'form': form, 'listing_id': listing_id})
 
 
 @transaction.atomic
@@ -65,5 +64,4 @@ def delete_listing(request, listing_id):
         return HttpResponseRedirect(reverse('my_profile'))
 
     else:
-        return render(request, 'new_templates/delete_form.html', {'listing': listing, 'profile': request.user.profile,
-                                                                  'form_title': 'Delete Post'})
+        return render(request, 'new_templates/delete_form.html', {'listing': listing, 'profile': request.user.profile})

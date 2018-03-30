@@ -98,7 +98,7 @@
                         {% for account in accounts %}
                             <div class="table-row">
                                 <div class="avatar-wrapper blue">
-                                    <a href="{% url 'profile' account.partner.username %}">
+                                    <a href="{{ account.partner.get_absolute_url }}">
                                         <img src="{% profile_image_url account.partner '60x60' %}"
                                              data-toggle="tooltip" data-placement="right"
                                              data-html="true"

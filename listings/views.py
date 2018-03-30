@@ -57,7 +57,7 @@ def add_new_listing(request):
                 messages.error(request, 'A server error occurred, please try again later.')
     else:
         form = ListingsForms()
-    return render(request, 'new_templates/add_post.html', {'form': form, 'form_title': 'New Post'})
+    return render(request, 'new_templates/add_post.html', {'form': form})
 
 
 def submit_listing_api(request):

@@ -93,9 +93,11 @@
                                     <div class="endorsement-block">
 
                                         <div class="avatar-wrapper blue">
-                                            <img src="{% profile_image_url each_endorsement_received.endorser '400x400' %}"
-                                                 alt="avatar" height="100%" width="200px"
-                                                 style="position: relative; border-radius: 50%; overflow: hidden;">
+                                            <a href="{{ each_endorsement_received.endorser.get_absolute_url }}">
+                                                <img src="{% profile_image_url each_endorsement_received.endorser '400x400' %}"
+                                                     alt="avatar" height="100%" width="200px"
+                                                     style="position: relative; border-radius: 50%; overflow: hidden;">
+                                            </a>
                                         </div>
 
                                         <div class="endorsement">
@@ -118,9 +120,11 @@
                                     <div class="endorsement-block">
 
                                         <div class="avatar-wrapper blue">
-                                            <img src="{% profile_image_url each_endorsement_made.recipient '60x60' %}"
-                                                 alt="avatar" height="100%" width="200px"
-                                                 style="position: relative; border-radius: 50%; overflow: hidden;">
+                                            <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">
+                                                <img src="{% profile_image_url each_endorsement_made.recipient '60x60' %}"
+                                                     alt="avatar" height="100%" width="200px"
+                                                     style="position: relative; border-radius: 50%; overflow: hidden;">
+                                            </a>
                                         </div>
 
                                         <div class="endorsement">
