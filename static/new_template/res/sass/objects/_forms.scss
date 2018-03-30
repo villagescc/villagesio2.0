@@ -202,6 +202,41 @@ input:checked + .slider:before {
   }
 }
 
+// Add Post Form wrapper
+.form-content {
+  margin-top: 40px;
+  .form-title {
+    font-size: 18px;
+    color: $lightblue;
+    text-transform: uppercase;
+    @include media-width-up(sm) {
+      font-size: 24px;
+    }
+  }
+  label {
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-family: "Open Sans", sans-serif;
+    color: $lightgrey;
+    font-size: 18px;
+  }
+  .btn-save {
+    padding: 15px;
+    font-size: 1em;
+    color: #fff;
+    text-transform: uppercase;
+    background-color: $lightblue;
+    cursor: pointer;
+    border-radius: 0;
+    @include crossTransition(background-color .3s);
+    &:hover,
+    &:focus {
+      background-color: darken($lightblue, 10%);
+    }
+  }
+}
+
+
 // Input photo
 .post-image {
   .size-recommend {
