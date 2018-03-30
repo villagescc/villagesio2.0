@@ -33,7 +33,9 @@
                                         <div class="avatar-wrapper blue big">
                                             <a class="recipient-link" href="#">
                                                 <img id="img-payee" src="{% static 'img/generic_user.png' %}"
-                                                     class="rounded-circle">
+                                                     class="rounded-circle" data-toggle="tooltip" data-placement="right"
+                                                     data-html="true"
+                                                     title="&lt;span class='tip-balloon'&gt;Recipient&lt;/span&gt;">
                                             </a>
                                         </div>
                                     </div>
@@ -102,7 +104,11 @@
                                              src="{% static 'new_template/res/img/icons/arrow-right.png' %}" alt="to">
                                         <div class="avatar-wrapper blue">
                                             <a href="{% url 'profile' each_all.item.recipient.username %}">
-                                                <img src="{% profile_image_url each_all.item.recipient '60x60' %}" alt="photo">
+                                                <img src="{% profile_image_url each_all.item.recipient '60x60' %}" alt="photo"
+                                                     data-toggle="tooltip" data-placement="right"
+                                                     data-html="true"
+                                                     title="&lt;span class='tip-balloon'&gt;{{ each_all.item.recipient.username }}&lt;/span&gt;"
+                                                >
                                             </a>
                                         </div>
                                     </div>
@@ -198,6 +204,7 @@
                     $('.receiver-box .recipient-link').attr('href', '/profiles/' + selectedUser);
 
                     $('.receiver-box #img-payee').attr("src", e['data']['profile_photo_path']);
+                    $('.receiver-box #img-payee').attr("data-original-title", selectedUser);
                     if (!e['data']['can_ripple']) {
                         $(".receiver-box #payment-info-message").html('You do not have any more credit with this user. Your payment will only be able to be spent directly, with you. If this is not your intent, contact the recipient and ask them to raise your credit limit. This can be done after payment.');
                     } else if (e['data']['can_ripple']) {
