@@ -1,18 +1,6 @@
 {% extends "new_templates/base.html" %}
 {% load staticfiles profile %}
 
-{% block extra_css %}
-    <style>
-        #div-recipient-name .tt-menu {
-            max-height: 150px;
-            width: 100%;
-            overflow-y: auto;
-            border-bottom: 1px solid #ccc;
-            background-color: #ffffff;
-        }
-    </style>
-{% endblock extra_css %}
-
 {% block content %}
 
 
@@ -42,10 +30,12 @@
                                         <div id="div-profile-image"
                                              class="d-flex justify-content-start align-items-center">
                                             <div class="avatar-wrapper blue big mr-3">
-                                                <img id="profile-image"
-                                                     src="{% static 'new_template/res/img/people/mikail.png' %}"
-                                                     alt="mikail"
-                                                     class="rounded-circle">
+                                                <a class="recipient-link" href="#">
+                                                    <img id="profile-image"
+                                                         src="{% static 'new_template/res/img/people/mikail.png' %}"
+                                                         alt="photo"
+                                                         class="rounded-circle">
+                                                </a>
                                             </div>
                                             <span id="name-profile-image"></span>
                                         </div>
@@ -108,9 +98,13 @@
                         {% for account in accounts %}
                             <div class="table-row">
                                 <div class="avatar-wrapper blue">
-                                    <img src="{% profile_image_url account.partner '60x60' %}" height="100%"
-                                         width="200px"
-                                         style="position: relative; border-radius: 50%; overflow: hidden;">
+                                    <a href="{% url 'profile' account.partner.username %}">
+                                        <img src="{% profile_image_url account.partner '60x60' %}"
+                                             data-toggle="tooltip" data-placement="right"
+                                             data-html="true"
+                                             title="&lt;span class='tip-balloon'&gt;{{ account.partner.username }}&lt;/span&gt;"
+                                        >
+                                    </a>
                                 </div>
                                 <span>{{ account.partner }}</span>
 
@@ -179,12 +173,24 @@
                 }
             });
 
-        $("#id_recipient_name").bind('typeahead:selected', function (e) {
-            $("#id_data_profile").val($("#id_recipient_name").val());
+
+        $("#id_recipient_name").bind('typeahead:change typeahead:selected', function (e) {
+
+            var selectedUser;
+
+            if (e.type === 'typeahead:selected') {
+                selectedUser = $("#id_recipient_name").val();
+                $("#id_recipient_name").attr("data-profile-selected", selectedUser)
+            } else {
+                selectedUser = $("#id_recipient_name").attr("data-profile-selected");
+            }
+
+            if (!$("#id_recipient_name").attr("data-profile-selected")) return;
+
             $.ajax({
-                url: '/get_user_photo/' + $("#id_recipient_name").val(),
+                url: '/get_user_photo/' + selectedUser,
                 type: 'POST',
-                data: {'profile_username': $("#id_recipient_name").val()},
+                data: {'profile_username': selectedUser},
                 beforeSend: function (xhr) {
                     $('#spin-modal').fadeIn();
                     var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
@@ -195,7 +201,6 @@
                     $("#id_weight").val('');
                     $("#id_text").val('');
                     $("#id_referral").prop('checked', false);
-
 
                     if (e['data']['error']) {
                         $('#error-modal-alert').text(e["data"]["error_message"]);
@@ -211,8 +216,8 @@
                         }
                     }
                     $('#div-profile-photo').attr("hidden", false);
+                    $('#div-profile-image .recipient-link').attr('href', '/profiles/' + selectedUser);
                     $('#profile-image').attr("src", e['data']['profile_photo_path']);
-                    debugger;
                     $('#name-profile-image').text(e['data']['recipient']);
                     $('#spin-modal').fadeOut();
                 },

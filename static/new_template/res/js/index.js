@@ -10,5 +10,16 @@ $(document).ready(function() {
        }, 600);
       }
     });
+    
+    // Responsive Menu Toggle
+    $('.user-link.responsive-toggle').on('click', function () {
+        var menu = $('.responsive-profile-menu');
+        menu.toggleClass('open');
+    });
+
+    // Tooltip Run
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 
 });

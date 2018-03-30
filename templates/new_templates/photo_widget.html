@@ -1,8 +1,13 @@
 {% load static %}
 
-
-<div class="alert alert-warning collapse" id="error_{{ listing_form.photo }}"></div>
-{% if widget.value %}<p>Current: <a href="{{ widget.value.url }}">{{ widget.value }}</a></p>{% endif %}
-<img src="{% static 'new_template/res/img/icons/camera.png' %}" alt="photo">
+<div class="post-image">
+    <p class="size-recommend">Your image size shouldn't exсeed 10MB.</p>
+    <div class="input-block">
+        {% if widget.value %}<img class="image-preview" src="{{ widget.value.url }}" alt="photo">{% endif %}
+        <div class="upload-error"></div>
+        <img class="camera-icon" src="{% static 'new_template/res/img/icons/camera.png' %}" alt="photo">
+        <p class="browse-title">browse</p>
+        <input id="id_photo" type="file" class="image-input" name="photo">
+    </div>
+</div>
 <p class="action-call"></p>
-<p><label class="inline" for="id_photo">browse</label></p>

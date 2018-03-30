@@ -79,12 +79,7 @@
 </form>
 
 <script>
-    $('input[type=file]').change(function () {
-        debugger;
-        var filename = $(this).val().split('\\').pop();
-        $("label[for='id_photo']").text(filename);
-    });
-
+$(document).ready(function () {
     $('#save-post').click(function (e) {
         e.preventDefault();
         $('#save-post').attr("disabled", true);
@@ -127,7 +122,56 @@
                 showInternalServerError();
             }
         })
-    })
+    });
+
+    // Filereader for image upload
+    var $input = $('.image-input');
+
+    $input.on('change', function(e) {
+        //hide error
+        $('.upload-error').text('');
+        $('.upload-error').css('opacity', '0');
+        //get FileList
+        var files = e.target.files;
+        var $this = $(this);
+
+        //if files are chosen
+        if (files.length) {
+            var file = files[0];
+            var fileSize = Math.round(file.size / 1024 / 1024  * 100) / 100;
+            var img, reader;
+
+            if (fileSize > 10) {
+                $('.upload-error').text('Please, load image less than 10MB.');
+                $('.upload-error').css('opacity', '1');
+                return;
+            }
+
+            //get file data
+            reader = new FileReader();
+
+            reader.onload = function(e) {
+
+                var fileData = e.target.result;
+
+                if (file.type.substr(0, 5) === 'image') {
+                    var $imagePreview = $this.parent('.input-block').find('.image-preview');
+
+                    if ($imagePreview.length > 0) {
+                        $imagePreview.attr('src', fileData);
+                    } else {
+                        img = '<img class="image-preview" src="' + fileData + '" alt="preview">'
+                        $('.input-block').append(img);
+                    }
+                } else {
+                    $('.upload-error').text('You should load an image here.');
+                    $('.upload-error').css('opacity', '1');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
 </script>
 
 

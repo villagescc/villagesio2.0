@@ -38,7 +38,7 @@
 
                                             </div>
 
-                                            <div class="post-content">
+                                            <div class="post-content listing-modal" data-listing-id="{{ each.id }}">
 
                                                 <div class="avatar-thumbnail"
                                                      style="background-image: url('{% profile_image_url each.user.profile '60x60' %}');">
@@ -59,11 +59,9 @@
 
                                             <div class="post-action">
                                                 <a class="action-menu-item edit-post-button"
-                                                   data-toggle="modal"
-                                                   data-target="#new-post-modal"
                                                    href="{% url 'listing_management:edit' each.id %} "><img
                                                         src="{% static 'new_template/res/img/icons/edit.svg' %}"
-                                                        alt="like"></a>
+                                                        alt="edit"></a>
                                                 <a class="action-menu-item delete-post-button"
                                                    href="{% url 'listing_management:delete' each.id %}"><img
                                                         src="{% static 'new_template/res/img/icons/trash-alt.svg' %}"

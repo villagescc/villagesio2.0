@@ -14,13 +14,21 @@
             <div class="user-menu d-flex d-lg-none">
                 <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}"
                                                    alt="notifications"></a>
-                <a class="user-link" href="#">
+                <a class="user-link responsive-toggle" href="#">
                     <div class="avatar-wrapper blue">
                         <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%"
                              width="200px"
                              style="position: relative; border-radius: 50%; overflow: hidden;">
                     </div>
+                    <div class="responsive-profile-menu">
+                        <a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a>
+                        <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a>
+                        <a class="dropdown-item" href="{% url 'accounts:settings' %}">Settings</a>
+                        {#<a class="dropdown-item" href="{% url 'management:management' %}">Management</a>#}
+                        <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+                    </div>
                 </a>
+
             </div>
 
             <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse"
@@ -86,8 +94,8 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a>
-                            <a class="dropdown-item" href="{% url 'listing_management:manage_listings' %}">Manage
-                                Listing</a>
+                            <!--<a class="dropdown-item" href="{% url 'listing_management:manage_listings' %}">Manage-->
+                                <!--Listing</a>-->
                             <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit
                                 Profile</a>
                             <div class="dropdown-divider"></div>

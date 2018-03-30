@@ -2,7 +2,18 @@
 {% load staticfiles %}
 
 {% block content %}
-    <div class="col-8 col-xxl-8">
-        {% include 'new_templates/form.html' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-tab-12 col-lg-8 offset-lg-2">
+                {% include 'new_templates/form.html' %}
+            </div>
+        </div>
     </div>
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+
+
+</script>
+{% endblock extra_js %}

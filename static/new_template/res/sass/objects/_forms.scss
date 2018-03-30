@@ -185,3 +185,148 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+// Autoselect Typehead
+.receiver-box {
+  &#div-recipient-name .tt-menu,
+  &#div-recipient .tt-menu{
+    max-height: 150px;
+    width: 100%;
+    overflow-y: auto;
+    border-bottom: 1px solid #ccc;
+    background-color: #ffffff;
+  }
+  .twitter-typeahead {
+    max-width: 100%;
+    display: block !important;
+  }
+}
+
+// Add Post Form wrapper
+.form-content {
+  margin-top: 40px;
+  .form-title {
+    font-size: 18px;
+    color: $lightblue;
+    text-transform: uppercase;
+    @include media-width-up(sm) {
+      font-size: 24px;
+    }
+  }
+  label {
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-family: "Open Sans", sans-serif;
+    color: $lightgrey;
+    font-size: 18px;
+  }
+  .btn-save {
+    padding: 15px;
+    font-size: 1em;
+    color: #fff;
+    text-transform: uppercase;
+    background-color: $lightblue;
+    cursor: pointer;
+    border-radius: 0;
+    @include crossTransition(background-color .3s);
+    &:hover,
+    &:focus {
+      background-color: darken($lightblue, 10%);
+    }
+  }
+}
+
+
+// Input photo
+.post-image {
+  .size-recommend {
+    margin: 20px 0;
+    padding: 10px 20px;
+    border-radius: 6px;
+    color: #fff;
+    background-color: #9abdf3;
+  }
+  .input-block{
+    position: relative;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border: 3px dashed #8d9aa6;
+    border-radius: 10px;
+    @media screen and (min-width: 700px){
+      width: 400px;
+      height: 200px;
+    }
+    .upload-error {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      max-height: 80px;
+      padding: 10px;
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+      background-color: $red;
+      opacity: 0;
+      z-index: 3;
+    }
+    .image-preview {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.3;
+      z-index: 2;
+    }
+    .camera-icon {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      margin-left: -30px;
+      z-index: 3;
+    }
+    .browse-title {
+      position: absolute;
+      top: 130px;
+      left: 50%;
+      margin-left: -29px;
+      color: #8d9aa6;
+      z-index: 3;
+    }
+    .image-input {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background-color: transparent;
+      z-index: 4;
+    }
+  }
+}
+
+// Delete Post
+.confirm-block {
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 20px;
+  font-family: "Open Sans", sans-serif;
+  @include media-width-up(sm) {
+    padding: 40px;
+  }
+  .form-title {
+    font-size: 18px;
+    color: $lightblue;
+    @include media-width-up(sm) {
+      font-size: 24px;
+    }
+  }
+  p {
+    color: $lightgrey;
+  }
+  input {
+    margin-bottom: 10px;
+  }
+}
+
