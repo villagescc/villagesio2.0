@@ -25,7 +25,7 @@ forms.BaseForm.required_css_class = "required"
 
 
 class PhotoInput(forms.FileInput):
-    template_name = 'new_templates/photo_widget.html'
+    template_name = 'new_templates/widget_photo_input.html'
 
     def get_context(self, name, value, attrs=None):
         return {'widget': {'name': name, 'value': value, 'attrs': attrs}}
@@ -34,3 +34,15 @@ class PhotoInput(forms.FileInput):
         context = self.get_context(name, value, attrs)
         template = loader.get_template(self.template_name).render(context)
         return mark_safe(template)
+
+
+class AmountInput(forms.NumberInput):
+    template_name = 'new_templates/widget_currency_wrapper.html'
+
+    def get_context(self, name, value, attrs=None):
+        return {'widget': {'name': name, 'value': value, 'attrs': attrs}}
+
+    def render(self, name, value, attrs=None):
+        context = self.get_context(name, value, attrs)
+        template = loader.get_template(self.template_name).render(context)
+        return mark_safe(super(AmountInput, self).render(name, value, attrs) + template)

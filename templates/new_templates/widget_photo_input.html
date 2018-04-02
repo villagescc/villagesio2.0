@@ -1,0 +1,13 @@
+{% load static %}
+
+<div class="post-image">
+    <p class="size-recommend">Your image size shouldn't exсeed 10MB.</p>
+    <div class="input-block">
+        {% if widget.value %}<img class="image-preview" src="{{ widget.value.url }}" alt="{{ widget.name }}">{% endif %}
+        <div class="upload-error"></div>
+        <img class="camera-icon" src="{% static 'new_template/res/img/icons/camera.png' %}" alt="{{ widget.name }}">
+        <p class="browse-title">browse</p>
+        <input id="{{ widget.attrs.id }}" type="file" class="image-input" name="{{ widget.name }}">
+    </div>
+</div>
+<p class="action-call"></p>

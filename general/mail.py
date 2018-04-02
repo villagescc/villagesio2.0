@@ -31,7 +31,7 @@ def send_mail(subject, sender, recipient, template, context):
                        to=[to_email_str], reply_to=[sender_email], headers=headers)
     try:
         msg.send()
-    except:
+    except Exception as e:
         pass
 
     translation.activate(old_language)

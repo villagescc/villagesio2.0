@@ -6,6 +6,7 @@ from ripple import PRECISION, SCALE
 import ripple.api as ripple
 from feed.models import FeedItem
 from profile.models import Profile
+from general.forms import AmountInput
 
 ROUTED = 'routed'
 DIRECT = 'direct'
@@ -117,14 +118,14 @@ class BlankTrust(forms.ModelForm):
                                      widget=forms.TextInput(attrs={'class': 'typeahead',
                                                                    'style': 'max-width: 100%'}))
 
-    weight = forms.IntegerField(label="Credit Limit (Measured in 'Village Hours'.)",
-                                required=True, min_value=0, widget=forms.NumberInput(attrs={}))
+    weight = forms.IntegerField(label="Credit Limit", required=True,
+                                min_value=0, widget=AmountInput())
 
-    text = forms.CharField(label='Testimonial (This is a public statement)', required=False,
-                           widget=forms.Textarea(attrs={}))
+    text = forms.CharField(label='Testimonial', required=False,
+                           widget=forms.Textarea())
 
-    referral = forms.BooleanField(label="Refer This Person's Services to Friends? (Only refer a person if you have actually worked with them)", required=False,
-                                  widget=forms.CheckboxInput())
+    referral = forms.BooleanField(label="Refer This Person's Services to Friends?",
+                                  required=False, widget=forms.CheckboxInput())
 
     class Meta:
         model = Endorsement

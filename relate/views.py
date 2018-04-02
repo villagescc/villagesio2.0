@@ -1,14 +1,13 @@
 import json
 import ripple.api as ripple
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages
 from django.http import JsonResponse
 from general.util import render
-from django.shortcuts import render as django_render, redirect
+from django.shortcuts import render as django_render
 from listings.forms import ListingsForms
 from profile.models import Profile
 from relate.forms import EndorseForm, AcknowledgementForm, BlankTrust, BlankPaymentForm
@@ -294,6 +293,7 @@ def get_recipients_data(request):
                            'username': recipient.username})
         return JsonResponse({'result': result})
 
+
 @login_required
 @render()
 def blank_trust(request):
@@ -313,27 +313,23 @@ def blank_trust(request):
                 except Endorsement.DoesNotExist:
                     endorsement = None
                 if 'delete' in request.POST and endorsement:
+                    # TODO implement logic for delete trust
                     endorsement.delete()
                     messages.add_message(request, messages.INFO, 'Trust deleted')
-                    return django_render(request, 'new_templates/trust.html', {'form': form})
-
-                form = BlankTrust(request.POST, instance=endorsement, endorser=profile, recipient=recipient)
-                if form.is_valid():
-                    form.save()
-                    create_notification(notifier=profile, recipient=recipient, type=Notification.TRUST)
-                    if form.cleaned_data['referral']:
+                else:
+                    form = BlankTrust(request.POST, instance=endorsement, endorser=profile, recipient=recipient)
+                    if form.is_valid():
+                        endorsement = form.save()
+                        create_notification(notifier=profile, recipient=recipient, type=Notification.TRUST)
                         existing_referral = Referral.objects.filter(referrer=profile, recipient=recipient)
-                        if not existing_referral:
-                            new_referral = Referral()
-                            new_referral.referrer = profile
-                            new_referral.recipient = recipient
-                            new_referral.save()
-                    else:
-                        existing_referral = Referral.objects.filter(referrer=profile, recipient=recipient)
-                        if existing_referral:
-                            existing_referral.delete()
-                    # send_endorsement_notification(endorsement)
-                    messages.add_message(request, messages.INFO, 'Trust saved!')
+                        if form.cleaned_data['referral']:
+                            if not existing_referral:
+                                Referral.objects.create(referrer=profile, recipient=recipient)
+                        else:
+                            if existing_referral:
+                                existing_referral.delete()
+                        send_endorsement_notification(endorsement)
+                        messages.add_message(request, messages.INFO, 'Trust saved!')
     else:
         form = BlankTrust(instance=None, endorser=profile, recipient=None)
     return django_render(request, 'new_templates/trust.html', {'form': form, 'accounts': accounts, 'profile': profile})
@@ -341,9 +337,6 @@ def blank_trust(request):
 
 @login_required()
 def blank_payment(request):
-    listing_form = ListingsForms()
-    received_payments = FeedItem.objects.filter(recipient_id=request.profile.id, item_type='acknowledgement').order_by('-date')
-    made_payments = FeedItem.objects.filter(poster_id=request.profile.id, item_type='acknowledgement').order_by('-date')
     all_payments = (FeedItem.objects.filter(recipient_id=request.profile.id, item_type='acknowledgement').
                     order_by('-date') | FeedItem.objects.filter(poster_id=request.profile.id, item_type='acknowledgement').order_by('-date'))
     form = BlankPaymentForm(max_ripple=None, initial=request.GET)
@@ -371,10 +364,7 @@ def blank_payment(request):
                 messages.add_message(request, messages.INFO, 'Payment sent.')
     else:
         form = BlankPaymentForm(max_ripple=None, initial=request.GET)
-    return django_render(request, 'new_templates/pay.html', {'form': form, 'listing_form': listing_form,
-                                                             'received_payments': received_payments,
-                                                             'made_payments': made_payments,
-                                                             'all_payments': all_payments})
+    return django_render(request, 'new_templates/pay.html', {'form': form, 'all_payments': all_payments})
 
 
 def send_payment_notification(payment):

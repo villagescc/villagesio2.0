@@ -3,7 +3,6 @@
 
 {% block content %}
 
-
     <div class="app-view">
 
         <main class="app-main">
@@ -20,58 +19,10 @@
                         <div class="trust-data">
                             <form id="trust-form" action="{% url 'blank_trust_user' %}" method="POST">
                                 {% csrf_token %}
-                                <div class="receiver-box" id="div-recipient-name">
-                                    <h4 class="mt-1">Choose Trust Receiver</h4>
-                                    {{ form.recipient_name }}
-                                    <h4></h4>
-                                </div>
-                                <div class="receiver">
-                                    <div class="receiver-box" id="div-profile-photo" hidden>
-                                        <div id="div-profile-image"
-                                             class="d-flex justify-content-start align-items-center">
-                                            <div class="avatar-wrapper blue big mr-3">
-                                                <a class="recipient-link" href="#">
-                                                    <img id="profile-image"
-                                                         src="{% static 'new_template/res/img/people/mikail.png' %}"
-                                                         alt="photo"
-                                                         class="rounded-circle">
-                                                </a>
-                                            </div>
-                                            <span id="name-profile-image"></span>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="credit-limit">
-                                    <h4>Credit Limit</h4>
-                                    <div class="d-flex">
-                                        {{ form.weight }}
-                                        {#                      <input type="number" name="rate" id="rate" placeholder="2.00">#}
-                                        <span class="currency-wrapper">V.H.</span>
-                                    </div>
-                                </div>
-
-                                <div class="testimonial">
-                                    <h4>Testimonial</h4>
-                                    {{ form.text }}
-                                    {#                    <textarea name="testimonial" id="testimonial" cols="30" rows="10"></textarea>#}
-                                </div>
-
-                                <div class="reference">
-                                    <div class="d-flex justify-content-start align-items-center">
-                                        <label class="switch mr-3 mb-0">
-                                            {{ form.referral }}
-                                            <span class="slider round"></span>
-                                        </label>
-                                        <p style="margin-bottom: 0;">Refer This Person's Services to Friends?</p>
-                                    </div>
-                                    <p class="note">(Only refer a person if you have actually worked with them)</p>
-                                </div>
+                                {% include 'new_templates/form.html' %}
 
                                 <div class="row" style="max-width: 600px;">
-                                    <div class="col-6">
-                                        <input class="btn btn-std btn-cancel" type="button" value="Cancel">
-                                    </div>
                                     <div class="col-6">
                                         <input class="btn btn-std" id="save-trust" type="submit" value="Save Trust">
                                     </div>
