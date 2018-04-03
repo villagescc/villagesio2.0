@@ -298,8 +298,7 @@ def get_recipients_data(request):
 @render()
 def blank_trust(request):
     profile = request.profile
-    accounts = ripple.get_user_accounts(request.profile)
-    form = BlankTrust(endorser=profile, recipient=None)
+    form = BlankTrust(instance=None, endorser=profile, recipient=None)
     if request.method == 'POST':
         if not request.POST['recipient_name']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
@@ -330,40 +329,38 @@ def blank_trust(request):
                                 existing_referral.delete()
                         send_endorsement_notification(endorsement)
                         messages.add_message(request, messages.INFO, 'Trust saved!')
-    else:
-        form = BlankTrust(instance=None, endorser=profile, recipient=None)
+
+    accounts = ripple.get_user_accounts(request.profile)
     return django_render(request, 'new_templates/trust.html', {'form': form, 'accounts': accounts, 'profile': profile})
 
 
 @login_required()
 def blank_payment(request):
-    all_payments = (FeedItem.objects.filter(recipient_id=request.profile.id, item_type='acknowledgement').
-                    order_by('-date') | FeedItem.objects.filter(poster_id=request.profile.id, item_type='acknowledgement').order_by('-date'))
-    form = BlankPaymentForm(max_ripple=None, initial=request.GET)
-
+    profile = request.profile
+    form = BlankPaymentForm(payer=profile, recipient=None, max_amount=0)
     if request.method == 'POST':
         if not request.POST['recipient']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
+            form.errors['recipient'] = 'This field is required.'
         else:
             recipient = get_object_or_404(Profile, user__username=request.POST['recipient'])
-            max_amount = ripple.max_payment(request.profile, recipient)
-            form = BlankPaymentForm(request.POST, max_ripple=max_amount)
-            if recipient == request.profile:
-                messages.add_message(request, messages.ERROR, 'You cant send a payment to yourself')
-            else:
-                can_ripple = max_amount > 0
-                # if not can_ripple and request.POST['ripple'] == 'routed':
-                #     messages.add_message(request, messages.ERROR, 'There are no available paths through the trust network, '
-                #                                                   'so you can only send direct trust')
-                #     form = BlankPaymentForm(max_ripple=None, initial=request.GET)
-                #     return django_render(request, 'blank_payment.html', {'form': form,
-                #                                                          'listing_form': listing_form})
-                payment = form.send_payment(request.profile, recipient, request.POST, can_ripple)
-                create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
-                send_payment_notification(payment)
-                messages.add_message(request, messages.INFO, 'Payment sent.')
-    else:
-        form = BlankPaymentForm(max_ripple=None, initial=request.GET)
+            max_amount = ripple.max_payment(profile, recipient)
+            form = BlankPaymentForm(request.POST, payer=profile, recipient=recipient, max_amount=max_amount)
+            if form.is_valid():
+                if recipient == profile:
+                    messages.add_message(request, messages.ERROR, 'You cant send a payment to yourself')
+                    form.errors['recipient'] = 'Choose another recipient.'
+                else:
+                    payment = form.send_payment()
+                    create_notification(notifier=profile, recipient=recipient, type=Notification.PAYMENT)
+                    send_payment_notification(payment)
+                    messages.add_message(request, messages.INFO,
+                                         'Payment sent {}.'.format('through the trust network'
+                                                                   if form.cleaned_data['routed'] else 'directly'))
+    all_payments = (
+        FeedItem.objects.filter(recipient_id=profile.id, item_type='acknowledgement').order_by('-date') |
+        FeedItem.objects.filter(poster_id=profile.id, item_type='acknowledgement').order_by('-date')
+    )
     return django_render(request, 'new_templates/pay.html', {'form': form, 'all_payments': all_payments})
 
 

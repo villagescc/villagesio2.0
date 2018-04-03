@@ -24,7 +24,7 @@ class EndorseForm(forms.ModelForm):
     referral = forms.BooleanField(label="Refer This Person's Services to Friends? (Only refer a person if you have actually worked with them)",
                                   required=False,
                                   widget=forms.CheckboxInput())
-    
+
     class Meta:
         model = Endorsement
         exclude = ('endorser', 'recipient', 'updated')
@@ -44,14 +44,14 @@ class EndorseForm(forms.ModelForm):
         if self.instance.id:
             max_weight += self.instance.weight
         return max_weight
-        
+
     # def clean_weight(self):
     #     weight = self.cleaned_data['weight']
     #     if self.endorser.endorsement_limited and weight > self.max_weight:
     #         raise forms.ValidationError(
     #             self.MESSAGES['over_weight'] % self.max_weight)
     #     return weight
-    
+
     def save(self):
         endorsement = super(EndorseForm, self).save(commit=False)
         if not self.instance.id:
@@ -82,7 +82,7 @@ class AcknowledgementForm(forms.Form):
         'max_ripple': _("This is higher than the maximum possible routed "
                         "payment amount."),
     }
-    
+
     def __init__(self, *args, **kwargs):
         self.max_ripple = kwargs.pop('max_ripple')
         super(AcknowledgementForm, self).__init__(*args, **kwargs)
@@ -146,13 +146,6 @@ class BlankTrust(forms.ModelForm):
             max_weight += self.instance.weight
         return max_weight
 
-    # def clean_weight(self):
-    #     weight = self.cleaned_data['weight']
-    #     if self.endorser.endorsement_limited and weight > self.max_weight:
-    #         raise forms.ValidationError(
-    #             self.MESSAGES['over_weight'] % self.max_weight)
-    #     return weight
-
     def save(self):
         endorsement = super(BlankTrust, self).save(commit=False)
         if not self.instance.id:
@@ -163,57 +156,36 @@ class BlankTrust(forms.ModelForm):
 
 
 class BlankPaymentForm(forms.Form):
+    recipient = forms.CharField(label='Choose the trust receiver', required=True,
+                                widget=forms.TextInput(attrs={'class': 'typeahead', 'style': 'max-width: 100%'}))
 
-    recipient = forms.ModelChoiceField(queryset=Profile.objects.all(),
-                                       label='Choose the payment receiver', required=True,
-                                       widget=forms.TextInput(attrs={'class': 'typeahead'}))
-
-    ripple = forms.ChoiceField(
-        label=_("Send"),
-        widget=forms.RadioSelect(attrs={'style': 'float: left;'}),
-        choices=((ROUTED, _(" Trusted payment")),
-                 (DIRECT, _(" Direct payment"))),
-        initial=ROUTED)
     amount = forms.DecimalField(
         label=_("Hours"),
         max_digits=PRECISION, decimal_places=SCALE,
         min_value=D('0.' + '0' * (SCALE - 1) + '1'),
-        widget=forms.NumberInput(attrs={}))
+        widget=AmountInput())
+
     memo = forms.CharField(
         label=_("Testimonial"),
         required=False,
         widget=forms.Textarea(attrs={'style': 'max-width: 100%; height: 100px;'}))
 
-    ERRORS = {
-        'max_ripple': _("This is higher than the maximum possible routed "
-                        "payment amount."),
-    }
-
     def __init__(self, *args, **kwargs):
-        if 'max_ripple' in kwargs:
-            self.max_ripple = kwargs.pop('max_ripple')
+        self.payer = kwargs.pop('payer')
+        self.recipient = kwargs.pop('recipient')
+        self.max_amount = kwargs.pop('max_amount')
         super(BlankPaymentForm, self).__init__(*args, **kwargs)
-        if self.max_ripple == 0:
-            del self.fields['ripple']
 
     def clean(self):
         data = self.cleaned_data
-        # Enforce max_ripple amount.
-        if data.get('ripple') == ROUTED and 'amount' in data:
-            if data['amount'] > self.max_ripple:
-                self._errors['amount'] = self.error_class(
-                    [self.ERRORS['max_ripple']])
+        data['routed'] = self.max_amount >= data['amount']
         return data
 
-    @staticmethod
-    def send_payment(payer, recipient, data, can_ripple):
-        if can_ripple:
-            routed = True
-        else:
-            routed = False
+    def send_payment(self):
+        data = self.cleaned_data
         obj = ripple.pay(
-            payer, recipient, float(data['amount']), data['memo'], routed=routed)
+            self.payer, self.recipient, float(data['amount']), data['memo'], routed=data['routed']
+        )
         # Create feed item
-        FeedItem.create_feed_items(
-            sender=ripple.RipplePayment, instance=obj, created=True)
+        FeedItem.create_feed_items(sender=ripple.RipplePayment, instance=obj, created=True)
         return obj
