@@ -8,7 +8,6 @@ from django.contrib import messages
 from django.http import JsonResponse
 from general.util import render
 from django.shortcuts import render as django_render
-from listings.forms import ListingsForms
 from profile.models import Profile
 from relate.forms import EndorseForm, AcknowledgementForm, BlankTrust, BlankPaymentForm
 from relate.models import Endorsement, Referral
@@ -357,10 +356,8 @@ def blank_payment(request):
                     messages.add_message(request, messages.INFO,
                                          'Payment sent {}.'.format('through the trust network'
                                                                    if form.cleaned_data['routed'] else 'directly'))
-    all_payments = (
-        FeedItem.objects.filter(recipient_id=profile.id, item_type='acknowledgement').order_by('-date') |
-        FeedItem.objects.filter(poster_id=profile.id, item_type='acknowledgement').order_by('-date')
-    )
+
+    all_payments = FeedItem.objects.filter((Q(recipient_id=profile.id) | Q(poster_id=profile.id)) & Q(item_type='acknowledgement')).order_by('-date')
     return django_render(request, 'new_templates/pay.html', {'form': form, 'all_payments': all_payments})
 
 

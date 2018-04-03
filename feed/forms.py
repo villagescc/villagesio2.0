@@ -87,8 +87,6 @@ class FeedFilterForm(forms.Form):
             query_radius = None
         trusted = data['trusted']
         referral = referral_radio
-        balance_high = balance_high
-        balance_low = balance_low
 
         while True:
             items, count, total = FeedItem.objects.get_feed_and_remaining(
@@ -108,7 +106,7 @@ class FeedFilterForm(forms.Form):
                     query_radius = None
                 continue
             break
-        return items, count, total
+        return list(items), count, total
         
     def update_sticky_filter_prefs(self):
         """

@@ -8,7 +8,7 @@ from listings.map_visualization.views import listing_map
 urlpatterns = [
     url(r'^home/people/(?:/(?P<type_filter>[a-zA-Z]+)/)?', frontend_views.home,
         dict(item_type=Profile, template='profiles.html', do_filter=True), name='home_people'),
-    url(r'^home/people_listing/(?:/(?P<type_filter>[a-zA-Z]+)/)?', frontend_views.people_listing,
+    url(r'^home/people_listing/', frontend_views.people_listing, dict(item_type=Profile, do_filter=True),
         name='people_listing'),
     url(r'^home(?:/(?P<type_filter>[0-9a-zA-Z]+)/)?', frontend_views.home, name='home'),
     url(r'^map', listing_map, name='map'),

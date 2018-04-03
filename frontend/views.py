@@ -1,23 +1,20 @@
 import ujson
-from django.http.response import HttpResponse, JsonResponse
+from django.http.response import HttpResponse
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpRequest
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.conf import settings
 # Forms
 from accounts.forms import UserForm
 from listings.forms import ListingsForms
 from listings.models import LISTING_TYPE_CHECK
 from feed.forms import FeedFilterForm, DATE_FORMAT
 from notification.models import Notification
-from relate.forms import Endorsement, EndorseForm, AcknowledgementForm
+from relate.forms import EndorseForm, AcknowledgementForm
 from profile.forms import ContactForm
 from frontend.forms import FormListingsSettings
 from django_user_agents.utils import get_user_agent
 from profile.templatetags.profile import *
-from django.core.signals import request_finished
 # models
-from django.contrib.gis.db.models import Q
 from listings.models import Listings
 from categories.models import Categories, SubCategories
 
