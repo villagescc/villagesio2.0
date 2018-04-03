@@ -21,14 +21,14 @@
 
                                 {% include "new_templates/form.html" %}
 
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <input class="btn btn-std btn-cancel" type="button" value="Cancel">
-                                        </div>
-                                        <div class="col-6">
-                                            <input class="btn btn-std" type="submit" value="Save Payment">
-                                        </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input class="btn btn-std btn-cancel" type="button" value="Cancel">
                                     </div>
+                                    <div class="col-6">
+                                        <input class="btn btn-std" type="submit" value="Save Payment">
+                                    </div>
+                                </div>
 
                             </form>
                         </div>
@@ -37,7 +37,9 @@
 
                     <div class="col-xs-12 col-lg-6 mt-5 mt-lg-0">
 
-                        <h2>Last Payments | <a class="small" href="#">View More</a></h2>
+                        <h2>Last Payments
+                            {#                            | <a class="small" href="#">View More</a>#}
+                        </h2>
                         {% if all_payments %}
                             <div class="table-head">
 
@@ -45,6 +47,7 @@
                                 <span>Recipient</span>
                                 <span>Date / Time</span>
                                 <span>Amount</span>
+                                <span>Memo</span>
 
                             </div>
                             {% for each_all in all_payments %}
@@ -52,14 +55,16 @@
                                     <div class="transaction">
                                         <div class="avatar-wrapper blue">
                                             <a href="{{ each_all.item.payer.get_absolute_url }}">
-                                                <img src="{% profile_image_url each_all.item.payer '60x60' %}" alt="photo">
+                                                <img src="{% profile_image_url each_all.item.payer '60x60' %}"
+                                                     alt="photo">
                                             </a>
                                         </div>
                                         <img style="padding: 0 0.5em;"
                                              src="{% static 'new_template/res/img/icons/arrow-right.png' %}" alt="to">
                                         <div class="avatar-wrapper blue">
                                             <a href="{{ each_all.item.recipient.get_absolute_url }}">
-                                                <img src="{% profile_image_url each_all.item.recipient '60x60' %}" alt="photo"
+                                                <img src="{% profile_image_url each_all.item.recipient '60x60' %}"
+                                                     alt="photo"
                                                      data-toggle="tooltip" data-placement="right"
                                                      data-html="true"
                                                      title="&lt;span class='tip-balloon'&gt;{{ each_all.item.recipient.username }}&lt;/span&gt;"
@@ -71,6 +76,7 @@
                                     <span class="datetime">{{ each_all.item.date }}<span class="small">PM</span></span>
 
                                     <span class="amount"><strong><span class="price">{{ each_all.item.amount }}</span> V.H.</strong></span>
+                                    <span class="memo"><strong>{{ each_all.item.payment.memo }}</strong></span>
                                 </div>
                             {% endfor %}
                         {% endif %}
