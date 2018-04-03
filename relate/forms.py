@@ -30,8 +30,8 @@ class EndorseForm(forms.ModelForm):
         exclude = ('endorser', 'recipient', 'updated')
 
     def __init__(self, *args, **kwargs):
-        self.endorser = kwargs.pop('endorser')
-        self.recipient = kwargs.pop('recipient')
+        self.endorser = kwargs.pop('endorser', None)
+        self.recipient = kwargs.pop('recipient', None)
         super(EndorseForm, self).__init__(*args, **kwargs)
         self.fields['text'].widget = (forms.Textarea(attrs={}))
         self.fields['text'].label = 'Testimonial (This is a public statement)'
@@ -84,7 +84,7 @@ class AcknowledgementForm(forms.Form):
     }
 
     def __init__(self, *args, **kwargs):
-        self.max_ripple = kwargs.pop('max_ripple')
+        self.max_ripple = kwargs.pop('max_ripple', None)
         super(AcknowledgementForm, self).__init__(*args, **kwargs)
         if self.max_ripple == 0:
             del self.fields['ripple']
@@ -133,8 +133,8 @@ class BlankTrust(forms.ModelForm):
         exclude = ('endorser', 'recipient', 'updated')
 
     def __init__(self, *args, **kwargs):
-        self.endorser = kwargs.pop('endorser')
-        self.recipient = kwargs.pop('recipient')
+        self.endorser = kwargs.pop('endorser', None)
+        self.recipient = kwargs.pop('recipient', None)
         super(BlankTrust, self).__init__(*args, **kwargs)
 
     @property
@@ -171,9 +171,9 @@ class BlankPaymentForm(forms.Form):
         widget=forms.Textarea(attrs={'style': 'max-width: 100%; height: 100px;'}))
 
     def __init__(self, *args, **kwargs):
-        self.payer = kwargs.pop('payer')
-        self.recipient = kwargs.pop('recipient')
-        self.max_amount = kwargs.pop('max_amount')
+        self.payer = kwargs.pop('payer', None)
+        self.recipient = kwargs.pop('recipient', None)
+        self.max_amount = kwargs.pop('max_amount', None)
         super(BlankPaymentForm, self).__init__(*args, **kwargs)
 
     def clean(self):

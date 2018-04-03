@@ -7,7 +7,7 @@
 
     <div class="app-view">
 
-    {% include 'new_templates/categories_sidebar.html' %}
+        {% include 'new_templates/categories_sidebar.html' %}
 
         <main class="app-main" id="main">
 
@@ -165,9 +165,7 @@
 
                                 </div>
 
-                                <div class="post-content listing-modal"
-                                     data-listing-id="{{ each.id }}"
-                                >
+                                <div class="post-content listing-modal" data-listing-id="{{ each.id }}">
                                     <div class="avatar-thumbnail"
                                          style="background-image: url('{% profile_image_url each.user.profile '80x80' %}');">
                                         <img class="trusted-icon"
@@ -188,8 +186,10 @@
                                 <div class="post-action">
 
                                     <a class="action-menu-item trust-modal"
-                                       data-profile-username="{{ each.user.profile.username }}" href="#"><img
-                                            src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like"></a>
+                                       data-profile-username="{{ each.user.profile.username }}"
+                                       href="{% url 'endorsement' %} ">
+                                        <img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like">
+                                    </a>
                                     <a class="action-menu-item payment-modal"
                                        data-profile-username="{{ each.user.profile.username }}"><img
                                             src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy"></a>
