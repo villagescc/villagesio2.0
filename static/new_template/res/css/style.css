@@ -6398,6 +6398,19 @@ input:checked + .slider:before {
   padding: 0;
   list-style: none; }
 
+.form-container.contact-form {
+  padding: 40px;
+  background-color: #fff; }
+  .form-container.contact-form input,
+  .form-container.contact-form textarea {
+    border: 1px solid #ebebeb; }
+  .form-container.contact-form .id_contact_recipient_name .form-group:first-child,
+  .form-container.contact-form .id_message .form-group:first-child {
+    margin-bottom: 0; }
+    .form-container.contact-form .id_contact_recipient_name .form-group:first-child label,
+    .form-container.contact-form .id_message .form-group:first-child label {
+      margin-bottom: 5px; }
+
 /* links */
 a {
   -webkit-transition: all 0.3s;

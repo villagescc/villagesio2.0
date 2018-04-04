@@ -366,3 +366,21 @@ input:checked + .slider:before {
     list-style: none;
   }
 }
+
+.form-container.contact-form {
+  padding: 40px;
+  background-color: #fff;
+  input,
+  textarea {
+    border: 1px solid #ebebeb;
+  }
+  .id_contact_recipient_name,
+  .id_message {
+    .form-group:first-child {
+      margin-bottom: 0;
+      label {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
