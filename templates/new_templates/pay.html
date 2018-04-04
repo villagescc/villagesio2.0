@@ -138,17 +138,20 @@
                 }
             });
         var max_amount_span = $("#max-amount");
-        $(".receiver-box #id_recipient").on('typeahead:change typeahead:selected', function (e) {
+        $(".twitter-typeahead #id_recipient").on('typeahead:change typeahead:selected', function (e) {
             var selectedUser;
+            var $input = $(this);
 
             if (e.type === 'typeahead:selected') {
-                selectedUser = $("#id_recipient").val();
-                $("#id_recipient").attr("data-profile-selected", selectedUser)
+                selectedUser = $input.val();
+                $input.attr("data-profile-selected", selectedUser)
             } else {
-                selectedUser = $("#id_recipient").attr("data-profile-selected");
+                selectedUser = $input.attr("data-profile-selected");
             }
 
-            if (!$("#id_recipient").attr("data-profile-selected")) return;
+            console.log(selectedUser);
+
+            if (!$input.attr("data-profile-selected")) return;
             $.ajax({
                 url: '/get_user_photo/' + selectedUser,
                 type: 'POST',
@@ -163,16 +166,22 @@
                         $("#id_text").val(e['data']['text']);
                     }
 
-                    $('.transaction#div-transaction-photos').attr('hidden', false);
+                    var $infoBlock = $('.transaction#div-transaction-photos');
 
-                    $('.receiver-box .recipient-link').attr('href', '/profiles/' + selectedUser);
+                    $infoBlock.attr('hidden', false);
 
-                    $('.receiver-box #img-payee').attr("src", e['data']['profile_photo_path']);
-                    $('.receiver-box #img-payee').attr("data-original-title", selectedUser);
+                    $('.transaction .recipient-link').attr('href', '/profiles/' + selectedUser);
+
+                    $('.transaction #img-payee').attr("src", e['data']['profile_photo_path']);
+                    $('.transaction #img-payee').attr("data-original-title", selectedUser);
+
+                    if (!$infoBlock.next().hasClass('payment-msg')) {
+                        $infoBlock.after('<div class="payment-msg"></div>');
+                    }
                     if (!e['data']['can_ripple']) {
-                        $(".receiver-box #payment-info-message").html('You do not have any more credit with this user. Your payment will only be able to be spent directly, with you. If this is not your intent, contact the recipient and ask them to raise your credit limit. This can be done after payment.');
+                        $('.payment-msg').html('You do not have any more credit with this user. Your payment will only be able to be spent directly, with you. If this is not your intent, contact the recipient and ask them to raise your credit limit. This can be done after payment.');
                     } else if (e['data']['can_ripple']) {
-                        $(".receiver-box #payment-info-message").html("You can send a trusted payment of up to " + e['data']['max_amount'] + " hour(s) or a direct payment of any amount.");
+                        $('.payment-msg').html('You can send a trusted payment of up to ' + e.data.max_amount + ' hour(s) or a direct payment of any amount.');
                     }
 
                     $('#spin-modal').fadeOut();

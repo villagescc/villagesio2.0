@@ -7781,6 +7781,14 @@ p {
   -webkit-box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06);
   -moz-box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06);
   box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06); }
+  .payment-data .id_recipient .form-group:first-child,
+  .payment-data .id_amount .form-group:first-child,
+  .payment-data .id_memo .form-group:first-child {
+    margin-bottom: 5px; }
+  .payment-data .id_recipient label,
+  .payment-data .id_amount label,
+  .payment-data .id_memo label {
+    margin-bottom: 0; }
   .payment-data .item-cover {
     background-position: top center;
     background-size: contain;
@@ -7799,6 +7807,17 @@ p {
     flex: 0 0 100%;
     max-width: 100%;
     padding: 1.875em; }
+    .payment-data #payment-form .id_amount .form-group:nth-child(2) {
+      display: flex;
+      flex-direction: row;
+      align-items: center; }
+      .payment-data #payment-form .id_amount .form-group:nth-child(2) img {
+        margin: 5px;
+        width: 13px;
+        height: 13px; }
+    .payment-data #payment-form #id_amount {
+      width: 100px;
+      height: 44px; }
     .payment-data #payment-form .transaction {
       display: flex;
       justify-content: space-around;
@@ -7842,7 +7861,8 @@ p {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 100%;
+      width: 100px;
+      height: 44px;
       background-color: #e1e1e1;
       font-size: 1.375em;
       font-weight: 600;
@@ -8017,6 +8037,14 @@ p {
     flex: 0 0 100%;
     max-width: 100%;
     padding: 1.875em; }
+    .trust-data #trust-form .id_weight .form-group:nth-child(2) {
+      display: flex;
+      flex-direction: row;
+      align-items: center; }
+      .trust-data #trust-form .id_weight .form-group:nth-child(2) img {
+        margin: 5px;
+        width: 13px;
+        height: 13px; }
     .trust-data #trust-form input#id_weight {
       display: inline-block;
       width: 100px;
