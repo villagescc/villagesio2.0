@@ -158,10 +158,11 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
                    'number_of_pages': number_of_pages})
 
 
-def parse_products(products):
+def parse_products(request, products):
     products_html = ''
     for each_product in products:
-        products_html += render_to_string('new_templates/listing_item.html', {'item': each_product})
+        products_html += render_to_string('new_templates/listing_item.html', {'request': request,
+                                                                              'item': each_product})
     return HttpResponse(products_html)
 
 
@@ -170,7 +171,7 @@ def product_infinite_scroll(request, offset=settings.LISTING_ITEMS_PER_PAGE):
     end_session_offset = start_session_offset + int(offset)
 
     products = Listings.objects.order_by('-updated')[start_session_offset:end_session_offset]
-    parsed_products = parse_products(products)
+    parsed_products = parse_products(request, products)
 
     if not products:
         end_session_offset = 0

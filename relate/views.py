@@ -358,13 +358,30 @@ def blank_trust(request):
 @login_required()
 def blank_payment(request):
     profile = request.profile
-    form = BlankPaymentForm(initial={'recipient': request.GET.get('recipient_name'),
-                                     'amount': request.GET.get('amount'),
-                                     'memo': request.GET.get('memo')})
+
+    if request.method == 'GET':
+        recipient = None
+        max_amount = 0
+        form_errors = {}
+
+        recipient_name = request.GET.get('recipient_name')
+        if recipient_name:
+            try:
+                recipient = Profile.objects.get(user__username=recipient_name)
+            except Profile.DoesNotExist:
+                form_errors['recipient'] = "Recipient doesn't exist"
+            else:
+                max_amount = ripple.max_payment(profile, recipient)
+
+        form = BlankPaymentForm(payer=profile, recipient=recipient, max_amount=max_amount,
+                                initial={'recipient': request.GET.get('recipient_name'),
+                                         'amount': request.GET.get('amount'),
+                                         'memo': request.GET.get('memo')})
+        for field_name, error_message in form_errors.iteritems():
+            form.errors[field_name] = error_message
     if request.method == 'POST':
         if not request.POST['recipient']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
-            form.errors['recipient'] = 'This field is required.'
         else:
             recipient = get_object_or_404(Profile, user__username=request.POST['recipient'])
             max_amount = ripple.max_payment(profile, recipient)
