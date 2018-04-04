@@ -7366,6 +7366,17 @@ p {
     justify-content: flex-start;
     align-items: center;
     border-top: 1px solid #f3f2f2; }
+    .post-box .post-action.self-profile .action-menu-item {
+      flex: 0 0 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 3.5em;
+      outline: none; }
+      .post-box .post-action.self-profile .action-menu-item img {
+        width: 24px;
+        height: 24px;
+        fill: grey; }
     .post-box .post-action .action-menu-item {
       flex: 0 0 33.333%;
       display: flex;
@@ -7373,12 +7384,6 @@ p {
       align-items: center;
       height: 3.5em;
       outline: none; }
-      .my-profile .post-box .post-action .action-menu-item {
-        flex: 0 0 50%; }
-        .my-profile .post-box .post-action .action-menu-item img {
-          width: 24px;
-          height: 24px;
-          fill: grey; }
       .post-box .post-action .action-menu-item:not(:first-of-type) {
         border-left: 1px solid #f3f2f2; }
       .post-box .post-action .action-menu-item:hover, .post-box .post-action .action-menu-item:focus {

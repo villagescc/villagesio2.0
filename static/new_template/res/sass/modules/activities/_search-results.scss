@@ -88,6 +88,21 @@
     justify-content: flex-start;
     align-items: center;
     border-top: 1px solid #f3f2f2;
+    &.self-profile {
+      .action-menu-item {
+        flex: 0 0 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 3.5em;
+        outline: none;
+        img {
+          width: 24px;
+          height: 24px;
+          fill: grey;
+        }
+      }
+    }
     & .action-menu-item {
       flex: 0 0 33.333%;
       display: flex;
@@ -95,14 +110,6 @@
       align-items: center;
       height: 3.5em;
       outline: none;
-      .my-profile & {
-        flex: 0 0 50%;
-        img {
-          width: 24px;
-          height: 24px;
-          fill: grey;
-        }
-      }
       &:not(:first-of-type) {
         border-left: 1px solid #f3f2f2;
       }
