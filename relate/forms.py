@@ -5,8 +5,7 @@ from relate.models import Endorsement
 from ripple import PRECISION, SCALE
 import ripple.api as ripple
 from feed.models import FeedItem
-from profile.models import Profile
-from general.forms import AmountInput
+from general.forms import AmountInput, ReceiverInput, ReceiverPayInput, ToggleSwitch
 
 ROUTED = 'routed'
 DIRECT = 'direct'
@@ -30,8 +29,8 @@ class EndorseForm(forms.ModelForm):
         exclude = ('endorser', 'recipient', 'updated')
 
     def __init__(self, *args, **kwargs):
-        self.endorser = kwargs.pop('endorser')
-        self.recipient = kwargs.pop('recipient')
+        self.endorser = kwargs.pop('endorser', None)
+        self.recipient = kwargs.pop('recipient', None)
         super(EndorseForm, self).__init__(*args, **kwargs)
         self.fields['text'].widget = (forms.Textarea(attrs={}))
         self.fields['text'].label = 'Testimonial (This is a public statement)'
@@ -84,7 +83,7 @@ class AcknowledgementForm(forms.Form):
     }
 
     def __init__(self, *args, **kwargs):
-        self.max_ripple = kwargs.pop('max_ripple')
+        self.max_ripple = kwargs.pop('max_ripple', None)
         super(AcknowledgementForm, self).__init__(*args, **kwargs)
         if self.max_ripple == 0:
             del self.fields['ripple']
@@ -115,8 +114,7 @@ class BlankTrust(forms.ModelForm):
     }
 
     recipient_name = forms.CharField(label='Choose the trust receiver', required=True,
-                                     widget=forms.TextInput(attrs={'class': 'typeahead',
-                                                                   'style': 'max-width: 100%'}))
+                                     widget=ReceiverInput(attrs={'class': 'typeahead', 'style': 'max-width: 100%'}, ))
 
     weight = forms.IntegerField(label="Credit Limit", required=True,
                                 min_value=0, widget=AmountInput())
@@ -124,8 +122,11 @@ class BlankTrust(forms.ModelForm):
     text = forms.CharField(label='Testimonial', required=False,
                            widget=forms.Textarea())
 
-    referral = forms.BooleanField(label="Refer This Person's Services to Friends?",
-                                  required=False, widget=forms.CheckboxInput())
+    referral = forms.BooleanField(label="", required=False,
+                                  widget=ToggleSwitch(attrs={
+                                      'label_text': "Refer This Person's Services to Friends?",
+                                      'help_text': "(Only refer a person if you have actually worked with them)",
+                                  }))
 
     class Meta:
         model = Endorsement
@@ -133,8 +134,8 @@ class BlankTrust(forms.ModelForm):
         exclude = ('endorser', 'recipient', 'updated')
 
     def __init__(self, *args, **kwargs):
-        self.endorser = kwargs.pop('endorser')
-        self.recipient = kwargs.pop('recipient')
+        self.endorser = kwargs.pop('endorser', None)
+        self.recipient = kwargs.pop('recipient', None)
         super(BlankTrust, self).__init__(*args, **kwargs)
 
     @property
@@ -157,7 +158,7 @@ class BlankTrust(forms.ModelForm):
 
 class BlankPaymentForm(forms.Form):
     recipient = forms.CharField(label='Choose the trust receiver', required=True,
-                                widget=forms.TextInput(attrs={'class': 'typeahead', 'style': 'max-width: 100%'}))
+                                widget=ReceiverPayInput(attrs={'class': 'typeahead', 'style': 'max-width: 100%'}))
 
     amount = forms.DecimalField(
         label=_("Hours"),
@@ -171,9 +172,9 @@ class BlankPaymentForm(forms.Form):
         widget=forms.Textarea(attrs={'style': 'max-width: 100%; height: 100px;'}))
 
     def __init__(self, *args, **kwargs):
-        self.payer = kwargs.pop('payer')
-        self.recipient = kwargs.pop('recipient')
-        self.max_amount = kwargs.pop('max_amount')
+        self.payer = kwargs.pop('payer', None)
+        self.recipient = kwargs.pop('recipient', None)
+        self.max_amount = kwargs.pop('max_amount', None)
         super(BlankPaymentForm, self).__init__(*args, **kwargs)
 
     def clean(self):

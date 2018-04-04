@@ -5,14 +5,18 @@
 {% endfor %}
 
 {% for field in form %}
-    <div class="form-group {% if field.errors %}has-errors text-danger small{% endif %}">
-        {{ field.label_tag }}
-    </div>
-    <div class="form-group">
-        {{ field }}
-    </div>
-    <div class="form-group small">{{ field.help_text }}</div>
-    <div class="form-group has-errors text-danger small">
-        {{ field.errors }}
+    <div class="{{ field.auto_id }}">
+        {% if field.label %}
+            <div class="form-group {% if field.errors %}has-errors text-danger small{% endif %}">
+                {{ field.label_tag }}
+            </div>
+        {% endif %}
+        <div class="form-group">
+            {{ field }}
+        </div>
+        <div class="form-group small">{{ field.help_text }}</div>
+        <div class="form-group has-errors text-danger small">
+            {{ field.errors }}
+        </div>
     </div>
 {% endfor %}

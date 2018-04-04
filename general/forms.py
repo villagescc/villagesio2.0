@@ -46,3 +46,32 @@ class AmountInput(forms.NumberInput):
         context = self.get_context(name, value, attrs)
         template = loader.get_template(self.template_name).render(context)
         return mark_safe(super(AmountInput, self).render(name, value, attrs) + template)
+
+
+class ReceiverInput(forms.TextInput):
+    template_name = 'new_templates/widget_receiver.html'
+
+    def get_context(self, name, value, attrs=None):
+        return {'widget': {'name': name, 'value': value, 'attrs': attrs}}
+
+    def render(self, name, value, attrs=None):
+        context = self.get_context(name, value, attrs)
+        template = loader.get_template(self.template_name).render(context)
+        return mark_safe(super(ReceiverInput, self).render(name, value, attrs) + template)
+
+
+class ReceiverPayInput(ReceiverInput):
+    template_name = 'new_templates/widget_receiver_pay.html'
+
+
+class ToggleSwitch(forms.CheckboxInput):
+    template_name = 'new_templates/widget_toggle_switch.html'
+
+    def get_context(self, name, value, attrs=None):
+        return {'widget': {'name': name, 'value': value, 'attrs': attrs}}
+
+    def render(self, name, value, attrs=None):
+        final_attrs = self.build_attrs(attrs, type='checkbox', name=name)
+        context = self.get_context(name, value, final_attrs)
+        template = loader.get_template(self.template_name).render(context)
+        return mark_safe(template)

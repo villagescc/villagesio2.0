@@ -297,8 +297,30 @@ def get_recipients_data(request):
 @render()
 def blank_trust(request):
     profile = request.profile
-    form = BlankTrust(instance=None, endorser=profile, recipient=None)
-    if request.method == 'POST':
+
+    if request.method == 'GET':
+        endorsement = None
+        referral = False
+        form_errors = {}
+
+        recipient_name = request.GET.get('recipient_name')
+        if recipient_name:
+            try:
+                recipient = Profile.objects.get(user__username=recipient_name)
+            except Profile.DoesNotExist:
+                form_errors['recipient_name'] = "Recipient doesn't exist"
+            else:
+                referral = Referral.objects.filter(referrer=profile, recipient=recipient).exists()
+                try:
+                    endorsement = Endorsement.objects.get(endorser=profile, recipient=recipient)
+                except Endorsement.DoesNotExist:
+                    pass
+
+        form = BlankTrust(instance=endorsement, initial={'recipient_name': recipient_name, 'referral': referral})
+        for field_name, error_message in form_errors.iteritems():
+            form.errors[field_name] = error_message
+
+    elif request.method == 'POST':
         if not request.POST['recipient_name']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
         else:
@@ -336,7 +358,9 @@ def blank_trust(request):
 @login_required()
 def blank_payment(request):
     profile = request.profile
-    form = BlankPaymentForm(payer=profile, recipient=None, max_amount=0)
+    form = BlankPaymentForm(initial={'recipient': request.GET.get('recipient_name'),
+                                     'amount': request.GET.get('amount'),
+                                     'memo': request.GET.get('memo')})
     if request.method == 'POST':
         if not request.POST['recipient']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')

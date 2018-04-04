@@ -1,6 +1,8 @@
 from django import template
-from general.templatetags.image import resize
 from django.conf import settings
+
+from ..models import Profile
+from general.templatetags.image import resize
 
 register = template.Library()
 
@@ -16,6 +18,19 @@ def profile_image_url(profile, size):
     else:
         square_side = min((int(i) for i in size.split('x')))
         return '/static/img/generic_user.png'
+
+
+@register.simple_tag
+def image_url_by_username(username, size):
+    if username:
+        try:
+            profile = Profile.objects.get(user__username=username)
+        except Profile.DoesNotExist:
+            pass
+        else:
+            if profile.photo:
+                return resize(profile.photo, size)
+    return '/static/img/generic_user.png'
 
 
 def profile_image_path_infinite_scroll(profile, size):

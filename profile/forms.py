@@ -1,15 +1,15 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.conf import settings
+from django.utils import timezone
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
-from datetime import datetime
-from profile.models import (
-    Profile, Invitation, Settings, PasswordResetLink)
+
+from profile.models import Profile, Invitation, Settings, PasswordResetLink
 from general.models import EmailField
 from general.mail import send_mail, send_mail_to_admin
-from django.utils import timezone
+from general.forms import ReceiverInput
+
 
 alphanumeric = RegexValidator(r'^[0-9a-zA-Z_\s]*$', 'Only alphanumeric characters are allowed.')
 
@@ -217,7 +217,7 @@ class ProfileForm(forms.ModelForm):
 class ContactForm(forms.Form):
 
     contact_recipient_name = forms.CharField(label='Recipients Name', required=True,
-                                     widget=forms.TextInput(attrs={'class': 'typeahead'}))
+                                             widget=ReceiverInput(attrs={'class': 'typeahead'}))
 
     message = forms.CharField(widget=forms.Textarea(attrs={'style': 'max-width: 100%; height:100px;'}))
 
