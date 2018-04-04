@@ -105,7 +105,7 @@ class ProductListViews extends Views {
 
                 <div class="post-action">
 
-                  <a class="action-menu-item trust-modal" data-profile-username="${data.profile_username}" href="#"><img src="/static/new_template/res/img/icons/heart.png" alt="like"></a>
+                  <a class="action-menu-item trust-modal" data-profile-username="${data.profile_username}" href="/trust/${data.profile_username}"><img src="/static/new_template/res/img/icons/heart.png" alt="like"></a>
                   <a class="action-menu-item payment-modal" data-profile-username="${data.profile_username}"><img src="/static/new_template/res/img/icons/wallet.png" alt="buy"></a>
                   <a class="action-menu-item contact-modal" data-profile-username="${data.profile_username}"
                      data-listing-title="${data.title}" href="#"><img src="/static/new_template/res/img/icons/mail.png" alt="contact"></a>

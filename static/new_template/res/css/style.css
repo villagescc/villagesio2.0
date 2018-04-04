@@ -6108,6 +6108,11 @@ input[type="submit"] {
   flex-flow: row wrap;
   height: 100%; }
 
+.id_recipient_name .form-group:first-child,
+.id_weight .form-group:first-child,
+.id_text .form-group:first-child {
+  margin-bottom: 5px; }
+
 form .form-group label {
   margin-bottom: 0;
   font-size: 0.75em;
@@ -6225,6 +6230,9 @@ div.textbox-with-icon {
   background-color: #ccc;
   -webkit-transition: .4s;
   transition: .4s; }
+
+.reference p {
+  margin-bottom: 0; }
 
 .slider:before {
   position: absolute;
@@ -8094,13 +8102,15 @@ p {
       .trust-data #trust-form .transaction {
         padding: 1em 0 2em; } }
 
-.receiver .receiver-box {
-  padding: 1.5em;
-  border: 1px solid #ebebeb; }
-  .receiver .receiver-box span {
-    font-size: 1.5em;
-    font-weight: 300;
-    color: #8d8d8d; }
+.receiver {
+  margin-top: 20px; }
+  .receiver .receiver-box {
+    padding: 1.5em;
+    border: 1px solid #ebebeb; }
+    .receiver .receiver-box span {
+      font-size: 1.5em;
+      font-weight: 300;
+      color: #8d8d8d; }
 
 /* transaction-history */
 .transaction-history {

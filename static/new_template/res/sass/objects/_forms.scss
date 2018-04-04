@@ -42,6 +42,13 @@ input[type="submit"] {
   height: 100%;
 }
 
+.id_recipient_name,
+.id_weight,
+.id_text {
+  .form-group:first-child {
+    margin-bottom: 5px;
+  }
+}
 form .form-group label {
   margin-bottom: 0;
   font-size: 0.75em;
@@ -158,6 +165,9 @@ div.textbox-with-icon {
   transition: .4s;
 }
 
+.reference p {
+  margin-bottom: 0;
+}
 .slider:before {
   position: absolute;
   content: "";
