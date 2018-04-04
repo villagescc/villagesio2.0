@@ -3,6 +3,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.template.loader import render_to_string
 # Forms
 from accounts.forms import UserForm
 from listings.forms import ListingsForms
@@ -158,20 +159,10 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
 
 
 def parse_products(products):
-    products_list = []
+    products_html = ''
     for each_product in products:
-        profile_image = profile_image_url(each_product.profile, '80x80')
-        product_image = product_image_url(each_product, '320x320')
-        products_list.append({'listing_id': each_product.id,
-                              'product_image': product_image,
-                              'profile_image': profile_image,
-                              'listing_type': each_product.listing_type,
-                              'profile_username': each_product.user.username,
-                              'price': str(each_product.price) if each_product.price else '0',
-                              'title': each_product.title[:80],
-                              'description': each_product.description[:100],
-                              'tags': each_product.tag.all() if each_product.tag else None})
-    return products_list
+        products_html += render_to_string('new_templates/listing_item.html', {'item': each_product})
+    return HttpResponse(products_html)
 
 
 def product_infinite_scroll(request, offset=settings.LISTING_ITEMS_PER_PAGE):
