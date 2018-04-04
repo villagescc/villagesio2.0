@@ -47,11 +47,15 @@
                                 <span>Recipient</span>
                                 <span>Date / Time</span>
                                 <span>Amount</span>
-                                <span>Memo</span>
 
                             </div>
                             {% for each_all in all_payments %}
-                                <div class="table-row">
+                                <div class="table-row"
+                                     data-toggle="tooltip" data-placement="top"
+                                     data-html="true"
+                                     {% if each_all.item.payment.memo %}
+                                     title="&lt;span class='tip-balloon'&gt;{{ each_all.item.payment.memo }}&lt;/span&gt;"
+                                     {% endif %}>
                                     <div class="transaction">
                                         <div class="avatar-wrapper blue">
                                             <a href="{{ each_all.item.payer.get_absolute_url }}">
@@ -76,7 +80,6 @@
                                     <span class="datetime">{{ each_all.item.date }}<span class="small">PM</span></span>
 
                                     <span class="amount"><strong><span class="price">{{ each_all.item.amount }}</span> V.H.</strong></span>
-                                    <span class="memo"><strong>{{ each_all.item.payment.memo }}</strong></span>
                                 </div>
                             {% endfor %}
                         {% endif %}
