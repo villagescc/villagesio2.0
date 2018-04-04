@@ -102,6 +102,9 @@
     <script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>
 
     <script>
+        // disable saveBtn
+        var $saveBtn = $('#payment-form input[type=submit]');
+            $saveBtn.attr('disabled', true);
         var recipients = new Bloodhound({
             datumTokenizer: function (datum) {
                 return Bloodhound.tokenizers.whitespace(datum.value);
@@ -185,7 +188,7 @@
                     }
 
                     $('#spin-modal').fadeOut();
-
+                    $saveBtn.removeAttr('disabled');
                 },
                 error: function (e) {
                     if (e.status === 500) {
