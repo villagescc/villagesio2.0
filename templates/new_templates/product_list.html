@@ -150,59 +150,9 @@
 
                     <div id="django_scroll_offset" data-offset="21" style="display: none"></div>
 
-                    {% for each in listing_items %}
+                    {% for item in listing_items %}
 
-                        <div class="col-12 col-sm-6 col-md-12 col-lg-6 col-xl-4 col-xxl-3"
-                             id="div_listing_{{ each.user.profile.username }}">
-
-                            <div class="post-box">
-
-                                <div class="post-cover listing-modal"
-                                     style="background-image: url('{% product_image_url each '320x320' %}');"
-                                     data-listing-id="{{ each.id }}">
-                                    <span class="type">{{ each.listing_type }}</span>
-                                    <span class="price">{{ each.price }} VH</span>
-
-                                </div>
-
-                                <div class="post-content listing-modal" data-listing-id="{{ each.id }}">
-                                    <div class="avatar-thumbnail"
-                                         style="background-image: url('{% profile_image_url each.user.profile '80x80' %}');">
-                                        <img class="trusted-icon"
-                                             src="{% static 'new_template/res/img/icons/trusted-icon.png' %}"
-                                             alt="trusted">
-                                    </div>
-
-                                    <h1>{{ each.title|slice:":80" }}</h1>
-                                    <p>{{ each.description|truncatechars:100 }}</p>
-                                    <div class="tag-container">
-                                        {% for each_tag in each.tag.all %}
-                                            <a class="tag" href="#">{{ each_tag.name }}</a>
-                                        {% endfor %}
-                                    </div>
-
-                                </div>
-
-                                <div class="post-action">
-
-                                    <a class="action-menu-item trust-modal"
-                                       data-profile-username="{{ each.user.profile.username }}"
-                                       href="{% url 'blank_trust_user' %}?recipient_name={{ each.user.profile.username }}">
-                                        <img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like">
-                                    </a>
-                                    <a class="action-menu-item payment-modal"
-                                       data-profile-username="{{ each.user.profile.username }}"><img
-                                            src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy"></a>
-                                    <a class="action-menu-item contact-modal"
-                                       data-profile-username="{{ each.user.profile.username }}"
-                                       data-listing-title="{{ each.title }}" href="#"><img
-                                            src="{% static 'new_template/res/img/icons/mail.png' %}" alt="contact"></a>
-
-                                </div>
-
-                            </div>
-
-                        </div>
+                        {% include 'new_templates/listing_item.html' %}
 
                     {% endfor %}
 

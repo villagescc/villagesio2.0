@@ -9,6 +9,7 @@ from decimal import Decimal
 from categories.models import Categories, SubCategories
 from tags.models import Tag
 from profile.models import Profile
+from general.util import reverse_querystring
 
 
 OFFER = 'OFFER'
@@ -119,6 +120,17 @@ class Listings(models.Model):
     @property
     def date(self):
         return self.updated
+
+    def get_trust_link(self):
+        return reverse_querystring('blank_trust_user', query_kwargs={'recipient_name': self.user.username})
+
+    def get_payment_link(self):
+        return reverse_querystring('blank_payment_user', query_kwargs={'recipient_name': self.user.username,
+                                                                       'amount': self.price,
+                                                                       'memo': self.title})
+
+    def get_contact_link(self):
+        return reverse_querystring('undefined_contact', query_kwargs={'recipient_name': self.user.username})
 
     def __str__(self):
         return self.title

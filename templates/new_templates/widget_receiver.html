@@ -5,13 +5,14 @@
         <div id="div-profile-image"
              class="d-flex justify-content-start align-items-center">
             <div class="avatar-wrapper blue big mr-3">
-                <a class="recipient-link" href="/profiles/{{ widget.value }}">
+                <a class="recipient-link" href="{% url 'profile' widget.value %}">
                     <img id="profile-image"
                          src="{% image_url_by_username widget.value '60x60' %}"
                          alt="photo"
                          class="rounded-circle">
                 </a>
             </div>
+            <span id="name-profile-image"></span>
         </div>
     </div>
 </div>

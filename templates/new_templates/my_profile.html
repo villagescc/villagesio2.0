@@ -26,49 +26,10 @@
                         <div class="row" id="product_list">
 
                             {% if listings %}
-                                {% for each in listings %}
-                                    <div class="col-12 col-sm-6 col-md-12 col-lg-6 col-xl-4 col-xxl-3">
-                                        <div class="post-box">
+                                {% for item in listings %}
 
-                                            <div class="post-cover listing-modal" data-listing-id="{{ each.id }}"
-                                                 style="background-image: url('{% product_image_url each '280x280' %}');">
+                                    {% include 'new_templates/listing_item.html' %}
 
-                                                <span class="type">{{ each.listing_type }}</span>
-                                                <span class="price">{{ each.price }} VH</span>
-
-                                            </div>
-
-                                            <div class="post-content listing-modal" data-listing-id="{{ each.id }}">
-
-                                                <div class="avatar-thumbnail"
-                                                     style="background-image: url('{% profile_image_url each.user.profile '60x60' %}');">
-                                                    <img class="trusted-icon"
-                                                         src="{% static 'new_template/res/img/icons/trusted-icon.png' %}"
-                                                         alt="trusted">
-                                                </div>
-
-                                                <h1>{{ each.title }}</h1>
-                                                <p>{{ each.description }}</p>
-                                                <div class="tag-container">
-                                                    {% for each_tag in each.tag.all %}
-                                                        <a class="tag" href="#">{{ each_tag.name }}</a>
-                                                    {% endfor %}
-                                                </div>
-
-                                            </div>
-
-                                            <div class="post-action">
-                                                <a class="action-menu-item edit-post-button"
-                                                   href="{% url 'listing_management:edit' each.id %} "><img
-                                                        src="{% static 'new_template/res/img/icons/edit.svg' %}"
-                                                        alt="edit"></a>
-                                                <a class="action-menu-item delete-post-button"
-                                                   href="{% url 'listing_management:delete' each.id %}"><img
-                                                        src="{% static 'new_template/res/img/icons/trash-alt.svg' %}"
-                                                        alt="like"></a>
-                                            </div>
-                                        </div>
-                                    </div>
                                 {% endfor %}
                             {% endif %}
 
