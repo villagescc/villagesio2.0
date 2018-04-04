@@ -93,6 +93,11 @@
     flex: 0 0 100%;
     max-width: 100%;
     padding: 1.875em;
+    input#id_weight {
+      display: inline-block;
+      width: 100px;
+      height: 44px;
+    }
     & .transaction {
       display: flex;
       justify-content: space-around;
@@ -145,10 +150,12 @@
       }
     }
     & .currency-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
+      display: inline-block;
+      width: 100px;
+      height: 100%;
+      margin-left: -5px;
+      text-align: center;
+      line-height: 44px;
       background-color: #e1e1e1;
       font-size: 1.375em;
       font-weight: 600;

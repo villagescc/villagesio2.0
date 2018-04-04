@@ -6108,6 +6108,12 @@ input[type="submit"] {
   flex-flow: row wrap;
   height: 100%; }
 
+form .form-group label {
+  margin-bottom: 0;
+  font-size: 0.75em;
+  color: #9a9a9a;
+  text-transform: uppercase; }
+
 label.custom-radio,
 label.custom-check {
   flex: 1;
@@ -7997,6 +8003,10 @@ p {
     flex: 0 0 100%;
     max-width: 100%;
     padding: 1.875em; }
+    .trust-data #trust-form input#id_weight {
+      display: inline-block;
+      width: 100px;
+      height: 44px; }
     .trust-data #trust-form .transaction {
       display: flex;
       justify-content: space-around;
@@ -8039,10 +8049,12 @@ p {
         text-transform: uppercase;
         line-height: 1.125; }
     .trust-data #trust-form .currency-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
+      display: inline-block;
+      width: 100px;
+      height: 100%;
+      margin-left: -5px;
+      text-align: center;
+      line-height: 44px;
       background-color: #e1e1e1;
       font-size: 1.375em;
       font-weight: 600;

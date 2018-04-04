@@ -42,6 +42,13 @@ input[type="submit"] {
   height: 100%;
 }
 
+form .form-group label {
+  margin-bottom: 0;
+  font-size: 0.75em;
+  color: #9a9a9a;
+  text-transform: uppercase;
+}
+
 label.custom-radio,
 label.custom-check {
   flex: 1;
