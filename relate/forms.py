@@ -5,8 +5,7 @@ from relate.models import Endorsement
 from ripple import PRECISION, SCALE
 import ripple.api as ripple
 from feed.models import FeedItem
-from profile.models import Profile
-from general.forms import AmountInput
+from general.forms import AmountInput, ReceiverInput, ReceiverPayInput, ToggleSwitch
 
 ROUTED = 'routed'
 DIRECT = 'direct'
@@ -115,8 +114,7 @@ class BlankTrust(forms.ModelForm):
     }
 
     recipient_name = forms.CharField(label='Choose the trust receiver', required=True,
-                                     widget=forms.TextInput(attrs={'class': 'typeahead',
-                                                                   'style': 'max-width: 100%'}))
+                                     widget=ReceiverInput(attrs={'class': 'typeahead', 'style': 'max-width: 100%'}, ))
 
     weight = forms.IntegerField(label="Credit Limit", required=True,
                                 min_value=0, widget=AmountInput())
@@ -124,8 +122,11 @@ class BlankTrust(forms.ModelForm):
     text = forms.CharField(label='Testimonial', required=False,
                            widget=forms.Textarea())
 
-    referral = forms.BooleanField(label="Refer This Person's Services to Friends?",
-                                  required=False, widget=forms.CheckboxInput())
+    referral = forms.BooleanField(label="", required=False,
+                                  widget=ToggleSwitch(attrs={
+                                      'label_text': "Refer This Person's Services to Friends?",
+                                      'help_text': "(Only refer a person if you have actually worked with them)",
+                                  }))
 
     class Meta:
         model = Endorsement
@@ -157,7 +158,7 @@ class BlankTrust(forms.ModelForm):
 
 class BlankPaymentForm(forms.Form):
     recipient = forms.CharField(label='Choose the trust receiver', required=True,
-                                widget=forms.TextInput(attrs={'class': 'typeahead', 'style': 'max-width: 100%'}))
+                                widget=ReceiverPayInput(attrs={'class': 'typeahead', 'style': 'max-width: 100%'}))
 
     amount = forms.DecimalField(
         label=_("Hours"),

@@ -300,19 +300,25 @@ def blank_trust(request):
 
     if request.method == 'GET':
         endorsement = None
+        referral = False
+        form_errors = {}
+
         recipient_name = request.GET.get('recipient_name')
         if recipient_name:
             try:
                 recipient = Profile.objects.get(user__username=recipient_name)
             except Profile.DoesNotExist:
-                pass
+                form_errors['recipient_name'] = "Recipient doesn't exist"
             else:
+                referral = Referral.objects.filter(referrer=profile, recipient=recipient).exists()
                 try:
                     endorsement = Endorsement.objects.get(endorser=profile, recipient=recipient)
                 except Endorsement.DoesNotExist:
                     pass
 
-        form = BlankTrust(instance=endorsement, initial={'recipient_name': recipient_name})
+        form = BlankTrust(instance=endorsement, initial={'recipient_name': recipient_name, 'referral': referral})
+        for field_name, error_message in form_errors.iteritems():
+            form.errors[field_name] = error_message
 
     elif request.method == 'POST':
         if not request.POST['recipient_name']:

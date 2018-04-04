@@ -187,7 +187,7 @@
 
                                     <a class="action-menu-item trust-modal"
                                        data-profile-username="{{ each.user.profile.username }}"
-                                       href="{% url 'endorsement' %} ">
+                                       href="{% url 'blank_trust_user' %}?recipient_name={{ each.user.profile.username }}">
                                         <img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like">
                                     </a>
                                     <a class="action-menu-item payment-modal"
