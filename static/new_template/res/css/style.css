@@ -7358,7 +7358,8 @@ p {
     .post-box .post-content p {
       font-size: 0.75em;
       font-weight: 300;
-      color: #5c5c5c; }
+      color: #5c5c5c;
+      overflow: hidden; }
     .post-box .post-content .tag {
       font-size: 0.6875em; }
   .post-box .post-action {
