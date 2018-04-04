@@ -350,6 +350,7 @@ def blank_trust(request):
                                 existing_referral.delete()
                         send_endorsement_notification(endorsement)
                         messages.add_message(request, messages.INFO, 'Trust saved!')
+                        form = BlankTrust()
 
     accounts = ripple.get_user_accounts(request.profile)
     return django_render(request, 'new_templates/trust.html', {'form': form, 'accounts': accounts, 'profile': profile})
@@ -397,6 +398,7 @@ def blank_payment(request):
                     messages.add_message(request, messages.INFO,
                                          'Payment sent {}.'.format('through the trust network'
                                                                    if form.cleaned_data['routed'] else 'directly'))
+                    form = BlankPaymentForm()
 
     all_payments = FeedItem.objects.filter((Q(recipient_id=profile.id) | Q(poster_id=profile.id)) & Q(item_type='acknowledgement')).order_by('-date')
     return django_render(request, 'new_templates/pay.html', {'form': form, 'all_payments': all_payments})
