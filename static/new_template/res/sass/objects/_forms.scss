@@ -187,18 +187,28 @@ input:checked + .slider:before {
 }
 
 // Autoselect Typehead
-.receiver-box {
-  &#div-recipient-name .tt-menu,
-  &#div-recipient .tt-menu{
+.twitter-typeahead {
+  max-width: 100%;
+  display: block !important;
+  .tt-menu {
     max-height: 150px;
     width: 100%;
     overflow-y: auto;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     background-color: #ffffff;
-  }
-  .twitter-typeahead {
-    max-width: 100%;
-    display: block !important;
+    box-shadow: 0 5px 5px #ddd;
+    .tt-dataset {
+      padding: 10px 0;
+      .tt-suggestion {
+        padding-left: 10px;
+        cursor: pointer;
+        &:hover {
+          background-color: #ddd;
+        }
+      }
+    }
   }
 }
 
@@ -330,3 +340,12 @@ input:checked + .slider:before {
   }
 }
 
+// Errors
+.has-errors {
+  .errorlist {
+    margin: 0;
+    margin-top: -10px;
+    padding: 0;
+    list-style: none;
+  }
+}

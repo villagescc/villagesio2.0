@@ -6249,17 +6249,25 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%; }
 
-.receiver-box#div-recipient-name .tt-menu,
-.receiver-box#div-recipient .tt-menu {
-  max-height: 150px;
-  width: 100%;
-  overflow-y: auto;
-  border-bottom: 1px solid #ccc;
-  background-color: #ffffff; }
-
-.receiver-box .twitter-typeahead {
+.twitter-typeahead {
   max-width: 100%;
   display: block !important; }
+  .twitter-typeahead .tt-menu {
+    max-height: 150px;
+    width: 100%;
+    overflow-y: auto;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    background-color: #ffffff;
+    box-shadow: 0 5px 5px #ddd; }
+    .twitter-typeahead .tt-menu .tt-dataset {
+      padding: 10px 0; }
+      .twitter-typeahead .tt-menu .tt-dataset .tt-suggestion {
+        padding-left: 10px;
+        cursor: pointer; }
+        .twitter-typeahead .tt-menu .tt-dataset .tt-suggestion:hover {
+          background-color: #ddd; }
 
 .form-content {
   margin-top: 40px; }
@@ -6369,6 +6377,12 @@ input:checked + .slider:before {
     color: #8d8d8d; }
   .confirm-block input {
     margin-bottom: 10px; }
+
+.has-errors .errorlist {
+  margin: 0;
+  margin-top: -10px;
+  padding: 0;
+  list-style: none; }
 
 /* links */
 a {
