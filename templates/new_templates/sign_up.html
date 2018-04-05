@@ -26,12 +26,12 @@
             {% endfor %}
 
             <div class="row" style="max-width: 600px;">
-                <div class="col-3">
-                    <input class="btn btn-std" id="save-trust" type="submit" value="Submit">
-                </div>
-                <div class="col-3">
-                    <input class="btn btn-std btn-cancel" id="save-trust" type="button" value="Cancel"
+                <div class="col-sm-6">
+                    <input class="btn btn-std btn-cancel" type="button" value="Cancel"
                            onclick="window.location='/'">
+                </div>
+                <div class="col-sm-6">
+                    <input class="btn btn-std" id="save-trust" type="submit" value="Submit">
                 </div>
             </div>
             {% if not form.is_valid %}

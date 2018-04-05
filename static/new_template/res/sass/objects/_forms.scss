@@ -384,3 +384,22 @@ input:checked + .slider:before {
     }
   }
 }
+
+// Sign Up
+.register-form {
+  .btn.btn-std.btn-cancel {
+    @include media-width-down(sm) {
+      margin-bottom: 20px;
+    }
+  }
+  .form-group input#id_terms_of_service {
+    float: left;
+    margin-top: 5px;
+    margin-right: 10px;
+    height: 18px;
+    width: 18px;
+    &:focus {
+      outline: none;
+    }
+  }
+}

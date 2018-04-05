@@ -6411,6 +6411,19 @@ input:checked + .slider:before {
     .form-container.contact-form .id_message .form-group:first-child label {
       margin-bottom: 5px; }
 
+@media (max-width: 767px) {
+  .register-form .btn.btn-std.btn-cancel {
+    margin-bottom: 20px; } }
+
+.register-form .form-group input#id_terms_of_service {
+  float: left;
+  margin-top: 5px;
+  margin-right: 10px;
+  height: 18px;
+  width: 18px; }
+  .register-form .form-group input#id_terms_of_service:focus {
+    outline: none; }
+
 /* links */
 a {
   -webkit-transition: all 0.3s;
