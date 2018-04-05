@@ -122,48 +122,48 @@ function init_trust_modal() {
     });
 }
 
-function init_payment_modal() {
-    $(".payment-modal").click(function (e) {
-        $('#payment-error-modal-alert').html("<strong>Hold on,</strong> We are discovering trust pathways");
-        $('#payment-loading-modal').modal("show");
-        $('#spin-modal').fadeIn();
-        var profile_username = $(this).attr('data-profile-username');
-        $("#profile-username").val(profile_username);
-        var url = '/acknowledge_ajax/' + profile_username;
-        $.ajax({
-            url: url,
-            type: 'GET',
-            cache: false,
-            success: function (data) {
-                if (data["data"]["stat"] != "ok") {
-                    $('#payment-error-modal-alert').text(data["data"]["stat"]);
-                    $('#spin-modal').fadeOut();
-                }
-                else if (!data['data']['can_ripple']) {
-                    $('label[for="id_ripple_0"]').closest('li').hide();
-                    $('#id_ripple_1').attr('checked', true);
-                    $('.ripple-hours').html("There are no available paths through the trust network to <strong>" + data['data']['recipient'] + "</strong>, so you can only send direct acknowledgement.")
-                    $('#spin-modal').fadeOut();
-                    $('#payment-loading-modal').modal("hide");
-                    $("#new-payment-modal").modal("show");
-                } else if (data["data"]["can_ripple"]) {
-                    $('#id_ripple_0').attr('checked', true);
-                    $('.ripple-hours').html("You can send a trusted acknowledgement of up to " + data['data']['max_amount'] + " hour(s) or a direct acknowledgement of any amount.")
-                    $('#spin-modal').fadeOut();
-                    $('#payment-loading-modal').modal("hide");
-                    $("#new-payment-modal").modal("show");
-                }
-            },
-
-            error: function (data) {
-                debugger;
-                $('#spin-modal').fadeOut();
-                showInternalServerError();
-            }
-        });
-        e.preventDefault();
-    });
-}
+// function init_payment_modal() {
+//     $(".payment-modal").click(function (e) {
+//         $('#payment-error-modal-alert').html("<strong>Hold on,</strong> We are discovering trust pathways");
+//         $('#payment-loading-modal').modal("show");
+//         $('#spin-modal').fadeIn();
+//         var profile_username = $(this).attr('data-profile-username');
+//         $("#profile-username").val(profile_username);
+//         var url = '/acknowledge_ajax/' + profile_username;
+//         $.ajax({
+//             url: url,
+//             type: 'GET',
+//             cache: false,
+//             success: function (data) {
+//                 if (data["data"]["stat"] != "ok") {
+//                     $('#payment-error-modal-alert').text(data["data"]["stat"]);
+//                     $('#spin-modal').fadeOut();
+//                 }
+//                 else if (!data['data']['can_ripple']) {
+//                     $('label[for="id_ripple_0"]').closest('li').hide();
+//                     $('#id_ripple_1').attr('checked', true);
+//                     $('.ripple-hours').html("There are no available paths through the trust network to <strong>" + data['data']['recipient'] + "</strong>, so you can only send direct acknowledgement.")
+//                     $('#spin-modal').fadeOut();
+//                     $('#payment-loading-modal').modal("hide");
+//                     $("#new-payment-modal").modal("show");
+//                 } else if (data["data"]["can_ripple"]) {
+//                     $('#id_ripple_0').attr('checked', true);
+//                     $('.ripple-hours').html("You can send a trusted acknowledgement of up to " + data['data']['max_amount'] + " hour(s) or a direct acknowledgement of any amount.")
+//                     $('#spin-modal').fadeOut();
+//                     $('#payment-loading-modal').modal("hide");
+//                     $("#new-payment-modal").modal("show");
+//                 }
+//             },
+//
+//             error: function (data) {
+//                 debugger;
+//                 $('#spin-modal').fadeOut();
+//                 showInternalServerError();
+//             }
+//         });
+//         e.preventDefault();
+//     });
+// }
 
 function init_contact_modal() {
     $(".contact-modal").click(function (e) {

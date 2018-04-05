@@ -7854,7 +7854,7 @@ p {
         width: 13px;
         height: 13px; }
     .payment-data #payment-form #id_amount {
-      width: 100px;
+      width: 150px;
       height: 44px; }
     .payment-data #payment-form .transaction {
       display: flex;
@@ -8086,7 +8086,7 @@ p {
         height: 13px; }
     .trust-data #trust-form input#id_weight {
       display: inline-block;
-      width: 100px;
+      width: 150px;
       height: 44px; }
     .trust-data #trust-form .transaction {
       display: flex;
