@@ -160,27 +160,29 @@
 
                         <div class="col-12">
                             <div class="person-box">
-                                <a href="{{ each.get_absolute_url }}">
+                                <a class="person-avatar" href="{{ each.get_absolute_url }}">
                                     <div class="avatar-wrapper blue">
                                         <img src="{% profile_image_url each '400x400' %}" alt="avatar"
                                              class="rounded-circle">
                                     </div>
                                 </a>
 
-                                <a href="{{ each.get_absolute_url }}" style="text-decoration: none">
+                                <a class="person-name" href="{{ each.get_absolute_url }}" style="text-decoration: none">
                                     <div class="person-id">
                                         <h1>{{ each }}</h1>
                                     </div>
                                 </a>
 
-                                <div class="price-container">
-                                    <img src="{% static 'new_template/res/img/icons/balance_b.png' %}" alt="balance">
-                                    <span class="price">{{ each.overall_balance }}</span>
-                                </div>
+                                <div class="likes-container">
+                                    <div class="price-container">
+                                        <img src="{% static 'new_template/res/img/icons/balance_b.png' %}" alt="balance">
+                                        <span class="price">{{ each.overall_balance }}</span>
+                                    </div>
 
-                                <div class="like-container">
-                                    <img src="{% static 'new_template/res/img/icons/heart_b.png' %}" alt="balance">
-                                    <span class="like-count">{{ each.endorsement_count }}</span>
+                                    <div class="like-container">
+                                        <img src="{% static 'new_template/res/img/icons/heart_b.png' %}" alt="balance">
+                                        <span class="like-count">{{ each.endorsement_count }}</span>
+                                    </div>
                                 </div>
 
                                 <div class="location-container">
@@ -188,21 +190,23 @@
                                     <span class="location">{{ each.location }}</span>
                                 </div>
 
-                                <div class="date-container">
-                                    <img src="{% static 'new_template/res/img/icons/calendar_b.png' %}" alt="date">
-                                    <span class="date">{{ each.user.last_login }}</span>
-                                </div>
+                                <div class="action-block">
+                                    <div class="date-container">
+                                        <img src="{% static 'new_template/res/img/icons/calendar_b.png' %}" alt="date">
+                                        <span class="date">{{ each.user.last_login }}</span>
+                                    </div>
 
-                                <div class="person-action">
-                                    <a class="action-menu-item trust-modal"
-                                       data-profile-username="{{ each.user.profile.username }}" href="#"><img
-                                            src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like"></a>
-                                    <a class="action-menu-item" href="{% url 'blank_payment_user' %}"><img
-                                            src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy"></a>
-                                    <a class="action-menu-item contact-modal"
-                                       data-profile-username="{{ each.user.profile.username }}"
-                                       data-listing-title="{{ each.title }}" href="#"><img
-                                            src="{% static 'new_template/res/img/icons/mail.png' %}" alt="contact"></a>
+                                    <div class="person-action">
+                                        <a class="action-menu-item trust-modal"
+                                           data-profile-username="{{ each.user.profile.username }}" href="#"><img
+                                                src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like"></a>
+                                        <a class="action-menu-item" href="{% url 'blank_payment_user' %}"><img
+                                                src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy"></a>
+                                        <a class="action-menu-item contact-modal"
+                                           data-profile-username="{{ each.user.profile.username }}"
+                                           data-listing-title="{{ each.title }}" href="#"><img
+                                                src="{% static 'new_template/res/img/icons/mail.png' %}" alt="contact"></a>
+                                    </div>
                                 </div>
 
                             </div>
