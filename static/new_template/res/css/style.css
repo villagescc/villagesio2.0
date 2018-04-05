@@ -6424,6 +6424,25 @@ input:checked + .slider:before {
   .register-form .form-group input#id_terms_of_service:focus {
     outline: none; }
 
+.account-settings .row {
+  max-width: 1000px; }
+
+.account-settings .fb-btn {
+  margin-bottom: 20px; }
+
+.account-settings .form-group label {
+  margin-bottom: 5px; }
+
+.account-settings #id_send_notifications,
+.account-settings #id_send_newsletter {
+  width: 18px;
+  float: left;
+  margin-top: 6px;
+  margin-right: 10px; }
+
+.account-settings .btn-submit {
+  padding: 10px 20px; }
+
 /* links */
 a {
   -webkit-transition: all 0.3s;

@@ -403,3 +403,30 @@ input:checked + .slider:before {
     }
   }
 }
+
+// account-settings
+.account-settings {
+  .row {
+    max-width: 1000px;
+  }
+  .fb-btn {
+    margin-bottom: 20px;
+  }
+  .form-group {
+    label {
+      margin-bottom: 5px;
+    }
+  }
+  #id_send_notifications,
+  #id_send_newsletter {
+    width: 18px;
+    float: left;
+    margin-top: 6px;
+    margin-right: 10px;
+  }
+
+  .btn-submit {
+    padding: 10px 20px;
+  }
+
+}
