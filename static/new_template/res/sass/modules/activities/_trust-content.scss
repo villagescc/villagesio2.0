@@ -88,6 +88,7 @@
   align-items: flex-start;
   flex-flow: row wrap;
   background-color: #fff;
+  overflow: hidden;
   @include crossShadow(0 0 16px 0 rgba(119, 119, 119, 0.06));
   & #trust-form {
     flex: 0 0 100%;

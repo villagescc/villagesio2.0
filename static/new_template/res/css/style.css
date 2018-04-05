@@ -8049,6 +8049,7 @@ p {
   align-items: flex-start;
   flex-flow: row wrap;
   background-color: #fff;
+  overflow: hidden;
   -webkit-box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06);
   -moz-box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06);
   box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06); }
