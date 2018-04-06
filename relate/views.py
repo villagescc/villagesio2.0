@@ -361,8 +361,7 @@ def blank_payment(request):
     profile = request.profile
 
     if request.method == 'GET':
-        recipient = None
-        max_amount = 0
+        recipient = max_amount = None
         form_errors = {}
 
         recipient_name = request.GET.get('recipient_name')

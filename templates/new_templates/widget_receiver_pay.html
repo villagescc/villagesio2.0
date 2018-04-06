@@ -20,7 +20,7 @@
 </div>
 <div class="payment-msg">
     {% with max_amount=widget.attrs.max_amount %}
-        <p id="payment-not-ripple" {% if max_amount %}style="display:none"{% endif %}>You do not have any
+        <p id="payment-not-ripple" {% if max_amount != 0 %}style="display:none"{% endif %}>You do not have any
             more credit with this user. Your payment will only be able to be spent directly, with you. If this is not
             your intent, contact the recipient and ask them to raise your credit limit. This can be done after
             payment.</p>
