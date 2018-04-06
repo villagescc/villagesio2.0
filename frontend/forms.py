@@ -18,7 +18,6 @@ RADIUS_CHOICES = (
 )
 
 RADII = [rc[0] for rc in RADIUS_CHOICES]
-DEFAULT_RADIUS = 5000
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 
 
@@ -45,7 +44,7 @@ class FormListingsSettings(forms.Form):
         self.profile, self.location, self.type_filter, self.listing_type = (profile, location, type_filter, data.get('listing_type'))
         data = data.copy()
         if 'radius' not in data:
-            default_radius = (profile and profile.settings.feed_radius or DEFAULT_RADIUS)
+            default_radius = (profile and profile.settings.feed_radius or settings.DEFAULT_RADIUS)
             data['radius'] = default_radius
             self._explicit_radius = False
         else:
