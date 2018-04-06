@@ -42,6 +42,20 @@ input[type="submit"] {
   height: 100%;
 }
 
+.id_recipient_name,
+.id_weight,
+.id_text {
+  .form-group:first-child {
+    margin-bottom: 5px;
+  }
+}
+form .form-group label {
+  margin-bottom: 0;
+  font-size: 0.75em;
+  color: #9a9a9a;
+  text-transform: uppercase;
+}
+
 label.custom-radio,
 label.custom-check {
   flex: 1;
@@ -151,6 +165,9 @@ div.textbox-with-icon {
   transition: .4s;
 }
 
+.reference p {
+  margin-bottom: 0;
+}
 .slider:before {
   position: absolute;
   content: "";
@@ -187,18 +204,28 @@ input:checked + .slider:before {
 }
 
 // Autoselect Typehead
-.receiver-box {
-  &#div-recipient-name .tt-menu,
-  &#div-recipient .tt-menu{
+.twitter-typeahead {
+  max-width: 100%;
+  display: block !important;
+  .tt-menu {
     max-height: 150px;
     width: 100%;
     overflow-y: auto;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     background-color: #ffffff;
-  }
-  .twitter-typeahead {
-    max-width: 100%;
-    display: block !important;
+    box-shadow: 0 5px 5px #ddd;
+    .tt-dataset {
+      padding: 10px 0;
+      .tt-suggestion {
+        padding-left: 10px;
+        cursor: pointer;
+        &:hover {
+          background-color: #ddd;
+        }
+      }
+    }
   }
 }
 
@@ -330,3 +357,76 @@ input:checked + .slider:before {
   }
 }
 
+// Errors
+.has-errors {
+  .errorlist {
+    margin: 0;
+    margin-top: -10px;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.form-container.contact-form {
+  padding: 40px;
+  background-color: #fff;
+  input,
+  textarea {
+    border: 1px solid #ebebeb;
+  }
+  .id_contact_recipient_name,
+  .id_message {
+    .form-group:first-child {
+      margin-bottom: 0;
+      label {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
+
+// Sign Up
+.register-form {
+  .btn.btn-std.btn-cancel {
+    @include media-width-down(sm) {
+      margin-bottom: 20px;
+    }
+  }
+  .form-group input#id_terms_of_service {
+    float: left;
+    margin-top: 5px;
+    margin-right: 10px;
+    height: 18px;
+    width: 18px;
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+// account-settings
+.account-settings {
+  .row {
+    max-width: 1000px;
+  }
+  .fb-btn {
+    margin-bottom: 20px;
+  }
+  .form-group {
+    label {
+      margin-bottom: 5px;
+    }
+  }
+  #id_send_notifications,
+  #id_send_newsletter {
+    width: 18px;
+    float: left;
+    margin-top: 6px;
+    margin-right: 10px;
+  }
+
+  .btn-submit {
+    padding: 10px 20px;
+  }
+
+}

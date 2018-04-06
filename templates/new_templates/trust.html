@@ -24,7 +24,7 @@
 
                                 <div class="row" style="max-width: 600px;">
                                     <div class="col-6">
-                                        <input class="btn btn-std" id="save-trust" type="submit" value="Save Trust">
+                                        <input class="btn btn-std trust-btn" id="save-trust" type="submit" value="Save Trust">
                                     </div>
                                 </div>
                             </form>
@@ -45,6 +45,8 @@
                             <span>Trust from You</span>
 
                         </div>
+
+                        <div class="rows-wrapper">
                         {% for account in accounts %}
                             <div class="table-row">
                                 <div class="avatar-wrapper blue">
@@ -74,7 +76,7 @@
                                 </span>
                             </div>
                         {% endfor %}
-
+                        </div>
                     </div>
 
                 </div>
@@ -93,6 +95,10 @@
     <script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>
 
     <script>
+        // disable save btn
+        var $saveBtn = $('.trust-btn#save-trust');
+        $saveBtn.attr('disabled', true);
+
         var recipients = new Bloodhound({
             datumTokenizer: function (datum) {
                 return Bloodhound.tokenizers.whitespace(datum.value);
@@ -176,6 +182,9 @@
                     $('#profile-image').attr("src", e['data']['profile_photo_path']);
                     $('#name-profile-image').text(e['data']['recipient']);
                     $('#spin-modal').fadeOut();
+
+                    // activate saveBtn
+                    $saveBtn.removeAttr('disabled');
                 },
                 error: function (e) {
                     if (e.status === 500) {

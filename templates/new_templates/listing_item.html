@@ -30,8 +30,7 @@
             </div>
 
         </div>
-
-        <div class="post-action">
+        <div class="post-action{% if item.profile == request.profile %} self-profile{% endif %}">
             {% if item.profile == request.profile %}
                 <a class="action-menu-item edit-post-button"
                    href="{% url 'listing_management:edit' item.id %} "><img

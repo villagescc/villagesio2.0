@@ -9,7 +9,7 @@
 
         <main class="app-main">
 
-            <div class="trust-content">
+            <div class="trust-content account-settings">
 
                 <div class="row">
                     <div class="col-12 col-xxl-8">
@@ -20,7 +20,7 @@
                             {% csrf_token %}
 
                             {% if not social_auth %}
-                                <a class="btn btn-primary"
+                                <a class="btn btn-primary fb-btn"
                                    href="{% url 'social:begin' 'facebook' %}?next=/settings/?settings=true"><i
                                         class="fa fa-facebook-official">&nbsp; Bind account to facebook</i></a>
                             {% endif %}
@@ -44,16 +44,12 @@
                                 {% endif %}
                             {% endfor %}
 
-
-                            <table class="form">
-                                <tr>
-                                    <th></th>
-                                    <td>
-                                        <input class="btn btn-submit btn-success" type="submit" name="change_settings"
-                                               value="Save Settings">
-                                    </td>
-                                </tr>
-                            </table>
+                            <div class="row">
+                                <div class="col-sm-6 col-lg-4">
+                                    <input class="btn btn-submit btn-success" type="submit" name="change_settings"
+                                           value="Save Settings">
+                                </div>
+                            </div>
 
                             {% if not form.is_valid %}
                                 <script>
@@ -88,13 +84,12 @@
                                         </div>
                                     {% endif %}
                                 {% endfor %}
-                                <tr>
-                                    <th></th>
-                                    <td>
-                                        <input class="btn btn-danger" type="submit" name="change_password"
+                                <div class="row">
+                                    <div class="col-sm-6 col-lg-4">
+                                        <input class="btn btn-submit" type="submit" name="change_password"
                                                value="Change Password">
-                                    </td>
-                                </tr>
+                                    </div>
+                                </div>
                             </table>
                         </form>
 
