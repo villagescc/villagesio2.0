@@ -37,7 +37,7 @@ TODO: Feed item expiry.
 
 from django.db import models, connection, transaction
 from django.db.models.signals import post_save, post_delete
-from django.db.models import Q, Count
+from django.db.models import Q
 from django.conf import settings
 from django.contrib.gis.db.models import GeoManager
 from datetime import datetime
@@ -164,13 +164,13 @@ class FeedManager(GeoManager):
                 where=["tsearch @@ plainto_tsquery(%s)"],
                 params=[tsearch])
         if referral:
-            query = query.filter(item_type='profile').order_by('-referral_count', '-date')
+            query = query.filter(item_type='profile').order_by('-referral_count')
 
         if balance_low:
-            query = query.filter(item_type='profile').order_by('balance', '-date')
+            query = query.filter(item_type='profile').order_by('balance')
 
         if balance_high:
-            query = query.filter(item_type='profile').order_by('-balance', '-date')
+            query = query.filter(item_type='profile').order_by('-balance')
         return query
 
     def create_from_item(self, item):
