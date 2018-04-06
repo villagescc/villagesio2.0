@@ -3,7 +3,7 @@
 <div class="transaction" id="div-transaction-photos" {% if not widget.value %}hidden{% endif %}>
     <div class="avatar-wrapper blue big">
         <a href="{% url 'profile' 'my_profile' %}">
-            <img src="{% profile_image_url widget.attrs.profile '60x60' %}"
+            <img src="{% profile_image_url widget.attrs.profile '400x400' %}"
                  class="rounded-circle">
         </a>
     </div>
@@ -11,7 +11,7 @@
          src="{% static 'new_template/res/img/icons/arrow-right.png' %}" alt="to">
     <div class="avatar-wrapper blue big">
         <a class="recipient-link" href="{% url 'profile' widget.value %}">
-            <img id="img-payee" src="{% image_url_by_username widget.value '60x60' %}"
+            <img id="img-payee" src="{% image_url_by_username widget.value '400x400' %}"
                  class="rounded-circle" data-toggle="tooltip" data-placement="right"
                  data-html="true"
                  title="&lt;span class='tip-balloon'&gt;Recipient&lt;/span&gt;">
