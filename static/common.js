@@ -122,7 +122,7 @@ function init_trust_modal() {
     });
 }
 
-// function init_payment_modal() {
+function init_payment_modal() {
 //     $(".payment-modal").click(function (e) {
 //         $('#payment-error-modal-alert').html("<strong>Hold on,</strong> We are discovering trust pathways");
 //         $('#payment-loading-modal').modal("show");
@@ -163,7 +163,7 @@ function init_trust_modal() {
 //         });
 //         e.preventDefault();
 //     });
-// }
+}
 
 function init_contact_modal() {
     $(".contact-modal").click(function (e) {

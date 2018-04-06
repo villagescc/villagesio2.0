@@ -49,6 +49,8 @@
                                 <span>Amount</span>
 
                             </div>
+                            <div class="rows-wrapper">
+
                             {% for each_all in all_payments %}
                                 <div class="table-row"
                                      data-toggle="tooltip" data-placement="top"
@@ -82,6 +84,8 @@
                                     <span class="amount"><strong><span class="price">{{ each_all.item.amount }}</span> V.H.</strong></span>
                                 </div>
                             {% endfor %}
+                            </div>
+
                         {% endif %}
                     </div>
 

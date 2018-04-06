@@ -8,6 +8,11 @@
     text-transform: uppercase;
     color: #1d90b5;
   }
+
+  .rows-wrapper {
+    max-height: 810px;
+    overflow: auto;
+  }
   .table-head {
     display: flex;
     justify-content: flex-start;

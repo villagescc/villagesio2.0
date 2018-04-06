@@ -7927,6 +7927,10 @@ p {
       .payment-data #payment-form .transaction {
         padding: 1em 0 2em; } }
 
+.rows-wrapper {
+  max-height: 600px;
+  overflow: auto; }
+
 .table-head {
   display: flex;
   justify-content: flex-start;
@@ -8003,6 +8007,9 @@ p {
     font-size: 1.375em;
     text-transform: uppercase;
     color: #1d90b5; }
+  .trust-content .rows-wrapper {
+    max-height: 810px;
+    overflow: auto; }
   .trust-content .table-head {
     display: flex;
     justify-content: flex-start;
