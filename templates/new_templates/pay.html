@@ -182,13 +182,13 @@
                     $('.transaction #img-payee').attr("src", e['data']['profile_photo_path']);
                     $('.transaction #img-payee').attr("data-original-title", selectedUser);
 
-                    if (!$infoBlock.next().hasClass('payment-msg')) {
-                        $infoBlock.after('<div class="payment-msg"></div>');
-                    }
                     if (!e['data']['can_ripple']) {
-                        $('.payment-msg').html('You do not have any more credit with this user. Your payment will only be able to be spent directly, with you. If this is not your intent, contact the recipient and ask them to raise your credit limit. This can be done after payment.');
+                        $('#payment-ripple').hide();
+                        $('#payment-not-ripple').show();
                     } else if (e['data']['can_ripple']) {
-                        $('.payment-msg').html('You can send a trusted payment of up to ' + e.data.max_amount + ' hour(s) or a direct payment of any amount.');
+                        $('#payment-not-ripple').hide();
+                        $('#payment-ripple').show();
+                        $('#payment-max-amount').html(e.data.max_amount);
                     }
 
                     $('#spin-modal').fadeOut();

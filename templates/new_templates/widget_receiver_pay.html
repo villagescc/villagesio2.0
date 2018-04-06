@@ -18,3 +18,14 @@
         </a>
     </div>
 </div>
+<div class="payment-msg">
+    {% with max_amount=widget.attrs.max_amount %}
+        <p id="payment-not-ripple" {% if max_amount %}style="display:none"{% endif %}>You do not have any
+            more credit with this user. Your payment will only be able to be spent directly, with you. If this is not
+            your intent, contact the recipient and ask them to raise your credit limit. This can be done after
+            payment.</p>
+        <p id="payment-ripple" {% if not max_amount %}style="display:none"{% endif %}>You can send a
+            trusted payment of up to <span id="payment-max-amount">{{ max_amount }}</span> hour(s) or a
+            direct payment of any amount.</p>
+    {% endwith %}
+</div>
