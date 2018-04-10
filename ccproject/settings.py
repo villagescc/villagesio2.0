@@ -253,7 +253,7 @@ PASSWORD_RESET_LINK_EXPIRY = timedelta(days=7)
 
 LOCATION_SESSION_KEY = 'location_id'
 DEFAULT_LOCATION = ('49.2696243', '-123.0696036')  # East Vancouver.
-DEFAULT_RADIUS = None
+DEFAULT_RADIUS = -1  # infinity
 
 INVITATION_ONLY = False
 

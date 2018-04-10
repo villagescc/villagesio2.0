@@ -244,7 +244,7 @@ class SettingsForm(forms.ModelForm):
 
     class Meta:
         model = Settings
-        fields = ('email', 'send_notifications', 'send_newsletter', 'language')
+        fields = ('email', 'send_notifications', 'send_newsletter', 'feed_radius', 'language')
 
         widgets = {
             'language': forms.Select(attrs={

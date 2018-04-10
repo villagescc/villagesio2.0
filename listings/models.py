@@ -74,8 +74,7 @@ class ListingsManager(GeoManager):
         if up_to_date:
             query = query.filter(updated__lt=up_to_date)
         if location and radius:
-            query = query.filter(
-                user__profile__location__point__dwithin=(location.point, radius))
+            query = query.filter(user__profile__location__point__dwithin=(location.point, radius))
 
         if tsearch:
             # Searching by TAGs

@@ -176,6 +176,7 @@ class BlankPaymentForm(forms.Form):
         self.recipient = kwargs.pop('recipient', None)
         self.max_amount = kwargs.pop('max_amount', None)
         super(BlankPaymentForm, self).__init__(*args, **kwargs)
+
         self.fields['recipient'].widget.attrs['profile'] = self.payer
         self.fields['recipient'].widget.attrs['max_amount'] = self.max_amount
 

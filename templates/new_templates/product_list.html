@@ -54,14 +54,7 @@
                     </div>
 
                     <div class="col-12 col-xs-6 col-md-4 col-lg-4 col-xxl-2">
-                        <select class="filter-input" id="id_radius" name="radius">
-                            <option value="-1" selected>Anywhere</option>
-                            <option value="1000">Within 1 km</option>
-                            <option value="5000">Within 5 km</option>
-                            <option value="10000">Within 10 km</option>
-                            <option value="50000">Within 50 km</option>
-                        </select>
-
+                        {{ form_listing_settings.radius }}
                     </div>
 
                     <div class="col-12 col-sm-8 col-md-8 col-lg-6 col-xxl-3">

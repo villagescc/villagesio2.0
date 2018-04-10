@@ -222,6 +222,15 @@ post_delete.connect(Profile.post_delete, sender=Profile,
 
 class Settings(models.Model):
     "Profile settings."
+    INFINITE_RADIUS = -1
+    FEED_RADIUS_CHOICES = (
+        (INFINITE_RADIUS, 'Anywhere'),
+        (1000, _('Within 1 km')),
+        (5000, _('Within 5 km')),
+        (10000, _('Within 10 km')),
+        (50000, _('Within 50 km')),
+    )
+
     profile = models.OneToOneField(Profile, related_name='settings', on_delete=models.CASCADE)
     email = EmailField(blank=True)
     endorsement_limited = models.BooleanField(
@@ -238,7 +247,7 @@ class Settings(models.Model):
     language = VarCharField(
         _("Language"), default="en", max_length=8, choices=langs)
     # Sticky form settings.
-    feed_radius = models.IntegerField(null=True, blank=True)
+    feed_radius = models.IntegerField(null=True, blank=True, choices=FEED_RADIUS_CHOICES)
     feed_trusted = models.BooleanField(default=False)
 
     def __unicode__(self):

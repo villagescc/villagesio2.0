@@ -220,8 +220,7 @@ def edit_settings(request):
     if request.method == 'POST':
         if 'change_settings' in request.POST:
             old_email = request.profile.settings.email
-            settings_form = SettingsForm(
-                request.POST, instance=request.profile.settings)
+            settings_form = SettingsForm(request.POST, instance=request.profile.settings)
             if settings_form.is_valid():
                 settings_obj = settings_form.save()
                 translation.activate(settings_obj.language)
