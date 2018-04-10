@@ -161,19 +161,25 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
 def parse_products(request, products):
     products_html = ''
     for each_product in products:
-        products_html += render_to_string('new_templates/listing_item.html', {'request': request,
-                                                                              'item': each_product})
+        products_html += render_to_string('new_templates/listing_item.html', {'request': request, 'item': each_product})
     return HttpResponse(products_html)
 
 
 def product_infinite_scroll(request, offset=settings.LISTING_ITEMS_PER_PAGE):
+    offset = int(offset)
     start_session_offset = request.session.get('offset', 0)
-    end_session_offset = start_session_offset + int(offset)
+    end_session_offset = start_session_offset + offset
 
-    products = Listings.objects.order_by('-updated')[start_session_offset:end_session_offset]
-    parsed_products = parse_products(request, products)
+    form_listing_settings = FormListingsSettings(request.GET, profile=request.profile, location=request.location,
+                                                 start_limit=start_session_offset, end_limit=end_session_offset)
+    if form_listing_settings.is_valid():
+        listing_items, remaining_count = form_listing_settings.get_results()
+    else:
+        listing_items = []
 
-    if not products:
+    parsed_products = parse_products(request, listing_items)
+
+    if len(listing_items) < offset or not listing_items:
         end_session_offset = 0
     request.session['offset'] = end_session_offset
     return HttpResponse(ujson.dumps(parsed_products), content_type='application/json')
@@ -187,7 +193,6 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     if not request.user.is_authenticated():
         return render(request, 'new_templates/home_page.html')
 
-    # max_amount = ripple.max_payment(request.profile, recipient)
     request.session['offset'] = settings.LISTING_ITEMS_PER_PAGE
     sign_in_form = UserForm
     user_agent = get_user_agent(request)

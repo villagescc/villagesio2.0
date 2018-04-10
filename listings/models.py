@@ -36,14 +36,10 @@ TRUSTED_SUBQUERY = (
 
 class ListingsManager(GeoManager):
     def get_items_and_remaining(self, *args, **kwargs):
-        """
-
-        :param args:
-        :param kwargs:
-        :return:
-        """
         count_kwargs = kwargs.copy()
-        count_kwargs.pop('limit', None)
+        count_kwargs.pop('start_limit', None)
+        count_kwargs.pop('end_limit', None)
+
         count = self.get_items_count(self, *args, **count_kwargs)
         if count > 0:
             items = self.get_items(*args, **kwargs)
@@ -55,12 +51,10 @@ class ListingsManager(GeoManager):
         return self._item_query(*args, **kwargs).count()
 
     def get_items(self, *args, **kwargs):
-        limit = kwargs.pop('limit', settings.LISTING_ITEMS_PER_PAGE)
-        query = self._item_query(*args, **kwargs)[:limit]
-        items = []
-        for listing_item in query:
-            items.append(listing_item)
-        return items
+        start_limit = kwargs.pop('start_limit', 0)
+        end_limit = kwargs.pop('end_limit', settings.LISTING_ITEMS_PER_PAGE)
+        items = self._item_query(*args, **kwargs)[start_limit:end_limit]
+        return list(items)
 
     def _item_query(self, profile=None, location=None, radius=None, tsearch=None, trusted_only=False,
                     up_to_date=None, request_profile=None, type_filter=None, listing_type=None):

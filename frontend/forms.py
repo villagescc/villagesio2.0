@@ -32,8 +32,10 @@ class FormListingsSettings(forms.Form):
         required=False, choices=RADIUS_CHOICES, coerce=int, empty_value=None,
         widget=forms.Select(attrs={'class': 'filter-input'}))
 
-    def __init__(self, data, profile, location=None, type_filter=None, *args, **kwargs):
-        self.profile, self.location, self.type_filter, self.listing_type = (profile, location, type_filter, data.get('listing_type'))
+    def __init__(self, data, profile, location=None, type_filter=None, start_limit=0,
+                 end_limit=settings.LISTING_ITEMS_PER_PAGE, *args, **kwargs):
+        self.profile, self.location, self.type_filter, self.listing_type, self.start_limit, self.end_limit\
+            = (profile, location, type_filter, data.get('listing_type'), start_limit, end_limit)
         data = data.copy()
         if 'radius' not in data:
             default_radius = (profile and profile.settings.feed_radius or settings.DEFAULT_RADIUS)
@@ -57,10 +59,11 @@ class FormListingsSettings(forms.Form):
                                                                     trusted_only=trusted, radius=query_radius,
                                                                     up_to_date=date, request_profile=self.profile,
                                                                     type_filter=self.type_filter,
-                                                                    listing_type=self.listing_type)
+                                                                    listing_type=self.listing_type,
+                                                                    start_limit=self.start_limit,
+                                                                    end_limit=self.end_limit)
             if (not (self.profile and self.profile.settings.feed_radius) and
-                not self._explicit_radius and
-                len(items) < settings.LISTING_ITEMS_PER_PAGE and query_radius != None):
+                not self._explicit_radius and len(items) < settings.LISTING_ITEMS_PER_PAGE and query_radius != None):
                 query_radius = next_query_radius(query_radius)
                 self.data['radius'] = query_radius
                 if query_radius == INFINITE_RADIUS:
