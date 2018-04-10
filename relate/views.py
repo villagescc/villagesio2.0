@@ -16,7 +16,7 @@ from notification.utils import create_notification
 from general.mail import send_notification
 from django.utils.translation import ugettext as _
 from feed.models import FeedItem
-from django.contrib.gis.db.models import Q
+from django.contrib.gis.db.models import Q, F
 from django.templatetags.static import static
 
 
@@ -244,10 +244,7 @@ def get_user_photo(request, profile_username):
     data = {}
     payments = []
     profile = Profile.objects.get(user__username=profile_username)
-    if profile == request.profile:
-        data['error'] = "same_user"
-        data['error_message'] = "You can't send a trust to yourself"
-        return JsonResponse({'data': data})
+
     payment_list = FeedItem.objects.filter(poster_id=request.profile.id, recipient_id=profile.id).all()
     recipient = get_object_or_404(Profile, id=profile.id)
     try:
@@ -255,7 +252,7 @@ def get_user_photo(request, profile_username):
     except Endorsement.DoesNotExist:
         trust = None
     max_amount = ripple.max_payment(request.profile, recipient)
-    can_ripple = max_amount > 0
+    can_ripple =  max_amount > 0
     if payment_list:
         for each_payment in payment_list:
             payments.append('{0} paid {1} in {2}'.format(each_payment.poster.name, each_payment.recipient.name, each_payment.date.date()))
@@ -281,15 +278,12 @@ def get_user_photo(request, profile_username):
 
 def get_recipients_data(request):
     if request.is_ajax() and request.method == 'GET':
-        result = []
-        if not request.GET['query']:
-            recipient_info = Profile.objects.all()[:50]
-        else:
-            recipient_info = Profile.objects.filter(Q(name__icontains=request.GET['query']) |
-                                                    Q(user__username__icontains=request.GET['query']))
-        for recipient in recipient_info:
-            result.append({'name': recipient.name, 'profile_id': recipient.id,
-                           'username': recipient.username})
+        recipient_info = Profile.objects.select_related('user').exclude(user=request.user)\
+            .annotate(profile_id=F('id'), username=F('user__username')).values('name', 'profile_id', 'username')
+        if request.GET['query']:
+            recipient_info = recipient_info.filter(Q(name__icontains=request.GET['query']) |
+                                                   Q(user__username__icontains=request.GET['query']))
+        result = list(recipient_info[:50])
         return JsonResponse({'result': result})
 
 
@@ -306,7 +300,7 @@ def blank_trust(request):
         recipient_name = request.GET.get('recipient_name')
         if recipient_name:
             try:
-                recipient = Profile.objects.get(user__username=recipient_name)
+                recipient = Profile.objects.exclude(user=request.user).get(user__username=recipient_name)
             except Profile.DoesNotExist:
                 form_errors['recipient_name'] = "Recipient doesn't exist"
             else:
@@ -367,7 +361,7 @@ def blank_payment(request):
         recipient_name = request.GET.get('recipient_name')
         if recipient_name:
             try:
-                recipient = Profile.objects.get(user__username=recipient_name)
+                recipient = Profile.objects.exclude(user=request.user).get(user__username=recipient_name)
             except Profile.DoesNotExist:
                 form_errors['recipient'] = "Recipient doesn't exist"
             else:
@@ -387,17 +381,11 @@ def blank_payment(request):
             max_amount = ripple.max_payment(profile, recipient)
             form = BlankPaymentForm(request.POST, payer=profile, recipient=recipient, max_amount=max_amount)
             if form.is_valid():
-                if recipient == profile:
-                    messages.add_message(request, messages.ERROR, 'You cant send a payment to yourself')
-                    form.errors['recipient'] = 'Choose another recipient.'
-                else:
-                    payment = form.send_payment()
-                    create_notification(notifier=profile, recipient=recipient, type=Notification.PAYMENT)
-                    send_payment_notification(payment)
-                    messages.add_message(request, messages.INFO,
-                                         'Payment sent {}.'.format('through the trust network'
-                                                                   if form.cleaned_data['routed'] else 'directly'))
-                    form = BlankPaymentForm()
+                payment = form.send_payment()
+                create_notification(notifier=profile, recipient=recipient, type=Notification.PAYMENT)
+                send_payment_notification(payment)
+                messages.add_message(request, messages.INFO, 'Payment sent through the trust network.')
+                form = BlankPaymentForm()
 
     all_payments = FeedItem.objects.filter((Q(recipient_id=profile.id) | Q(poster_id=profile.id)) & Q(item_type='acknowledgement')).order_by('-date')
     return django_render(request, 'new_templates/pay.html', {'form': form, 'all_payments': all_payments})

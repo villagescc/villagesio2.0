@@ -181,9 +181,23 @@ class BlankPaymentForm(forms.Form):
         self.fields['recipient'].widget.attrs['max_amount'] = self.max_amount
 
     def clean(self):
-        data = self.cleaned_data
-        data['routed'] = self.max_amount >= data['amount']
-        return data
+        cleaned_data = super(BlankPaymentForm, self).clean()
+
+        if self.payer == self.recipient:
+            raise forms.ValidationError(
+                "You cant send a payment to yourself."
+            )
+
+        amount = cleaned_data.get("amount")
+        if amount:
+            cleaned_data['routed'] = self.max_amount >= cleaned_data['amount']
+            if not cleaned_data['routed']:
+                raise forms.ValidationError(
+                    "The payment through the trust network is refused. "
+                    "Contact the recipient and ask them to raise your credit limit."
+                )
+
+        return cleaned_data
 
     def send_payment(self):
         data = self.cleaned_data
