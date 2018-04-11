@@ -185,7 +185,7 @@ class BlankPaymentForm(forms.Form):
 
         if self.payer == self.recipient:
             raise forms.ValidationError(
-                "You cant send a payment to yourself."
+                "You can't send a payment to yourself."
             )
 
         amount = cleaned_data.get("amount")

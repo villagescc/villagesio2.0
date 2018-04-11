@@ -24,7 +24,8 @@
 
                                 <div class="row" style="max-width: 600px;">
                                     <div class="col-6">
-                                        <input class="btn btn-std trust-btn" id="save-trust" type="submit" value="Save Trust">
+                                        <input class="btn btn-std trust-btn" id="save-trust" type="submit"
+                                               value="Save Trust">
                                     </div>
                                 </div>
                             </form>
@@ -47,19 +48,19 @@
                         </div>
 
                         <div class="rows-wrapper">
-                        {% for account in accounts %}
-                            <div class="table-row">
-                                <div class="avatar-wrapper blue">
-                                    <a href="{{ account.partner.get_absolute_url }}">
-                                        <img src="{% profile_image_url account.partner '400x400' %}"
-                                             data-toggle="tooltip" data-placement="right"
-                                             data-html="true"
-                                             title="&lt;span class='tip-balloon'&gt;{{ account.partner.username }}&lt;/span&gt;"
-                                        >
-                                    </a>
-                                </div>
-                                <span>{{ account.partner }}</span>
-                                <span class="amount">
+                            {% for account in accounts %}
+                                <div class="table-row">
+                                    <div class="avatar-wrapper blue">
+                                        <a href="{{ account.partner.get_absolute_url }}">
+                                            <img src="{% profile_image_url account.partner '400x400' %}"
+                                                 data-toggle="tooltip" data-placement="right"
+                                                 data-html="true"
+                                                 title="&lt;span class='tip-balloon'&gt;{{ account.partner.username }}&lt;/span&gt;"
+                                            >
+                                        </a>
+                                    </div>
+                                    <span>{{ account.partner }}</span>
+                                    <span class="amount">
                                     {% if account.partner_endorsement %}
                                         <span class="price">{{ account.out_limit }} V.H.</span>
                                     {% else %}
@@ -67,15 +68,18 @@
                                     {% endif %}
                                 </span>
 
-                                <span class="amount">
+                                    <span class="amount">
                                     {% if account.endorsement %}
                                         <span class="price">{{ account.in_limit }} V.H.</span>
                                     {% elif account.partner %}
                                         <span class="price">0</span> V.H.
                                     {% endif %}
                                 </span>
-                            </div>
-                        {% endfor %}
+                                    <span>
+                                    <a href="{% url 'blank_trust_user' %}?recipient_name={{ account.partner.username }}">Edit</a>
+                                </span>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
 
