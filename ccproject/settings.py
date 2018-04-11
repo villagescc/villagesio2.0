@@ -236,11 +236,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-ENDORSEMENT_BONUS = 5
-
-FEED_ITEMS_PER_PAGE = 20
-LISTING_ITEMS_PER_PAGE = 21
-
 MEDIA_URL = '/uploads/'
 
 MEDIA_ROOT = 'uploads'
@@ -287,6 +282,15 @@ SOCIAL_AUTH_PIPELINE = (
 USE_X_FORWARDED_HOST = True
 
 GOOGLE_MAPS_API_KEY = 'AIzaSyBuQbf5nmnkuK8vOlF2STsyqfWeCzL13jA'
+
+
+ENDORSEMENT_BONUS = 5
+
+FEED_ITEMS_PER_PAGE = 20
+
+LISTING_ITEMS_PER_PAGE = 21
+
+NOTIFICATIONS_PER_PAGE = 20
 
 try:
     from ccproject.local_settings import *

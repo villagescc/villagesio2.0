@@ -1,6 +1,7 @@
-{% load staticfiles profile %}
+{% load staticfiles %}
 
 {% if user.is_authenticated %}
+    {% load profile notifications %}
 
     <header class="app-header">
         <nav class="navbar navbar-expand-lg">
@@ -12,8 +13,10 @@
             </a>
 
             <div class="user-menu d-flex d-lg-none">
-                <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}"
-                                                   alt="notifications"></a>
+                <a class="user-link" href="#">
+                    <img src="{% static 'new_template/res/img/icons/bell.png' %}"alt="notifications">
+                    {% new_notifications_count %}
+                </a>
                 <a class="user-link responsive-toggle" href="#">
                     <div class="avatar-wrapper blue">
                         <img src="{% profile_image_url request.profile '400x400' %}" alt="avatar" height="100%"
@@ -80,8 +83,10 @@
             </div>
 
             <div class="user-menu d-none d-lg-flex">
-                <a class="user-link" href="#"><img src="{% static 'new_template/res/img/icons/bell.png' %}"
-                                                   alt="notifications"></a>
+                <a class="user-link" href="#">
+                    <img src="{% static 'new_template/res/img/icons/bell.png' %}"alt="notifications">
+                    {% new_notifications_count %}
+                </a>
                 <ul class="nav navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"

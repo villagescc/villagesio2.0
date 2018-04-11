@@ -11,6 +11,7 @@ SHARED_BY_USERNAME_KEY = 'u'
 
 PROFILE_LINK_TEMPLATE = '''<a href="%s">%s</a>'''
 
+
 @register.simple_tag
 def profile_image_url(profile, size):
     if profile and profile.photo:
@@ -33,13 +34,6 @@ def image_url_by_username(username, size):
     return '/static/img/generic_user.png'
 
 
-def profile_image_path_infinite_scroll(profile, size):
-    if profile and profile.photo:
-        return resize(profile.photo, size)
-    else:
-        square_side = min((int(i) for i in size.split('x')))
-        return '/static/img/generic_user.png'
-
 @register.simple_tag
 def product_image_url(listing, size):
     if listing and listing.photo:
@@ -47,6 +41,7 @@ def product_image_url(listing, size):
     else:
         square_side = min((int(i) for i in size.split('x')))
         return '/static/img/default_product.png'
+
 
 @register.simple_tag
 def profile_display(profile, request, text="you", not_you_text=None):
@@ -57,6 +52,7 @@ def profile_display(profile, request, text="you", not_you_text=None):
             return not_you_text
         else:
             return PROFILE_LINK_TEMPLATE % (profile.get_absolute_url(), profile)
+
 
 @register.inclusion_tag('share_link.html')
 def share_link(profile):

@@ -65,8 +65,6 @@ def listing_map(request):
         subcategories = SubCategories.objects.all()
         contact_form = ContactForm()
 
-        notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
-
         if request.GET.get('map-price'):
             min_price = request.GET.get('map-price').split(',')[0]
             max_price = request.GET.get('map-price').split(',')[1]
@@ -132,5 +130,4 @@ def listing_map(request):
                        'rideshare_sub_categories': rideshare_sub_categories,
                        'housing_sub_categories': housing_sub_categories,
                        'payment_form': payment_form, 'contact_form': contact_form,
-                       'notification_number': notification_number, 'listing_locations': listing_locations,
-                       'min_price': min_price, 'max_price': max_price})
+                       'listing_locations': listing_locations, 'min_price': min_price, 'max_price': max_price})

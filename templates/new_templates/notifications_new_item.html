@@ -1,0 +1,12 @@
+{% load staticfiles humanize  %}
+
+<div class="table-row">
+    {{ notification.notifier.username }}
+        <a href="{{ notification.notifier.get_absolute_url }}">
+        {{ notification.notifier_name }}
+        </a>
+
+    {{ notification.notification_type|lower }}
+    {{ notification.status|lower }}
+    {{ notification.created_at|naturaltime }}
+</div>
