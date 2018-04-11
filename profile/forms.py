@@ -215,10 +215,8 @@ class ProfileForm(forms.ModelForm):
 
 
 class ContactForm(forms.Form):
-
     contact_recipient_name = forms.CharField(label='Recipients Name', required=True,
                                              widget=ReceiverInput(attrs={'class': 'typeahead'}))
-
     message = forms.CharField(widget=forms.Textarea(attrs={'style': 'max-width: 100%; height:100px;'}))
 
     def send(self, sender, recipient, subject=None,
@@ -237,7 +235,7 @@ class SettingsForm(forms.ModelForm):
     # username = forms.CharField(required=True, max_length=30, validators=[alphanumeric],
     #                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     # Email is required.
-    email = forms.EmailField(widget=forms.EmailInput(attrs={}),
+    email = forms.EmailField(widget=forms.EmailInput(),
                              max_length=EmailField.MAX_EMAIL_LENGTH)
 
     # endorsement_limited = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-control'}))

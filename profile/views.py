@@ -422,29 +422,39 @@ def contact(request, username):
     return locals()
 
 
+@login_required
 def undefined_contact(request):
-    form = ContactForm()
-    listing_form = ListingsForms()
-    if request.method == 'POST' and not request.is_ajax():
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            profile = Profile.objects.get(user__username=form.cleaned_data['contact_recipient_name'])
-            form.send(sender=request.profile, recipient=profile)
-            messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
-            form = ContactForm()
-            return django_render(request, 'new_templates/contact.html', {'form': form})
-    elif request.method == 'POST' and request.is_ajax():
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            profile = Profile.objects.get(user__username=form.cleaned_data['contact_recipient_name'])
+    if request.method == 'GET':
+        recipient_name = request.GET.get('recipient_name')
+        form = ContactForm(initial={'contact_recipient_name': recipient_name})
+        if recipient_name:
             try:
-                form.send(sender=request.profile, recipient=profile, subject='In reply to Villages.io post: '+form.data.get('listing_title'))
-            except Exception as e:
-                messages.add_message(request, messages.ERROR, 'Error sending message')
-                return JsonResponse({'msg': 'Success'})
-            messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
-            return JsonResponse({'msg': 'Success'})
-    return django_render(request, 'new_templates/contact.html', {'form': form, 'listing_form': listing_form})
+                Profile.objects.exclude(user=request.user).get(user__username=recipient_name)
+            except Profile.DoesNotExist:
+                form.errors['contact_recipient_name'] = "Recipient doesn't exist."
+
+    elif request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            recipient_name = form.cleaned_data['contact_recipient_name']
+            try:
+                recipient = Profile.objects.exclude(user=request.user).get(user__username=recipient_name)
+            except Profile.DoesNotExist:
+                form.add_error('contact_recipient_name', "Recipient doesn't exist.")
+            else:
+                listing_id = request.GET.get('listing_id')
+                subject = None
+                if listing_id:
+                    listing_title = Listings.objects.filter(id=listing_id, profile=recipient)\
+                        .values_list('title', flat=True).first()
+                    if listing_title:
+                        subject = 'In reply to Villages.io post: {}'.format(listing_title)
+
+                form.send(sender=request.profile, recipient=recipient, subject=subject)
+                messages.add_message(request, messages.SUCCESS, 'Message successfully sent.')
+                form = ContactForm()
+
+    return django_render(request, 'new_templates/contact.html', {'form': form})
 
 
 @login_required

@@ -122,7 +122,8 @@ class Listings(models.Model):
                                                                        'memo': self.title})
 
     def get_contact_link(self):
-        return reverse_querystring('undefined_contact', query_kwargs={'recipient_name': self.user.username})
+        return reverse_querystring('undefined_contact', query_kwargs={'recipient_name': self.user.username,
+                                                                      'listing_id': self.id})
 
     def __str__(self):
         return self.title
