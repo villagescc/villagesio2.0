@@ -6,7 +6,7 @@
 
         {% for notification in notifications %}
             <div class="table-row">
-                {{ notification.notifier.username }}
+                {{ notification.notifier_name }}
                 <div class="avatar-wrapper blue">
                     <a href="{{ notification.notifier.get_absolute_url }}">
                         <img src="{% profile_image_url notification.notifier '400x400' %}"
@@ -22,6 +22,10 @@
                 {{ notification.created_at|naturaltime }}
             </div>
         {% endfor %}
+
+    {% if notifications.has_next %}
+        <a href="?page={{ notifications.next_page_number }}">Load more</a>
+    {% endif %}
 
     </div>
 {% endblock content %}

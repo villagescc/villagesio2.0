@@ -268,6 +268,19 @@ function init_edit_post() {
     });
 }
 
+function init_notification_dropdown() {
+    $(".notification-dropdown").click(function () {
+        $.ajax({
+            url: "/notifications/new/",
+            dataType: 'html',
+            method: 'GET',
+            success: function (data, status, xhr) {
+                $('#notification-dropdown-menu').html(data).toggle();
+            }
+        })
+    });
+}
+
 function initModals () {
     init_listing_modal();
     init_contact_modal();
@@ -280,5 +293,6 @@ $(document).ready(function () {
     init_instruction_input();
     init_feed_items();
     init_edit_post();
+    init_notification_dropdown();
     initModals();
 });

@@ -1,0 +1,15 @@
+{% load staticfiles humanize %}
+
+{% if notifications %}
+    {% for notification in notifications %}
+        <div class="table-row">
+            <a href="{{ notification.notifier.get_absolute_url }}">{{ notification.notifier_name }}</a>
+            {{ notification.notification_type|lower }}
+            {{ notification.status|lower }}
+            {{ notification.created_at|naturaltime }}
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="table-row">You don't have new notifications</div>
+{% endif %}
+<div><a href="{% url 'notifications:all_notifications' %}">See all notifications</a></div>
