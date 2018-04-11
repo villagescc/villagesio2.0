@@ -8,7 +8,7 @@ class Person{
     getPerson(offset){
         this.personApi.getPersonList(offset)
             .then((data) => {
-                data.forEach(item => this.views.update(item));
+                this.views.update(data);
                 initModals();
             })
             .catch(err => console.log(err))

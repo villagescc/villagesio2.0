@@ -133,7 +133,6 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
     trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
     payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
     contact_form = ContactForm()
-    notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
 
     context = locals()
     context.update(extra_context or {})
@@ -154,7 +153,6 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
                    'housing_sub_categories': housing_sub_categories,
                    'categories': categories_list, 'trust_form': trust_form,
                    'payment_form': payment_form, 'contact_form': contact_form,
-                   'notification_number': notification_number,
                    'number_of_pages': number_of_pages})
 
 
@@ -162,7 +160,7 @@ def parse_products(request, products):
     products_html = ''
     for each_product in products:
         products_html += render_to_string('new_templates/listing_item.html', {'request': request, 'item': each_product})
-    return HttpResponse(products_html)
+    return products_html
 
 
 def product_infinite_scroll(request, offset=settings.LISTING_ITEMS_PER_PAGE):
@@ -182,7 +180,7 @@ def product_infinite_scroll(request, offset=settings.LISTING_ITEMS_PER_PAGE):
     if len(listing_items) < offset or not listing_items:
         end_session_offset = 0
     request.session['offset'] = end_session_offset
-    return HttpResponse(ujson.dumps(parsed_products), content_type='application/json')
+    return HttpResponse(parsed_products)
 
 
 def home(request, type_filter=None, item_type=None, template=None, poster=None, recipient=None,
@@ -246,8 +244,6 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
     housing_sub_categories = SubCategories.objects.all().filter(categories=4)
 
-    notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
-
     return render(request, 'new_templates/product_list.html', {
         'item_sub_categories': item_sub_categories, 'subcategories': subcategories,
         'services_sub_categories': services_sub_categories, 'rideshare_sub_categories': rideshare_sub_categories,
@@ -257,8 +253,7 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
         'contact_form': contact_form, 'form_listing_settings': form_listing_settings,
         'item_type_name': item_type_name, 'is_listing': True, 'url_params': url_params,
         'listing_items': listing_items, 'next_page_date': next_page_date, 'remaining_count': remaining_count,
-        'next_page_param_str': next_page_param_str, 'listing_type_filter': type_filter,
-        'notification_number': notification_number, 'sign_in_form': sign_in_form})
+        'next_page_param_str': next_page_param_str, 'listing_type_filter': type_filter})
 
 
 def map_visualization(request):
