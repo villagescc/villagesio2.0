@@ -155,10 +155,7 @@ class FeedManager(GeoManager):
             query = query.extra(where=[TRUSTED_SUBQUERY], params=[profile.id])
 
         if location and radius:
-            query = query.filter(
-                # TODO: Bounding box query might be faster?
-                Q(location__point__dwithin=(location.point, radius)) |
-                Q(location__isnull=True))
+            query = query.filter(location__point__dwithin=(location.point, radius))
         if tsearch:
             query = query.extra(
                 where=["tsearch @@ plainto_tsquery(%s)"],

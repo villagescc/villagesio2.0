@@ -123,7 +123,6 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
 
     number_of_pages = len(total_items) / settings.FEED_ITEMS_PER_PAGE
 
-    listing_form = ListingsForms()
     categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)
     services_sub_categories = SubCategories.objects.all().filter(categories=2)
@@ -138,10 +137,8 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
     return render(request, 'new_templates/people_listing.html',
                   {'url_params': url_params, 'feed_items': feed_items,
                    'next_page_date': next_page_date, 'context': context,
-                   'form': form, 'listing_form': listing_form,
-                   'poster': poster, 'do_filter': do_filter,
-                   'remaining_count': remaining_count,
-                   'item_type': item_type,
+                   'form': form, 'poster': poster, 'do_filter': do_filter,
+                   'remaining_count': remaining_count, 'item_type': item_type,
                    'url_param_str': url_param_str,
                    'next_page_param_str': next_page_param_str,
                    'extra_context': extra_context,

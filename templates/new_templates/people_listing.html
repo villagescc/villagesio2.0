@@ -40,6 +40,10 @@
 
                     </div>
 
+                    <div class="col-12 col-xs-6 col-md-4 col-lg-4 col-xxl-2">
+                        {{ form.radius }}
+                    </div>
+
                     <div class="col-12 col-sm-8 col-md-8 col-lg-6 col-xxl-3">
 
                         <div class="custom-group">
@@ -175,7 +179,8 @@
 
                                 <div class="likes-container">
                                     <div class="price-container">
-                                        <img src="{% static 'new_template/res/img/icons/balance_b.png' %}" alt="balance">
+                                        <img src="{% static 'new_template/res/img/icons/balance_b.png' %}"
+                                             alt="balance">
                                         <span class="price">{{ each.overall_balance }}</span>
                                     </div>
 
@@ -199,9 +204,11 @@
                                     <div class="person-action">
                                         <a class="action-menu-item trust-modal"
                                            data-profile-username="{{ each.user.profile.username }}" href="#"><img
-                                                src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like"></a>
+                                                src="{% static 'new_template/res/img/icons/heart.png' %}"
+                                                alt="like"></a>
                                         <a class="action-menu-item" href="{% url 'blank_payment_user' %}"><img
-                                                src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy"></a>
+                                                src="{% static 'new_template/res/img/icons/wallet.png' %}"
+                                                alt="buy"></a>
                                         <a class="action-menu-item contact-modal"
                                            data-profile-username="{{ each.user.profile.username }}"
                                            data-listing-title="{{ each.title }}" href="#"><img

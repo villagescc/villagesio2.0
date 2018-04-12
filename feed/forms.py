@@ -4,18 +4,11 @@ from django import forms
 from django.conf import settings
 
 from feed.models import FeedItem
-from django.utils.translation import ugettext_lazy as _
+from profile.models import Settings
 
-# Passing no radius => use default, so need a code for infinite.
-INFINITE_RADIUS = -1
+INFINITE_RADIUS = Settings.INFINITE_RADIUS
 
-RADIUS_CHOICES = (
-    (1000, _('Within 1 km')),
-    (5000, _('Within 5 km')),
-    (10000, _('Within 10 km')),
-    (50000, _('Within 50 km')),
-    (INFINITE_RADIUS, _('Anywhere')),
-)
+RADIUS_CHOICES = Settings.FEED_RADIUS_CHOICES
 
 RADII = [rc[0] for rc in RADIUS_CHOICES]
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
@@ -32,9 +25,10 @@ class FeedFilterForm(forms.Form):
     q = forms.CharField(
         label="Search", required=False, widget=forms.TextInput(
             attrs={'placeholder': 'Search people...'}))
+
     radius = forms.TypedChoiceField(
         required=False, choices=RADIUS_CHOICES, coerce=int, empty_value=None,
-        widget=forms.Select(attrs={}))
+        widget=forms.Select(attrs={'class': 'filter-input'}))
 
     trusted = forms.BooleanField(label='Trusted only', required=False,
                                  widget=forms.CheckboxInput(attrs={}))
