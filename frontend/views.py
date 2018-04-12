@@ -159,12 +159,12 @@ def parse_products(request, products):
     return products_html
 
 
-def product_infinite_scroll(request, offset=settings.LISTING_ITEMS_PER_PAGE):
-    offset = int(offset)
+def product_infinite_scroll(request, type_filter=None):
+    offset = int(request.GET.get('offset', settings.LISTING_ITEMS_PER_PAGE))
     start_session_offset = request.session.get('offset', 0)
     end_session_offset = start_session_offset + offset
 
-    form_listing_settings = FormListingsSettings(request.GET, profile=request.profile, location=request.location,
+    form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter,
                                                  start_limit=start_session_offset, end_limit=end_session_offset)
     if form_listing_settings.is_valid():
         listing_items, remaining_count = form_listing_settings.get_results()
@@ -188,7 +188,6 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
         return render(request, 'new_templates/home_page.html')
 
     request.session['offset'] = settings.LISTING_ITEMS_PER_PAGE
-    sign_in_form = UserForm
     user_agent = get_user_agent(request)
     if user_agent.is_mobile:
         user_agent_type = 'mobile'

@@ -16,6 +16,6 @@ urlpatterns = [
     url(r'^categories/(?:(?P<category_type>[a-zA-Z]+)/)?', frontend_views.categories_filter, name='category_type'),
     # url(r'^profile/(?P<username>\w+)/$', accounts_views.profile),
     url(r'^$', frontend_views.home, name='home'),
-    url(r'^product_infinite_scroll/(?P<offset>\w+)$', frontend_views.product_infinite_scroll, name='product_infinite_scroll')
+    url(r'^product_infinite_scroll(?:/(?P<type_filter>[0-9a-zA-Z]+))?', frontend_views.product_infinite_scroll, name='product_infinite_scroll')
 
 ]
