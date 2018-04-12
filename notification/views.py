@@ -3,6 +3,7 @@ from django.db.models import Value
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from django.http.response import HttpResponse
+from django.http import Http404
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -12,16 +13,19 @@ from notification.models import Notification
 
 @login_required()
 def new_notifications(request):
-    notifications = Notification.objects.filter(recipient=request.profile, status=Notification.NEW)\
-        .select_related('notifier__user')\
-        .annotate(notifier_name=Concat('notifier__name', Value(" ("), 'notifier__user__username', Value(")")))\
-        .order_by('-created_at')[:5]
+    if request.is_ajax():
+        notifications = Notification.objects.filter(recipient=request.profile, status=Notification.NEW)\
+            .select_related('notifier__user')\
+            .annotate(notifier_name=Concat('notifier__name', Value(" ("), 'notifier__user__username', Value(")")))\
+            .order_by('-created_at')[:5]
 
-    parsed_notifications = render_to_string('new_templates/notifications_dropdown.html',
-                                            {'request': request, 'notifications': notifications})
+        parsed_notifications = render_to_string('new_templates/notifications_dropdown.html',
+                                                {'request': request, 'notifications': notifications})
 
-    Notification.objects.filter(recipient=request.profile, status=Notification.NEW).update(status=Notification.READ)
-    return HttpResponse(parsed_notifications)
+        Notification.objects.filter(recipient=request.profile, status=Notification.NEW).update(status=Notification.READ)
+        return HttpResponse(parsed_notifications)
+    else:
+        raise Http404
 
 
 @login_required()

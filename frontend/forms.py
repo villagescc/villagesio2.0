@@ -2,7 +2,7 @@ from datetime import datetime
 from django import forms
 from django.conf import settings
 
-from listings.models import Listings
+from listings.models import Listings, LISTING_TYPE
 from profile.models import Settings
 
 INFINITE_RADIUS = Settings.INFINITE_RADIUS
@@ -14,6 +14,10 @@ DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 
 
 class FormListingsSettings(forms.Form):
+    listing_type = forms.TypedChoiceField(
+        required=False, choices=(('', 'All listings'),) + LISTING_TYPE, coerce=str, empty_value='',
+        widget=forms.Select(attrs={'class': 'filter-input',
+                                   'id': 'inputListingType'}))
 
     d = forms.DateTimeField(
         label="Up to date", required=False, input_formats=[DATE_FORMAT])

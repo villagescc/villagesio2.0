@@ -1,10 +1,10 @@
 from django.http.response import HttpResponse
+from django.http import Http404
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 # Forms
-from accounts.forms import UserForm
 from listings.forms import ListingsForms
 from listings.models import LISTING_TYPE_CHECK
 from feed.forms import FeedFilterForm, DATE_FORMAT
@@ -152,31 +152,30 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
                    'number_of_pages': number_of_pages})
 
 
-def parse_products(request, products):
-    products_html = ''
-    for each_product in products:
-        products_html += render_to_string('new_templates/listing_item.html', {'request': request, 'item': each_product})
-    return products_html
-
-
 def product_infinite_scroll(request, type_filter=None):
-    offset = int(request.GET.get('offset', settings.LISTING_ITEMS_PER_PAGE))
-    start_session_offset = request.session.get('offset', 0)
-    end_session_offset = start_session_offset + offset
+    if request.is_ajax():
+        offset = int(request.GET.get('offset', settings.LISTING_ITEMS_PER_PAGE))
+        start_session_offset = request.session.get('offset', 0)
+        end_session_offset = start_session_offset + offset
 
-    form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter,
-                                                 start_limit=start_session_offset, end_limit=end_session_offset)
-    if form_listing_settings.is_valid():
-        listing_items, remaining_count = form_listing_settings.get_results()
+        form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter,
+                                                     start_limit=start_session_offset, end_limit=end_session_offset)
+        if form_listing_settings.is_valid():
+            listing_items, remaining_count = form_listing_settings.get_results()
+        else:
+            listing_items = []
+
+        parsed_products = ''
+        for each_product in listing_items:
+            parsed_products += render_to_string('new_templates/listing_item.html',
+                                                {'request': request, 'item': each_product})
+
+        if len(listing_items) < offset or not listing_items:
+            end_session_offset = 0
+        request.session['offset'] = end_session_offset
+        return HttpResponse(parsed_products)
     else:
-        listing_items = []
-
-    parsed_products = parse_products(request, listing_items)
-
-    if len(listing_items) < offset or not listing_items:
-        end_session_offset = 0
-    request.session['offset'] = end_session_offset
-    return HttpResponse(parsed_products)
+        raise Http404
 
 
 def home(request, type_filter=None, item_type=None, template=None, poster=None, recipient=None,
