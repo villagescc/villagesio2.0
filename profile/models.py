@@ -10,15 +10,17 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 from django.contrib.gis.db.models import GeoManager
 from django.db.models import Q
-from general.models import VarCharField, EmailField
-from geo.models import Location
-import ripple.api as ripple
-from general.util import cache_on_object
-from general.mail import send_mail, email_str, send_mail_from_system
 from django.utils import translation
 from django.utils.translation import get_language_info as lang_info
 from django.utils.translation import ugettext_lazy as _
+
+from general.models import VarCharField, EmailField
+from geo.models import Location
 from tags.models import Tag
+from general.util import cache_on_object, reverse_querystring
+from general.mail import send_mail, email_str, send_mail_from_system
+import ripple.api as ripple
+
 
 CODE_LENGTH = 20
 CODE_CHARS = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -197,6 +199,17 @@ class Profile(models.Model):
         Returns '"Name" <email>' suitable for email headers.
         """
         return email_str(self.name, self.email)
+
+    def get_trust_link(self):
+        return reverse_querystring('blank_trust_user', query_kwargs={'recipient_name': self.username})
+
+    def get_payment_link(self):
+        return reverse_querystring('blank_payment_user', query_kwargs={'recipient_name': self.username})
+
+    def get_contact_link(self):
+        return reverse_querystring('undefined_contact', query_kwargs={'recipient_name': self.username})
+
+
     
     @classmethod
     def get_by_id(cls, id):

@@ -91,24 +91,25 @@
                     </div>
 
                     <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
-
                         <label class="custom-check" for="id_trusted">
                             {{ form.trusted }}
-                            <input id="id_trusted" type="checkbox" name="trusted" value="on">
                             <span class="btn-input-layout">
-                    <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
-                    <span class="btn-input-text">Trusted</span>
-                  </span>
+                                <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}"
+                                     alt="Lock">
+                                <span class="btn-input-text">Trusted</span>
+                            </span>
                         </label>
                     </div>
 
                     <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+
                         <label class="custom-check" for="id_referral_filter">
-                            <input id="id_referral_filter" name="referral-radio" type="checkbox" value="on">
+                            {{ form.referral_filter }}
                             <span class="btn-input-layout">
-                    <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
-                    <span class="btn-input-text">Referral filter</span>
-                  </span>
+                                <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}"
+                                     alt="Lock">
+                                <span class="btn-input-text">Referral filter</span>
+                            </span>
                         </label>
                     </div>
 
@@ -203,15 +204,15 @@
 
                                     <div class="person-action">
                                         <a class="action-menu-item trust-modal"
-                                           data-profile-username="{{ each.user.profile.username }}" href="#"><img
+                                           data-profile-username="{{ each.username }}" href="{{ each.get_trust_link }}"><img
                                                 src="{% static 'new_template/res/img/icons/heart.png' %}"
                                                 alt="like"></a>
-                                        <a class="action-menu-item" href="{% url 'blank_payment_user' %}"><img
+                                        <a class="action-menu-item" href="{{ each.get_payment_link }}"><img
                                                 src="{% static 'new_template/res/img/icons/wallet.png' %}"
                                                 alt="buy"></a>
                                         <a class="action-menu-item contact-modal"
-                                           data-profile-username="{{ each.user.profile.username }}"
-                                           data-listing-title="{{ each.title }}" href="#"><img
+                                           data-profile-username="{{ each.username }}"
+                                           data-listing-title="{{ each.title }}" href="{{ each.get_contact_link }}"><img
                                                 src="{% static 'new_template/res/img/icons/mail.png' %}" alt="contact"></a>
                                     </div>
                                 </div>

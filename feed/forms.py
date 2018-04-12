@@ -31,13 +31,10 @@ class FeedFilterForm(forms.Form):
         widget=forms.Select(attrs={'class': 'filter-input'}))
 
     trusted = forms.BooleanField(label='Trusted only', required=False,
-                                 widget=forms.CheckboxInput(attrs={}))
+                                 widget=forms.CheckboxInput())
 
     referral_filter = forms.BooleanField(required=False,
-                                         widget=forms.CheckboxInput(attrs={
-                                             'class': 'form-control checkbox-inline',
-                                             'style': 'vertical-align: moddle; width: 15px;'
-                                         }))
+                                         widget=forms.CheckboxInput())
 
     # balance_high = forms.BooleanField(required=False,
     #                              widget=forms.CheckboxInput(attrs={

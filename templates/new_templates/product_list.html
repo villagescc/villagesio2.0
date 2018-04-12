@@ -106,7 +106,7 @@
                     <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
 
                         <label class="custom-check" for="id_trusted">
-                            <input id="id_trusted" type="checkbox" name="trusted" value="on">
+                            {{ form_listing_settings.trusted }}
                             <span class="btn-input-layout">
                     <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
                     <span class="btn-input-text">Trusted</span>
