@@ -31,10 +31,10 @@
         flex: 0 1 50%;
       }
       &:nth-child(2) {
-        flex: 0 1 25%;
+        flex: 0 1 20%;
       }
       &:nth-child(3) {
-        flex: 0 1 25%;
+        flex: 0 1 20%;
       }
     }
   }
@@ -63,10 +63,13 @@
         flex: 0 1 30%;
       }
       &:nth-child(3) {
-        flex: 0 1 25%;
+        flex: 0 1 20%;
       }
       &:nth-child(4) {
-        flex: 0 1 25%;
+        flex: 0 1 20%;
+      }
+      &:nth-child(5) {
+        flex: 0 0 10%;
       }
     }
     & > span {
@@ -75,6 +78,19 @@
         font-weight: 500;
         & .price {
           color: #1d90b5;
+        }
+      }
+    }
+    .edit {
+      a {
+        display: inline-block;
+        padding: 4px;
+        font-size: 18px;
+        color: $lightgrey;
+        text-decoration: none;
+        text-transform: uppercase;
+        &:hover {
+          color: lighten($lightgrey, 10%);
         }
       }
     }

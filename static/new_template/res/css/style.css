@@ -7597,17 +7597,18 @@ p {
   .person-box .action-block {
     flex: 0 0 31%;
     display: flex;
-    flex-direction: row; }
+    flex-direction: row;
+    align-items: center; }
     @media (max-width: 1199px) {
       .person-box .action-block {
         flex-direction: column; } }
     @media (max-width: 991px) {
       .person-box .action-block {
         flex: 0 0 100%;
-        flex-direction: row;
-        align-items: center; } }
+        flex-direction: row; } }
   .person-box .date-container {
-    flex: 0 0 60%; }
+    flex: 0 0 60%;
+    font-size: 12px; }
     .person-box .date-container span {
       font-weight: 300; }
     .person-box .date-container img {
@@ -8096,9 +8097,9 @@ p {
       .trust-content .table-head span:nth-child(1) {
         flex: 0 1 50%; }
       .trust-content .table-head span:nth-child(2) {
-        flex: 0 1 25%; }
+        flex: 0 1 20%; }
       .trust-content .table-head span:nth-child(3) {
-        flex: 0 1 25%; }
+        flex: 0 1 20%; }
   .trust-content .table-row {
     padding: 1em;
     display: flex;
@@ -8122,15 +8123,26 @@ p {
         font-size: 16px;
         flex: 0 1 30%; }
       .trust-content .table-row > *:nth-child(3) {
-        flex: 0 1 25%; }
+        flex: 0 1 20%; }
       .trust-content .table-row > *:nth-child(4) {
-        flex: 0 1 25%; }
+        flex: 0 1 20%; }
+      .trust-content .table-row > *:nth-child(5) {
+        flex: 0 0 10%; }
     .trust-content .table-row > span {
       display: block; }
       .trust-content .table-row > span.amount {
         font-weight: 500; }
         .trust-content .table-row > span.amount .price {
           color: #1d90b5; }
+    .trust-content .table-row .edit a {
+      display: inline-block;
+      padding: 4px;
+      font-size: 18px;
+      color: #8d8d8d;
+      text-decoration: none;
+      text-transform: uppercase; }
+      .trust-content .table-row .edit a:hover {
+        color: #a7a7a7; }
     @media (max-width: 991px) {
       .trust-content .table-row {
         font-size: 0.9em; } }

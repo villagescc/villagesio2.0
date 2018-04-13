@@ -75,8 +75,10 @@
                                         <span class="price">0</span> V.H.
                                     {% endif %}
                                 </span>
-                                    <span>
-                                    <a href="{% url 'blank_trust_user' %}?recipient_name={{ account.partner.username }}">Edit</a>
+                                <span class="edit">
+                                    <a href="{% url 'blank_trust_user' %}?recipient_name={{ account.partner.username }}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
                                 </span>
                                 </div>
                             {% endfor %}

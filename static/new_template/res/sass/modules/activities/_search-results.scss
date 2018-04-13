@@ -243,18 +243,19 @@
     flex: 0 0 31%;
     display: flex;
     flex-direction: row;
+    align-items: center;
     @include media-width-down(lg) {
       flex-direction: column;
     }
     @include media-width-down(md) {
       flex: 0 0 100%;
       flex-direction: row;
-      align-items: center;
     }
   }
 
   & .date-container {
     flex: 0 0 60%;
+    font-size: 12px;
     & span {
       font-weight: 300;
     }
