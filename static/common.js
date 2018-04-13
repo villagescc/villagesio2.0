@@ -277,7 +277,8 @@ function init_notification_dropdown() {
             success: function (data, status, xhr) {
                 $('#notification-dropdown-menu').html(data).toggle();
             }
-        })
+        });
+        $(this).find('.count').removeClass('full').text(0);
     });
 }
 

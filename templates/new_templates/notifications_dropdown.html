@@ -3,7 +3,7 @@
 {% if notifications %}
     {% for notification in notifications %}
         <div class="dropdown-item">
-            <div class="table-row">
+            <div class="note-item">
                 <a href="{{ notification.notifier.get_absolute_url }}">{{ notification.notifier_name }}</a>
                 <span>{{ notification.notification_type|lower }}</span>
                 <span>{{ notification.status|lower }}</span>
@@ -12,6 +12,6 @@
         </div>
     {% endfor %}
 {% else %}
-    <div class="table-row">You don't have new notifications</div>
+    <div class="no-items">You don't have new notifications</div>
 {% endif %}
 <div class="dropdown-item"><a href="{% url 'notifications:all_notifications' %}">See all notifications</a></div>

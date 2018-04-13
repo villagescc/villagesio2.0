@@ -33,7 +33,7 @@
             </div>
         {% endfor %}
         {% if notifications.has_next %}
-        <a href="?page={{ notifications.next_page_number }}">Load more</a>
+        <a class="load-more" href="?page={{ notifications.next_page_number }}">Load more</a>
         {% endif %}
     {% else %}
         <div class="container">

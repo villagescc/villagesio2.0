@@ -6815,9 +6815,24 @@ p {
     -webkit-box-shadow: 0 1px 10px 0 rgba(119, 119, 119, 0.4);
     -moz-box-shadow: 0 1px 10px 0 rgba(119, 119, 119, 0.4);
     box-shadow: 0 1px 10px 0 rgba(119, 119, 119, 0.4); }
-    .notification-block .dropdown-menu .table-row {
+    .notification-block .dropdown-menu .note-item {
       min-width: 17rem;
-      margin: 0; }
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center; }
+      .notification-block .dropdown-menu .note-item a {
+        margin-right: 10px; }
+      .notification-block .dropdown-menu .note-item span {
+        margin-right: 10px;
+        color: #8d8d8d;
+        font-size: 14px; }
+        .notification-block .dropdown-menu .note-item span:nth-child(2) {
+          color: #4cdfab; }
+        .notification-block .dropdown-menu .note-item span:last-child {
+          margin-right: 0; }
   .notification-block .notification-dropdown {
     text-decoration: none; }
     .notification-block .notification-dropdown .count {
@@ -6833,18 +6848,22 @@ p {
       border-radius: 50%;
       color: #fff;
       text-decoration: none;
-      background-color: #8d8d8d; }
+      background-color: #a7a7a7; }
       .notification-block .notification-dropdown .count:hover {
-        background-color: #a7a7a7; }
+        background-color: silver; }
       .notification-block .notification-dropdown .count.full {
-        background-color: #4cdfab; }
+        background-color: #28b1dd; }
         .notification-block .notification-dropdown .count.full:hover {
-          background-color: #77e7bf; }
+          background-color: #1d90b5; }
   .notification-block .dropdown-item {
     margin-top: 0; }
     .notification-block .dropdown-item a {
       text-decoration: none;
       color: #1d90b5; }
+  .notification-block .no-items {
+    min-width: 18rem;
+    padding: 10px 20px;
+    color: #8d8d8d; }
 
 .no-notes {
   margin-top: 20px;
@@ -8406,3 +8425,15 @@ p {
     .notification-list .note .time {
       text-align: center;
       color: #1d90b5; }
+  .notification-list .load-more {
+    display: inline-block;
+    min-width: 100px;
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: #1d90b5; }
+    .notification-list .load-more:hover {
+      background-color: #28b1dd; }

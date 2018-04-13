@@ -65,4 +65,18 @@
       color: $lightblue;
     }
   }
+  .load-more {
+    display: inline-block;
+    min-width: 100px;
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: $lightblue;
+    &:hover {
+      background-color: lighten($lightblue, 10%);
+    }
+  }
 }
