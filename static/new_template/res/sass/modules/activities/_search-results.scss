@@ -132,6 +132,7 @@
   flex-flow: row nowrap;
   background-color: #fff;
   padding: 12px 20px;
+  font-size: 16px;
   overflow: hidden;
   @include crossShadow(0 0 16px 0 rgba(119, 119, 119, 0.06));
   &:hover {
@@ -139,6 +140,10 @@
   }
   @include media-width-down(md) {
     flex-flow: row wrap;
+    font-size: 14px;
+  }
+  @include media-width-down(sm) {
+    font-size: 12px;
   }
   .person-avatar {
     flex: 0 0 8%;
@@ -194,7 +199,6 @@
     margin: 5px;
     flex: 0 0 auto;
     & span {
-      font-size: 1.125em;
       font-weight: 300;
     }
     & img {
@@ -209,7 +213,6 @@
     margin: 5px;
     flex: 0 0 auto;
     & span {
-      font-size: 1.125em;
       font-weight: 300;
     }
     & img {
@@ -224,7 +227,6 @@
     justify-content: flex-start;
     padding: 0 20px;
     & span {
-      font-size: 1.125em;
       font-weight: 300;
     }
     & img {
@@ -254,7 +256,6 @@
   & .date-container {
     flex: 0 0 60%;
     & span {
-      font-size: 1.125em;
       font-weight: 300;
     }
     & img {

@@ -7,87 +7,75 @@
         {% include 'new_templates/categories_sidebar.html' %}
 
         <main class="app-main">
-
             <form id="search-form" class="form-container">
-
                 <div class="row">
-
-                    <div class="col-12 col-xs-6 col-lg-4 col-xxl-3">
-
+                    <div class="col-sm-12 col-md-8 col-lg-6 col-xxl-3">
                         <div class="custom-group">
-
                             <label class="custom-radio" for="radio-grid">
                                 <a href="{% url 'frontend:home' %}">
                                     <input id="radio-grid" type="radio" name="view-radio" value="grid" checked>
                                     <span class="btn-input-layout">
-                        <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/grid.png' %}" alt="Grid">
-                      <span class="btn-input-text">Grid</span>
-                    </span>
+                                        <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/grid.png' %}" alt="Grid">
+                                        <span class="btn-input-text">Grid</span>
+                                    </span>
                                 </a>
                             </label>
-
                             <label class="custom-radio" for="radio-map">
-                                <a href="{% url 'frontend:map' %}"><input id="radio-map" type="radio" name="view-radio"
-                                                                          value="map">
+                                <a href="{% url 'frontend:map' %}">
+                                    <input id="radio-map" type="radio" name="view-radio" value="map">
                                     <span class="btn-input-layout">
-                      <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/map.png' %}" alt="Map">
-                      <span class="btn-input-text">Map</span>
-                    </span>
+                                      <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/map.png' %}" alt="Map">
+                                      <span class="btn-input-text">Map</span>
+                                    </span>
                                 </a>
                             </label>
-
                         </div>
-
                     </div>
 
-                    <div class="col-12 col-xs-6 col-md-4 col-lg-4 col-xxl-2">
+                    <div class="col-sm-12 col-md-4 col-lg-6 col-xxl-2">
                         {{ form.radius }}
                     </div>
 
                     <div class="col-12 col-sm-8 col-md-8 col-lg-6 col-xxl-3">
-
                         <div class="custom-group">
-
                             <label class="custom-radio" for="radio-posts">
                                 <input id="radio-posts" type="radio" name="type-radio" value="posts">
                                 <span class="btn-input-layout">
-                      <span class="btn-input-icon checkbox">
-                        <svg viewbox="0 0 7 7">
-                          <path d="
-                            M 0.6,3.5
-                            L 2.3,5.25
-                            L 6.4,0.9
-                            l 0.6,0.6
-                            L 2.3,6.15
-                            L 0,4.1
-                            z">
-                        </svg>
-                      </span>
-                      <span class="btn-input-text">View Posts</span>
-                    </span>
+                                    <span class="btn-input-icon checkbox">
+                                        <svg viewbox="0 0 7 7">
+                                          <path d="
+                                            M 0.6,3.5
+                                            L 2.3,5.25
+                                            L 6.4,0.9
+                                            l 0.6,0.6
+                                            L 2.3,6.15
+                                            L 0,4.1
+                                            z">
+                                        </svg>
+                                    </span>
+                                    <span class="btn-input-text">View Posts</span>
+                                </span>
                             </label>
 
                             <label class="custom-radio" for="radio-people">
                                 <input id="radio-people" type="radio" name="type-radio" value="people" checked>
                                 <span class="btn-input-layout">
-                      <span class="btn-input-icon checkbox">
-                        <svg viewbox="0 0 7 7">
-                          <path d="
-                            M 0.6,3.5
-                            L 2.3,5.25
-                            L 6.4,0.9
-                            l 0.6,0.6
-                            L 2.3,6.15
-                            L 0,4.1
-                            z">
-                        </svg>
-                      </span>
-                      <span class="btn-input-text">View People</span>
-                    </span>
+                                  <span class="btn-input-icon checkbox">
+                                    <svg viewbox="0 0 7 7">
+                                      <path d="
+                                        M 0.6,3.5
+                                        L 2.3,5.25
+                                        L 6.4,0.9
+                                        l 0.6,0.6
+                                        L 2.3,6.15
+                                        L 0,4.1
+                                        z">
+                                    </svg>
+                                  </span>
+                                  <span class="btn-input-text">View People</span>
+                                </span>
                             </label>
-
                         </div>
-
                     </div>
 
                     <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">

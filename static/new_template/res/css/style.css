@@ -7512,6 +7512,7 @@ p {
   flex-flow: row nowrap;
   background-color: #fff;
   padding: 12px 20px;
+  font-size: 16px;
   overflow: hidden;
   -webkit-box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06);
   -moz-box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06);
@@ -7520,7 +7521,11 @@ p {
     background-color: #f5f5f5; }
   @media (max-width: 991px) {
     .person-box {
-      flex-flow: row wrap; } }
+      flex-flow: row wrap;
+      font-size: 14px; } }
+  @media (max-width: 767px) {
+    .person-box {
+      font-size: 12px; } }
   .person-box .person-avatar {
     flex: 0 0 8%; }
   .person-box .person-name {
@@ -7563,7 +7568,6 @@ p {
     margin: 5px;
     flex: 0 0 auto; }
     .person-box .price-container span {
-      font-size: 1.125em;
       font-weight: 300; }
     .person-box .price-container img {
       margin-right: 4px;
@@ -7572,7 +7576,6 @@ p {
     margin: 5px;
     flex: 0 0 auto; }
     .person-box .like-container span {
-      font-size: 1.125em;
       font-weight: 300; }
     .person-box .like-container img {
       margin-right: 7px;
@@ -7583,7 +7586,6 @@ p {
     justify-content: flex-start;
     padding: 0 20px; }
     .person-box .location-container span {
-      font-size: 1.125em;
       font-weight: 300; }
     .person-box .location-container img {
       margin: auto 0.5em;
@@ -7607,7 +7609,6 @@ p {
   .person-box .date-container {
     flex: 0 0 60%; }
     .person-box .date-container span {
-      font-size: 1.125em;
       font-weight: 300; }
     .person-box .date-container img {
       margin: auto 0.5em;
