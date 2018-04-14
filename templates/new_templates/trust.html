@@ -152,7 +152,7 @@
             };
 
             // prevent trust double load
-            if ($input.val() === $('#name-profile-image').text()) {
+            if (!$input.attr("data-profile-selected") || ($input.val() === $('#name-profile-image').text())) {
                 return;
             }
 
@@ -162,8 +162,6 @@
             } else {
                 selectedUser = $input.attr("data-profile-selected");
             }
-
-            if (!$input.attr("data-profile-selected")) return;
 
             $.ajax({
                 url: '/get_user_photo/' + selectedUser,
@@ -207,6 +205,27 @@
                     $('#spin-modal').fadeOut();
                 }
             });
+        });
+
+        $("#trust-form").submit(function (e) {
+            var $errorModal = $('#error-modal');
+
+            $('#spin-modal').fadeIn();
+
+            // check whether all fields are filled
+            if ($("#id_recipient_name").val() == '') {
+                e.preventDefault();
+                $errorModal.find('#error-modal-alert').text('Recipient is invalid.');
+                $errorModal.modal();
+            } else if ($("#id_weight").val() == '') {
+                e.preventDefault();
+                $errorModal.find('#error-modal-alert').text('Amount cannot be 0. Please verify.');
+                $errorModal.modal();
+            } else {
+                $("#trust-form").submit();
+            }
+
+            $('#spin-modal').fadeOut();
         });
     </script>
 
