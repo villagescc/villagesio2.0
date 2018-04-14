@@ -8098,6 +8098,50 @@ p {
     .table-row {
       font-size: 0.8em; } }
 
+.activate-search {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  margin-left: 10px;
+  padding: 5px;
+  cursor: pointer; }
+  .activate-search .fa-times-circle {
+    display: none; }
+  .activate-search.active .fa-search {
+    display: none; }
+  .activate-search.active .fa-times-circle {
+    display: inline-block; }
+
+.search-block {
+  display: none;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border: 2px solid #1d90b5; }
+  .search-block .search-group {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center; }
+    .search-block .search-group.btn-block {
+      justify-content: flex-end; }
+    .search-block .search-group label {
+      margin: 0;
+      flex: 0 0 30%;
+      color: #1d90b5; }
+    .search-block .search-group input {
+      flex: 0 0 70%;
+      border: 1px solid silver; }
+    .search-block .search-group .btn-search {
+      width: 150px;
+      text-transform: uppercase;
+      color: #fff;
+      background-color: #1d90b5;
+      border-radius: 0;
+      cursor: pointer;
+      transition: all 0.2s ease; }
+      .search-block .search-group .btn-search:hover {
+        background-color: #28b1dd; }
+
 /* trust-content */
 .trust-content {
   width: 100%;

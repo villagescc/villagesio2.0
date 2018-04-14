@@ -5,7 +5,7 @@
 
     <div class="app-view">
 
-        <main class="app-main">
+        <main>
 
             <div class="payment-content">
 
@@ -34,9 +34,26 @@
 
                     <div class="col-xs-12 col-lg-6 mt-5 mt-lg-0">
 
-                        <h2>Last Payments
+                        <h2>Last Payments <span class="activate-search"><i class="fa fa-search"></i><i class="fa fa-times-circle"></i></span>
                             {#| <a class="small" href="#">View More</a>#}
                         </h2>
+                        <div class="search-block">
+                            <div class="search-group">
+                                <label for="search-name">Name</label>
+                                <input type="text" id="search-name">
+                            </div>
+                            <div class="search-group">
+                                <label for="search-from">Date from</label>
+                                <input type="text" id="search-from">
+                            </div>
+                            <div class="search-group">
+                                <label for="search-to">Date to</label>
+                                <input type="text" id="search-to">
+                            </div>
+                            <!--<div class="search-group btn-block">-->
+                                <!--<button class="btn btn-search">Search</button>-->
+                            <!--</div>-->
+                        </div>
                         {% if all_payments %}
                             <div class="table-head">
 
@@ -55,7 +72,10 @@
                                      {% if each_all.item.payment.memo %}
                                      title="&lt;span class='tip-balloon'&gt;{{ each_all.item.payment.memo }}&lt;/span&gt;"
                                      {% endif %}>
-                                    <div class="transaction">
+                                    <div class="transaction"
+                                         data-payer="{{ each_all.item.payer.name }}"
+                                         data-recipient="{{ each_all.item.recipient.name }}"
+                                    >
                                         <div class="avatar-wrapper blue">
                                             <a href="{{ each_all.item.payer.get_absolute_url }}">
                                                 <img src="{% profile_image_url each_all.item.payer '400x400' %}"
@@ -228,32 +248,6 @@
             $('#spin-modal').fadeOut();
         });
 
-        $("#save-payment").click(function (e) {
-            var profile = $('#id_recipient').val();
-            $("#id_recipient").val(profile);
-            var url = '/pay/' + profile;
-            // $.ajax({
-            //     url: url,
-            //     type: 'POST',
-            //     data: $("#blank-payment-form").serialize(),
-            //     beforeSend: function (xhr) {
-            //         var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
-            //         xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            //     },
-            //     success: function (data) {
-            //         if (data['referral'] === true) {
-            //
-            //         } else {
-            //             showSuccessMessage('Payment sent')
-            //         }
-            //     },
-            //     error: function (data) {
-            //         console.log(data);
-            //         showFormErrors(data['responseJSON']['errors'])
-            //     }
-            // });
-        });
-
         $("#saveReferral").click(function () {
             var profile = $('#id_recipient').val();
             $.ajax({
@@ -290,7 +284,39 @@
             $("#table-payments-all").addClass("hidden");
             $("#table-made-payments").addClass("hidden");
             $("#table-received-payments").removeClass("hidden");
-        })
+        });
+
+        // Filtering
+        (function () {
+            var $activateBtn = $('.activate-search'),
+                $searchBlock = $('.search-block'),
+                $nameInput = $('#search-name');
+
+            $activateBtn.on('click', function () {
+                $(this).toggleClass('active');
+                $searchBlock.toggleClass('active');
+                $searchBlock.hasClass('active') ? $searchBlock.slideDown(300, 'swing') : $searchBlock.slideUp(300, 'swing');
+            });
+
+            $nameInput.on('input', function () {
+                var $this = $(this),
+                    $items = $('.rows-wrapper .table-row'),
+                    value = $this.val().toLowerCase();
+
+                $items.hide();
+                if (value == '') {
+                    $items.show();
+                }
+                $items.each(function (i, item) {
+                    var payer = $(item).find('.transaction').attr('data-payer').toLowerCase();
+                    var recipient = $(item).find('.transaction').attr('data-recipient').toLowerCase();
+                    if ((payer.indexOf(value) != -1) || (recipient.indexOf(value) != -1)) {
+                        $(item).show();
+                    }
+                });
+            });
+        })();
+
     </script>
 
     <script>
