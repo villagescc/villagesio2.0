@@ -143,6 +143,10 @@
             var selectedUser;
             var $input = $(this);
 
+            if ($input.val() === $('.transaction #img-payee').attr("data-original-title")) {
+                return;
+            }
+
             if (e.type === 'typeahead:selected') {
                 selectedUser = $input.val();
                 $input.attr("data-profile-selected", selectedUser)
