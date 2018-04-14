@@ -117,6 +117,7 @@
 .user-menu {
   display: flex;
   flex-flow: row;
+  flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
   margin-left: auto;

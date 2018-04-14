@@ -16,7 +16,7 @@
             <div class="user-menu d-flex d-lg-none">
                 <a class="user-link" href="{% url 'notifications:all_notifications' %}">
                     <img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications">
-                    {{ notifications_count }}
+                    <span class="count {% if notifications_count %} full{% endif %}">{{ notifications_count }}</span>
                 </a>
                 <a class="user-link responsive-toggle" href="#">
                     <div class="avatar-wrapper blue">

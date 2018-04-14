@@ -280,7 +280,12 @@
         background-color: darken(#fff, 10%);
       }
     }
+    @include media-width-down(lg) {
+      margin: 10px;
+      width: 100%;
+    }
     @include media-width-down(md) {
+      margin: 0;
       flex: 0 0 40%;
       flex-direction: row;
     }

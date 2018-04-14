@@ -53,6 +53,35 @@
 }
 
 // Notifications
+.user-menu {
+  .user-link {
+    position: relative;
+  }
+  .count {
+    position: absolute;
+    top: -16px;
+    left: 17px;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 50%;
+    color: #fff;
+    text-decoration: none;
+    background-color: lighten($lightgrey, 30%);
+    &:hover {
+      background-color: lighten($lightgrey, 20%);
+    }
+    &.full {
+      background-color: lighten($lightblue, 10%);
+      &:hover {
+        background-color: $lightblue;
+      }
+    }
+  }
+}
 .notification-block {
   position: relative;
   margin: 0;
@@ -89,9 +118,9 @@
   .notification-dropdown {
     text-decoration: none;
     .count {
-      position: relative;
-      top: -10px;
-      left: -5px;
+      position: absolute;
+      top: -16px;
+      left: 17px;
       display: inline-block;
       width: 30px;
       height: 30px;
@@ -101,7 +130,7 @@
       border-radius: 50%;
       color: #fff;
       text-decoration: none;
-      background-color: lighten($lightgrey, 10%);
+      background-color: lighten($lightgrey, 30%);
       &:hover {
         background-color: lighten($lightgrey, 20%);
       }
