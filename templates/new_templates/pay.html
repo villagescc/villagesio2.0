@@ -142,7 +142,19 @@
         $(".twitter-typeahead #id_recipient").on('typeahead:change typeahead:selected', function (e) {
             var selectedUser;
             var $input = $(this);
+            var $infoBlock = $('.transaction#div-transaction-photos');
 
+            // hide payee data when empty input
+            if (!$input.attr("data-profile-selected") || !$input.val()) {
+                $('.transaction #img-payee').attr("data-original-title", '');
+                $infoBlock.attr('hidden', true);
+                $('#payment-not-ripple').hide();
+                $('#payment-ripple').hide();
+                $('#payment-max-amount').hide();
+                return;
+            };
+
+            // prevent payee double load
             if ($input.val() === $('.transaction #img-payee').attr("data-original-title")) {
                 return;
             }
@@ -154,7 +166,6 @@
                 selectedUser = $input.attr("data-profile-selected");
             }
 
-            if (!$input.attr("data-profile-selected")) return;
             $.ajax({
                 url: '/get_user_photo/' + selectedUser,
                 type: 'POST',
@@ -168,8 +179,6 @@
                         $("#id_weight").val(e['data']['credit_limit']);
                         $("#id_text").val(e['data']['text']);
                     }
-
-                    var $infoBlock = $('.transaction#div-transaction-photos');
 
                     $infoBlock.attr('hidden', false);
 
