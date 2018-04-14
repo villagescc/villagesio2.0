@@ -138,8 +138,7 @@
             });
 
 
-        $("#id_recipient_name").bind('typeahead:change typeahead:selected', function (e) {
-
+        $("#id_recipient_name").bind('typeahead:change typeahead:selected change', function (e) {
             var selectedUser;
             var $input = $(this);
 
@@ -151,6 +150,11 @@
                 $('#name-profile-image').text('');
                 return;
             };
+
+            // prevent trust double load
+            if ($input.val() === $('#name-profile-image').text()) {
+                return;
+            }
 
             if (e.type === 'typeahead:selected') {
                 selectedUser = $input.val();

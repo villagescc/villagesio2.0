@@ -139,7 +139,7 @@
                 }
             });
         var max_amount_span = $("#max-amount");
-        $(".twitter-typeahead #id_recipient").on('typeahead:change typeahead:selected', function (e) {
+        $(".twitter-typeahead #id_recipient").on('typeahead:change typeahead:selected change', function (e) {
             var selectedUser;
             var $input = $(this);
             var $infoBlock = $('.transaction#div-transaction-photos');
