@@ -101,10 +101,6 @@
     <script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>
 
     <script>
-        // disable save btn
-        var $saveBtn = $('.trust-btn#save-trust');
-        $saveBtn.attr('disabled', true);
-
         var recipients = new Bloodhound({
             datumTokenizer: function (datum) {
                 return Bloodhound.tokenizers.whitespace(datum.value);
@@ -145,15 +141,25 @@
         $("#id_recipient_name").bind('typeahead:change typeahead:selected', function (e) {
 
             var selectedUser;
+            var $input = $(this);
+
+            // hide trust data when empty input
+            if (!$input.attr("data-profile-selected") || !$input.val()) {
+                $('#div-profile-photo').attr("hidden", true);
+                $('#div-profile-image .recipient-link').attr('href', '#');
+                $('#profile-image').attr("src", '');
+                $('#name-profile-image').text('');
+                return;
+            };
 
             if (e.type === 'typeahead:selected') {
-                selectedUser = $("#id_recipient_name").val();
-                $("#id_recipient_name").attr("data-profile-selected", selectedUser)
+                selectedUser = $input.val();
+                $input.attr("data-profile-selected", selectedUser)
             } else {
-                selectedUser = $("#id_recipient_name").attr("data-profile-selected");
+                selectedUser = $input.attr("data-profile-selected");
             }
 
-            if (!$("#id_recipient_name").attr("data-profile-selected")) return;
+            if (!$input.attr("data-profile-selected")) return;
 
             $.ajax({
                 url: '/get_user_photo/' + selectedUser,
@@ -187,16 +193,14 @@
                     $('#div-profile-image .recipient-link').attr('href', '/profiles/' + selectedUser);
                     $('#profile-image').attr("src", e['data']['profile_photo_path']);
                     $('#name-profile-image').text(e['data']['recipient']);
-                    $('#spin-modal').fadeOut();
-
-                    // activate saveBtn
-                    $saveBtn.removeAttr('disabled');
                 },
                 error: function (e) {
                     if (e.status === 500) {
                         showInternalServerError();
-                        $('#spin-modal').fadeOut();
                     }
+                },
+                complete: function () {
+                    $('#spin-modal').fadeOut();
                 }
             });
         });
