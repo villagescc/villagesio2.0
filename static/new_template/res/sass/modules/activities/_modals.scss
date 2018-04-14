@@ -1,11 +1,18 @@
 .modal {
   &#error-modal {
     .modal-header h4 {
+      padding-left: 15px;
+      font-size: 20px;
       font-weight: bold;
+      text-transform: uppercase;
       color: $red;
     }
     .modal-body {
+      color: $lightgrey;
       overflow-y: auto;
+    }
+    #error-modal-alert {
+      min-height: 40px;
     }
   }
 

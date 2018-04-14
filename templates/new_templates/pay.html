@@ -35,7 +35,7 @@
                     <div class="col-xs-12 col-lg-6 mt-5 mt-lg-0">
 
                         <h2>Last Payments
-                            {#                            | <a class="small" href="#">View More</a>#}
+                            {#| <a class="small" href="#">View More</a>#}
                         </h2>
                         {% if all_payments %}
                             <div class="table-head">
@@ -103,9 +103,6 @@
     <script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>
 
     <script>
-        // disable saveBtn
-        var $saveBtn = $('#payment-form input[type=submit]');
-            $saveBtn.attr('disabled', true);
         var recipients = new Bloodhound({
             datumTokenizer: function (datum) {
                 return Bloodhound.tokenizers.whitespace(datum.value);
@@ -153,8 +150,6 @@
                 selectedUser = $input.attr("data-profile-selected");
             }
 
-            console.log(selectedUser);
-
             if (!$input.attr("data-profile-selected")) return;
             $.ajax({
                 url: '/get_user_photo/' + selectedUser,
@@ -187,72 +182,63 @@
                         $('#payment-ripple').show();
                         $('#payment-max-amount').html(e.data.max_amount);
                     }
-
-                    $('#spin-modal').fadeOut();
-                    $saveBtn.removeAttr('disabled');
                 },
                 error: function (e) {
                     if (e.status === 500) {
                         showInternalServerError();
-                        $('#spin-modal').fadeOut();
                     }
+                },
+                complete: function () {
+                    $('#spin-modal').fadeOut();
                 }
             });
         });
 
-        $("#blank-payment-form").submit(function (e) {
-            debugger;
-            if ($("#form-submit-checker").attr("data-submit-checker") === "true") {
-                $("#form-submit-checker").attr("data-submit-checker", false);
-            } else {
+        $("#payment-form").submit(function (e) {
+            var $errorModal = $('#error-modal');
+
+            $('#spin-modal').fadeIn();
+
+            // check whether all fields are filled
+            if ($("#id_recipient").val() == '') {
                 e.preventDefault();
-                debugger;
-                var modal = $('#referralModal');
-                if ($("#id_recipient").val() == '') {
-                    modal.find('.modal-body').html('Recipient is invalid');
-                    modal.modal();
-                }
-                if ($("#id_amount").val() == '') {
-                    modal.find('.modal-body').html('Amount cannot be 0. Please verify');
-                    modal.find('.modal-footer').html('<button type="button" class="btn btn-secondary" id="not-refer" data-dismiss="modal"><i class="fa fa-arrow-left"></i>Close</button>');
-                    modal.modal();
-                }
-                else {
-                    if ($("#boolean-referral").attr("data-referral") === "true") {
-                        $("#form-submit-checker").attr("data-submit-checker", true);
-                        $("#blank-payment-form").submit();
-                    } else {
-                        modal.modal();
-                    }
-                }
+                $errorModal.find('#error-modal-alert').text('Recipient is invalid.');
+                $errorModal.modal();
+            } else if ($("#id_amount").val() == '') {
+                e.preventDefault();
+                $errorModal.find('#error-modal-alert').text('Amount cannot be 0. Please verify.');
+                $errorModal.modal();
+            } else {
+                $("#payment-form").submit();
             }
+
+            $('#spin-modal').fadeOut();
         });
 
         $("#save-payment").click(function (e) {
-            debugger;
             var profile = $('#id_recipient').val();
             $("#id_recipient").val(profile);
             var url = '/pay/' + profile;
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: $("#blank-payment-form").serialize(),
-                beforeSend: function (xhr) {
-                    var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                },
-                success: function (data) {
-                    if (data['referral'] === true) {
-
-                    } else {
-                        showSuccessMessage('Payment sent')
-                    }
-                },
-                error: function (data) {
-                    console.log(data);
-                    showFormErrors(data['responseJSON']['errors'])
-                }
-            });
+            // $.ajax({
+            //     url: url,
+            //     type: 'POST',
+            //     data: $("#blank-payment-form").serialize(),
+            //     beforeSend: function (xhr) {
+            //         var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+            //         xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            //     },
+            //     success: function (data) {
+            //         if (data['referral'] === true) {
+            //
+            //         } else {
+            //             showSuccessMessage('Payment sent')
+            //         }
+            //     },
+            //     error: function (data) {
+            //         console.log(data);
+            //         showFormErrors(data['responseJSON']['errors'])
+            //     }
+            // });
         });
 
         $("#saveReferral").click(function () {

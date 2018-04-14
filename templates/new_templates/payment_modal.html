@@ -145,7 +145,7 @@
                 else if (data['data']['stat'] == 'error') {
                     debugger;
                     if ('weight' in data['data']['errors']) {
-                        $('#payment-msg').html(data).fadeIn('slow');
+                        $('#payment-mseferralModalg').html(data).fadeIn('slow');
                         var error = data["data"]["errors"]["weight"];
                         $('#payment-msg').html("<strong><p> Weight: " + error + " Please verify</p></strong>").fadeIn('slow');
                         $('#payment-msg').delay(4500).fadeOut('slow');

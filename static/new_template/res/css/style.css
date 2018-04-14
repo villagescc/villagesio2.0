@@ -7985,6 +7985,10 @@ p {
       font-size: 1em;
       height: 3.75em;
       text-transform: uppercase; }
+      .payment-data #payment-form .btn-std:disabled {
+        background-color: silver; }
+        .payment-data #payment-form .btn-std:disabled:hover {
+          background-color: silver; }
       .payment-data #payment-form .btn-std.btn-cancel {
         background-color: #ebebeb; }
         .payment-data #payment-form .btn-std.btn-cancel:hover, .payment-data #payment-form .btn-std.btn-cancel:focus {
@@ -8321,11 +8325,18 @@ p {
       margin: 0 0.5em; }
 
 .modal#error-modal .modal-header h4 {
+  padding-left: 15px;
+  font-size: 20px;
   font-weight: bold;
+  text-transform: uppercase;
   color: #d97271; }
 
 .modal#error-modal .modal-body {
+  color: #8d8d8d;
   overflow-y: auto; }
+
+.modal#error-modal #error-modal-alert {
+  min-height: 40px; }
 
 .modal#listing-modal .modal-dialog {
   max-width: 1000px; }

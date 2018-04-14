@@ -135,6 +135,12 @@
       font-size: 1em;
       height: 3.75em;
       text-transform: uppercase;
+      &:disabled {
+        background-color: lighten($lightgrey, 20%);
+        &:hover {
+          background-color: lighten($lightgrey, 20%);
+        }
+      }
       &.btn-cancel {
         background-color: #ebebeb;
         &:hover,
