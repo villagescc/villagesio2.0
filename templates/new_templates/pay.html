@@ -5,7 +5,7 @@
 
     <div class="app-view">
 
-        <main>
+        <main class="container-fluid">
 
             <div class="payment-content">
 
@@ -40,15 +40,15 @@
                         <div class="search-block">
                             <div class="search-group">
                                 <label for="search-name">Name</label>
-                                <input type="text" id="search-name">
+                                <input type="search" id="search-name">
                             </div>
                             <div class="search-group">
                                 <label for="search-from">Date from</label>
-                                <input type="text" id="search-from">
+                                <input type="date" id="search-from">
                             </div>
                             <div class="search-group">
                                 <label for="search-to">Date to</label>
-                                <input type="text" id="search-to">
+                                <input type="date" id="search-to">
                             </div>
                             <!--<div class="search-group btn-block">-->
                                 <!--<button class="btn btn-search">Search</button>-->
@@ -290,7 +290,9 @@
         (function () {
             var $activateBtn = $('.activate-search'),
                 $searchBlock = $('.search-block'),
-                $nameInput = $('#search-name');
+                $nameInput = $('#search-name'),
+                $fromInput = $('#search-from'),
+                $toInput = $('#search-to');
 
             $activateBtn.on('click', function () {
                 $(this).toggleClass('active');
@@ -298,23 +300,99 @@
                 $searchBlock.hasClass('active') ? $searchBlock.slideDown(300, 'swing') : $searchBlock.slideUp(300, 'swing');
             });
 
-            $nameInput.on('input', function () {
-                var $this = $(this),
-                    $items = $('.rows-wrapper .table-row'),
-                    value = $this.val().toLowerCase();
+            $nameInput.on('input change', filterPayments);
+            $fromInput.on('input change', filterPayments);
+            $toInput.on('input change', filterPayments);
 
-                $items.hide();
-                if (value == '') {
-                    $items.show();
+            function filterPayments (e) {
+                console.log(e.type);
+                var $items = $('.rows-wrapper .table-row');
+
+                    $items.hide();
+
+                    $items.each(function (i, item) {
+                        var payer = $(item).find('.transaction').attr('data-payer').toLowerCase(),
+                            recipient = $(item).find('.transaction').attr('data-recipient').toLowerCase(),
+                            date;
+
+                        // format Date
+                        date = $(item).find('.datetime').text();
+                        var dateArr = date.split(' ');
+                        var parseDate = dateArr[0] + ' ' + dateArr[1] + ' ' + dateArr[2].slice(0, 4) + ' '
+                            + dateArr[3];
+                        var newDate = new Date(parseDate);
+                        // if (dateArr[4] == 'p.m.') {
+                        //     newDate.setTime(newDate.getTime() + 12 * 60 * 60 * 1000);
+                        // }
+
+                        if ( fromDate(newDate) && toDate(newDate) && checkName(payer, recipient)) {
+                            $(item).show();
+                        }
+                    });
+            }
+
+            function fromDate (date) {
+                if ($fromInput.val()) {
+                    return date >= new Date($fromInput.val());
+                } else {
+                    return true;
                 }
-                $items.each(function (i, item) {
-                    var payer = $(item).find('.transaction').attr('data-payer').toLowerCase();
-                    var recipient = $(item).find('.transaction').attr('data-recipient').toLowerCase();
-                    if ((payer.indexOf(value) != -1) || (recipient.indexOf(value) != -1)) {
-                        $(item).show();
-                    }
-                });
-            });
+            }
+
+            function toDate (date) {
+                if ($toInput.val()) {
+                    return date <= new Date($toInput.val());
+                } else {
+                    return true;
+                }
+            }
+
+            function checkName (payer, recipient) {
+                if ($nameInput.val()) {
+                    return payer.indexOf($nameInput.val()) != -1 || recipient.indexOf($nameInput.val()) != -1;
+                } else {
+                    return true;
+                }
+            }
+
+            // filtering by NAME
+            // $nameInput.on('input change', function () {
+            //     var $this = $(this),
+            //         $items = $('.rows-wrapper .table-row:visible'),
+            //         value = $this.val().toLowerCase();
+            //
+            //     $items.each(function (i, item) {
+            //         var payer = $(item).find('.transaction').attr('data-payer').toLowerCase();
+            //         var recipient = $(item).find('.transaction').attr('data-recipient').toLowerCase();
+            //         console.log(payer.indexOf(value), payer, value  );
+            //         if ((payer.indexOf(value) == -1) || (recipient.indexOf(value) == -1)) {
+            //             $(item).hide();
+            //         }
+            //     });
+            // });
+
+            // $fromInput.on('input', function () {
+            //     var $this = $(this),
+            //         $items = $('.rows-wrapper .table-row'),
+            //         value = $this.val();
+            //
+            //     $items.each(function (i, item) {
+            //         var date = $(item).find('.datetime').text();
+            //         var dateArr = date.split(' ');
+            //         var formDate = dateArr[0] + ' ' + dateArr[1] + ' ' + dateArr[2].slice(0, 4) + ' '
+            //             + dateArr[3];
+            //         var newDate = new Date(formDate);
+            //         if (dateArr[4] == 'p.m.') { newDate.setTime(newDate.getTime() + 12 * 60 * 60 * 1000) }
+            //
+            //         if (newDate > new Date(value)) {
+            //             console.log(newDate, new Date(value));
+            //
+            //             $(item).show();
+            //         } else {
+            //             $(item).hide();
+            //         }
+            //     });
+            // });
         })();
 
     </script>
