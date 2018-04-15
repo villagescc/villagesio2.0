@@ -255,3 +255,31 @@
     }
   }
 }
+
+// Search
+.search-by-name {
+  display: inline-block;
+  width: auto;
+  padding: 10px 35px 10px 15px;
+  font-size: 18px;
+  color: $lightblue;
+  border: 2px solid $lightblue;
+  background-color: transparent;
+}
+.search-holder {
+  position: relative;
+  display: inline-block;
+  .input-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 18px;
+    color: $lightblue;
+  }
+}
+
+.search-by-name {
+  &:before {
+    content: "\f002";
+  }
+}

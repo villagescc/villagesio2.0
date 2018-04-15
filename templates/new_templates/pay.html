@@ -305,7 +305,6 @@
             $toInput.on('input change', filterPayments);
 
             function filterPayments (e) {
-                console.log(e.type);
                 var $items = $('.rows-wrapper .table-row');
 
                     $items.hide();
@@ -321,9 +320,6 @@
                         var parseDate = dateArr[0] + ' ' + dateArr[1] + ' ' + dateArr[2].slice(0, 4) + ' '
                             + dateArr[3];
                         var newDate = new Date(parseDate);
-                        // if (dateArr[4] == 'p.m.') {
-                        //     newDate.setTime(newDate.getTime() + 12 * 60 * 60 * 1000);
-                        // }
 
                         if ( fromDate(newDate) && toDate(newDate) && checkName(payer, recipient)) {
                             $(item).show();
@@ -354,45 +350,6 @@
                     return true;
                 }
             }
-
-            // filtering by NAME
-            // $nameInput.on('input change', function () {
-            //     var $this = $(this),
-            //         $items = $('.rows-wrapper .table-row:visible'),
-            //         value = $this.val().toLowerCase();
-            //
-            //     $items.each(function (i, item) {
-            //         var payer = $(item).find('.transaction').attr('data-payer').toLowerCase();
-            //         var recipient = $(item).find('.transaction').attr('data-recipient').toLowerCase();
-            //         console.log(payer.indexOf(value), payer, value  );
-            //         if ((payer.indexOf(value) == -1) || (recipient.indexOf(value) == -1)) {
-            //             $(item).hide();
-            //         }
-            //     });
-            // });
-
-            // $fromInput.on('input', function () {
-            //     var $this = $(this),
-            //         $items = $('.rows-wrapper .table-row'),
-            //         value = $this.val();
-            //
-            //     $items.each(function (i, item) {
-            //         var date = $(item).find('.datetime').text();
-            //         var dateArr = date.split(' ');
-            //         var formDate = dateArr[0] + ' ' + dateArr[1] + ' ' + dateArr[2].slice(0, 4) + ' '
-            //             + dateArr[3];
-            //         var newDate = new Date(formDate);
-            //         if (dateArr[4] == 'p.m.') { newDate.setTime(newDate.getTime() + 12 * 60 * 60 * 1000) }
-            //
-            //         if (newDate > new Date(value)) {
-            //             console.log(newDate, new Date(value));
-            //
-            //             $(item).show();
-            //         } else {
-            //             $(item).hide();
-            //         }
-            //     });
-            // });
         })();
 
     </script>

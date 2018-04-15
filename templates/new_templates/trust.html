@@ -36,8 +36,9 @@
                     <div class="col-xs-12 col-lg-6 mt-5 mt-lg-0">
 
                         <h2>Trust Info
-                            {#                            | <a class="small" href="#">View More</a>#}
+                            {#| <a class="small" href="#">View More</a>#}
                         </h2>
+                        <label class="search-holder"><input class="search-by-name" type="search" placeholder="Search..."><i class="input-icon fa fa-search"></i></label>
 
                         <div class="table-head">
 
@@ -49,7 +50,9 @@
 
                         <div class="rows-wrapper">
                             {% for account in accounts %}
-                                <div class="table-row">
+                                <div class="table-row"
+                                     data-partner="{{ account.partner }}"
+                                >
                                     <div class="avatar-wrapper blue">
                                         <a href="{{ account.partner.get_absolute_url }}">
                                             <img src="{% profile_image_url account.partner '400x400' %}"
@@ -226,6 +229,25 @@
             }
 
             $('#spin-modal').fadeOut();
+        });
+
+        // Search
+        $('.search-by-name').on('input change', function () {
+            var value = $(this).val(),
+                $items = $('.rows-wrapper .table-row');
+
+            $items.hide();
+            if (value == '') {
+                $items.show();
+            }
+
+            $items.each(function (i, item) {
+                var $item = $(item);
+                var name = $item.attr('data-partner');
+                if (name.indexOf(value.toLowerCase()) != -1) {
+                    $item.show();
+                }
+           });
         });
     </script>
 

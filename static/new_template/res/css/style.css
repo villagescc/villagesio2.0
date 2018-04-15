@@ -8351,6 +8351,28 @@ p {
       font-weight: 300;
       color: #8d8d8d; }
 
+.search-by-name {
+  display: inline-block;
+  width: auto;
+  padding: 10px 35px 10px 15px;
+  font-size: 18px;
+  color: #1d90b5;
+  border: 2px solid #1d90b5;
+  background-color: transparent; }
+
+.search-holder {
+  position: relative;
+  display: inline-block; }
+  .search-holder .input-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 18px;
+    color: #1d90b5; }
+
+.search-by-name:before {
+  content: "\f002"; }
+
 /* transaction-history */
 .transaction-history {
   width: 100%;
