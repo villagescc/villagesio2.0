@@ -87,7 +87,6 @@ class ListingsManager(GeoManager):
         if listing_type:
             query = query.filter(listing_type=listing_type).order_by('-updated')
 
-        query = query.filter()
         return query
 
 

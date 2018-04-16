@@ -290,7 +290,7 @@ FEED_ITEMS_PER_PAGE = 20
 
 LISTING_ITEMS_PER_PAGE = 21
 
-NOTIFICATIONS_PER_PAGE = 5
+NOTIFICATIONS_PER_PAGE = 10
 
 try:
     from ccproject.local_settings import *
