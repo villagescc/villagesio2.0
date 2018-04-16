@@ -232,7 +232,6 @@ function init_listing_modal() {
 function init_edit_post() {
 
     $('.my-profile').on('click', '.edit-post-button', function (e) {
-        console.log('hello');
     //     var postId = $(this).parents('.post-box').find('.post-cover').data().listingId;
     //     var url = '/get_listing_info/' + postId;
     //     var listing_picture_path = '/uploads/';
@@ -275,7 +274,7 @@ function init_notification_dropdown() {
             dataType: 'html',
             method: 'GET',
             success: function (data, status, xhr) {
-                $('#notification-dropdown-menu').html(data).toggle();
+                $('#notification-dropdown-menu').html(data);
             }
         });
         $(this).find('.count').removeClass('full').text(0);
