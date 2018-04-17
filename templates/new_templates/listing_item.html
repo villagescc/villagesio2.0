@@ -10,7 +10,6 @@
              data-listing-id="{{ item.id }}">
             <span class="type">{{ item.listing_type }}</span>
             <span class="price">{{ item.price }} VH</span>
-
         </div>
 
         <div class="post-content listing-modal" data-listing-id="{{ item.id }}">
@@ -41,16 +40,16 @@
                         src="{% static 'new_template/res/img/icons/trash-alt.svg' %}"
                         alt="like"></a>
             {% else %}
-                <a class="action-menu-item"
+                <a class="action-menu-item trust-button"
                    data-profile-username="{{ item.user.profile.username }}"
                    href="{{ item.get_trust_link }}">
                     <img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like">
                 </a>
-                <a class="action-menu-item"
+                <a class="action-menu-item pay-button"
                    data-profile-username="{{ item.user.profile.username }}"
                    href="{{ item.get_payment_link }}">
                     <img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy"></a>
-                <a class="action-menu-item"
+                <a class="action-menu-item contact-button"
                    data-profile-username="{{ item.user.profile.username }}"
                    data-listing-title="{{ item.title }}"
                    href="{{ item.get_contact_link }}"><img

@@ -281,12 +281,57 @@ function init_notification_dropdown() {
     });
 }
 
-function initModals () {
-    init_listing_modal();
-    init_contact_modal();
-    init_payment_modal();
-    init_trust_modal();
+
+function init_modals() {
+    $(".trust-button, .pay-button, .contact-button").click(function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            method: 'GET',
+
+            success: function (data, status, xhr) {
+                var modal = $('#base-modal'), html = $(data),
+					form = html.find('form');
+
+                modal.find('.modal-body').html(form);
+
+                init_modal_form(form, modal, url);
+                modal.modal({
+					'keyboard': false,
+					'show': true
+				});
+            }
+        });
+    });
 }
+
+
+function init_modal_form(form, modal, url) {
+    form.ajaxForm({
+        url: url,
+        dataType: 'html',
+
+        'success': function(data, status, xhr) {
+            var html = $(data), success_status = html.find('.messages'),
+                newform = html.find('form');
+
+            modal.find('.modal-body').html(newform);
+            // initialize form fields and buttons
+            init_modal_form(newform, modal, url);
+        }
+    });
+}
+
+
+// function initModals () {
+//     init_listing_modal();
+//     init_contact_modal();
+//     init_payment_modal();
+//     init_trust_modal();
+// }
 
 $(document).ready(function () {
     init_feed_filter_form();
@@ -294,5 +339,5 @@ $(document).ready(function () {
     init_feed_items();
     init_edit_post();
     init_notification_dropdown();
-    initModals();
+    init_modals()
 });

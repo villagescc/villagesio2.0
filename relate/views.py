@@ -317,6 +317,7 @@ def blank_trust(request):
     elif request.method == 'POST':
         if not request.POST['recipient_name']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
+            form = BlankTrust(request.POST)
         else:
             recipient = get_object_or_404(Profile, user__username=request.POST['recipient_name'])
             if recipient == profile:
@@ -376,6 +377,7 @@ def blank_payment(request):
     if request.method == 'POST':
         if not request.POST['recipient']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
+            form = BlankPaymentForm(request.POST)
         else:
             recipient = get_object_or_404(Profile, user__username=request.POST['recipient'])
             max_amount = ripple.max_payment(profile, recipient)
