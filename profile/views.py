@@ -3,7 +3,7 @@ from datetime import datetime
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as django_login
@@ -16,7 +16,6 @@ from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from general.util import render, deflect_logged_in
 from django.shortcuts import render as django_render
-from listings.forms import ListingsForms
 from listings.models import Listings
 from listings.views import update_profile_tags
 from relate.forms import AcknowledgementForm
@@ -29,6 +28,7 @@ from profile.forms import (
 from profile.models import Profile, Invitation, PasswordResetLink, ProfilePageTag
 from relate.models import Referral
 from post.models import Post
+from categories.models import Categories
 from geo.util import location_required
 from geo.models import Location
 from relate.models import Endorsement
@@ -214,15 +214,13 @@ def reset_password(request, code):
 
 
 @login_required
-@render('settings.html')
 def edit_settings(request):
     request.session['from_settings'] = True
-    social_auth = request.user.social_auth.filter(provider="facebook")
+    # social_auth = request.user.social_auth.filter(provider="facebook")
     if request.method == 'POST':
         if 'change_settings' in request.POST:
             old_email = request.profile.settings.email
-            settings_form = SettingsForm(
-                request.POST, instance=request.profile.settings)
+            settings_form = SettingsForm(request.POST, instance=request.profile.settings)
             if settings_form.is_valid():
                 settings_obj = settings_form.save()
                 translation.activate(settings_obj.language)
@@ -241,11 +239,14 @@ def edit_settings(request):
                 return redirect(edit_settings)
         
     if 'change_settings' not in request.POST:
-        tag_list = []
         settings_form = SettingsForm(instance=request.profile.settings)
     if 'change_password' not in request.POST:
         password_form = PasswordChangeForm(request.user)
-    return locals()
+    all_categories = Categories.objects.order_by('id')
+
+    return django_render(request, 'new_templates/profile_settings.html', {'settings_form': settings_form,
+                                                                          'password_form': password_form,
+                                                                          'categories': all_categories})
 
 
 def send_new_address_email(settings_obj):
@@ -285,7 +286,7 @@ def my_profile(request):
     other_tags = []
 
     listing_form = ListingsForms()
-    listings = Listings.objects.filter(user_id=request.profile.user_id)
+    listings = Listings.objects.filter(user_id=request.profile.user_id).order_by('-id')
     endorsements_received = request.profile.endorsements_received.all()
     endorsements_made = request.profile.endorsements_made.all()
     profile_tags = ProfilePageTag.objects.filter(profile_id=request.profile.id)
@@ -320,7 +321,7 @@ def my_profile(request):
     else:
         referral_count = None
 
-    return django_render(request, 'new_templates/04_My_Profile_001b.html',
+    return django_render(request, 'new_templates/my_profile.html',
                          {'profile': request.profile, 'listings': listings, 'endorsements_made': endorsements_made,
                           'endorsements_received': endorsements_received, 'offer_tags': offer_tags,
                           'request_tags': request_tags, 'teach_tags': teach_tags, 'learn_tags': learn_tags,
@@ -351,7 +352,7 @@ def profile(request, username):
             account = profile.account(request.profile)
             trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
             payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
-            listings = Listings.objects.filter(user_id=profile.user_id)
+            listings = Listings.objects.filter(user_id=profile.user_id).order_by('-id')
             contact_form = ContactForm()
 
             profile_tags = ProfilePageTag.objects.filter(profile_id=profile.id)
@@ -374,12 +375,12 @@ def profile(request, username):
             else:
                 referral_count = None
 
-            return django_render(request, 'new_templates/04_Profile_001b.html',
+            return django_render(request, 'new_templates/profile.html',
                                  {'endorsements_made': profile_endorsements_made,
                                   'endorsements_received': profile_endorsements_received,
                                   'account': account, 'listing_form': listing_form, 'profile': profile,
                                   'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form,
-                                  'offer_tags':offer_tags, 'request_tags': request_tags, 'teach_tags': teach_tags,
+                                  'offer_tags': offer_tags, 'request_tags': request_tags, 'teach_tags': teach_tags,
                                   'learn_tags': learn_tags, 'other_tags': other_tags, 'listings': listings,
                                   'referral': referral, 'referral_count': referral_count})
     return locals(), template
@@ -421,29 +422,39 @@ def contact(request, username):
     return locals()
 
 
+@login_required
 def undefined_contact(request):
-    form = ContactForm()
-    listing_form = ListingsForms()
-    if request.method == 'POST' and not request.is_ajax():
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            profile = Profile.objects.get(user__username=form.cleaned_data['contact_recipient_name'])
-            form.send(sender=request.profile, recipient=profile)
-            messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
-            form = ContactForm()
-            return django_render(request, 'contact.html', {'form': form})
-    elif request.method == 'POST' and request.is_ajax():
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            profile = Profile.objects.get(user__username=form.cleaned_data['contact_recipient_name'])
+    if request.method == 'GET':
+        recipient_name = request.GET.get('recipient_name')
+        form = ContactForm(initial={'contact_recipient_name': recipient_name})
+        if recipient_name:
             try:
-                form.send(sender=request.profile, recipient=profile, subject='In reply to Villages.io post: '+form.data.get('listing_title'))
-            except Exception as e:
-                messages.add_message(request, messages.ERROR, 'Error sending message')
-                return JsonResponse({'msg': 'Success'})
-            messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
-            return JsonResponse({'msg': 'Success'})
-    return django_render(request, 'contact.html', {'form': form, 'listing_form': listing_form})
+                Profile.objects.exclude(user=request.user).get(user__username=recipient_name)
+            except Profile.DoesNotExist:
+                form.errors['contact_recipient_name'] = "Recipient doesn't exist."
+
+    elif request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            recipient_name = form.cleaned_data['contact_recipient_name']
+            try:
+                recipient = Profile.objects.exclude(user=request.user).get(user__username=recipient_name)
+            except Profile.DoesNotExist:
+                form.add_error('contact_recipient_name', "Recipient doesn't exist.")
+            else:
+                listing_id = request.GET.get('listing_id')
+                subject = None
+                if listing_id:
+                    listing_title = Listings.objects.filter(id=listing_id, profile=recipient)\
+                        .values_list('title', flat=True).first()
+                    if listing_title:
+                        subject = 'In reply to Villages.io post: {}'.format(listing_title)
+
+                form.send(sender=request.profile, recipient=recipient, subject=subject)
+                messages.add_message(request, messages.SUCCESS, 'Message successfully sent.')
+                form = ContactForm()
+
+    return django_render(request, 'new_templates/contact.html', {'form': form})
 
 
 @login_required

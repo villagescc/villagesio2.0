@@ -1,15 +1,15 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.conf import settings
+from django.utils import timezone
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
-from datetime import datetime
-from profile.models import (
-    Profile, Invitation, Settings, PasswordResetLink)
+
+from profile.models import Profile, Invitation, Settings, PasswordResetLink
 from general.models import EmailField
 from general.mail import send_mail, send_mail_to_admin
-from django.utils import timezone
+from general.forms import ReceiverInput
+
 
 alphanumeric = RegexValidator(r'^[0-9a-zA-Z_\s]*$', 'Only alphanumeric characters are allowed.')
 
@@ -215,13 +215,9 @@ class ProfileForm(forms.ModelForm):
 
 
 class ContactForm(forms.Form):
-
     contact_recipient_name = forms.CharField(label='Recipients Name', required=True,
-                                     widget=forms.TextInput(attrs={'class': 'typeahead'}))
-
+                                             widget=ReceiverInput(attrs={'class': 'typeahead'}))
     message = forms.CharField(widget=forms.Textarea(attrs={'style': 'max-width: 100%; height:100px;'}))
-
-    data_profile = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     def send(self, sender, recipient, subject=None,
              template='contact_email.txt', extra_context=None):
@@ -239,14 +235,14 @@ class SettingsForm(forms.ModelForm):
     # username = forms.CharField(required=True, max_length=30, validators=[alphanumeric],
     #                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     # Email is required.
-    email = forms.EmailField(widget=forms.EmailInput(attrs={}),
+    email = forms.EmailField(widget=forms.EmailInput(),
                              max_length=EmailField.MAX_EMAIL_LENGTH)
 
     # endorsement_limited = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Settings
-        fields = ('email', 'send_notifications', 'send_newsletter', 'language')
+        fields = ('email', 'send_notifications', 'send_newsletter', 'feed_radius', 'language')
 
         widgets = {
             'language': forms.Select(attrs={

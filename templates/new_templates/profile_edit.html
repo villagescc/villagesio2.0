@@ -1,0 +1,199 @@
+{% extends 'new_templates/base.html' %}
+{% load staticfiles  i18n %}
+
+{% block extra_css %}
+
+    <style>
+        .drag-and-drop-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-flow: row wrap;
+            min-width: 220px;
+            padding: 2.1875em 10px;
+            border: 3px dashed #919191;
+            text-align: center;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .drag-and-drop-container {
+                margin: 0 -20px;
+            }
+        }
+
+        .drag-and-drop-container input {
+            display: none;
+        }
+
+        .drag-and-drop-container img {
+            display: flex;
+        }
+
+        .drag-and-drop-container p {
+            margin-bottom: 0;
+            font-size: 1.125em;
+            color: #b0b0b0;
+            flex: 0 0 100%;
+        }
+
+        .drag-and-drop-container .action-call {
+            margin-top: 0.5em;
+            font-size: 1.375em;
+            font-weight: 700;
+            color: #8c99a5;
+            text-transform: uppercase;
+        }
+
+        .drag-and-drop-container label {
+            color: #8c99a5;
+        }
+
+        img.photo-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media screen and (max-width: 575px) {
+            .edit-profile .btn-cancel {
+                margin-bottom: 15px;
+            }
+        }
+
+    </style>
+
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="app-view">
+
+        {% include 'new_templates/categories_sidebar.html' %}
+
+        <main class="app-main">
+
+            <div class="trust-content edit-profile">
+
+                <div class="row">
+                    <div class="col-12 col-xxl-8">
+
+                        <h2>Edit Profile</h2>
+                        <p>Your profile tells other community members about
+                            you, and lets them find you based on your interests and skills.
+                            Please mention anything that you wish to offer or bring to the
+                            community generally, so others will find you when they search
+                            for those things.</p>
+
+                        <span>
+                            <a href="{% url 'my_profile' %}" class="btn btn-info">
+                                {% trans 'View my profile' %}
+                            </a>
+                            <a class="btn btn-warning" href="{% url 'add_profile_tag' %}">Edit tags</a>
+                        </span>
+
+                        <div class="trust-data">
+                            <form id="trust-form" action="" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="receiver-box" id="div-recipient-name">
+                                    <h4 class="mt-1">Name</h4>
+                                    {{ form.name }}
+                                    <h4></h4>
+                                </div>
+
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <label>&nbsp;</label>
+
+                                    <div class="drag-and-drop-container">
+                                        <input id="id_photo" name="photo" type="file">
+
+                                        <div class="alert alert-warning collapse" id="error_{{ form.photo }}"></div>
+                                        {% if form.instance.photo %}
+                                            <img class="photo-preview" src="{{ form.instance.photo.url }}" alt="photo">
+                                            <p class="action-call"></p>
+                                            <p><label class="inline" for="id_photo">change</label></p>
+                                        {% else %}
+                                            <img src="{% static 'new_template/res/img/icons/camera.png' %}" alt="photo">
+                                            <p class="action-call"></p>
+                                            <p><label class="inline" for="id_photo">browse</label></p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <label></label>
+                                    <h4>Header image</h4>
+
+                                    <div class="drag-and-drop-container">
+                                        <input id="id_header_image" name="header_image" type="file">
+
+                                        <div class="alert alert-warning collapse"
+                                             id="error_{{ form.header_image }}"></div>
+                                        {% if form.instance.header_image %}
+                                            <img src="{{ form.instance.header_image.url }}" alt="Header image"
+                                                 width="150">
+                                            <p class="action-call"></p>
+                                            <p><label class="inline" for="id_header_image">change</label></p>
+
+                                        {% else %}
+                                            <img src="{% static 'new_template/res/img/icons/camera.png' %}"
+                                                 alt="Header image">
+                                            <p class="action-call"></p>
+                                            <p><label class="inline" for="id_header_image">browse</label></p>
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <h4>Job</h4>
+                                    {{ form.job }}
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <label for="description">Description</label>
+                                    {{ form.description }}
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <label for="location">Location</label>
+                                    <a href="{% url 'locator' %}" data-toggle="tooltip"
+                                       title="{{ request.location }}"><i
+                                            class="fa fa-location-arrow"></i>&nbsp&nbsp{{ request.location|truncatechars:"42" }}
+                                    </a>
+                                    <input id="autocomplete" name="location" placeholder="Enter your address"
+                                           onFocus="geolocate()" type="text">
+                                </div>
+                                <br>
+                                <div class="row" style="max-width: 600px;">
+                                    <div class="col-sm-6">
+                                        <input class="btn btn-std btn-cancel" type="button" value="Cancel">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input class="btn btn-std" id="save-trust" type="submit" value="Save Profile">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+
+    <script>
+        var input_choose_file = $("#id_photo");
+        input_choose_file.css({height: "3em"});
+    </script>
+
+{% endblock extra_js %}

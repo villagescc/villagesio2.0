@@ -4,21 +4,13 @@ from django import forms
 from django.conf import settings
 
 from feed.models import FeedItem
-from django.utils.translation import ugettext_lazy as _
+from profile.models import Settings
 
-# Passing no radius => use default, so need a code for infinite.
-INFINITE_RADIUS = -1
+INFINITE_RADIUS = Settings.INFINITE_RADIUS
 
-RADIUS_CHOICES = (
-    (1000, _('Within 1 km')),
-    (5000, _('Within 5 km')),
-    (10000, _('Within 10 km')),
-    (50000, _('Within 50 km')),
-    (INFINITE_RADIUS, _('Anywhere')),
-)
+RADIUS_CHOICES = Settings.FEED_RADIUS_CHOICES
 
 RADII = [rc[0] for rc in RADIUS_CHOICES]
-DEFAULT_RADIUS = 5000
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 
 
@@ -33,18 +25,16 @@ class FeedFilterForm(forms.Form):
     q = forms.CharField(
         label="Search", required=False, widget=forms.TextInput(
             attrs={'placeholder': 'Search people...'}))
+
     radius = forms.TypedChoiceField(
         required=False, choices=RADIUS_CHOICES, coerce=int, empty_value=None,
-        widget=forms.Select(attrs={}))
+        widget=forms.Select(attrs={'class': 'filter-input'}))
 
     trusted = forms.BooleanField(label='Trusted only', required=False,
-                                 widget=forms.CheckboxInput(attrs={}))
+                                 widget=forms.CheckboxInput())
 
     referral_filter = forms.BooleanField(required=False,
-                                         widget=forms.CheckboxInput(attrs={
-                                             'class': 'form-control checkbox-inline',
-                                             'style': 'vertical-align: moddle; width: 15px;'
-                                         }))
+                                         widget=forms.CheckboxInput())
 
     # balance_high = forms.BooleanField(required=False,
     #                              widget=forms.CheckboxInput(attrs={
@@ -60,7 +50,7 @@ class FeedFilterForm(forms.Form):
         data = data.copy()
         if do_filter and 'radius' not in data:
             default_radius = (profile and profile.settings.feed_radius
-                              or DEFAULT_RADIUS)
+                              or settings.DEFAULT_RADIUS)
             data['radius'] = default_radius
             self._explicit_radius = False
         else:
@@ -87,8 +77,6 @@ class FeedFilterForm(forms.Form):
             query_radius = None
         trusted = data['trusted']
         referral = referral_radio
-        balance_high = balance_high
-        balance_low = balance_low
 
         while True:
             items, count, total = FeedItem.objects.get_feed_and_remaining(
@@ -108,7 +96,7 @@ class FeedFilterForm(forms.Form):
                     query_radius = None
                 continue
             break
-        return items, count, total
+        return list(items), count, total
         
     def update_sticky_filter_prefs(self):
         """

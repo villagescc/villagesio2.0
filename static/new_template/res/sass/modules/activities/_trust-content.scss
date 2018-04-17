@@ -8,6 +8,11 @@
     text-transform: uppercase;
     color: #1d90b5;
   }
+
+  .rows-wrapper {
+    max-height: 810px;
+    overflow: auto;
+  }
   .table-head {
     display: flex;
     justify-content: flex-start;
@@ -23,16 +28,13 @@
       display: block;
       text-align: center;
       &:nth-child(1) {
-        flex: 0 1 20%;
+        flex: 0 1 50%;
       }
       &:nth-child(2) {
         flex: 0 1 20%;
       }
       &:nth-child(3) {
-        flex: 0 1 30%;
-      }
-      &:nth-child(4) {
-        flex: 0 1 30%;
+        flex: 0 1 20%;
       }
     }
   }
@@ -57,13 +59,17 @@
         margin: auto;
       }
       &:nth-child(2) {
-        flex: 0 1 20%;
+        font-size: 16px;
+        flex: 0 1 30%;
       }
       &:nth-child(3) {
-        flex: 0 1 30%;
+        flex: 0 1 20%;
       }
       &:nth-child(4) {
-        flex: 0 1 30%;
+        flex: 0 1 20%;
+      }
+      &:nth-child(5) {
+        flex: 0 0 10%;
       }
     }
     & > span {
@@ -72,6 +78,19 @@
         font-weight: 500;
         & .price {
           color: #1d90b5;
+        }
+      }
+    }
+    .edit {
+      a {
+        display: inline-block;
+        padding: 4px;
+        font-size: 18px;
+        color: $lightgrey;
+        text-decoration: none;
+        text-transform: uppercase;
+        &:hover {
+          color: lighten($lightgrey, 10%);
         }
       }
     }
@@ -90,11 +109,29 @@
   align-items: flex-start;
   flex-flow: row wrap;
   background-color: #fff;
+  overflow: hidden;
   @include crossShadow(0 0 16px 0 rgba(119, 119, 119, 0.06));
   & #trust-form {
     flex: 0 0 100%;
     max-width: 100%;
     padding: 1.875em;
+    .id_weight {
+      .form-group:nth-child(2) {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        img {
+          margin: 5px;
+          width: 13px;
+          height: 13px;
+        }
+      }
+    }
+    input#id_weight {
+      display: inline-block;
+      width: 150px;
+      height: 44px;
+    }
     & .transaction {
       display: flex;
       justify-content: space-around;
@@ -122,8 +159,16 @@
     & textarea {
       font-size: 1.375em;
       font-weight: 300;
-      height: 2em;
       border: 1px solid #ebebeb;
+    }
+    & input,
+    & select {
+      height: 2em;
+    }
+    & textarea {
+      min-height: 100px;
+      max-height: 300px;
+      resize: none;
     }
     & .credit-limit {
       max-width: 200px;
@@ -139,10 +184,12 @@
       }
     }
     & .currency-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
+      display: inline-block;
+      width: 100px;
+      height: 100%;
+      margin-left: -5px;
+      text-align: center;
+      line-height: 44px;
       background-color: #e1e1e1;
       font-size: 1.375em;
       font-weight: 600;
@@ -197,6 +244,7 @@
 }
 
 .receiver {
+  margin-top: 20px;
   & .receiver-box {
     padding: 1.5em;
     border: 1px solid #ebebeb;
@@ -205,5 +253,33 @@
       font-weight: 300;
       color: #8d8d8d;
     }
+  }
+}
+
+// Search
+.search-by-name {
+  display: inline-block;
+  width: auto;
+  padding: 10px 35px 10px 15px;
+  font-size: 18px;
+  color: $lightblue;
+  border: 2px solid $lightblue;
+  background-color: transparent;
+}
+.search-holder {
+  position: relative;
+  display: inline-block;
+  .input-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 18px;
+    color: $lightblue;
+  }
+}
+
+.search-by-name {
+  &:before {
+    content: "\f002";
   }
 }

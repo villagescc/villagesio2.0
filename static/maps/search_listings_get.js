@@ -9,8 +9,12 @@ var map;
 
 function initMap() {
 
-     var mapOptions;
-        if(localStorage.mapLat!=null && localStorage.mapLng!=null && localStorage.mapZoom!=null){
+    var mapOptions;
+
+    // Default to Vancouver.
+    // var pos = {lat: 49.248523, lng: -123.108};
+
+    if(localStorage.mapLat!=null && localStorage.mapLng!=null && localStorage.mapZoom!=null){
             mapOptions = {
                 center: new google.maps.LatLng(localStorage.mapLat,localStorage.mapLng),
                 zoom: parseInt(localStorage.mapZoom),
@@ -25,7 +29,7 @@ function initMap() {
                 scaleControl: true,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
-        }
+    }
 
     var pos = {lat: 21.289373, lng: -157.917480};
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -71,6 +75,7 @@ function initMap() {
 
 function call_area_map() {
     var value = $('#input_search').val();
+    console.log(value);
     var area_map = {
         lat_min: map.getBounds().getSouthWest().lat(),
         lat_max: map.getBounds().getNorthEast().lat(),

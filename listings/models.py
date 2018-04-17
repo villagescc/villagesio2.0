@@ -4,9 +4,12 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.contrib.gis.db.models import GeoManager, Q
 
+from decimal import Decimal
+
 from categories.models import Categories, SubCategories
 from tags.models import Tag
 from profile.models import Profile
+from general.util import reverse_querystring
 
 
 OFFER = 'OFFER'
@@ -33,14 +36,10 @@ TRUSTED_SUBQUERY = (
 
 class ListingsManager(GeoManager):
     def get_items_and_remaining(self, *args, **kwargs):
-        """
-
-        :param args:
-        :param kwargs:
-        :return:
-        """
         count_kwargs = kwargs.copy()
-        count_kwargs.pop('limit', None)
+        count_kwargs.pop('start_limit', None)
+        count_kwargs.pop('end_limit', None)
+
         count = self.get_items_count(self, *args, **count_kwargs)
         if count > 0:
             items = self.get_items(*args, **kwargs)
@@ -52,12 +51,10 @@ class ListingsManager(GeoManager):
         return self._item_query(*args, **kwargs).count()
 
     def get_items(self, *args, **kwargs):
-        limit = kwargs.pop('limit', settings.LISTING_ITEMS_PER_PAGE)
-        query = self._item_query(*args, **kwargs)[:limit]
-        items = []
-        for listing_item in query:
-            items.append(listing_item)
-        return items
+        start_limit = kwargs.pop('start_limit', 0)
+        end_limit = kwargs.pop('end_limit', settings.LISTING_ITEMS_PER_PAGE)
+        items = self._item_query(*args, **kwargs)[start_limit:end_limit]
+        return list(items)
 
     def _item_query(self, profile=None, location=None, radius=None, tsearch=None, trusted_only=False,
                     up_to_date=None, request_profile=None, type_filter=None, listing_type=None):
@@ -71,9 +68,7 @@ class ListingsManager(GeoManager):
         if up_to_date:
             query = query.filter(updated__lt=up_to_date)
         if location and radius:
-            query = query.filter(
-                Q(user__profile__location__point__dwithin=(location.point, radius)) |
-                Q(user__profile__location__isnull=True))
+            query = query.filter(user__profile__location__point__dwithin=(location.point, radius))
 
         if tsearch:
             # Searching by TAGs
@@ -92,7 +87,6 @@ class ListingsManager(GeoManager):
         if listing_type:
             query = query.filter(listing_type=listing_type).order_by('-updated')
 
-        query = query.filter()
         return query
 
 
@@ -102,7 +96,7 @@ class Listings(models.Model):
     profile = models.ForeignKey(Profile, null=True, blank=True)
     title = models.CharField(max_length=70)
     description = models.CharField(max_length=5000, null=True, blank=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0'))
     subcategories = models.ForeignKey(SubCategories, null=True, blank=True)
     # tag = models.ForeignKey(TagListing, null=True, blank=True)
 
@@ -110,13 +104,25 @@ class Listings(models.Model):
     photo = models.ImageField(upload_to='listings', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    tag = models.ManyToManyField(Tag)
+    tag = models.ManyToManyField(Tag, blank=True)
 
     objects = ListingsManager()
 
     @property
     def date(self):
         return self.updated
+
+    def get_trust_link(self):
+        return reverse_querystring('blank_trust_user', query_kwargs={'recipient_name': self.user.username})
+
+    def get_payment_link(self):
+        return reverse_querystring('blank_payment_user', query_kwargs={'recipient_name': self.user.username,
+                                                                       'amount': self.price,
+                                                                       'memo': self.title})
+
+    def get_contact_link(self):
+        return reverse_querystring('undefined_contact', query_kwargs={'recipient_name': self.user.username,
+                                                                      'listing_id': self.id})
 
     def __str__(self):
         return self.title

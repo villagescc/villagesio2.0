@@ -1,0 +1,263 @@
+{% extends "new_templates/base.html" %}
+{% load staticfiles profile i18n %}
+
+{% block content %}
+    <div class="app-view">
+
+        {% include 'new_templates/categories_sidebar.html' %}
+
+        <main class="app-main">
+            <form id="search-form" class="form-container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8 col-lg-6 col-xxl-3">
+                        <div class="custom-group">
+                            <label class="custom-radio" for="radio-grid">
+                                <a href="{% url 'frontend:home' %}">
+                                    <input id="radio-grid" type="radio" name="view-radio" value="grid" checked>
+                                    <span class="btn-input-layout">
+                                        <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/grid.png' %}" alt="Grid">
+                                        <span class="btn-input-text">Grid</span>
+                                    </span>
+                                </a>
+                            </label>
+                            <label class="custom-radio" for="radio-map">
+                                <a href="{% url 'frontend:map' %}">
+                                    <input id="radio-map" type="radio" name="view-radio" value="map">
+                                    <span class="btn-input-layout">
+                                      <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/map.png' %}" alt="Map">
+                                      <span class="btn-input-text">Map</span>
+                                    </span>
+                                </a>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-4 col-lg-6 col-xxl-2">
+                        {{ form.radius }}
+                    </div>
+
+                    <div class="col-12 col-sm-8 col-md-8 col-lg-6 col-xxl-3">
+                        <div class="custom-group">
+                            <label class="custom-radio" for="radio-posts">
+                                <input id="radio-posts" type="radio" name="type-radio" value="posts">
+                                <span class="btn-input-layout">
+                                    <span class="btn-input-icon checkbox">
+                                        <svg viewbox="0 0 7 7">
+                                          <path d="
+                                            M 0.6,3.5
+                                            L 2.3,5.25
+                                            L 6.4,0.9
+                                            l 0.6,0.6
+                                            L 2.3,6.15
+                                            L 0,4.1
+                                            z">
+                                        </svg>
+                                    </span>
+                                    <span class="btn-input-text">View Posts</span>
+                                </span>
+                            </label>
+
+                            <label class="custom-radio" for="radio-people">
+                                <input id="radio-people" type="radio" name="type-radio" value="people" checked>
+                                <span class="btn-input-layout">
+                                  <span class="btn-input-icon checkbox">
+                                    <svg viewbox="0 0 7 7">
+                                      <path d="
+                                        M 0.6,3.5
+                                        L 2.3,5.25
+                                        L 6.4,0.9
+                                        l 0.6,0.6
+                                        L 2.3,6.15
+                                        L 0,4.1
+                                        z">
+                                    </svg>
+                                  </span>
+                                  <span class="btn-input-text">View People</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+                        <label class="custom-check" for="id_trusted">
+                            {{ form.trusted }}
+                            <span class="btn-input-layout">
+                                <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}"
+                                     alt="Lock">
+                                <span class="btn-input-text">Trusted</span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+
+                        <label class="custom-check" for="id_referral_filter">
+                            {{ form.referral_filter }}
+                            <span class="btn-input-layout">
+                                <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}"
+                                     alt="Lock">
+                                <span class="btn-input-text">Referral filter</span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+                        <label class="custom-check" for="balance-high">
+                            <input id="balance-high" name="radio-high" type="checkbox" value="on">
+                            <span class="btn-input-layout">
+                    <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
+                    <span class="btn-input-text">Higher balance</span>
+                  </span>
+                        </label>
+                    </div>
+
+                    <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+                        <label class="custom-check" for="balance-low">
+                            <input id="balance-low" name="radio-low" type="checkbox" value="on">
+                            <span class="btn-input-layout">
+                    <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
+                    <span class="btn-input-text">Lower balance</span>
+                  </span>
+                        </label>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-12 col-sm-8 col-xxl-5">
+
+                        <div class="textbox-with-icon">
+                            {{ form.q }}
+                            <img class="textbox-icon" src="{% static 'new_template/res/img/icons/magnifier.png' %}"
+                                 alt="magnifier">
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 col-sm-4 col-xxl-2">
+
+                        <input type="submit" name="search" value="Search">
+
+                    </div>
+
+                </div>
+
+            </form>
+
+            <div class="search-results">
+
+                <div class="row" id="person_list">
+
+                    {% for each in feed_items %}
+
+                        <div class="col-12">
+                            <div class="person-box">
+                                <a class="person-avatar" href="{{ each.get_absolute_url }}">
+                                    <div class="avatar-wrapper blue">
+                                        <img src="{% profile_image_url each '400x400' %}" alt="avatar"
+                                             class="rounded-circle">
+                                    </div>
+                                </a>
+
+                                <a class="person-name" href="{{ each.get_absolute_url }}" style="text-decoration: none">
+                                    <div class="person-id">
+                                        <h1>{{ each }}</h1>
+                                    </div>
+                                </a>
+
+                                <div class="likes-container">
+                                    <div class="price-container">
+                                        <img src="{% static 'new_template/res/img/icons/balance_b.png' %}"
+                                             alt="balance">
+                                        <span class="price">{{ each.overall_balance }}</span>
+                                    </div>
+
+                                    <div class="like-container">
+                                        <img src="{% static 'new_template/res/img/icons/heart_b.png' %}" alt="balance">
+                                        <span class="like-count">{{ each.endorsement_count }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="location-container">
+                                    <img src="{% static 'new_template/res/img/icons/map_b.png' %}" alt="location">
+                                    <span class="location">{{ each.location }}</span>
+                                </div>
+
+                                <div class="action-block">
+                                    <div class="date-container">
+                                        <img src="{% static 'new_template/res/img/icons/calendar_b.png' %}" alt="date">
+                                        <span class="date">{{ each.user.last_login }}</span>
+                                    </div>
+
+                                    <div class="person-action">
+                                        <a class="action-menu-item trust-modal"
+                                           data-profile-username="{{ each.username }}" href="{{ each.get_trust_link }}"><img
+                                                src="{% static 'new_template/res/img/icons/heart.png' %}"
+                                                alt="like"></a>
+                                        <a class="action-menu-item" href="{{ each.get_payment_link }}"><img
+                                                src="{% static 'new_template/res/img/icons/wallet.png' %}"
+                                                alt="buy"></a>
+                                        <a class="action-menu-item contact-modal"
+                                           data-profile-username="{{ each.username }}"
+                                           data-listing-title="{{ each.title }}" href="{{ each.get_contact_link }}"><img
+                                                src="{% static 'new_template/res/img/icons/mail.png' %}" alt="contact"></a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+            {% if remaining_count %}
+                <p><a href="?{{ next_page_param_str }}">
+                    {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
+                </a></p>
+            {% endif %}
+
+        </main>
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+    <script>
+        // change Active MenuItem
+        $(document).ready(function () {
+            // console.log(window.location.href);
+            if ((window.location.href === '/') || (window.location.href == "{% url 'frontend:home' %}")) {
+                console.log(window.location.href);
+            }
+        });
+
+        $("#radio-people").click(function () {
+            window.location.href = "{% url 'frontend:people_listing' %}"
+        });
+        $("#radio-posts").click(function () {
+            window.location.href = "{% url 'frontend:home' %}"
+        });
+        $("#radio-grid").click(function () {
+            window.location.href = "{% url 'frontend:home' %}"
+        });
+        $("#radio-map").click(function () {
+            window.location.href = "{% url 'frontend:map' %}"
+        });
+
+        $('.menu-group div').click(function () {
+            var menu = $(this).parent().find('ul');
+            menu.slideToggle();
+        });
+
+    </script>
+
+    <script src="{% static 'res/js/HttpService.js' %}" type="text/javascript"></script>
+    <script src="{% static 'res/js/Views.js' %}" type="text/javascript"></script>
+    <script src="{% static 'res/js/PersonApi.js' %}" type="text/javascript"></script>
+    <script src="{% static 'res/js/Person.js' %}" type="text/javascript"></script>
+    <script src="{% static 'res/js/index.js' %}" type="text/javascript"></script>
+
+{% endblock extra_js %}

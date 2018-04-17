@@ -1,0 +1,363 @@
+{% extends "new_templates/base.html" %}
+{% load staticfiles profile %}
+
+{% block content %}
+
+    <div class="app-view">
+
+        <main class="container-fluid">
+
+            <div class="payment-content">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h2>Payment</h2>
+                    </div>
+                    <div class="col-xs-12 col-lg-6">
+
+                        <div class="payment-data">
+                            <form action="{% url 'blank_payment_user' %}" method="POST" id="payment-form">
+                                {% csrf_token %}
+
+                                {% include "new_templates/form.html" %}
+
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6">
+                                        <input class="btn btn-std" type="submit" value="Send Payment">
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <div class="col-xs-12 col-lg-6 mt-5 mt-lg-0">
+
+                        <h2>Last Payments <span class="activate-search"><i class="fa fa-search"></i><i class="fa fa-times-circle"></i></span>
+                            {#| <a class="small" href="#">View More</a>#}
+                        </h2>
+                        <div class="search-block">
+                            <div class="search-group">
+                                <label for="search-name">Name</label>
+                                <input type="search" id="search-name">
+                            </div>
+                            <div class="search-group">
+                                <label for="search-from">Date from</label>
+                                <input type="date" id="search-from">
+                            </div>
+                            <div class="search-group">
+                                <label for="search-to">Date to</label>
+                                <input type="date" id="search-to">
+                            </div>
+                            <!--<div class="search-group btn-block">-->
+                                <!--<button class="btn btn-search">Search</button>-->
+                            <!--</div>-->
+                        </div>
+                        {% if all_payments %}
+                            <div class="table-head">
+
+                                <span>Payer</span>
+                                <span>Recipient</span>
+                                <span>Date / Time</span>
+                                <span>Amount</span>
+
+                            </div>
+                            <div class="rows-wrapper">
+
+                            {% for each_all in all_payments %}
+                                <div class="table-row"
+                                     data-toggle="tooltip" data-placement="top"
+                                     data-html="true"
+                                     {% if each_all.item.payment.memo %}
+                                     title="&lt;span class='tip-balloon'&gt;{{ each_all.item.payment.memo }}&lt;/span&gt;"
+                                     {% endif %}>
+                                    <div class="transaction"
+                                         data-payer="{{ each_all.item.payer.name }}"
+                                         data-recipient="{{ each_all.item.recipient.name }}"
+                                    >
+                                        <div class="avatar-wrapper blue">
+                                            <a href="{{ each_all.item.payer.get_absolute_url }}">
+                                                <img src="{% profile_image_url each_all.item.payer '400x400' %}"
+                                                     alt="photo">
+                                            </a>
+                                        </div>
+                                        <img style="padding: 0 0.5em;"
+                                             src="{% static 'new_template/res/img/icons/arrow-right.png' %}" alt="to">
+                                        <div class="avatar-wrapper blue">
+                                            <a href="{{ each_all.item.recipient.get_absolute_url }}">
+                                                <img src="{% profile_image_url each_all.item.recipient '400x400' %}"
+                                                     alt="photo"
+                                                     data-toggle="tooltip" data-placement="right"
+                                                     data-html="true"
+                                                     title="&lt;span class='tip-balloon'&gt;{{ each_all.item.recipient.username }}&lt;/span&gt;"
+                                                >
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <span class="datetime">{{ each_all.item.date }}</span>
+
+                                    <span class="amount"><strong><span class="price">{{ each_all.item.amount }}</span> V.H.</strong></span>
+                                </div>
+                            {% endfor %}
+                            </div>
+
+                        {% endif %}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+        <!-- .app-main -->
+
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+
+    <script src="{% static 'assets/typeahead.js/typeahead.jquery.min.js' %}"></script>
+    <script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>
+
+    <script>
+        var recipients = new Bloodhound({
+            datumTokenizer: function (datum) {
+                return Bloodhound.tokenizers.whitespace(datum.value);
+            },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                wildcard: '%QUERY',
+                url: "{% url 'get_recipients_data' %}?query=%QUERY",
+                transform: function (response) {
+                    return $.map(response.result, function (recipient) {
+                        $('#id_recipient').attr("data-profile-selected", recipient.username);
+                        return {
+                            value: recipient.username,
+                            suggest: recipient
+                        };
+                    });
+                }
+            }
+
+        });
+        $('#id_recipient').typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 0
+            },
+            {
+                display: 'value',
+                source: recipients,
+                limit: 20,
+                templates: {
+                    suggestion: function (data) {
+                        return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
+                    }
+                }
+            });
+        var max_amount_span = $("#max-amount");
+        $(".twitter-typeahead #id_recipient").on('typeahead:change typeahead:selected change', function (e) {
+            var selectedUser;
+            var $input = $(this);
+            var $infoBlock = $('.transaction#div-transaction-photos');
+
+            // hide payee data when empty input
+            if (!$input.attr("data-profile-selected") || !$input.val()) {
+                $('.transaction #img-payee').attr("data-original-title", '');
+                $infoBlock.attr('hidden', true);
+                $('#payment-not-ripple').hide();
+                $('#payment-ripple').hide();
+                $('#payment-max-amount').hide();
+                return;
+            };
+
+            // prevent payee double load
+            if ($input.val() === $('.transaction #img-payee').attr("data-original-title")) {
+                return;
+            }
+
+            if (e.type === 'typeahead:selected') {
+                selectedUser = $input.val();
+                $input.attr("data-profile-selected", selectedUser)
+            } else {
+                selectedUser = $input.attr("data-profile-selected");
+            }
+
+            $.ajax({
+                url: '/get_user_photo/' + selectedUser,
+                type: 'POST',
+                beforeSend: function (xhr) {
+                    $('#spin-modal').fadeIn();
+                    var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (e) {
+                    if (e['data']['has_trust']) {
+                        $("#id_weight").val(e['data']['credit_limit']);
+                        $("#id_text").val(e['data']['text']);
+                    }
+
+                    $infoBlock.attr('hidden', false);
+
+                    $('.transaction .recipient-link').attr('href', '/profiles/' + selectedUser);
+
+                    $('.transaction #img-payee').attr("src", e['data']['profile_photo_path']);
+                    $('.transaction #img-payee').attr("data-original-title", selectedUser);
+
+                    if (!e['data']['can_ripple']) {
+                        $('#payment-ripple').hide();
+                        $('#payment-not-ripple').show();
+                    } else if (e['data']['can_ripple']) {
+                        $('#payment-not-ripple').hide();
+                        $('#payment-ripple').show();
+                        $('#payment-max-amount').html(e.data.max_amount);
+                    }
+                },
+                error: function (e) {
+                    if (e.status === 500) {
+                        showInternalServerError();
+                    }
+                },
+                complete: function () {
+                    $('#spin-modal').fadeOut();
+                }
+            });
+        });
+
+        $("#payment-form").submit(function (e) {
+            var $errorModal = $('#error-modal');
+
+            $('#spin-modal').fadeIn();
+
+            // check whether all fields are filled
+            if ($("#id_recipient").val() == '') {
+                e.preventDefault();
+                $errorModal.find('#error-modal-alert').text('Recipient is invalid.');
+                $errorModal.modal();
+            } else if ($("#id_amount").val() == '') {
+                e.preventDefault();
+                $errorModal.find('#error-modal-alert').text('Amount cannot be 0. Please verify.');
+                $errorModal.modal();
+            } else {
+                $("#payment-form").submit();
+            }
+
+            $('#spin-modal').fadeOut();
+        });
+
+        $("#saveReferral").click(function () {
+            var profile = $('#id_recipient').val();
+            $.ajax({
+                url: "{% url 'referral_on_payment' %}",
+                data: JSON.stringify({'profile': profile}),
+                contentType: "application/json; charset=utf-8",
+                method: 'POST',
+                success: function () {
+                    $("#form-submit-checker").attr("data-submit-checker", true);
+                    $("#blank-payment-form").submit();
+                }
+            })
+        });
+
+        $("#not-refer").click(function (e) {
+            $("#form-submit-checker").attr("data-submit-checker", true);
+            $("#blank-payment-form").submit();
+        });
+
+        $("#table-filter-all").click(function (e) {
+            $("#table-payments-all").removeClass("hidden");
+            $("#table-made-payments").addClass("hidden");
+            $("#table-received-payments").addClass("hidden");
+        });
+
+        $("#table-filter-sent").click(function (e) {
+            $("#table-payments-all").addClass("hidden");
+            $("#table-made-payments").removeClass("hidden");
+            $("#table-received-payments").addClass("hidden");
+        });
+
+
+        $("#table-filter-received").click(function (e) {
+            $("#table-payments-all").addClass("hidden");
+            $("#table-made-payments").addClass("hidden");
+            $("#table-received-payments").removeClass("hidden");
+        });
+
+        // Filtering
+        (function () {
+            var $activateBtn = $('.activate-search'),
+                $searchBlock = $('.search-block'),
+                $nameInput = $('#search-name'),
+                $fromInput = $('#search-from'),
+                $toInput = $('#search-to');
+
+            $activateBtn.on('click', function () {
+                $(this).toggleClass('active');
+                $searchBlock.toggleClass('active');
+                $searchBlock.hasClass('active') ? $searchBlock.slideDown(300, 'swing') : $searchBlock.slideUp(300, 'swing');
+            });
+
+            $nameInput.on('input change', filterPayments);
+            $fromInput.on('input change', filterPayments);
+            $toInput.on('input change', filterPayments);
+
+            function filterPayments (e) {
+                var $items = $('.rows-wrapper .table-row');
+
+                    $items.hide();
+
+                    $items.each(function (i, item) {
+                        var payer = $(item).find('.transaction').attr('data-payer').toLowerCase(),
+                            recipient = $(item).find('.transaction').attr('data-recipient').toLowerCase(),
+                            date;
+
+                        // format Date
+                        date = $(item).find('.datetime').text();
+                        var dateArr = date.split(' ');
+                        var parseDate = dateArr[0] + ' ' + dateArr[1] + ' ' + dateArr[2].slice(0, 4) + ' '
+                            + dateArr[3];
+                        var newDate = new Date(parseDate);
+
+                        if ( fromDate(newDate) && toDate(newDate) && checkName(payer, recipient)) {
+                            $(item).show();
+                        }
+                    });
+            }
+
+            function fromDate (date) {
+                if ($fromInput.val()) {
+                    return date >= new Date($fromInput.val());
+                } else {
+                    return true;
+                }
+            }
+
+            function toDate (date) {
+                if ($toInput.val()) {
+                    return date <= new Date($toInput.val());
+                } else {
+                    return true;
+                }
+            }
+
+            function checkName (payer, recipient) {
+                if ($nameInput.val()) {
+                    return payer.indexOf($nameInput.val()) != -1 || recipient.indexOf($nameInput.val()) != -1;
+                } else {
+                    return true;
+                }
+            }
+        })();
+
+    </script>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+{% endblock extra_js %}

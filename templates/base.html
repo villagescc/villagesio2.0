@@ -54,11 +54,11 @@
     <!-- bootstrap-slider -->
     <link href="{% static 'seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css' %}" rel="stylesheet">
 
-    <script src="{% static 'new_template/node_modules/jquery/dist/jquery.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/jquery.js' %}" type="text/javascript"></script>
     <!-- jQuery -->
-    <script src="{% static 'new_template/node_modules/popper.js/dist/umd/popper.js' %}" type="text/javascript"></script>
-    <!-- Popper -->
-    <script src="{% static 'new_template/node_modules/bootstrap/dist/js/bootstrap.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/popper.js' %}" type="text/javascript"></script>
+    <!-- Bootstrap -->
+    <script src="{% static 'js/bootstrap.js' %}"
     <!-- Bootstrap -->
 
     <!-- Custom jQuery -->
@@ -175,12 +175,6 @@
 
 <div id="fb-root"></div>
 
-{% if request.user.is_authenticated %}
-{#    {% include 'new_templates/02_ProductList_001c.html' %}#}
-{#    {% include 'frontend/plugs/post-login.html' %}#}
-{% else %}
-{#    {% include 'plugs/navigation-pre-login.html' %}#}
-{% endif %}
 <div id="inner-flex-container">
     <header id="top-header">
     </header>

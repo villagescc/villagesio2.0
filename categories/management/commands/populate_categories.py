@@ -37,6 +37,6 @@ class Command(BaseCommand):
                                            for housing_sub in housing_subcategories])
 
         try:
-            User.objects.create_superuser('admin', email='web@villages.cc', password='admin')
+            User.objects.create_superuser('admin', email='info@villages.io', password='admin')
         except IntegrityError:
             pass

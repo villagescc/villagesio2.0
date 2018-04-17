@@ -1,4 +1,6 @@
 from django import forms
+from django.template import loader
+from django.utils.safestring import mark_safe
 
 # *** HACK ALERT ***
 # Monkeypatch some form things so the defaults are nicer:
@@ -20,3 +22,59 @@ forms.CharField.clean = strip_input(forms.CharField.clean)
 
 # Set required rows to class="required".
 forms.BaseForm.required_css_class = "required"
+
+
+class PhotoInput(forms.FileInput):
+    template_name = 'new_templates/widget_photo_input.html'
+
+    def get_context(self, name, value, attrs=None):
+        return {'widget': {'name': name, 'value': value, 'attrs': attrs}}
+
+    def render(self, name, value, attrs=None):
+        context = self.get_context(name, value, attrs)
+        template = loader.get_template(self.template_name).render(context)
+        return mark_safe(template)
+
+
+class AmountInput(forms.NumberInput):
+    template_name = 'new_templates/widget_currency_wrapper.html'
+
+    def get_context(self, name, value, attrs=None):
+        return {'widget': {'name': name, 'value': value, 'attrs': attrs}}
+
+    def render(self, name, value, attrs=None):
+        context = self.get_context(name, value, attrs)
+        template = loader.get_template(self.template_name).render(context)
+        return mark_safe(super(AmountInput, self).render(name, value, attrs) + template)
+
+
+class ReceiverInput(forms.TextInput):
+    input_type = 'text'
+    template_name = 'new_templates/widget_receiver.html'
+
+    def get_context(self, name, value, attrs=None):
+        return {'widget': {'name': name, 'value': value, 'attrs': attrs}}
+
+    def render(self, name, value, attrs=None):
+        attrs = self.build_attrs(attrs, type=self.input_type, name=name)
+        context = self.get_context(name, value, attrs)
+        template = loader.get_template(self.template_name).render(context)
+        return mark_safe(super(ReceiverInput, self).render(name, value, attrs) + template)
+
+
+class ReceiverPayInput(ReceiverInput):
+    template_name = 'new_templates/widget_receiver_pay.html'
+
+
+class ToggleSwitch(forms.CheckboxInput):
+    input_type = 'checkbox'
+    template_name = 'new_templates/widget_toggle_switch.html'
+
+    def get_context(self, name, value, attrs=None):
+        return {'widget': {'name': name, 'value': value, 'attrs': attrs}}
+
+    def render(self, name, value, attrs=None):
+        attrs = self.build_attrs(attrs, type=self.input_type, name=name)
+        context = self.get_context(name, value, attrs)
+        template = loader.get_template(self.template_name).render(context)
+        return mark_safe(template)

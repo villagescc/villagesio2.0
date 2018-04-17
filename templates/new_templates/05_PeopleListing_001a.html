@@ -132,7 +132,7 @@
                           <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a>
                           <div class="dropdown-divider"></div>
                           <a class="dropdown-item" href="{% url 'accounts:settings' %}">Settings</a>
-                          <a class="dropdown-item" href="{% url 'management:management' %}">Management</a>
+{#                          <a class="dropdown-item" href="{% url 'management:management' %}">Management</a>#}
                           <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
                       </div>
                   </li>
@@ -148,25 +148,25 @@
       <aside class="app-sidebar">
 
         <div class="cat-menu">
-          <a class="cat-item active" href="#">
+          <a class="cat-item active" href="{% url 'frontend:home' %}">
             <div class="cat-item-icon">
               <img src="{% static 'new_template/res/img/icons/all_categories.png' %}" alt="All Categories">
             </div>
             <span class="cat-item-name">All Categories</span>
           </a>
-          <a class="cat-item" href="#">
+          <a class="cat-item" href="{% url 'frontend:home' 'SERVICES' %}">
             <div class="cat-item-icon">
               <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/services.png' %}" alt="Services">
             </div>
             <span class="cat-item-name">Services</span>
           </a>
-          <a class="cat-item" href="#">
+          <a class="cat-item" href="{% url 'frontend:home' 'PRODUCTS' %}">
             <div class="cat-item-icon">
               <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Products">
             </div>
             <span class="cat-item-name">Products</span>
           </a>
-          <a class="cat-item" href="#">
+          <a class="cat-item" href="{% url 'frontend:home' 'HOUSING' %}">
             <div class="cat-item-icon">
               <img class="cat-item-icon" src="{% static 'new_template/res/img/icons/products.png' %}" alt="Housing">
             </div>

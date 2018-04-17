@@ -1,0 +1,109 @@
+{% extends "new_templates/base.html" %}
+{% load staticfiles profile %}
+
+{% block content %}
+
+    <div class="app-view">
+
+        {% include 'new_templates/profile_sidebar.html' %}
+
+        <main class="app-main">
+
+            <div class="profile-content my-profile">
+
+                <div class="row">
+                    <div class="col-12 col-xxl-7">
+
+                        <div class="row">
+
+                            <div class="col-12">
+                                <h2>Profile Description</h2>
+                                <p>{{ profile.description|linebreaks }}</p>
+                            </div>
+
+                        </div>
+
+                        <div class="row" id="product_list">
+
+                            {% if listings %}
+                                {% for item in listings %}
+
+                                    {% include 'new_templates/listing_item.html' %}
+
+                                {% endfor %}
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 col-xxl-5">
+
+                        <div class="endorsement-box">
+                            <h2>Endorsed By</h2>
+                            {% if endorsements_received %}
+                                {% for each_endorsement_received in endorsements_received %}
+                                    <div class="endorsement-block">
+
+                                        <div class="avatar-wrapper blue">
+                                            <a href="{{ each_endorsement_received.endorser.get_absolute_url }}">
+                                                <img src="{% profile_image_url each_endorsement_received.endorser '400x400' %}"
+                                                     alt="avatar" height="100%" width="200px"
+                                                     style="position: relative; border-radius: 50%; overflow: hidden;">
+                                            </a>
+                                        </div>
+
+                                        <div class="endorsement">
+                                            <p class="endorsement-flow">From <a
+                                                    href="{{ each_endorsement_received.endorser.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a>
+                                                to
+                                                <a href="{{ each_endorsement_received.recipient.get_absolute_url }}">{{ request.profile.name }}</a>
+                                            </p>
+                                            <p class="endorsement-text">{{ each_endorsement_received.text }}</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="endorsement-box">
+                            <h2>Endorsements Made</h2>
+                            {% if endorsements_made %}
+                                {% for each_endorsement_made in endorsements_made %}
+                                    <div class="endorsement-block">
+
+                                        <div class="avatar-wrapper blue">
+                                            <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">
+                                                <img src="{% profile_image_url each_endorsement_made.recipient '400x400' %}"
+                                                     alt="avatar" width="43px"
+                                                     height="70px" class="rounded-circle">
+                                            </a>
+                                        </div>
+
+                                        <div class="endorsement">
+                                            <p class="endorsement-flow">From <a
+                                                    href="{{ request.profile.get_absolute_url }}">{{ request.profile }}</a>
+                                                to
+                                                <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">{{ each_endorsement_made.recipient.name }}</a>
+                                            </p>
+                                            <p class="endorsement-text">{{ each_endorsement_made.text }}</p>
+                                        </div>
+
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+        <!-- .app-main -->
+
+    </div>
+
+{% endblock content %}

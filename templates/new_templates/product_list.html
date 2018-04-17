@@ -1,0 +1,194 @@
+{% extends "new_templates/base.html" %}
+{% load staticfiles profile %}
+
+{% block content %}
+
+    <!-- .app-header -->
+
+    <div class="app-view">
+
+        {% include 'new_templates/categories_sidebar.html' %}
+
+        <main class="app-main" id="main">
+
+            <form id="search-form" class="form-container">
+
+                <div class="row">
+
+                    <div class="col-12 col-md-6 col-lg-4 col-xxl-2">
+
+                        {{ form_listing_settings.listing_type }}
+
+                    </div>
+
+                    <div class="col-12 col-xs-6 col-lg-4 col-xxl-3">
+
+                        <div class="custom-group">
+
+                            <label class="custom-radio" for="radio-grid">
+                                <a href="{% url 'frontend:home' %}">
+                                    <input id="radio-grid" type="radio" name="view-radio" value="grid" checked>
+                                    <span class="btn-input-layout">
+                        <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/grid.png' %}" alt="Grid">
+                      <span class="btn-input-text">Grid</span>
+                    </span>
+                                </a>
+                            </label>
+
+                            <label class="custom-radio" for="radio-map">
+                                <input id="radio-map" type="radio" name="view-radio" value="map">
+                                <span class="btn-input-layout">
+                      <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/map.png' %}" alt="Map">
+                      <span class="btn-input-text">Map</span>
+                    </span>
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 col-xs-6 col-md-4 col-lg-4 col-xxl-2">
+                        {{ form_listing_settings.radius }}
+                    </div>
+
+                    <div class="col-12 col-sm-8 col-md-8 col-lg-6 col-xxl-3">
+
+                        <div class="custom-group">
+
+                            <label class="custom-radio" for="radio-posts">
+                                <input id="radio-posts" type="radio" name="type-radio" value="posts" checked>
+                                <span class="btn-input-layout">
+                      <span class="btn-input-icon checkbox">
+                        <svg viewbox="0 0 7 7">
+                          <path d="
+                            M 0.6,3.5
+                            L 2.3,5.25
+                            L 6.4,0.9
+                            l 0.6,0.6
+                            L 2.3,6.15
+                            L 0,4.1
+                            z">
+                        </svg>
+                      </span>
+                      <span class="btn-input-text">View Posts</span>
+                    </span>
+                            </label>
+
+                            <label class="custom-radio" for="radio-people">
+                                <input id="radio-people" type="radio" name="type-radio" value="people">
+                                <span class="btn-input-layout">
+                      <span class="btn-input-icon checkbox">
+                        <svg viewbox="0 0 7 7">
+                          <path d="
+                            M 0.6,3.5
+                            L 2.3,5.25
+                            L 6.4,0.9
+                            l 0.6,0.6
+                            L 2.3,6.15
+                            L 0,4.1
+                            z">
+                        </svg>
+                      </span>
+                      <span class="btn-input-text">View People</span>
+                    </span>
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+
+                        <label class="custom-check" for="id_trusted">
+                            {{ form_listing_settings.trusted }}
+                            <span class="btn-input-layout">
+                    <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/lock.png' %}" alt="Lock">
+                    <span class="btn-input-text">Trusted</span>
+                  </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-12 col-sm-8 col-xxl-5">
+
+                        <div class="textbox-with-icon">
+                            {{ form_listing_settings.q }}
+                            <img class="textbox-icon" src="{% static 'new_template/res/img/icons/magnifier.png' %}"
+                                 alt="magnifier">
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 col-sm-4 col-xxl-2">
+
+                        <input type="submit" name="search" value="Search">
+
+                    </div>
+
+                </div>
+
+            </form>
+
+            <div class="search-results">
+
+                <div class="row" id="product_list">
+
+                    <div id="django_scroll_offset" data-offset="21" style="display: none"></div>
+
+                    {% for item in listing_items %}
+
+                        {% include 'new_templates/listing_item.html' %}
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </main>
+        <!-- .app-main -->
+
+    </div>
+
+{% endblock content %}
+
+
+{% block extra_js %}
+    <script>
+        // change Active MenuItem
+        $(document).ready(function () {
+            // console.log(window.location.href);
+            if ((window.location.href === '/') || (window.location.href == "{% url 'frontend:home' %}")) {
+                console.log(window.location.href);
+            }
+        });
+
+        $("#radio-people").click(function () {
+            window.location.href = "{% url 'frontend:people_listing' %}"
+        });
+        $("#radio-posts").click(function () {
+            window.location.href = "{% url 'frontend:home' %}"
+        });
+        $("#radio-grid").click(function () {
+            window.location.href = "{% url 'frontend:home' %}"
+        });
+        $("#radio-map").click(function () {
+            window.location.href = "{% url 'frontend:map' %}"
+        });
+
+        $('.menu-group div').click(function () {
+            var menu = $(this).parent().find('ul');
+            menu.slideToggle();
+        });
+
+    </script>
+
+    <script src="{% static 'res/js/HttpService.js' %}" type="text/javascript"></script>
+    <script src="{% static 'res/js/Views.js' %}" type="text/javascript"></script>
+    <script src="{% static 'res/js/PersonApi.js' %}" type="text/javascript"></script>
+    <script src="{% static 'res/js/Person.js' %}" type="text/javascript"></script>
+    <script src="{% static 'res/js/index.js' %}" type="text/javascript"></script>
+
+{% endblock extra_js %}

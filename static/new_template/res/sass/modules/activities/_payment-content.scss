@@ -17,6 +17,16 @@
   flex-flow: row wrap;
   background-color: #fff;
   @include crossShadow(0 0 16px 0 rgba(119, 119, 119, 0.06));
+  .id_recipient,
+  .id_amount,
+  .id_memo {
+    .form-group:first-child {
+      margin-bottom: 5px;
+    }
+    label {
+      margin-bottom: 0;
+    }
+  }
   & .item-cover {
     background-position: top center;
     background-size: contain;
@@ -33,9 +43,25 @@
     }
   }
   & #payment-form {
-    flex: 0 0 50%;
-    max-width: 50%;
+    flex: 0 0 100%;
+    max-width: 100%;
     padding: 1.875em;
+    .id_amount {
+      .form-group:nth-child(2) {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        img {
+          margin: 5px;
+          width: 13px;
+          height: 13px;
+        }
+      }
+    }
+    #id_amount {
+      width: 150px;
+      height: 44px;
+    }
     & .transaction {
       display: flex;
       justify-content: space-around;
@@ -63,8 +89,16 @@
     & textarea {
       font-size: 1.375em;
       font-weight: 300;
-      height: 2em;
       border: 1px solid #ebebeb;
+    }
+    & input,
+    & select {
+      height: 2em;
+    }
+    textarea {
+      overflow: auto;
+      max-height: 400px;
+      resize: none;
     }
     & .payment-rate {
       & img {
@@ -82,7 +116,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 100%;
+      width: 100px;
+      height: 44px;
       background-color: #e1e1e1;
       font-size: 1.375em;
       font-weight: 600;
@@ -100,6 +135,12 @@
       font-size: 1em;
       height: 3.75em;
       text-transform: uppercase;
+      &:disabled {
+        background-color: lighten($lightgrey, 20%);
+        &:hover {
+          background-color: lighten($lightgrey, 20%);
+        }
+      }
       &.btn-cancel {
         background-color: #ebebeb;
         &:hover,
@@ -118,6 +159,11 @@
       }      
     }
   }
+}
+
+.rows-wrapper {
+  max-height: 600px;
+  overflow: auto;
 }
 
 .table-head {
@@ -194,5 +240,62 @@
   }
   @include media-width-down(sm) {
     font-size: 0.8em;
+  }
+}
+
+// Search
+.activate-search {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  margin-left: 10px;
+  padding: 5px;
+  cursor: pointer;
+  .fa-times-circle {
+    display: none;
+  }
+  &.active {
+    .fa-search {
+      display: none;
+    }
+    .fa-times-circle {
+      display: inline-block;
+    }
+  }
+}
+.search-block {
+  display: none;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border: 2px solid $lightblue;
+  .search-group {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    &.btn-block {
+      justify-content: flex-end;
+    }
+    label {
+      margin: 0;
+      flex: 0 0 30%;
+      color: $lightblue;
+    }
+    input {
+      flex: 0 0 70%;
+      border: 1px solid lighten($lightgrey, 20%);
+    }
+    .btn-search {
+      width: 150px;
+      text-transform: uppercase;
+      color: #fff;
+      background-color: $lightblue;
+      border-radius: 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      &:hover {
+        background-color: lighten($lightblue, 10%);
+      }
+    }
   }
 }

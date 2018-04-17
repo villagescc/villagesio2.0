@@ -1,0 +1,52 @@
+{% load staticfiles %}
+
+<footer id="colophon" class="site-footer">
+    <div class="page-wrapper">
+
+        <div class="site-info">
+            <div class="logo-link">
+                <a href="#">
+                    <img class="img-fluid" src="{% static 'new_template/res/img/home/logo_grayscale.png' %}"
+                         alt="Villages">
+                </a>
+            </div>
+            <div class="footer-nav">
+
+                <div id="footer-navbar" class="menu-primary-navigation-container">
+                    <ul id="footer-menu" class="menu">
+                        <li class="menu-item">
+                            <a href="#">Home</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'how_it_works' %}">About Us</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'contact_us' %}">Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="legal">
+                    <span>&copy; 2017 - Villages</span>
+                    <a href="{% url 'privacy' %}">Privacy Policy &bullet; Terms of Service</a>
+                </div>
+            </div>
+
+            <div class="footer-social">
+                <ul class="social-navbar">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                    </li>
+
+                </ul>
+            </div>
+        </div><!-- .site-info -->
+
+    </div>
+</footer><!-- #colophon -->

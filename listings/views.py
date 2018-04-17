@@ -13,6 +13,7 @@ from relate.forms import AcknowledgementForm
 from relate.forms import EndorseForm
 from .schemas import SubmitListingSchema
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.decorators import login_required
 from profile.models import ProfilePageTag
 
 
@@ -27,40 +28,36 @@ def update_profile_tags(tag_obj, profile_obj, listing_obj=None):
         new_profile_page_tag.save()
 
 
+@login_required
 def add_new_listing(request):
     if request.method == 'POST':
-        schema = SubmitListingSchema()
-        data, errors = schema.load(request.POST)
-        if not errors:
-            form = ListingsForms(request.POST, request.FILES)
-            tags_list = data['tag'].split(',')
-            if form.is_valid():
-                try:
-                    listing = form.save(commit=False)
-                    listing.user_id = request.profile.user_id
-                    listing.profile_id = request.profile.id
-                    listing.save()
+        form = ListingsForms(request.POST, request.FILES)
+        tags_list = request.POST['tag'].split(',')
+        if form.is_valid():
+            try:
+                listing = form.save(commit=False)
+                listing.user = request.profile.user
+                listing.profile = request.profile
+                listing.save()
 
-                    for tag in tags_list:
-                        new_tag = Tag(name=tag.strip())
-                        try:
-                            new_tag.save()
-                            new_tag.listings_set.add(listing)
-                            update_profile_tags(new_tag, request.profile, listing)
-                        except IntegrityError as e:
-                            existing_tag = Tag.objects.get(name=new_tag.name)
-                            existing_tag.listings_set.add(listing)
-                            update_profile_tags(existing_tag, request.profile, listing)
-                    # save_document(listing)
-                    return JsonResponse({'msg': 'Success!'})
-                except Exception as e:
-                    print(e)
-                    return HttpResponseRedirect(reverse('frontend:home'))
-        else:
-            return JsonResponse({'errors': errors}, status=400)
+                for tag in tags_list:
+                    new_tag = Tag(name=tag.strip())
+                    try:
+                        new_tag.save()
+                        new_tag.listings_set.add(listing)
+                        update_profile_tags(new_tag, request.profile, listing)
+                    except IntegrityError as e:
+                        existing_tag = Tag.objects.get(name=new_tag.name)
+                        existing_tag.listings_set.add(listing)
+                        update_profile_tags(existing_tag, request.profile, listing)
+                        messages.success(request, 'Post successfully added.')
+                return HttpResponseRedirect(reverse('frontend:home'))
+
+            except Exception as e:
+                messages.error(request, 'A server error occurred, please try again later.')
     else:
         form = ListingsForms()
-    return render(request, 'frontend/home.html', {'form': form})
+    return render(request, 'new_templates/add_post.html', {'form': form})
 
 
 def submit_listing_api(request):

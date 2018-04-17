@@ -1,0 +1,199 @@
+{% load staticfiles profile tag_utils %}
+
+<style>
+    @media (min-width: 2000px)/* The minimum width of the display area, such as a browser window*/ {
+        .modal-dialog {
+            width: 1000px;
+        }
+    }
+</style>
+
+<form class="form-horizontal" id="new-payment-form" method="POST">
+    {% csrf_token %}
+    <div class="modal fade" id="new-payment-modal" tabindex="-1" role="dialog" aria-labelledby="new-payment-modal"
+         aria-hidden="true">
+        <input type="text" id="profile-username" hidden>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="payment-modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="new-trust-heading">New Payment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="{% static 'new_template/res/img/icons/times.png' %}" alt="close">
+                    </button>
+                </div>
+                <div id="modaltext" class="modal-body">
+                    <form class="modal-container">
+                        <div class="row">
+                            <div class="credit-limit col-12">
+                                <label>Recipient</label>
+                                {{ payment_form.recipient }}
+                                <div class="transaction" id="div-transaction-photos" hidden>
+                                    <div class="avatar-wrapper blue big">
+                                        <img src="{% profile_image_url request.user.profile '400x400' %}"
+                                             class="rounded-circle" height="83px">
+                                    </div>
+                                    <img style="padding: 0 0.5em;"
+                                         src="{% static 'new_template/res/img/icons/arrow-right.png' %}" alt="to">
+                                    <div class="avatar-wrapper blue big">
+                                        <img id="img-payee" src="{% static 'img/generic_user.png' %}"
+                                             class="rounded-circle" height="83px">
+                                    </div>
+                                </div>
+
+                                <div class="purchase-info">
+                                    <h3></h3>
+                                    <p></p>
+                                </div>
+
+                                <label id="payment-info-message"></label>
+
+                                <div class="payment-rate">
+                                    <h4>Hours | Local Rate: 2.00 V.H. ~ 4.00 V.H.</h4>
+                                    <div class="d-flex">
+                                        {{ payment_form.amount }}
+                                        {#                      <input type="number" name="rate" id="rate" placeholder="2.00">#}
+                                        <span class="currency-wrapper">V.H.</span>
+                                        <img src="{% static 'new_template/res/img/icons/info.png' %}" alt="more info"
+                                             data-toggle="tooltip" data-placement="right" data-html="true"
+                                             title="&lt;span class='tip-balloon'&gt;according to your local community, this is worth $20&lt;/span&gt;">
+                                    </div>
+                                </div>
+
+                                <div class="testimonial">
+                                    <h4>Testimonial</h4>
+                                    {{ payment_form.memo }}
+                                </div>
+
+                                <div class="reference col-12">
+                                    <div class="d-flex justify-content-start align-items-center">
+                                        <label class="switch mr-3 mb-0">
+                                            {{ trust_form.referral }}
+                                            <span class="slider round"></span>
+                                        </label>
+                                        <p style="margin-bottom: 0;">Refer This Person's Services to Friends?</p>
+                                    </div>
+                                    <p class="note">(Only refer a person if you have actually worked with them)</p>
+                                </div>
+
+                                <div class="col-12 col-sm-6 col-md-12 col-xl-3">
+                                    <label>&nbsp;</label>
+                                    <input type="submit" value="SEND" id="save-trust">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</form>
+
+<script>
+    function confirm_text() {
+        var can_ripple = {% if can_ripple %}true{% else %}false{% endif %};
+
+        var hours = $("#id_amount").val();
+        var ack_type = "direct";
+        if (can_ripple) {
+            var ripple = ($("input:radio[name=ripple]:checked").val() == "routed");
+            if (ripple) {
+                ack_type = "trusted";
+            }
+        }
+        if (!hours) hours = 0;
+        var q = "Send a direct acknowledgement of " +
+            hours + "h ?";
+        if (ack_type == "trusted")
+            q = "Send a trusted acknowledgement of " +
+                hours + " h? ";
+        return q;
+    }
+
+    $("#save-payment").click(function (e) {
+        $("#save-payment").attr("disabled", true);
+        var profile_username = $("#profile-username").val();
+        var url = '/pay_user_ajax/' + profile_username + '/';
+        console.log(url);
+        var request = $.ajax({
+            url: url,
+            type: 'POST',
+            data: $('#new-payment-form').serialize(),
+            cache: false,
+            beforeSend: function (xhr) {
+                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                debugger;
+                if (data['data']['stat'] == 'ok') {
+                    var recipient = data['data']['recipient'];
+                    $('#payment-msg').html(data).fadeIn('slow');
+                    $('#payment-msg').html("<strong><p>Successfully sent trust to " + recipient + "</p></strong>").fadeIn('slow');
+                    $('#payment-msg').delay(4500).fadeOut('slow');
+                    $("#save-payment").attr("disabled", false);
+                    $('#new-payment-modal').modal("hide");
+
+                    if (!data['data']['refer']) {
+                        var modal = $('#referralModal');
+                        modal.modal();
+                    } else {
+                        location.reload();
+                    }
+
+                }
+                else if (data['data']['stat'] == 'error') {
+                    debugger;
+                    if ('weight' in data['data']['errors']) {
+                        $('#payment-mseferralModalg').html(data).fadeIn('slow');
+                        var error = data["data"]["errors"]["weight"];
+                        $('#payment-msg').html("<strong><p> Weight: " + error + " Please verify</p></strong>").fadeIn('slow');
+                        $('#payment-msg').delay(4500).fadeOut('slow');
+                        $("#save-payment").attr("disabled", false);
+                    }
+                    else if ('amount' in data['data']['errors']) {
+                        $('#payment-msg').html(data).fadeIn('slow');
+                        var error = data["data"]["errors"]["amount"];
+                        $('#payment-msg').html("<strong><p> Amount of Hours: " + error + " Please verify</p></strong>").fadeIn('slow');
+                        $('#payment-msg').delay(4500).fadeOut('slow');
+                        $("#save-payment").attr("disabled", false);
+                    }
+                }
+            },
+            error: function (resp) {
+                debugger;
+                $("#save-payment").attr("disabled", false);
+                console.log('Error ' + resp);
+            }
+        });
+        e.preventDefault();
+    });
+
+    $('#new-payment-modal').on('hidden.bs.modal', function (e) {
+        $(this)
+            .find("input,textarea,select")
+            .val('')
+            .end()
+            .find("input[type=checkbox], input[type=radio]")
+            .prop("checked", "")
+            .end();
+    });
+
+    $("#saveReferral").click(function () {
+        debugger;
+        var profile_username = $("#profile-username").val();
+        $.ajax({
+            url: "{% url 'referral_on_payment' %}",
+            data: JSON.stringify({'profile': profile_username}),
+            contentType: "application/json; charset=utf-8",
+            method: 'POST',
+            success: function () {
+                location.reload();
+            }
+        })
+    });
+
+    $("#not-refer").click(function (e) {
+        location.reload();
+    })
+</script>

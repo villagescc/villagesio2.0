@@ -1,0 +1,18 @@
+{% load staticfiles profile %}
+
+<div class="receiver">
+    <div class="receiver-box" id="div-profile-photo" {% if not widget.value %}hidden{% endif %}>
+        <div id="div-profile-image"
+             class="d-flex justify-content-start align-items-center">
+            <div class="avatar-wrapper blue big mr-3">
+                <a class="recipient-link" href="{% if widget.value %}{% url 'profile' widget.value %}{% else %}#{% endif %}">
+                    <img id="profile-image"
+                         src="{% image_url_by_username widget.value '400x400' %}"
+                         alt="photo"
+                         class="rounded-circle">
+                </a>
+            </div>
+            <span id="name-profile-image">{{ widget.value }}</span>
+        </div>
+    </div>
+</div>
