@@ -4,44 +4,43 @@
 {% block content %}
     <div class="container">
         <div class="notification-list">
-            {% if notifications %}
-                {% for notification in notifications %}
-                    <div class="note">
-                        <div class="user">
-                            <div class="avatar-wrapper blue">
-                                <a href="{{ notification.notifier.get_absolute_url }}">
-                                    <img src="{% profile_image_url notification.notifier '400x400' %}"
-                                         alt="photo"
-                                         data-toggle="tooltip" data-placement="right"
-                                         data-html="true"
-                                         title="&lt;span class='tip-balloon'&gt;{{ notification.notifier.username }}&lt;/span&gt;">
-                                </a>
-                            </div>
-                            <div class="name">
-                                {{ notification.notifier_name }}
-                            </div>
+            {% for notification in notifications %}
+                <div class="note">
+                    <div class="user">
+                        <div class="avatar-wrapper blue">
+                            <a href="{{ notification.notifier.get_absolute_url }}">
+                                <img src="{% profile_image_url notification.notifier '400x400' %}"
+                                     alt="photo"
+                                     data-toggle="tooltip" data-placement="right"
+                                     data-html="true"
+                                     title="&lt;span class='tip-balloon'&gt;{{ notification.notifier.username }}&lt;/span&gt;">
+                            </a>
                         </div>
-                        <div class="type">
-                            {{ notification.notification_type }}
-                        </div>
-                        <div class="status">
-                            {{ notification.status }}
-                        </div>
-                        <div class="time">
-                            {{ notification.created_at|naturaltime }}
+                        <div class="name">
+                            {{ notification.notifier_name }}
                         </div>
                     </div>
-                {% endfor %}
-                {% if notifications.has_next %}
-                    <a class="load-more" id="notification-load-more" href="?page={{ notifications.next_page_number }}">Load
-                        more</a>
-                {% endif %}
-            {% else %}
+                    <div class="type">
+                        {{ notification.notification_type }}
+                    </div>
+                    <div class="status">
+                        {{ notification.status }}
+                    </div>
+                    <div class="time">
+                        {{ notification.created_at|naturaltime }}
+                    </div>
+                </div>
+            {% empty %}
                 <div class="container">
                     <div class="no-notes">
                         You have no notifications.
                     </div>
                 </div>
+            {% endfor %}
+
+            {% if notifications.has_next %}
+                <a class="load-more" id="notification-load-more" href="?page={{ notifications.next_page_number }}">Load
+                    more</a>
             {% endif %}
         </div>
     </div>
@@ -50,7 +49,7 @@
 {% block extra_js %}
 
     <script>
-        $('div.notification-list').on('click', 'a#notification-load-more', function(e) {
+        $('div.notification-list').on('click', 'a#notification-load-more', function (e) {
             e.preventDefault();
             var url = $(this).attr('href');
 

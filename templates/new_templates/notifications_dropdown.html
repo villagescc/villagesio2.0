@@ -1,17 +1,16 @@
 {% load staticfiles humanize %}
 
-{% if notifications %}
-    {% for notification in notifications %}
-        <div class="dropdown-item">
-            <div class="note-item">
-                <a href="{{ notification.notifier.get_absolute_url }}">{{ notification.notifier_name }}</a>
-                <span>{{ notification.notification_type|lower }}</span>
-                <span>{{ notification.status|lower }}</span>
-                <span>{{ notification.created_at|naturaltime }}</span>
-            </div>
-        </div>
-    {% endfor %}
-{% else %}
+{% for notification in notifications %}
+    <div class="dropdown-item">
+        <div class="note-item">
+            <a href="{{ notification.notifier.get_absolute_url }}">{{ notification.notifier_name }}</a>
+            <span>{{ notification.notification_type|lower }}</span>
+            <span>{{ notification.status|lower }}</span>
+            <span>{{ notification.created_at|naturaltime }}</span>
+        </div>l
+    </div>
+{% empty %}
     <div class="no-items">You don't have new notifications</div>
-{% endif %}
+{% endfor %}
+
 <div class="dropdown-item"><a href="{% url 'notifications:all_notifications' %}">See all notifications</a></div>
