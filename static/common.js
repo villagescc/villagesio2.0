@@ -292,7 +292,7 @@ function init_notification_dropdown() {
 
 
 function init_modals() {
-    $(".trust-button, .pay-button, .contact-button").click(function (e) {
+    $(document).on('click','.trust-button, .pay-button, .contact-button',function (e) {
         e.preventDefault();
         var url = $(this).attr('href');
 
