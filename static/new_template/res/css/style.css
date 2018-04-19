@@ -6885,7 +6885,7 @@ p {
     .notification-block .dropdown-item a {
       text-decoration: none;
       color: #1d90b5; }
-  .notification-block .no-items {
+  .notification-block .dropdown-no-items {
     min-width: 18rem;
     padding: 10px 20px;
     color: #8d8d8d; }

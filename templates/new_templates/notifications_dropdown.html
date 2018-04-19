@@ -3,14 +3,12 @@
 {% for notification in notifications %}
     <div class="dropdown-item">
         <div class="note-item">
-            <a href="{{ notification.notifier.get_absolute_url }}">{{ notification.notifier_name }}</a>
-            <span>{{ notification.notification_type|lower }}</span>
-            <span>{{ notification.status|lower }}</span>
+            New <span>{{ notification.notification_type|lower }}</span> from
+            <a href="{{ notification.notifier.get_absolute_url }}">{{ notification.notifier.username }}</a>
+            {% if notification.amount %}({{ notification.amount }} V.H.){% endif %}
             <span>{{ notification.created_at|naturaltime }}</span>
-        </div>l
+        </div>
     </div>
 {% empty %}
-    <div class="no-items">You don't have new notifications</div>
+    <div class="dropdown-no-items">You don't have new notifications</div>
 {% endfor %}
-
-<div class="dropdown-item"><a href="{% url 'notifications:all_notifications' %}">See all notifications</a></div>
