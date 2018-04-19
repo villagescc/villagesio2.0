@@ -2,7 +2,6 @@ from django.db import models
 
 from account.models import AmountField
 from profile.models import Profile
-from payment.models import Payment
 
 
 class Notification(models.Model):

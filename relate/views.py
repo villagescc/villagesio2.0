@@ -349,8 +349,7 @@ def blank_trust(request):
                         form = BlankTrust()
 
     accounts = ripple.get_user_accounts(request.profile)
-    return django_render(request, 'new_templates/trust.html', {'form': form, 'accounts': accounts, 'profile': profile},
-                         status=204)
+    return django_render(request, 'new_templates/trust.html', {'form': form, 'accounts': accounts, 'profile': profile})
 
 
 @login_required()
