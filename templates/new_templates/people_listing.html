@@ -226,13 +226,6 @@
 
 {% block extra_js %}
     <script>
-        // change Active MenuItem
-        $(document).ready(function () {
-            // console.log(window.location.href);
-            if ((window.location.href === '/') || (window.location.href == "{% url 'frontend:home' %}")) {
-                console.log(window.location.href);
-            }
-        });
 
         $("#radio-people").click(function () {
             window.location.href = "{% url 'frontend:people_listing' %}"

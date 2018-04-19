@@ -114,7 +114,6 @@
         $("#save-payment").attr("disabled", true);
         var profile_username = $("#profile-username").val();
         var url = '/pay_user_ajax/' + profile_username + '/';
-        console.log(url);
         var request = $.ajax({
             url: url,
             type: 'POST',
@@ -125,7 +124,6 @@
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             },
             success: function (data) {
-                debugger;
                 if (data['data']['stat'] == 'ok') {
                     var recipient = data['data']['recipient'];
                     $('#payment-msg').html(data).fadeIn('slow');
@@ -143,7 +141,6 @@
 
                 }
                 else if (data['data']['stat'] == 'error') {
-                    debugger;
                     if ('weight' in data['data']['errors']) {
                         $('#payment-mseferralModalg').html(data).fadeIn('slow');
                         var error = data["data"]["errors"]["weight"];
@@ -161,9 +158,7 @@
                 }
             },
             error: function (resp) {
-                debugger;
                 $("#save-payment").attr("disabled", false);
-                console.log('Error ' + resp);
             }
         });
         e.preventDefault();
@@ -180,7 +175,6 @@
     });
 
     $("#saveReferral").click(function () {
-        debugger;
         var profile_username = $("#profile-username").val();
         $.ajax({
             url: "{% url 'referral_on_payment' %}",
