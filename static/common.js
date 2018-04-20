@@ -303,8 +303,14 @@ function init_modals() {
 
             success: function (data, status, xhr) {
                 var modal = $('#base-modal'), html = $(data),
-					form = html.find('form');
+                    form = html.find('form');
 
+                // disable recipient input
+                form.find('input[name=contact_recipient_name]').attr('readonly', true);
+                form.find('input[name=recipient_name]').attr('readonly', true);
+                form.find('input[name=name]').attr('readonly', true);
+
+                // fill modal window with content
                 modal.find('.modal-body').html(form);
 
                 init_modal_form(form, modal, url);
@@ -326,10 +332,14 @@ function init_modal_form(form, modal, url) {
         'success': function(data, status, xhr) {
             var html = $(data), success_status = html.find('.messages'),
                 newform = html.find('form');
-
-            modal.find('.modal-body').html(newform);
-            // initialize form fields and buttons
-            init_modal_form(newform, modal, url);
+            if (success_status.length > 0) {
+                // close modal
+                modal.modal('hide');
+            } else {
+                // initialize new form fields with errors
+                modal.find('.modal-body').html(newform);
+                init_modal_form(newform, modal, url);
+            }
         }
     });
 }
