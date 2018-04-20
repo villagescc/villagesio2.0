@@ -15,7 +15,8 @@
                                 <a href="{% url 'frontend:home' %}">
                                     <input id="radio-grid" type="radio" name="view-radio" value="grid" checked>
                                     <span class="btn-input-layout">
-                                        <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/grid.png' %}" alt="Grid">
+                                        <img class="btn-input-icon"
+                                             src="{% static 'new_template/res/img/icons/grid.png' %}" alt="Grid">
                                         <span class="btn-input-text">Grid</span>
                                     </span>
                                 </a>
@@ -24,7 +25,8 @@
                                 <a href="{% url 'frontend:map' %}">
                                     <input id="radio-map" type="radio" name="view-radio" value="map">
                                     <span class="btn-input-layout">
-                                      <img class="btn-input-icon" src="{% static 'new_template/res/img/icons/map.png' %}" alt="Map">
+                                      <img class="btn-input-icon"
+                                           src="{% static 'new_template/res/img/icons/map.png' %}" alt="Map">
                                       <span class="btn-input-text">Map</span>
                                     </span>
                                 </a>
@@ -181,7 +183,7 @@
 
                                 <div class="location-container">
                                     <img src="{% static 'new_template/res/img/icons/map_b.png' %}" alt="location">
-                                    <span class="location">{{ each.location }}</span>
+                                    <span class="location">{{ each.location|default:"" }}</span>
                                 </div>
 
                                 <div class="action-block">
@@ -191,17 +193,22 @@
                                     </div>
 
                                     <div class="person-action">
-                                        <a class="action-menu-item trust-modal"
-                                           data-profile-username="{{ each.username }}" href="{{ each.get_trust_link }}"><img
-                                                src="{% static 'new_template/res/img/icons/heart.png' %}"
-                                                alt="like"></a>
-                                        <a class="action-menu-item" href="{{ each.get_payment_link }}"><img
-                                                src="{% static 'new_template/res/img/icons/wallet.png' %}"
-                                                alt="buy"></a>
-                                        <a class="action-menu-item contact-modal"
-                                           data-profile-username="{{ each.username }}"
-                                           data-listing-title="{{ each.title }}" href="{{ each.get_contact_link }}"><img
-                                                src="{% static 'new_template/res/img/icons/mail.png' %}" alt="contact"></a>
+                                        {% if each != request.profile %}
+                                            <a class="action-menu-item trust-button"
+                                               data-profile-username="{{ each.username }}"
+                                               href="{{ each.get_trust_link }}"><img
+                                                    src="{% static 'new_template/res/img/icons/heart.png' %}"
+                                                    alt="like"></a>
+                                            <a class="action-menu-item pay-button"
+                                               href="{{ each.get_payment_link }}"><img
+                                                    src="{% static 'new_template/res/img/icons/wallet.png' %}"
+                                                    alt="buy"></a>
+                                            <a class="action-menu-item contact-button"
+                                               data-profile-username="{{ each.username }}"
+                                               data-listing-title="{{ each.title }}" href="{{ each.get_contact_link }}"><img
+                                                    src="{% static 'new_template/res/img/icons/mail.png' %}"
+                                                    alt="contact"></a>
+                                        {% endif %}
                                     </div>
                                 </div>
 

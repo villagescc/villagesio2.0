@@ -24,10 +24,10 @@
                         {{ notification.notification_type }}
                     </div>
                     <div class="amount">
-                        {{ notification.amount }} V.H.
+                        {% if notification.amount %}{{ notification.amount|default:"" }} V.H.{% endif %}
                     </div>
                     <div class="memo">
-                        {{ notification.memo }}
+                        {{ notification.memo|default:"" }}
                     </div>
                     <div class="status">
                         {{ notification.status }}

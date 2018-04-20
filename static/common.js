@@ -292,7 +292,7 @@ function init_notification_dropdown() {
 
 
 function init_modals() {
-    $(document).on('click','.trust-button, .pay-button, .contact-button',function (e) {
+    $(document).on('click','.trust-button, .pay-button, .contact-button, .delete-post-button', function (e) {
         e.preventDefault();
         var url = $(this).attr('href');
 
@@ -348,5 +348,6 @@ $(document).ready(function () {
     init_feed_items();
     init_edit_post();
     init_notification_dropdown();
-    init_modals()
+    init_listing_modal();
+    init_modals();
 });

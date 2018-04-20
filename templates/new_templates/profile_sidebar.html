@@ -29,7 +29,7 @@
                 </div>
                 <div class="data-block location">
                     <img src="{% static 'new_template/res/img/icons/map_blue.png' %}" alt="location">
-                    <span>{{ profile.location }}</span>
+                    <span>{{ profile.location|default:"" }}</span>
                 </div>
                 <div class="data-block">
                     <img src="{% static 'new_template/res/img/icons/calendar_blue.png' %}" alt="date">
