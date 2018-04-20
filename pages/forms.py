@@ -10,7 +10,7 @@ from general.mail import send_mail_to_admin
 
 class FeedbackForm(forms.Form):
     feedback = forms.CharField(label=_("Feedback"), widget=forms.Textarea)
-    captcha = ReCaptchaField(widget=ReCaptchaWidget())
+    captcha = ReCaptchaField(label='', widget=ReCaptchaWidget())
 
     def get_sender(self):
         return NotImplementedError  # Implement in subclasses.
