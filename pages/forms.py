@@ -1,13 +1,17 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from snowpenguin.django.recaptcha2.fields import ReCaptchaField
+from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
+
 from general.models import EmailField
 from general.mail import send_mail_to_admin
 
 
 class FeedbackForm(forms.Form):
     feedback = forms.CharField(label=_("Feedback"), widget=forms.Textarea)
-    
+    captcha = ReCaptchaField(widget=ReCaptchaWidget())
+
     def get_sender(self):
         return NotImplementedError  # Implement in subclasses.
 
@@ -28,6 +32,7 @@ class AnonymousFeedbackForm(FeedbackForm):
 
 
 AnonymousFeedbackForm.base_fields.keyOrder = ['name', 'email', 'feedback']
+
 
 class UserFeedbackForm(FeedbackForm):
     def __init__(self, profile, *args, **kwargs):

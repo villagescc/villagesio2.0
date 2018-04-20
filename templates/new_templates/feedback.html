@@ -1,5 +1,11 @@
 {% extends 'new_templates/base.html' %}
-{% load staticfiles %}
+{% load staticfiles recaptcha2 %}
+
+{% block extra_css %}
+
+    {% recaptcha_init %}
+
+{% endblock extra_css %}
 
 {% block content %}
 
@@ -27,7 +33,8 @@
 
                                     <div class="row" style="margin-top: 15px">
                                         <div class="col-6">
-                                            <input class="btn btn-std btn-cancel" type="submit" name="cancel" value="Cancel">
+                                            <input class="btn btn-std btn-cancel" type="submit" name="cancel"
+                                                   value="Cancel">
                                         </div>
                                         <div class="col-6">
                                             <input class="btn btn-std" type="submit" value="Send Feedback">
