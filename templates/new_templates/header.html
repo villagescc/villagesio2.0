@@ -89,9 +89,15 @@
                         <a class="notification-dropdown dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                            aria-haspopup="true" id="notifDropdown">
                             <img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications">
-                            <span class="count {% if notifications_count %} full{% endif %}">{{ notifications_count }}</span>
+                            <span class="count {% if notifications_count %} full{% endif %}"
+                                  id="new-notifications-count">{{ notifications_count }}</span>
                         </a>
-                        <div class="dropdown-menu" id="notification-dropdown-menu" aria-labelledby="notifDropdown"></div>
+                        <div class="dropdown-menu" id="notification-dropdown-menu" aria-labelledby="notifDropdown">
+                            <div class="notification-dropdown-items"></div>
+                            <div class="dropdown-no-items">You don't have new notifications</div>
+                            <div class="dropdown-item"><a href="{% url 'notifications:all_notifications' %}">See all
+                                notifications</a></div>
+                        </div>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav">

@@ -91,7 +91,6 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             success: function (data) {
-                debugger;
                 $('#new-posting-modal').modal("hide");
                 showSuccessMessage('Listing added successfully!');
                 $('#save-post').attr("disabled", false);
