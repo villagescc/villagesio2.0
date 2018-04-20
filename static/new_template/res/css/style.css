@@ -6443,6 +6443,12 @@ input:checked + .slider:before {
 .account-settings .btn-submit {
   padding: 10px 20px; }
 
+.bootstrap-tagsinput .tag {
+  color: #000; }
+
+.bootstrap-tagsinput {
+  width: 100%; }
+
 /* links */
 a {
   -webkit-transition: all 0.3s;
