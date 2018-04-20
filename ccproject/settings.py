@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'social_django',
+    'snowpenguin.django.recaptcha2',
 
     # Custom apps
     'ccproject',
@@ -92,7 +93,6 @@ INSTALLED_APPS = [
     'frontend.apps.FrontendConfig',
     'endorsement.apps.EndorsementConfig',
     'categories.apps.CategoriesConfig'
-
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -260,8 +260,8 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 
-SOCIAL_AUTH_FACEBOOK_KEY = '492492537748359'
-SOCIAL_AUTH_FACEBOOK_SECRET = '6eddbe0ef128f997f32962a15b77e215'
+SOCIAL_AUTH_FACEBOOK_KEY = env.str('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = env.str('SOCIAL_AUTH_FACEBOOK_SECRET')
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
@@ -281,7 +281,10 @@ SOCIAL_AUTH_PIPELINE = (
 
 USE_X_FORWARDED_HOST = True
 
-GOOGLE_MAPS_API_KEY = 'AIzaSyBuQbf5nmnkuK8vOlF2STsyqfWeCzL13jA'
+GOOGLE_MAPS_API_KEY = env.str('GOOGLE_MAPS_API_KEY')
+
+RECAPTCHA_PUBLIC_KEY = env.str('RECAPTCHA_PUBLIC_KEY')
+RECAPTCHA_PRIVATE_KEY = env.str('RECAPTCHA_PRIVATE_KEY')
 
 
 ENDORSEMENT_BONUS = 5
