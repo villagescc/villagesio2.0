@@ -306,8 +306,10 @@ function init_modals() {
 					form = html.find('form');
 
                 modal.find('.modal-body').html(form);
-
                 init_modal_form(form, modal, url);
+                // hide name input
+                modal.find('.form-group:first label').text('Trust receiver');
+                modal.find('#id_recipient_name').hide();
                 modal.modal({
 					'keyboard': false,
 					'show': true
@@ -324,9 +326,11 @@ function init_modal_form(form, modal, url) {
         dataType: 'html',
 
         'success': function(data, status, xhr) {
-            var html = $(data), success_status = html.find('.messages'),
+            var html = $(data),
+                success_status = html.find('.messages'),
                 newform = html.find('form');
 
+            // console.log(data);
             modal.find('.modal-body').html(newform);
             // initialize form fields and buttons
             init_modal_form(newform, modal, url);

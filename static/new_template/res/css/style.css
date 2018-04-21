@@ -8244,108 +8244,111 @@ p {
   -webkit-box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06);
   -moz-box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06);
   box-shadow: 0 0 16px 0 rgba(119, 119, 119, 0.06); }
-  .trust-data #trust-form {
-    flex: 0 0 100%;
-    max-width: 100%;
-    padding: 1.875em; }
-    .trust-data #trust-form .id_weight .form-group:nth-child(2) {
-      display: flex;
-      flex-direction: row;
-      align-items: center; }
-      .trust-data #trust-form .id_weight .form-group:nth-child(2) img {
-        margin: 5px;
-        width: 13px;
-        height: 13px; }
-    .trust-data #trust-form input#id_weight {
-      display: inline-block;
-      width: 150px;
-      height: 44px; }
-    .trust-data #trust-form .transaction {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 1em 12% 2em; }
-    .trust-data #trust-form h3 {
-      font-size: 1.5em;
-      font-weight: 300;
-      color: #8d8d8d; }
-    .trust-data #trust-form p {
-      font-size: 0.875em;
-      font-weight: 300;
-      color: #5c5c5c; }
-    .trust-data #trust-form h4 {
-      margin-top: 3em;
-      font-size: 0.75em;
-      color: #9a9a9a;
-      text-transform: uppercase; }
-    .trust-data #trust-form input,
-    .trust-data #trust-form select,
-    .trust-data #trust-form textarea {
-      font-size: 1.375em;
-      font-weight: 300;
-      border: 1px solid #ebebeb; }
-    .trust-data #trust-form input,
-    .trust-data #trust-form select {
-      height: 2em; }
-    .trust-data #trust-form textarea {
-      min-height: 100px;
-      max-height: 300px;
-      resize: none; }
-    .trust-data #trust-form .credit-limit {
-      max-width: 200px; }
-      .trust-data #trust-form .credit-limit img {
-        height: auto;
-        margin: auto 0 auto 0.5em; }
-      .trust-data #trust-form .credit-limit .tip-balloon {
-        font-size: 0.625em;
-        color: #ffffff;
-        text-transform: uppercase;
-        line-height: 1.125; }
-    .trust-data #trust-form .currency-wrapper {
-      display: inline-block;
-      width: 100px;
-      height: 100%;
-      margin-left: -5px;
-      text-align: center;
-      line-height: 44px;
-      background-color: #e1e1e1;
-      font-size: 1.375em;
-      font-weight: 600;
-      color: #8d8d8d; }
-    .trust-data #trust-form .testimonial {
-      padding-bottom: 1em; }
-      .trust-data #trust-form .testimonial #testimonial {
-        height: 10em;
-        font-size: 0.875em;
-        color: #5c5c5c; }
-    .trust-data #trust-form .reference {
-      font-size: 0.875em;
+
+#trust-form {
+  flex: 0 0 100%;
+  max-width: 100%;
+  padding: 1.875em; }
+  .modal-body #trust-form {
+    padding: 10px; }
+  #trust-form .id_weight .form-group:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+    align-items: center; }
+    #trust-form .id_weight .form-group:nth-child(2) img {
+      margin: 5px;
+      width: 13px;
+      height: 13px; }
+  #trust-form input#id_weight {
+    display: inline-block;
+    width: 150px;
+    height: 44px; }
+  #trust-form .transaction {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1em 12% 2em; }
+  #trust-form h3 {
+    font-size: 1.5em;
+    font-weight: 300;
+    color: #8d8d8d; }
+  #trust-form p {
+    font-size: 0.875em;
+    font-weight: 300;
+    color: #5c5c5c; }
+  #trust-form h4 {
+    margin-top: 3em;
+    font-size: 0.75em;
+    color: #9a9a9a;
+    text-transform: uppercase; }
+  #trust-form input,
+  #trust-form select,
+  #trust-form textarea {
+    font-size: 1.375em;
+    font-weight: 300;
+    border: 1px solid #ebebeb; }
+  #trust-form input,
+  #trust-form select {
+    height: 2em; }
+  #trust-form textarea {
+    min-height: 100px;
+    max-height: 300px;
+    resize: none; }
+  #trust-form .credit-limit {
+    max-width: 200px; }
+    #trust-form .credit-limit img {
+      height: auto;
+      margin: auto 0 auto 0.5em; }
+    #trust-form .credit-limit .tip-balloon {
+      font-size: 0.625em;
+      color: #ffffff;
       text-transform: uppercase;
-      color: #5c5c5c;
-      margin-bottom: 1em; }
-      .trust-data #trust-form .reference p {
-        font-weight: 400; }
-        .trust-data #trust-form .reference p.note {
-          margin-top: 0.5em;
-          font-size: 0.75em;
-          font-weight: 300;
-          color: #9a9a9a;
-          text-transform: none; }
-    .trust-data #trust-form .btn-std {
-      font-size: 1em;
-      height: 3.75em;
-      text-transform: uppercase; }
-      .trust-data #trust-form .btn-std.btn-cancel {
-        background-color: #ebebeb; }
-        .trust-data #trust-form .btn-std.btn-cancel:hover, .trust-data #trust-form .btn-std.btn-cancel:focus {
-          background-color: #d2d2d2; }
-    @media (max-width: 1199px) {
-      .trust-data #trust-form {
-        flex: 0 0 100%;
-        max-width: 100%; } }
-    @media (max-width: 575px) {
-      .trust-data #trust-form .transaction {
-        padding: 1em 0 2em; } }
+      line-height: 1.125; }
+  #trust-form .currency-wrapper {
+    display: inline-block;
+    width: 100px;
+    height: 100%;
+    margin-left: -5px;
+    text-align: center;
+    line-height: 44px;
+    background-color: #e1e1e1;
+    font-size: 1.375em;
+    font-weight: 600;
+    color: #8d8d8d; }
+  #trust-form .testimonial {
+    padding-bottom: 1em; }
+    #trust-form .testimonial #testimonial {
+      height: 10em;
+      font-size: 0.875em;
+      color: #5c5c5c; }
+  #trust-form .reference {
+    font-size: 0.875em;
+    text-transform: uppercase;
+    color: #5c5c5c;
+    margin-bottom: 1em; }
+    #trust-form .reference p {
+      font-weight: 400; }
+      #trust-form .reference p.note {
+        margin-top: 0.5em;
+        font-size: 0.75em;
+        font-weight: 300;
+        color: #9a9a9a;
+        text-transform: none; }
+  #trust-form .btn-std {
+    font-size: 1em;
+    height: 3.75em;
+    text-transform: uppercase; }
+    #trust-form .btn-std.btn-cancel {
+      background-color: #ebebeb; }
+      #trust-form .btn-std.btn-cancel:hover, #trust-form .btn-std.btn-cancel:focus {
+        background-color: #d2d2d2; }
+  @media (max-width: 1199px) {
+    #trust-form {
+      flex: 0 0 100%;
+      max-width: 100%; } }
+  @media (max-width: 575px) {
+    #trust-form .transaction {
+      padding: 1em 0 2em; } }
 
 .receiver {
   margin-top: 20px; }
@@ -8488,6 +8491,13 @@ p {
 
 .modal#listing-modal .modal-body .col-12 {
   min-height: 40px; }
+
+.modal#base-modal .modal-dialog #id_recipient_name {
+  display: none; }
+
+.modal#base-modal .modal-dialog #id_weight {
+  width: 50%;
+  border: 1px solid #ebebeb; }
 
 .notification-list {
   margin-top: 20px; }

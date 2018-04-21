@@ -72,5 +72,19 @@
       }
     }
   }
+
+  &#base-modal {
+    .modal-dialog {
+      #id_recipient_name {
+        display: none;
+      }
+      #id_weight {
+        width: 50%;
+        border: 1px solid #ebebeb;
+      }
+
+    }
+
+  }
 }
 
