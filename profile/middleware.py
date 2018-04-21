@@ -1,5 +1,6 @@
 from profile.models import Profile
 
+
 class ProfileMiddleware(object):
     def process_request(self, request):
         "Populate request with user profile, for convenience."
@@ -9,4 +10,3 @@ class ProfileMiddleware(object):
                 request.profile = request.user.profile
             except Profile.DoesNotExist:
                 pass
-
