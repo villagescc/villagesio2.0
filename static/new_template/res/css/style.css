@@ -8571,14 +8571,16 @@ p {
 .modal#base-modal p {
   color: #8d8d8d; }
 
-.modal#base-modal input[type=submit] {
+.modal#base-modal input[name=delete_button],
+.modal#base-modal input[name=cancel] {
   display: inline-block;
   width: calc(50% - 5px);
   padding: 10px;
   line-height: 1.2;
   border: none; }
   @media (max-width: 767px) {
-    .modal#base-modal input[type=submit] {
+    .modal#base-modal input[name=delete_button],
+    .modal#base-modal input[name=cancel] {
       width: 100%; } }
 
 .modal#base-modal input[name=delete_button] {

@@ -87,7 +87,8 @@
     p {
       color: $lightgrey;
     }
-    input[type=submit] {
+    input[name=delete_button],
+    input[name=cancel] {
       display: inline-block;
       width: calc(50% - 5px);
       padding: 10px;
