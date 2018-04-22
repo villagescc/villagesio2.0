@@ -84,6 +84,26 @@
       }
 
     }
+    p {
+      color: $lightgrey;
+    }
+    input[type=submit] {
+      display: inline-block;
+      width: calc(50% - 5px);
+      padding: 10px;
+      line-height: 1.2;
+      border: none;
+      @include media-width-down(sm) {
+        width: 100%;
+      }
+    }
+    input[name=delete_button] {
+      margin-right: 5px;
+      @include media-width-down(sm) {
+        margin-right: 0;
+      }
+
+    }
 
   }
 }

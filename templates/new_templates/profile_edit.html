@@ -4,64 +4,7 @@
 {% block extra_css %}
 
     <style>
-        .drag-and-drop-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-flow: row wrap;
-            min-width: 220px;
-            padding: 2.1875em 10px;
-            border: 3px dashed #919191;
-            text-align: center;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
-            border-radius: 10px;
-        }
 
-        @media screen and (max-width: 600px) {
-            .drag-and-drop-container {
-                margin: 0 -20px;
-            }
-        }
-
-        .drag-and-drop-container input {
-            display: none;
-        }
-
-        .drag-and-drop-container img {
-            display: flex;
-        }
-
-        .drag-and-drop-container p {
-            margin-bottom: 0;
-            font-size: 1.125em;
-            color: #b0b0b0;
-            flex: 0 0 100%;
-        }
-
-        .drag-and-drop-container .action-call {
-            margin-top: 0.5em;
-            font-size: 1.375em;
-            font-weight: 700;
-            color: #8c99a5;
-            text-transform: uppercase;
-        }
-
-        .drag-and-drop-container label {
-            color: #8c99a5;
-        }
-
-        img.photo-preview {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        @media screen and (max-width: 575px) {
-            .edit-profile .btn-cancel {
-                margin-bottom: 15px;
-            }
-        }
 
     </style>
 
@@ -102,7 +45,7 @@
                                     <h4></h4>
                                 </div>
 
-                                <div class="col-12 col-sm-6 col-md-3">
+                                <div class="col-12 col-sm-6">
                                     <label>&nbsp;</label>
 
                                     <div class="drag-and-drop-container">
@@ -121,7 +64,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-sm-6 col-md-3">
+                                <div class="col-12 col-sm-6">
                                     <label></label>
                                     <h4>Header image</h4>
 
@@ -191,9 +134,9 @@
 
 {% block extra_js %}
 
-    <script>
-        var input_choose_file = $("#id_photo");
-        input_choose_file.css({height: "3em"});
-    </script>
+<script>
+    var input_choose_file = $("#id_photo");
+    input_choose_file.css({height: "3em"});
+</script>
 
 {% endblock extra_js %}

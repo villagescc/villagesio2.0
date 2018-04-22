@@ -7893,6 +7893,49 @@ p {
       font-size: 0.6875em;
       color: #1d90b5; }
 
+.edit-profile .drag-and-drop-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: row wrap;
+  min-width: 220px;
+  max-width: 400px;
+  padding: 2.1875em 10px;
+  border: 3px dashed #919191;
+  text-align: center;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px; }
+  @media screen and (max-width: 600px) {
+    .edit-profile .drag-and-drop-container {
+      margin: 0 -20px; } }
+  .edit-profile .drag-and-drop-container input {
+    display: none; }
+  .edit-profile .drag-and-drop-container img {
+    display: flex; }
+  .edit-profile .drag-and-drop-container p {
+    margin-bottom: 0;
+    font-size: 1.125em;
+    color: #b0b0b0;
+    flex: 0 0 100%; }
+  .edit-profile .drag-and-drop-container .action-call {
+    margin-top: 0.5em;
+    font-size: 1.375em;
+    font-weight: 700;
+    color: #8c99a5;
+    text-transform: uppercase; }
+  .edit-profile .drag-and-drop-container label {
+    color: #8c99a5; }
+
+.edit-profile img.photo-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; }
+
+@media screen and (max-width: 575px) {
+  .edit-profile .edit-profile .btn-cancel {
+    margin-bottom: 15px; } }
+
 .endorsement-box {
   margin-bottom: 30px;
   padding: 1.5em;
@@ -8522,6 +8565,25 @@ p {
   width: 50%;
   border: 1px solid #ebebeb; }
 
+.modal#base-modal p {
+  color: #8d8d8d; }
+
+.modal#base-modal input[type=submit] {
+  display: inline-block;
+  width: calc(50% - 5px);
+  padding: 10px;
+  line-height: 1.2;
+  border: none; }
+  @media (max-width: 767px) {
+    .modal#base-modal input[type=submit] {
+      width: 100%; } }
+
+.modal#base-modal input[name=delete_button] {
+  margin-right: 5px; }
+  @media (max-width: 767px) {
+    .modal#base-modal input[name=delete_button] {
+      margin-right: 0; } }
+
 .notification-list {
   margin-top: 20px; }
   .notification-list .note {
@@ -8592,6 +8654,7 @@ p {
         .notification-list .note .amount {
           flex: 0 0 10%; } }
     .notification-list .note .memo {
+      padding: 5px 10px;
       flex: 1 0 60%;
       order: 0; }
       @media (min-width: 768px) {

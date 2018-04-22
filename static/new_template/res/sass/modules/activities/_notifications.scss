@@ -72,6 +72,7 @@
       }
     }
     .memo {
+      padding: 5px 10px;
       flex: 1 0 60%;
       order: 0;
       @include media-width-up(md) {
