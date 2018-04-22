@@ -8540,6 +8540,7 @@ p {
     overflow: hidden; }
     @media (min-width: 768px) {
       .notification-list .note {
+        flex-wrap: nowrap;
         font-size: 16px; } }
     .notification-list .note:hover {
       -webkit-box-shadow: 0 1px 10px 0 rgba(119, 119, 119, 0.4);
@@ -8550,7 +8551,8 @@ p {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start; }
+      justify-content: flex-start;
+      order: 0; }
       @media (min-width: 768px) {
         .notification-list .note .user {
           flex: 0 0 30%;
@@ -8567,15 +8569,35 @@ p {
         .notification-list .note .name {
           flex: 0 0 50%; } }
     .notification-list .note .type,
-    .notification-list .note .status,
     .notification-list .note .time {
       padding: 0 5px;
-      flex: 0 0 auto; }
+      flex: 0 0 auto;
+      order: 1; }
       @media (min-width: 768px) {
         .notification-list .note .type,
-        .notification-list .note .status,
         .notification-list .note .time {
-          flex: 0 0 20%; } }
+          flex: 0 0 15%; } }
+    .notification-list .note .status {
+      text-align: center;
+      padding: 0 5px;
+      flex: 0 0 auto;
+      order: 1; }
+      @media (min-width: 768px) {
+        .notification-list .note .status {
+          flex: 0 0 10%; } }
+    .notification-list .note .amount {
+      flex: 0 0 auto;
+      order: 1; }
+      @media (min-width: 768px) {
+        .notification-list .note .amount {
+          flex: 0 0 10%; } }
+    .notification-list .note .memo {
+      flex: 1 0 60%;
+      order: 0; }
+      @media (min-width: 768px) {
+        .notification-list .note .memo {
+          flex: 1 0 auto;
+          order: 1; } }
     .notification-list .note .type {
       font-weight: bold;
       color: #4cdfab; }
