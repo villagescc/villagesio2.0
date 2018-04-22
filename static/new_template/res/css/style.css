@@ -7912,7 +7912,10 @@ p {
   .edit-profile .drag-and-drop-container input {
     display: none; }
   .edit-profile .drag-and-drop-container img {
-    display: flex; }
+    display: flex;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; }
   .edit-profile .drag-and-drop-container p {
     margin-bottom: 0;
     font-size: 1.125em;
