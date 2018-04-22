@@ -112,6 +112,12 @@
         &:last-child {
           margin-right: 0;
         }
+        &.green {
+          color: $lightgreen;
+        }
+        &.red {
+          color: $red;
+        }
       }
     }
   }

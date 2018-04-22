@@ -180,8 +180,7 @@ function init_modals() {
                     form.find('input[name=contact_recipient_name]').hide();
                 }
 
-
-                    modal.modal({
+                modal.modal({
 					'keyboard': false,
 					'show': true
 				});

@@ -6880,6 +6880,10 @@ p {
           color: #4cdfab; }
         .notification-block .dropdown-menu .note-item span:last-child {
           margin-right: 0; }
+        .notification-block .dropdown-menu .note-item span.green {
+          color: #4cdfab; }
+        .notification-block .dropdown-menu .note-item span.red {
+          color: #d97271; }
   .notification-block .notification-dropdown {
     text-decoration: none; }
     .notification-block .notification-dropdown .count {
