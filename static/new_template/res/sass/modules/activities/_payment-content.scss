@@ -17,6 +17,15 @@
   flex-flow: row wrap;
   background-color: #fff;
   @include crossShadow(0 0 16px 0 rgba(119, 119, 119, 0.06));
+}
+
+#payment-form {
+  flex: 0 0 100%;
+  max-width: 100%;
+  padding: 1.875em;
+  .modal-body & {
+    padding: 10px;
+  }
   .id_recipient,
   .id_amount,
   .id_memo {
@@ -27,7 +36,7 @@
       margin-bottom: 0;
     }
   }
-  & .item-cover {
+  .item-cover {
     background-position: top center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -42,121 +51,116 @@
       padding-top: 50%;
     }
   }
-  & #payment-form {
-    flex: 0 0 100%;
-    max-width: 100%;
-    padding: 1.875em;
-    .id_amount {
-      .form-group:nth-child(2) {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        img {
-          margin: 5px;
-          width: 13px;
-          height: 13px;
-        }
+  .id_amount {
+    .form-group:nth-child(2) {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      img {
+        margin: 5px;
+        width: 13px;
+        height: 13px;
       }
     }
-    #id_amount {
-      width: 150px;
-      height: 44px;
+  }
+  #id_amount {
+    width: 150px;
+    height: 44px;
+  }
+  & .transaction {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1em 12% 2em;
+  }
+  & h3 {
+    font-size: 1.5em;
+    font-weight: 300;
+    color: #8d8d8d;
+  }
+  & p {
+    font-size: 0.875em;
+    font-weight: 300;
+    color: #5c5c5c;
+  }
+  & h4 {
+    margin-top: 3em;
+    font-size: 0.75em;
+    color: #9a9a9a;
+    text-transform: uppercase;
+  }
+  & input,
+  & select,
+  & textarea {
+    font-size: 1.375em;
+    font-weight: 300;
+    border: 1px solid #ebebeb;
+  }
+  & input,
+  & select {
+    height: 2em;
+  }
+  textarea {
+    overflow: auto;
+    max-height: 400px;
+    resize: none;
+  }
+  & .payment-rate {
+    & img {
+      height: auto;
+      margin: auto 0 auto 0.5em;
     }
-    & .transaction {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 1em 12% 2em;
+    & .tip-balloon {
+      font-size: 0.625em;
+      color: #ffffff;
+      text-transform: uppercase;
+      line-height: 1.125;
     }
-    & h3 {
-      font-size: 1.5em;
-      font-weight: 300;
-      color: #8d8d8d;
-    }
-    & p {
+  }
+  & .currency-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 44px;
+    background-color: #e1e1e1;
+    font-size: 1.375em;
+    font-weight: 600;
+    color: #8d8d8d;
+  }
+  & .testimonial {
+    padding-bottom: 1em;
+    & #testimonial {
+      height: 10em;
       font-size: 0.875em;
-      font-weight: 300;
       color: #5c5c5c;
     }
-    & h4 {
-      margin-top: 3em;
-      font-size: 0.75em;
-      color: #9a9a9a;
-      text-transform: uppercase;
-    }
-    & input,
-    & select,
-    & textarea {
-      font-size: 1.375em;
-      font-weight: 300;
-      border: 1px solid #ebebeb;
-    }
-    & input,
-    & select {
-      height: 2em;
-    }
-    textarea {
-      overflow: auto;
-      max-height: 400px;
-      resize: none;
-    }
-    & .payment-rate {
-      & img {
-        height: auto;
-        margin: auto 0 auto 0.5em;
-      }
-      & .tip-balloon {
-        font-size: 0.625em;
-        color: #ffffff;
-        text-transform: uppercase;
-        line-height: 1.125;
-      }
-    }
-    & .currency-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100px;
-      height: 44px;
-      background-color: #e1e1e1;
-      font-size: 1.375em;
-      font-weight: 600;
-      color: #8d8d8d;
-    }
-    & .testimonial {
-      padding-bottom: 1em;
-      & #testimonial {
-        height: 10em;
-        font-size: 0.875em;
-        color: #5c5c5c;
-      }
-    }
-    & .btn-std {
-      font-size: 1em;
-      height: 3.75em;
-      text-transform: uppercase;
-      &:disabled {
+  }
+  & .btn-std {
+    font-size: 1em;
+    height: 3.75em;
+    text-transform: uppercase;
+    &:disabled {
+      background-color: lighten($lightgrey, 20%);
+      &:hover {
         background-color: lighten($lightgrey, 20%);
-        &:hover {
-          background-color: lighten($lightgrey, 20%);
-        }
-      }
-      &.btn-cancel {
-        background-color: #ebebeb;
-        &:hover,
-        &:focus {
-          background-color: darken(#ebebeb, 10%);
-        }
       }
     }
-    @include media-width-down(lg) {
-      flex: 0 0 100%;
-      max-width: 100%;
+    &.btn-cancel {
+      background-color: #ebebeb;
+      &:hover,
+      &:focus {
+        background-color: darken(#ebebeb, 10%);
+      }
     }
-    @include media-width-down(xs) {
-      & .transaction {
-        padding: 1em 0 2em;
-      }      
+  }
+  @include media-width-down(lg) {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  @include media-width-down(xs) {
+    & .transaction {
+      padding: 1em 0 2em;
     }
   }
 }

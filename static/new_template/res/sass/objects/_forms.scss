@@ -370,6 +370,9 @@ input:checked + .slider:before {
 .form-container.contact-form {
   padding: 40px;
   background-color: #fff;
+  .modal-body & {
+    padding: 10px;
+  }
   input,
   textarea {
     border: 1px solid #ebebeb;
@@ -381,6 +384,20 @@ input:checked + .slider:before {
       label {
         margin-bottom: 5px;
       }
+    }
+  }
+  .btn-save {
+    padding: 15px;
+    font-size: 1em;
+    color: #fff;
+    text-transform: uppercase;
+    background-color: $lightblue;
+    cursor: pointer;
+    border-radius: 0;
+    @include crossTransition(background-color .3s);
+    &:hover,
+    &:focus {
+      background-color: darken($lightblue, 10%);
     }
   }
 }

@@ -153,7 +153,8 @@ function init_notification_dropdown() {
 function init_modals() {
     $(document).on('click','.trust-button, .pay-button, .contact-button, .delete-post-button', function (e) {
         e.preventDefault();
-        var url = $(this).attr('href');
+        var $btn = $(this),
+            url = $btn.attr('href');
 
         $.ajax({
             url: url,
@@ -164,18 +165,23 @@ function init_modals() {
                 var modal = $('#base-modal'), html = $(data),
                     form = html.find('form');
 
-                // disable recipient input
-                form.find('input[name=contact_recipient_name]').attr('readonly', true);
-                form.find('input[name=recipient_name]').attr('readonly', true);
-                form.find('input[name=recipient]').attr('readonly', true);
-
                 // fill modal window with content
                 modal.find('.modal-body').html(form);
                 init_modal_form(form, modal, url);
-                // hide name input
-                modal.find('.form-group:first label').text('Trust receiver');
-                modal.find('#id_recipient_name').hide();
-                modal.modal({
+
+                // disable recipient input
+                if ($btn.hasClass('trust-button')) {
+                    modal.find('.form-group:first label').text('Trust receiver');
+                    modal.find('#id_recipient_name').hide();
+                } else if ($btn.hasClass('pay-button')) {
+                    modal.find('.id_recipient .form-group:first label').text('Payment receiver');
+                    form.find('input[name=recipient]').attr('readonly', true);
+                } else if ($btn.hasClass('contact-button')) {
+                    form.find('input[name=contact_recipient_name]').hide();
+                }
+
+
+                    modal.modal({
 					'keyboard': false,
 					'show': true
 				});
