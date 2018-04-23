@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from django.db import IntegrityError
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -13,26 +12,24 @@ from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.core.exceptions import PermissionDenied
 from django.conf import settings
 from django.utils import translation
-from django.utils.translation import ugettext_lazy as _
-from general.util import render, deflect_logged_in
 from django.shortcuts import render as django_render
+from django.utils.translation import ugettext_lazy as _
+
 from listings.models import Listings
 from listings.views import update_profile_tags
-from relate.forms import AcknowledgementForm
-from relate.forms import EndorseForm
+from relate.forms import AcknowledgementForm, EndorseForm
 from tags.models import Tag
 from accounts.forms import UserForm
-from profile.forms import (
-    RegistrationForm, ProfileForm, ContactForm, SettingsForm, InvitationForm,
-    RequestInvitationForm, ForgotPasswordForm, FormProfileTag)
+from profile.forms import RegistrationForm, ProfileForm, ContactForm, SettingsForm, InvitationForm, \
+    RequestInvitationForm, ForgotPasswordForm, FormProfileTag
 from profile.models import Profile, Invitation, PasswordResetLink, ProfilePageTag
 from relate.models import Referral
 from post.models import Post
-from categories.models import Categories
 from geo.util import location_required
 from geo.models import Location
 from relate.models import Endorsement
 from feed.views import feed
+from general.util import render, deflect_logged_in
 from general.mail import send_mail_from_system
 from listings.forms import ListingsForms
 
@@ -66,7 +63,7 @@ MESSAGES = {
                            "<em>Join</em> link on the right to register."),
     'password_link_sent': _("A password reset link has been emailed to you."),
     'password_reset': _("Your password has been reset. You may now log in "
-			"with your new password."),
+                        "with your new password."),
 }
 
 
@@ -242,11 +239,9 @@ def edit_settings(request):
         settings_form = SettingsForm(instance=request.profile.settings)
     if 'change_password' not in request.POST:
         password_form = PasswordChangeForm(request.user)
-    all_categories = Categories.objects.order_by('id')
 
     return django_render(request, 'new_templates/profile_settings.html', {'settings_form': settings_form,
-                                                                          'password_form': password_form,
-                                                                          'categories': all_categories})
+                                                                          'password_form': password_form})
 
 
 def send_new_address_email(settings_obj):

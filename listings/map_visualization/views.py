@@ -61,7 +61,6 @@ def listing_map(request):
         rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
         housing_sub_categories = SubCategories.objects.all().filter(categories=4)
         payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
-        categories_list = Categories.objects.all()
         subcategories = SubCategories.objects.all()
         contact_form = ContactForm()
 
@@ -125,7 +124,7 @@ def listing_map(request):
         listing_locations = json.dumps(listing_locations)
 
         return render(request, 'new_templates/map-visualization.html',
-                      {'listing_form': form, 'categories': categories_list, 'item_sub_categories': item_sub_categories,
+                      {'listing_form': form, 'item_sub_categories': item_sub_categories,
                        'services_sub_categories': services_sub_categories, 'subcategories': subcategories,
                        'rideshare_sub_categories': rideshare_sub_categories,
                        'housing_sub_categories': housing_sub_categories,

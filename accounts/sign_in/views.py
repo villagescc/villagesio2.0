@@ -21,7 +21,6 @@ from geo.models import Location
 from profile.forms import RegistrationForm, ProfileForm
 from django.core.exceptions import ObjectDoesNotExist
 from django_user_agents.utils import get_user_agent
-from ccproject.utils import rotate_image
 import mailchimp
 import requests
 
@@ -218,15 +217,10 @@ class SignInUserRegister(View):
 def edit_profile(request):
     user_agent = get_user_agent(request)
 
-    p = Profile.objects.filter(user=request.user)
-    profile = p[0] if p else None
+    profile = request.profile
 
     if request.method == 'POST':
-        if user_agent.device.family == 'iPhone':
-            new_photo = rotate_image(request.FILES.get('photo'))
-            if new_photo:
-                request.FILES['photo'] = new_photo
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, user_agent=user_agent, instance=profile)
         if form.is_valid():
             photo = request.FILES.get('photo')
             header_image = request.FILES.get('header_image')
@@ -244,8 +238,7 @@ def edit_profile(request):
             return HttpResponseRedirect(reverse('frontend:home'))
     else:
         form = ProfileForm(instance=profile)
-    all_categories = Categories.objects.order_by('id')
-    return django_render(request, 'new_templates/profile_edit.html', {'form': form, 'categories': all_categories})
+    return django_render(request, 'new_templates/profile_edit.html', {'form': form})
 
 
 def build_location(loc):

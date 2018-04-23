@@ -9,6 +9,7 @@ from profile.models import Profile, Invitation, Settings, PasswordResetLink
 from general.models import EmailField
 from general.mail import send_mail, send_mail_to_admin
 from general.forms import ReceiverInput
+from ccproject.utils import rotate_image
 
 
 alphanumeric = RegexValidator(r'^[0-9a-zA-Z_\s]*$', 'Only alphanumeric characters are allowed.')
@@ -209,9 +210,27 @@ class ProfileForm(forms.ModelForm):
             # 'job': forms.TextInput(attrs={}),
         }
 
-    def save(self):
+    def __init__(self, *args, **kwargs):
+        self.user_agent = kwargs.pop('user_agent', None)
+        super(ProfileForm, self).__init__(*args, **kwargs)
+
+    def clean_photo(self):
+        photo = self.cleaned_data.get('photo')
+        user_agent = self.user_agent
+        if user_agent and (user_agent.device.family == 'iPhone' or user_agent.device.family == 'iPad'):
+            photo = rotate_image(photo)
+        return photo
+
+    def clean_header_image(self):
+        header_image = self.cleaned_data.get('header_image')
+        user_agent = self.user_agent
+        if user_agent and (user_agent.device.family == 'iPhone' or user_agent.device.family == 'iPad'):
+            header_image = rotate_image(header_image)
+        return header_image
+
+    def save(self, commit=True):
         self.instance.set_updated()
-        return super(ProfileForm, self).save()
+        return super(ProfileForm, self).save(commit)
 
 
 class ContactForm(forms.Form):

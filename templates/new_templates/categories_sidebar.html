@@ -1,4 +1,6 @@
-{% load staticfiles %}
+{% load staticfiles categories %}
+
+{% get_all_categories as all_categories %}
 
 <!-- Categories-sidebar -->
 <aside class="app-sidebar">
@@ -13,7 +15,7 @@
             <span class="cat-item-name">All Categories</span>
         </a>
 
-        {% for category in categories %}
+        {% for category in all_categories %}
         {% url 'frontend:home' type_filter=category.categories_text as category_url %}
         <a class="cat-item {% if category_url == request.path %}active{% endif %}"
            href="{% url 'frontend:home' type_filter=category.categories_text %}">

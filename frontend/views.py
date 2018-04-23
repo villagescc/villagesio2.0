@@ -123,7 +123,6 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
 
     number_of_pages = len(total_items) / settings.FEED_ITEMS_PER_PAGE
 
-    categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)
     services_sub_categories = SubCategories.objects.all().filter(categories=2)
     rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
@@ -147,9 +146,8 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
                    'services_sub_categories': services_sub_categories,
                    'rideshare_sub_categories': rideshare_sub_categories,
                    'housing_sub_categories': housing_sub_categories,
-                   'categories': categories_list, 'trust_form': trust_form,
-                   'payment_form': payment_form, 'contact_form': contact_form,
-                   'number_of_pages': number_of_pages})
+                   'trust_form': trust_form, 'payment_form': payment_form,
+                   'contact_form': contact_form, 'number_of_pages': number_of_pages})
 
 
 def product_infinite_scroll(request, type_filter=None):
@@ -221,7 +219,6 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     contact_form = ContactForm()
 
     form = ListingsForms()
-    categories_list = Categories.objects.order_by('id')
     subcategories = SubCategories.objects.all()
     if type_filter in LISTING_TYPE_CHECK:
         # is listing_type filter
@@ -242,8 +239,8 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
         'item_sub_categories': item_sub_categories, 'subcategories': subcategories,
         'services_sub_categories': services_sub_categories, 'rideshare_sub_categories': rideshare_sub_categories,
         'housing_sub_categories': housing_sub_categories, 'user_agent_type': user_agent_type,
-        'people': people, 'listing_form': form, 'categories': categories_list,
-        'trusted_only': trusted_only, 'trust_form': trust_form, 'payment_form': payment_form,
+        'people': people, 'listing_form': form, 'trusted_only': trusted_only,
+        'trust_form': trust_form, 'payment_form': payment_form,
         'contact_form': contact_form, 'form_listing_settings': form_listing_settings,
         'item_type_name': item_type_name, 'is_listing': True, 'url_params': url_params,
         'listing_items': listing_items, 'next_page_date': next_page_date, 'remaining_count': remaining_count,
@@ -260,14 +257,13 @@ def map_visualization(request):
     rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
     housing_sub_categories = SubCategories.objects.all().filter(categories=4)
     payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
-    categories_list = Categories.objects.all()
     subcategories = SubCategories.objects.all()
     contact_form = ContactForm()
 
     notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
 
     return render(request, 'frontend/plugs/map-visualization.html',
-                  {'listing_form': form, 'categories': categories_list, 'item_sub_categories': item_sub_categories,
+                  {'listing_form': form, 'item_sub_categories': item_sub_categories,
                    'services_sub_categories': services_sub_categories, 'subcategories': subcategories,
                    'rideshare_sub_categories': rideshare_sub_categories,
                    'housing_sub_categories': housing_sub_categories,
