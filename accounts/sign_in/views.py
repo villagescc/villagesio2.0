@@ -271,7 +271,7 @@ def build_location(loc):
             if item['types'][0] == 'country':
                 country = item['long_name']
 
-        location = Location(point=Point(lat, lng),
+        location = Location(point=Point(lng, lat),
                             country=country,
                             state=state,
                             city=city)
