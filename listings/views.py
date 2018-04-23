@@ -3,18 +3,22 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, JsonResponse
+from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.decorators import login_required
+
+from django_user_agents.utils import get_user_agent
+
 from categories.models import SubCategories
 from listings.models import Listings
 from tags.models import Tag
-from django.core.urlresolvers import reverse
+
 from listings.forms import ListingsForms
 from profile.forms import ContactForm
 from relate.forms import AcknowledgementForm
 from relate.forms import EndorseForm
-from .schemas import SubmitListingSchema
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.decorators import login_required
 from profile.models import ProfilePageTag
+from .schemas import SubmitListingSchema
 
 
 def update_profile_tags(tag_obj, profile_obj, listing_obj=None):
@@ -31,7 +35,8 @@ def update_profile_tags(tag_obj, profile_obj, listing_obj=None):
 @login_required
 def add_new_listing(request):
     if request.method == 'POST':
-        form = ListingsForms(request.POST, request.FILES)
+        user_agent = get_user_agent(request)
+        form = ListingsForms(request.POST, request.FILES, user_agent=user_agent)
         tags_list = request.POST['tag'].split(',')
         if form.is_valid():
             try:
@@ -57,7 +62,7 @@ def add_new_listing(request):
                 messages.error(request, 'A server error occurred, please try again later.')
     else:
         form = ListingsForms()
-    return render(request, 'new_templates/add_post.html', {'form': form})
+    return render(request, 'new_templates/post_add.html', {'form': form})
 
 
 def submit_listing_api(request):

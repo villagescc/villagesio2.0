@@ -8,9 +8,9 @@ from django.utils.translation import ugettext_lazy as _
 from profile.models import Profile, Invitation, Settings, PasswordResetLink
 from general.models import EmailField
 from general.mail import send_mail, send_mail_to_admin
+from general.util import rotate_image
 from general.forms import ReceiverInput
 from geo.util import build_location
-from ccproject.utils import rotate_image
 
 
 alphanumeric = RegexValidator(r'^[0-9a-zA-Z_\s]*$', 'Only alphanumeric characters are allowed.')

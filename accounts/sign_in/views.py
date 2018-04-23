@@ -10,8 +10,9 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as django_login
 from django.core.exceptions import ObjectDoesNotExist
-from django_user_agents.utils import get_user_agent
 from django.conf import settings
+
+from django_user_agents.utils import get_user_agent
 
 from accounts.forms import UserForm
 from profile.models import Profile, Invitation
@@ -214,10 +215,10 @@ class SignInUserRegister(View):
 
 @login_required
 def edit_profile(request):
-    user_agent = get_user_agent(request)
     profile = request.profile
 
     if request.method == 'POST':
+        user_agent = get_user_agent(request)
         form = ProfileForm(request.POST, request.FILES, user_agent=user_agent, instance=profile)
         if form.is_valid():
             form.save()
