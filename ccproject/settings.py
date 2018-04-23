@@ -62,7 +62,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'django.contrib.flatpages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'social_django',
@@ -107,7 +106,6 @@ MIDDLEWARE_CLASSES = [
     'profile.middleware.ProfileMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
     'geo.middleware.LocationMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = (
