@@ -5,25 +5,24 @@ from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.shortcuts import render as django_render
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.gis.geos import Point
-from accounts.forms import UserForm
-from profile.models import Profile, Invitation
-from django.conf import settings
 from django.contrib.auth import login
-from relate.models import Endorsement
-from general.mail import send_mail_from_system
 from django.contrib.auth.models import User
-from profile.models import Settings
-from categories.models import Categories
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as django_login
-from geo.models import Location
-from profile.forms import RegistrationForm, ProfileForm
 from django.core.exceptions import ObjectDoesNotExist
 from django_user_agents.utils import get_user_agent
+from django.conf import settings
+
+from accounts.forms import UserForm
+from profile.models import Profile, Invitation
+from relate.models import Endorsement
+from general.mail import send_mail_from_system
+from profile.models import Settings
+from geo.models import Location
+from profile.forms import RegistrationForm, ProfileForm
+
 import mailchimp
 import requests
-
 
 
 # Session key to store invite code for later signing up.
@@ -216,60 +215,17 @@ class SignInUserRegister(View):
 @login_required
 def edit_profile(request):
     user_agent = get_user_agent(request)
-
     profile = request.profile
 
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, user_agent=user_agent, instance=profile)
         if form.is_valid():
-            photo = request.FILES.get('photo')
-            header_image = request.FILES.get('header_image')
-            if photo:
-                profile.photo = photo
-            if header_image:
-                profile.header_image = header_image
-            profile.name = form.cleaned_data['name']
-            profile.job = form.cleaned_data['job']
-            profile.description = form.cleaned_data['description']
-            loc = request.POST.get('location')
-            profile.location = build_location(loc)
-            profile.save()
+            form.save()
             messages.success(request, MESSAGES['profile_saved'])
             return HttpResponseRedirect(reverse('frontend:home'))
     else:
         form = ProfileForm(instance=profile)
     return django_render(request, 'new_templates/profile_edit.html', {'form': form})
-
-
-def build_location(loc):
-    location = None
-    loc_encode = unicode(loc).encode('utf-8')
-    URL = 'https://maps.googleapis.com/maps/api/geocode/json?' \
-          'address={}&key={}'.format(loc_encode,
-                                     settings.GOOGLE_MAPS_API_KEY)
-    r = requests.get(URL)
-    res_json = r.json()
-    if res_json['status'] == 'OK':
-        lat = res_json['results'][0]['geometry']['location']['lat']
-        lng = res_json['results'][0]['geometry']['location']['lng']
-        address_components = res_json['results'][0]['address_components']
-        city = ''
-        state = ''
-        country = ''
-        for item in address_components:
-            if item['types'][0] == 'locality':
-                city = item['long_name']
-            if item['types'][0] == 'administrative_area_level_1':
-                state = item['long_name']
-            if item['types'][0] == 'country':
-                country = item['long_name']
-
-        location = Location(point=Point(lng, lat),
-                            country=country,
-                            state=state,
-                            city=city)
-        location.save()
-    return location
 
 
 def send_registration_email(profile):
@@ -298,4 +254,3 @@ def send_shared_link_registration_email(request, profile):
         send_mail_from_system(
             subject, sharer, 'shared_link_registration_email.txt',
             {'profile': profile})
-

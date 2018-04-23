@@ -1,13 +1,11 @@
 import json
 from django.shortcuts import render
-from django.views.generic import View
 from django.http import JsonResponse
 
 from feed.models import FeedItem
 from listings.models import Listings
 from listings.forms import ListingsForms
-from categories.models import Categories, SubCategories
-from notification.models import Notification
+from categories.models import SubCategories
 from profile.forms import ContactForm
 from relate.forms import AcknowledgementForm
 

@@ -9,6 +9,7 @@ from profile.models import Profile, Invitation, Settings, PasswordResetLink
 from general.models import EmailField
 from general.mail import send_mail, send_mail_to_admin
 from general.forms import ReceiverInput
+from geo.util import build_location
 from ccproject.utils import rotate_image
 
 
@@ -200,6 +201,8 @@ class RequestInvitationForm(forms.Form):
 
 
 class ProfileForm(forms.ModelForm):
+    location = forms.CharField(required=False)
+
     class Meta:
         model = Profile
         fields = ('name', 'photo', 'header_image', 'job', 'description')
@@ -216,19 +219,26 @@ class ProfileForm(forms.ModelForm):
 
     def clean_photo(self):
         photo = self.cleaned_data.get('photo')
-        user_agent = self.user_agent
-        if user_agent and (user_agent.device.family == 'iPhone' or user_agent.device.family == 'iPad'):
-            photo = rotate_image(photo)
+        new_photo = self.files.get('photo')
+        if new_photo:
+            user_agent = self.user_agent
+            if user_agent and (user_agent.device.family == 'iPhone' or user_agent.device.family == 'iPad'):
+                photo = rotate_image(new_photo)
         return photo
 
     def clean_header_image(self):
         header_image = self.cleaned_data.get('header_image')
-        user_agent = self.user_agent
-        if user_agent and (user_agent.device.family == 'iPhone' or user_agent.device.family == 'iPad'):
-            header_image = rotate_image(header_image)
+        new_header_image = self.files.get('header_image')
+        if new_header_image:
+            user_agent = self.user_agent
+            if user_agent and (user_agent.device.family == 'iPhone' or user_agent.device.family == 'iPad'):
+                header_image = rotate_image(new_header_image)
         return header_image
 
     def save(self, commit=True):
+        location = self.cleaned_data.get('location')
+        if location:
+            self.instance.location = build_location(location)
         self.instance.set_updated()
         return super(ProfileForm, self).save(commit)
 
