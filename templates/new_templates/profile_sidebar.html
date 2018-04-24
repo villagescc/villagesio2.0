@@ -5,7 +5,8 @@
     <div class="user-sidebar">
         <div class="user-statistics">
             <div class="user-cover"
-                 style="background-image: url('{% if profile.header_image %}{{ profile.header_image.url }}{% else %}{% static 'images/logo.png' %}{% endif %}');"
+                 style="background-image: url('
+                         {% if profile.header_image %}{{ profile.header_image.url }}{% else %}{% static 'images/logo.png' %}{% endif %}');"
                  data-toggle="tooltip" title="villages.cc"></div>
             <div class="user-avatar">
                 <div class="avatar-wrapper big">
@@ -13,6 +14,22 @@
                          style="position: relative; border-radius: 50%; overflow: hidden; object-fit: cover;">
                 </div>
                 <h1>{{ profile.name }}</h1>
+            </div>
+            <div class="person-action">
+                <a class="action-menu-item trust-button"
+                   data-profile-username="{{ profile.username }}"
+                   href="{{ profile.get_trust_link }}">
+                    <img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like">
+                </a>
+                <a class="action-menu-item pay-button"
+                   href="{{ profile.get_payment_link }}">
+                    <img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy">
+                </a>
+                <a class="action-menu-item contact-button"
+                   data-profile-username="{{ profile.username }}"
+                   data-listing-title="{{ profile.title }}" href="{{ profile.get_contact_link }}">
+                    <img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="contact">
+                </a>
             </div>
             <div class="user-data">
                 <div class="data-block balance">

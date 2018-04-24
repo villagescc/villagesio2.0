@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
-
 # all apps urls import
 from accounts import urls as accounts_urls
 from frontend import urls as frontend_urls
