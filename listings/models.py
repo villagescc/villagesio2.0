@@ -54,7 +54,7 @@ class ListingsManager(GeoManager):
         start_limit = kwargs.pop('start_limit', 0)
         end_limit = kwargs.pop('end_limit', settings.LISTING_ITEMS_PER_PAGE)
         items = self._item_query(*args, **kwargs)[start_limit:end_limit]
-        return list(items)
+        return items
 
     def _item_query(self, profile=None, location=None, radius=None, tsearch=None, trusted_only=False,
                     up_to_date=None, request_profile=None, type_filter=None, listing_type=None):

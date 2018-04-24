@@ -111,7 +111,7 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
     else:
         raise Exception(unicode(form.errors))
     if feed_items:
-        next_page_date = feed_items[-1].date
+        next_page_date = list(feed_items)[-1].date
     else:
         next_page_date = None
     url_params = request.GET.copy()
@@ -160,6 +160,7 @@ def product_infinite_scroll(request, type_filter=None):
                                                      start_limit=start_session_offset, end_limit=end_session_offset)
         if form_listing_settings.is_valid():
             listing_items, remaining_count = form_listing_settings.get_results()
+            listing_items = listing_items.prefetch_related('user__profile', 'profile', 'tag')
         else:
             listing_items = []
 
@@ -205,7 +206,8 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter, do_filter)
     if form_listing_settings.is_valid():
         listing_items, remaining_count = form_listing_settings.get_results()
-        next_page_date = listing_items[-1].date if listing_items else None
+        listing_items = listing_items.prefetch_related('user__profile', 'profile', 'tag')
+        next_page_date = list(listing_items)[-1].date if listing_items else None
     else:
         listing_items = remaining_count = next_page_date = None
     url_params = request.GET.copy()
