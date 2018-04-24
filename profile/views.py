@@ -273,111 +273,36 @@ def edit_profile(request):
 
 @login_required
 def my_profile(request):
-
-    offer_tags = []
-    request_tags = []
-    teach_tags = []
-    learn_tags = []
-    other_tags = []
-
-    listing_form = ListingsForms()
-    listings = Listings.objects.filter(user_id=request.profile.user_id).order_by('-id')
-    endorsements_received = request.profile.endorsements_received.all()
-    endorsements_made = request.profile.endorsements_made.all()
-    profile_tags = ProfilePageTag.objects.filter(profile_id=request.profile.id)
-
-    for each_profile_tag in profile_tags:
-        if each_profile_tag.listing_type == 'OFFER':
-            offer_tags.append(each_profile_tag)
-        elif each_profile_tag.listing_type == 'REQUEST':
-            request_tags.append(each_profile_tag)
-        elif each_profile_tag.listing_type == 'TEACH':
-            teach_tags.append(each_profile_tag)
-        elif each_profile_tag.listing_type == 'LEARN':
-            learn_tags.append(each_profile_tag)
-        else:
-            other_tags.append(each_profile_tag)
-
-    referral_obj_list = []
-    referral_count = []
-    referral = Referral.objects.filter(recipient=request.profile)
-    for each_referral in referral:
-        referral_obj_list.append(each_referral.referrer)
-    trusting_profiles = request.profile.trusted_profiles.through.objects.filter(
-        from_profile_id=request.profile.id)
-
-    if trusting_profiles:
-        for each_trusting in trusting_profiles:
-            if each_trusting.to_profile in referral_obj_list:
-                referral_count.append(each_trusting.to_profile)
-
-    if referral_count:
-        referral_count = len(referral_count)
-    else:
-        referral_count = None
-
+    listings = Listings.objects.filter(user_id=request.profile.user_id).select_related('user__profile', 'profile')\
+        .prefetch_related('tag').order_by('-id')
+    endorsements_received = request.profile.endorsements_received.all().select_related('endorser__user')
+    endorsements_made = request.profile.endorsements_made.all().select_related('recipient__user')
     return django_render(request, 'new_templates/my_profile.html',
                          {'profile': request.profile, 'listings': listings, 'endorsements_made': endorsements_made,
-                          'endorsements_received': endorsements_received, 'offer_tags': offer_tags,
-                          'request_tags': request_tags, 'teach_tags': teach_tags, 'learn_tags': learn_tags,
-                          'other_tags': other_tags, 'listing_form': listing_form, 'referral': referral,
-                          'referral_count': referral_count})
+                          'endorsements_received': endorsements_received})
 
 
 @render()
 @login_required
 def profile(request, username):
-
-    offer_tags = []
-    request_tags = []
-    teach_tags = []
-    learn_tags = []
-    other_tags = []
-
     endorsement = None
-    profile = get_object_or_404(Profile, user__username=username)
+    profile = get_object_or_404(Profile.objects.all().select_related('user'), user__username=username)
     if profile == request.profile:
         return HttpResponseRedirect(reverse(my_profile))
     else:
         listing_form = ListingsForms()
         template = 'profile.html'
         if request.profile:
-            profile_endorsements_made = profile.endorsements_made.all()
-            profile_endorsements_received = profile.endorsements_received.all()
-            account = profile.account(request.profile)
-            trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
-            payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
-            listings = Listings.objects.filter(user_id=profile.user_id).order_by('-id')
-            contact_form = ContactForm()
-
-            profile_tags = ProfilePageTag.objects.filter(profile_id=profile.id)
-
-            for each_profile_tag in profile_tags:
-                if each_profile_tag.listing_type == 'OFFER':
-                    offer_tags.append(each_profile_tag)
-                elif each_profile_tag.listing_type == 'REQUEST':
-                    request_tags.append(each_profile_tag)
-                elif each_profile_tag.listing_type == 'TEACH':
-                    teach_tags.append(each_profile_tag)
-                elif each_profile_tag.listing_type == 'LEARN':
-                    learn_tags.append(each_profile_tag)
-                else:
-                    other_tags.append(each_profile_tag)
-
-            referral = Referral.objects.filter(recipient=profile)
-            if referral:
-                referral_count = referral.count()
-            else:
-                referral_count = None
+            profile_endorsements_made = profile.endorsements_made.all().select_related('recipient__user')
+            profile_endorsements_received = profile.endorsements_received.all().select_related('endorser__user')
+            listings = Listings.objects.filter(user_id=profile.user_id).select_related('user__profile', 'profile')\
+                .prefetch_related('tag').order_by('-id')
 
             return django_render(request, 'new_templates/profile.html',
                                  {'endorsements_made': profile_endorsements_made,
                                   'endorsements_received': profile_endorsements_received,
-                                  'account': account, 'listing_form': listing_form, 'profile': profile,
-                                  'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form,
-                                  'offer_tags': offer_tags, 'request_tags': request_tags, 'teach_tags': teach_tags,
-                                  'learn_tags': learn_tags, 'other_tags': other_tags, 'listings': listings,
-                                  'referral': referral, 'referral_count': referral_count})
+                                  'listing_form': listing_form, 'profile': profile,
+                                  'listings': listings})
     return locals(), template
 
 
