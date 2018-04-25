@@ -506,6 +506,7 @@
 {% endblock content %}
 
 {% block extra_js %}
+
     <script src="{% static 'maps/search_listings_get.js' %}"></script>
     <script src="{% static 'maps/oms.min.js' %}"></script>
     <script>
@@ -529,10 +530,10 @@
         });
     </script>
 
-        <script>
-            var user_lat = "{{request.profile.location.point.coords.1}}";
-            var user_lon = "{{request.profile.location.point.coords.0}}";
-        </script>
+    <script>
+        var user_lat = "{{ request.profile.location.point.coords.1|default:default_location.0 }}";
+        var user_lon = "{{ request.profile.location.point.coords.0|default:default_location.1 }}";
+    </script>
 
 {% endblock extra_js %}
 

@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.conf import settings
 
 from feed.models import FeedItem
 from listings.models import Listings
@@ -119,6 +120,7 @@ def listing_map(request):
                 print(e)
 
         listing_locations = json.dumps(listing_locations)
+        default_location = settings.DEFAULT_LOCATION
 
         return render(request, 'new_templates/map-visualization.html',
                       {'listing_form': form, 'item_sub_categories': item_sub_categories,
@@ -126,4 +128,5 @@ def listing_map(request):
                        'rideshare_sub_categories': rideshare_sub_categories,
                        'housing_sub_categories': housing_sub_categories,
                        'payment_form': payment_form, 'contact_form': contact_form,
-                       'listing_locations': listing_locations, 'min_price': min_price, 'max_price': max_price})
+                       'listing_locations': listing_locations, 'default_location': default_location,
+                       'min_price': min_price, 'max_price': max_price})
