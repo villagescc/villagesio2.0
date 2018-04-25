@@ -501,8 +501,6 @@
                         var listings_locations = JSON.parse("{{ listing_locations|escapejs }}");
                     </script>
                 {% endif %}
-
-
     </form>
 
 {% endblock content %}
@@ -530,11 +528,11 @@
             menu.slideToggle();
         });
     </script>
-    {% if request.profile.location %}
+
         <script>
             var user_lat = "{{request.profile.location.point.coords.1}}";
             var user_lon = "{{request.profile.location.point.coords.0}}";
         </script>
-    {% endif %}
+
 {% endblock extra_js %}
 

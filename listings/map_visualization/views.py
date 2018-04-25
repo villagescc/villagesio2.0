@@ -69,8 +69,7 @@ def listing_map(request):
             min_price = 0
             max_price = 1000
 
-        query = Listings.objects.filter(price__range=(min_price,
-                                                      max_price))
+        query = Listings.objects.filter(price__range=(min_price, max_price))
 
         if request.GET.get('trusted'):
             profile_obj_list = []

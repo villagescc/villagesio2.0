@@ -15,22 +15,24 @@
                 </div>
                 <h1>{{ profile.name }}</h1>
             </div>
-            <div class="person-action">
-                <a class="action-menu-item trust-button"
-                   data-profile-username="{{ profile.username }}"
-                   href="{{ profile.get_trust_link }}">
-                    <img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like">
-                </a>
-                <a class="action-menu-item pay-button"
-                   href="{{ profile.get_payment_link }}">
-                    <img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy">
-                </a>
-                <a class="action-menu-item contact-button"
-                   data-profile-username="{{ profile.username }}"
-                   data-listing-title="{{ profile.title }}" href="{{ profile.get_contact_link }}">
-                    <img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="contact">
-                </a>
-            </div>
+            {% if profile != request.profile %}
+                <div class="person-action">
+                    <a class="action-menu-item trust-button"
+                       data-profile-username="{{ profile.username }}"
+                       href="{{ profile.get_trust_link }}">
+                        <img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like">
+                    </a>
+                    <a class="action-menu-item pay-button"
+                       href="{{ profile.get_payment_link }}">
+                        <img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy">
+                    </a>
+                    <a class="action-menu-item contact-button"
+                       data-profile-username="{{ profile.username }}"
+                       data-listing-title="{{ profile.title }}" href="{{ profile.get_contact_link }}">
+                        <img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="contact">
+                    </a>
+                </div>
+            {% endif %}
             <div class="user-data">
                 <div class="data-block balance">
                     <img src="{% static 'new_template/res/img/icons/balance_blue.png' %}" alt="balance">
