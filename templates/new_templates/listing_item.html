@@ -42,16 +42,16 @@
                         src="{% static 'new_template/res/img/icons/trash-alt.svg' %}"
                         alt="like"></a>
             {% else %}
-                <a class="action-menu-item trust-button"
+                <a class="action-menu-item {% if request.user.is_authenticated %}trust-button{% endif %}"
                    data-profile-username="{{ item.user.username }}"
                    href="{{ item.get_trust_link }}">
                     <img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like">
                 </a>
-                <a class="action-menu-item pay-button"
+                <a class="action-menu-item {% if request.user.is_authenticated %}pay-button{% endif %}"
                    data-profile-username="{{ item.user.username }}"
                    href="{{ item.get_payment_link }}">
                     <img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy"></a>
-                <a class="action-menu-item contact-button"
+                <a class="action-menu-item {% if request.user.is_authenticated %}contact-button{% endif %}"
                    data-profile-username="{{ item.user.username }}"
                    data-listing-title="{{ item.title }}"
                    href="{{ item.get_contact_link }}"><img

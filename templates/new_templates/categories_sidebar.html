@@ -16,16 +16,16 @@
         </a>
 
         {% for category in all_categories %}
-        {% url 'frontend:home' type_filter=category.categories_text as category_url %}
-        <a class="cat-item {% if category_url == request.path %}active{% endif %}"
-           href="{% url 'frontend:home' type_filter=category.categories_text %}">
-            <div class="cat-item-icon">
-                <img class="cat-item-icon" src="{% if category.icon %}{{ category.icon.url }}
+            {% url 'frontend:home' type_filter=category.categories_text as category_url %}
+            <a class="cat-item {% if category_url == request.path %}active{% endif %}"
+               href="{% url 'frontend:home' type_filter=category.categories_text %}">
+                <div class="cat-item-icon">
+                    <img class="cat-item-icon" src="{% if category.icon %}{{ category.icon.url }}
                             {% else %}{% static 'new_template/res/img/icons/products.png' %}{% endif %}"
-                     alt="{{ category.categories_text }}">
-            </div>
-            <span class="cat-item-name">{{ category.categories_text }}</span>
-        </a>
+                         alt="{{ category.categories_text }}">
+                </div>
+                <span class="cat-item-name">{{ category.categories_text }}</span>
+            </a>
         {% endfor %}
 
     </div>

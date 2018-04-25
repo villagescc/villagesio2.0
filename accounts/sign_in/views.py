@@ -3,10 +3,13 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views.generic import View
+from django.utils.decorators import method_decorator
+from django.views.decorators.debug import sensitive_post_parameters
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render as django_render
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import login
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as django_login
 from django.core.exceptions import ObjectDoesNotExist
@@ -14,7 +17,7 @@ from django.conf import settings
 
 from django_user_agents.utils import get_user_agent
 
-from accounts.forms import UserForm
+from accounts.forms import UserLoginForm
 from profile.models import Profile, Invitation
 from relate.models import Endorsement
 from general.mail import send_mail_from_system
@@ -119,52 +122,47 @@ def subscribe_mailchimp(profile):
 
 
 class SignInUserLogIn(View):
-    form_class = UserForm
+    form_class = UserLoginForm
+    template_name = 'new_templates/sign_in.html'
 
     def get(self, request):
+        if request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('frontend:home'))
         form = self.form_class()
-        form.fields.pop('first_name')
-        form.fields.pop('email')
         next_url = request.GET.get('next')
-        return django_render(request, 'new_templates/sign_in.html', {'form': form, 'next_url': next_url})
+        return django_render(request, self.template_name, {'form': form, 'next_url': next_url})
+
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(csrf_protect)
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        return super(SignInUserLogIn, self).dispatch(request, *args, **kwargs)
 
     def post(self, request):
-        form = UserForm(request.POST)
-        username = request.POST['username'].lower()
-        password = request.POST['password']
-        remember = request.POST.get('remember-me')
+        form = self.form_class(request.POST)
 
-        if remember:
-            request.session.set_expiry(0)
-
-        try:
-            if not '@' in username:
-                user = User.objects.get(username=username)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            try:
+                if '@' in username:
+                    username = Settings.objects.get(email__iexact=username).profile.username
                 user = authenticate(username=username, password=password)
-            else:
-                user = Settings.objects.get(email=username)
-                user = authenticate(username=user.profile.username, password=password)
-            if user:
-                # Password matching and user found with authenticate
-                login(request, user)
-                next_url = request.GET.get('next')
-                if next_url:
+
+                if user:
+                    # Password matching and user found with authenticate
+                    login(request, user)
+                    next_url = request.GET.get('next', reverse('frontend:home'))
                     return HttpResponseRedirect(next_url)
                 else:
-                    return HttpResponseRedirect(reverse('frontend:home'))
-            else:
-                # Password wrong
-                messages.add_message(request, messages.ERROR, 'Username or Password is wrong')
-                return HttpResponseRedirect(reverse('accounts:sign_in_user:sign_in_log_in'))
-        except ObjectDoesNotExist:
-            form.fields.pop('first_name')
-            form.fields.pop('email')
-            messages.add_message(request, messages.WARNING, 'This user is not registered yet')
-            return django_render(request, 'new_templates/sign_in.html', {'form': form})
-        except Exception as e:
-            messages.add_message(request, messages.ERROR, " User not found")
-            # return django_render(request, 'accounts/sign_in.html', {'form': form})
-            return HttpResponseRedirect(reverse('accounts:sign_in_user:sign_in_log_in'))
+                    # Password wrong
+                    messages.add_message(request, messages.ERROR, 'Username or Password is wrong')
+            except ObjectDoesNotExist:
+                messages.add_message(request, messages.WARNING, 'This user is not registered yet')
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, " User not found")
+
+        return django_render(request, self.template_name, {'form': form})
 
 
 class SignInUserRegister(View):

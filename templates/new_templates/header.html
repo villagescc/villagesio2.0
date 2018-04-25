@@ -7,7 +7,7 @@
     <header class="app-header">
         <nav class="navbar navbar-expand-lg">
 
-            <a class="navbar-brand" href="{% url 'frontend:home' %}">
+            <a class="navbar-brand" href="{% url 'frontend:home-page' %}">
                 <img class="d-none d-sm-block" src="{% static 'new_template/res/img/logo_full.png' %}"
                      alt="villages.io">
                 <img class="d-block d-sm-none" src="{% static 'new_template/res/img/logo.png' %}" alt="villages.io">
@@ -144,7 +144,7 @@
                     </button>
 
                     <div class="site-branding">
-                        <a href="{% url 'frontend:home' %}"><img class="img-fluid"
+                        <a href="{% url 'frontend:home-page' %}"><img class="img-fluid"
                                                                  src="{% static 'new_template/res/img/home/logo_full.png' %}"
                                                                  alt="Villages"></a>
                     </div><!-- .site-branding -->
@@ -191,7 +191,7 @@
                     <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" class="btn-std btn-blue">Join
                         Now</a>
 
-                    <a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}"
+                    <a href="{% url 'frontend:home-page' %}"
                        class="btn-std btn-blue outline">Login</a>
                 </nav>
             </nav><!-- #site-navigation -->

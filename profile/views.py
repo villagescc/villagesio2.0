@@ -282,28 +282,26 @@ def my_profile(request):
                           'endorsements_received': endorsements_received})
 
 
-@render()
-@login_required
+# @render()
+# @login_required
 def profile(request, username):
-    endorsement = None
     profile = get_object_or_404(Profile.objects.all().select_related('user'), user__username=username)
     if profile == request.profile:
         return HttpResponseRedirect(reverse(my_profile))
     else:
         listing_form = ListingsForms()
-        template = 'profile.html'
-        if request.profile:
-            profile_endorsements_made = profile.endorsements_made.all().select_related('recipient__user')
-            profile_endorsements_received = profile.endorsements_received.all().select_related('endorser__user')
-            listings = Listings.objects.filter(user_id=profile.user_id).select_related('user__profile', 'profile')\
-                .prefetch_related('tag').order_by('-id')
 
-            return django_render(request, 'new_templates/profile.html',
-                                 {'endorsements_made': profile_endorsements_made,
-                                  'endorsements_received': profile_endorsements_received,
-                                  'listing_form': listing_form, 'profile': profile,
-                                  'listings': listings})
-    return locals(), template
+        profile_endorsements_made = profile.endorsements_made.all().select_related('recipient__user')
+        profile_endorsements_received = profile.endorsements_received.all().select_related('endorser__user')
+        listings = Listings.objects.filter(user_id=profile.user_id).select_related('user__profile', 'profile')\
+            .prefetch_related('tag').order_by('-id')
+
+        return django_render(request, 'new_templates/profile.html',
+                             {'endorsements_made': profile_endorsements_made,
+                              'endorsements_received': profile_endorsements_received,
+                              'listing_form': listing_form, 'profile': profile,
+                              'listings': listings})
+
 
 
 # TODO: Move to post app?

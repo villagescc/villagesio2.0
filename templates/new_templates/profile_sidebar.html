@@ -17,16 +17,16 @@
             </div>
             {% if profile != request.profile %}
                 <div class="person-action">
-                    <a class="action-menu-item trust-button"
+                    <a class="action-menu-item {% if request.user.is_authenticated %}trust-button{% endif %}"
                        data-profile-username="{{ profile.username }}"
                        href="{{ profile.get_trust_link }}">
                         <img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like">
                     </a>
-                    <a class="action-menu-item pay-button"
+                    <a class="action-menu-item {% if request.user.is_authenticated %}pay-button{% endif %}"
                        href="{{ profile.get_payment_link }}">
                         <img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy">
                     </a>
-                    <a class="action-menu-item contact-button"
+                    <a class="action-menu-item {% if request.user.is_authenticated %}contact-button{% endif %}"
                        data-profile-username="{{ profile.username }}"
                        data-listing-title="{{ profile.title }}" href="{{ profile.get_contact_link }}">
                         <img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="contact">

@@ -14,9 +14,11 @@ from profile.forms import ContactForm
 from frontend.forms import FormListingsSettings
 from django_user_agents.utils import get_user_agent
 from profile.templatetags.profile import *
-# models
+# <odels
 from listings.models import Listings
 from categories.models import Categories, SubCategories
+# Views
+from accounts.sign_in.views import SignInUserLogIn
 
 TRUSTED_SUBQUERY = (
     "feed_feeditem.poster_id in "
@@ -177,14 +179,18 @@ def product_infinite_scroll(request, type_filter=None):
         raise Http404
 
 
+class HomePage(SignInUserLogIn):
+    """
+    url: /
+    """
+    template_name = 'new_templates/home_page.html'
+
+
 def home(request, type_filter=None, item_type=None, template=None, poster=None, recipient=None,
          extra_context=None, do_filter=False):
     """
     url: /home
     """
-    if not request.user.is_authenticated():
-        return render(request, 'new_templates/home_page.html')
-
     request.session['offset'] = settings.LISTING_ITEMS_PER_PAGE
     user_agent = get_user_agent(request)
     if user_agent.is_mobile:
