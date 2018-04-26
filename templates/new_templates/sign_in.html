@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="col-12 ">
                                     <a class="btn btn-primary"
-                                       href="{% url 'social:begin' 'facebook' %}?next={{ next_url }}"><i
+                                       href="{% url 'social:begin' 'facebook' %}?next={{ request.get.next }}"><i
                                             class="fa fa-facebook-official">&nbsp; Login with facebook</i></a>
                                 </div>
                             </div>

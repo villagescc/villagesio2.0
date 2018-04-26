@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
+from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.utils.decorators import method_decorator
@@ -121,48 +122,47 @@ def subscribe_mailchimp(profile):
     return
 
 
-class SignInUserLogIn(View):
-    form_class = UserLoginForm
+class SignInUserLogIn(FormView):
     template_name = 'new_templates/sign_in.html'
+    form_class = UserLoginForm
 
-    def get(self, request):
+    def get_success_url(self):
+        next_url = self.request.GET.get('next', reverse('frontend:home'))
+        return next_url
+
+    def get(self, request, *args, **kwargs):
         if request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('frontend:home'))
-        form = self.form_class()
-        next_url = request.GET.get('next')
-        return django_render(request, self.template_name, {'form': form, 'next_url': next_url})
+            return HttpResponseRedirect(self.get_success_url())
+        return super(SignInUserLogIn, self).get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        request = self.request
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        try:
+            if '@' in username:
+                username = Settings.objects.get(email__iexact=username).profile.username
+            user = authenticate(username=username, password=password)
+
+            if user:
+                # Password matching and user found with authenticate
+                login(request, user)
+                return HttpResponseRedirect(self.get_success_url())
+            else:
+                # Password wrong
+                messages.add_message(request, messages.ERROR, 'Username or Password is wrong')
+        except ObjectDoesNotExist:
+            messages.add_message(request, messages.WARNING, 'This user is not registered yet')
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, " User not found")
+
+        return super(SignInUserLogIn, self).form_invalid(form)
 
     @method_decorator(sensitive_post_parameters())
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         return super(SignInUserLogIn, self).dispatch(request, *args, **kwargs)
-
-    def post(self, request):
-        form = self.form_class(request.POST)
-
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            try:
-                if '@' in username:
-                    username = Settings.objects.get(email__iexact=username).profile.username
-                user = authenticate(username=username, password=password)
-
-                if user:
-                    # Password matching and user found with authenticate
-                    login(request, user)
-                    next_url = request.GET.get('next', reverse('frontend:home'))
-                    return HttpResponseRedirect(next_url)
-                else:
-                    # Password wrong
-                    messages.add_message(request, messages.ERROR, 'Username or Password is wrong')
-            except ObjectDoesNotExist:
-                messages.add_message(request, messages.WARNING, 'This user is not registered yet')
-            except Exception as e:
-                messages.add_message(request, messages.ERROR, " User not found")
-
-        return django_render(request, self.template_name, {'form': form})
 
 
 class SignInUserRegister(View):
