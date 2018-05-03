@@ -3,16 +3,14 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
-from django.views.generic import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render as django_render
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.contrib import messages
-from django.contrib.auth import authenticate, login as django_login
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 
@@ -67,21 +65,6 @@ MESSAGES = {
 }
 
 
-def get_invitation(request):
-    """
-    Get invitation code saved in session by invitation view (shown
-    when clicking on invitation link).
-    """
-    invitation = None
-    invite_code = request.session.get(INVITE_CODE_KEY)
-    if invite_code:
-        try:
-            invitation = Invitation.objects.get(code=invite_code)
-        except Invitation.DoesNotExist:
-            pass
-    return invitation
-
-
 def subscribe_mailchimp(profile):
 
     postal_code = ''
@@ -122,9 +105,7 @@ def subscribe_mailchimp(profile):
     return
 
 
-class SignInUserLogIn(FormView):
-    template_name = 'new_templates/sign_in.html'
-    form_class = UserLoginForm
+class AuthView(FormView):
 
     def get_success_url(self):
         next_url = self.request.GET.get('next', reverse('frontend:home'))
@@ -133,12 +114,23 @@ class SignInUserLogIn(FormView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated():
             return HttpResponseRedirect(self.get_success_url())
-        return super(SignInUserLogIn, self).get(request, *args, **kwargs)
+        return super(AuthView, self).get(request, *args, **kwargs)
+
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(csrf_protect)
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        return super(AuthView, self).dispatch(request, *args, **kwargs)
+
+
+class SignInUserLogIn(AuthView):
+    template_name = 'new_templates/sign_in.html'
+    form_class = UserLoginForm
 
     def form_valid(self, form):
         request = self.request
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
+        username = form.username
+        password = form.password
         try:
             if '@' in username:
                 username = Settings.objects.get(email__iexact=username).profile.username
@@ -147,7 +139,7 @@ class SignInUserLogIn(FormView):
             if user:
                 # Password matching and user found with authenticate
                 login(request, user)
-                return HttpResponseRedirect(self.get_success_url())
+                return super(SignInUserLogIn, self).form_valid(form)
             else:
                 # Password wrong
                 messages.add_message(request, messages.ERROR, 'Username or Password is wrong')
@@ -158,57 +150,60 @@ class SignInUserLogIn(FormView):
 
         return super(SignInUserLogIn, self).form_invalid(form)
 
-    @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
-    @method_decorator(never_cache)
-    def dispatch(self, request, *args, **kwargs):
-        return super(SignInUserLogIn, self).dispatch(request, *args, **kwargs)
 
-
-class SignInUserRegister(View):
+class SignInUserRegister(AuthView):
+    template_name = 'new_templates/sign_up.html'
     form_class = RegistrationForm
+    invitation = None
 
-    def get(self, request):
+    def get_invitation(self):
+        """
+        Get invitation code saved in session by invitation view (shown
+        when clicking on invitation link).
+        """
+        invite_code = self.request.session.get(INVITE_CODE_KEY)
+        register_invitation = self.invitation
+        if not register_invitation:
+            if invite_code:
+                try:
+                    register_invitation = Invitation.objects.get(code=invite_code)
+                except Invitation.DoesNotExist:
+                    pass
+        return register_invitation
 
-        form = self.form_class()
-        # form.fields.pop('new_password')
-        return django_render(request, 'new_templates/sign_up.html', {'form': form})
+    def form_valid(self, form):
+        request = self.request
 
-    def post(self, request):
-        invitation = get_invitation(request)
-        if settings.INVITATION_ONLY and not invitation:
-            raise PermissionDenied
-        if request.method == 'POST':
-            form = RegistrationForm(request.POST)
-            if form.is_valid():
-                profile = form.save(request.location, settings.LANGUAGE_CODE)
-                subscribe_mailchimp(profile)
-                if invitation:
-                    # Turn invitation into endorsement.
-                    Endorsement.objects.create(
-                        endorser=invitation.from_profile,
-                        recipient=profile,
-                        weight=invitation.endorsement_weight,
-                        text=invitation.endorsement_text)
-                    send_invitation_accepted_email(invitation, profile)
-                    invitation.delete()
-                else:
-                    # Let sharer know someone registered through their link.
-                    send_shared_link_registration_email(request, profile)
-                # Auto login.
-                user = authenticate(username=form.username, password=form.password)
-                django_login(request, user)
-                Location.clear_session(request)  # Location is in profile now.
-                # Notifications.
-                send_registration_email(profile)
-                messages.info(request, MESSAGES['registration_done'])
-                return HttpResponseRedirect(reverse('accounts:sign_in_user:edit_profile'))
-        else:
-            initial = {}
+        profile = form.save(request.location, settings.LANGUAGE_CODE)
+        invitation = self.invitation
+        if invitation:
             if invitation:
-                initial['email'] = invitation.to_email
-            form = RegistrationForm(initial=initial)
-        return django_render(request, 'new_templates/sign_up.html', {'form': form})
+                # Turn invitation into endorsement.
+                Endorsement.objects.create(
+                    endorser=invitation.from_profile,
+                    recipient=profile,
+                    weight=invitation.endorsement_weight,
+                    text=invitation.endorsement_text)
+                send_invitation_accepted_email(invitation, profile)
+                invitation.delete()
+        else:
+            # Let sharer know someone registered through their link.
+            send_shared_link_registration_email(request, profile)
+
+        # Auto login.
+        user = authenticate(username=form.username, password=form.password)
+        login(request, user)
+        Location.clear_session(request)
+        # Notifications.
+        send_registration_email(profile)
+        messages.info(request, MESSAGES['registration_done'])
+        return super(SignInUserRegister, self).form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        self.invitation = self.get_invitation()
+        if settings.INVITATION_ONLY and not self.invitation:
+            raise PermissionDenied
+        return super(SignInUserRegister, self).dispatch(request, *args, **kwargs)
 
 
 @login_required

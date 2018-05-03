@@ -49,6 +49,14 @@ class UserLoginForm(Form):
 
     password = forms.CharField(widget=forms.PasswordInput(attrs={'style': 'width:auto;', 'placeholder': 'Password'}))
 
+    @property
+    def username(self):
+        return self.cleaned_data['username']
+
+    @property
+    def password(self):
+        return self.cleaned_data['password']
+
 
 class ProfileCreationForm(ModelForm):
     class Meta:
