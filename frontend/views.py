@@ -1,6 +1,7 @@
 from django.http.response import HttpResponse
 from django.http import Http404
 from django.shortcuts import render
+from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
@@ -14,11 +15,9 @@ from profile.forms import ContactForm
 from frontend.forms import FormListingsSettings
 from django_user_agents.utils import get_user_agent
 from profile.templatetags.profile import *
-# <odels
+# models
 from listings.models import Listings
 from categories.models import Categories, SubCategories
-# Views
-from accounts.sign_in.views import SignInUserLogIn
 
 TRUSTED_SUBQUERY = (
     "feed_feeditem.poster_id in "
@@ -179,11 +178,16 @@ def product_infinite_scroll(request, type_filter=None):
         raise Http404
 
 
-class HomePage(SignInUserLogIn):
+class HomePage(TemplateView):
     """
     url: /
     """
     template_name = 'new_templates/home_page.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('frontend:home'))
+        return super(HomePage, self).get(request, *args, **kwargs)
 
 
 def home(request, type_filter=None, item_type=None, template=None, poster=None, recipient=None,

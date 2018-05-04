@@ -1,0 +1,15 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Change email</title>
+</head>
+<body>
+{% blocktrans %}Please confirm your email address in order to get started using Villages.io{% endblocktrans %}
+
+<a href="http://{{ domain }}{{ confirm_url }}">Click here to confirm</a>
+
+{% blocktrans %}If you have received this message in error, please delete it from your system.{% endblocktrans %}
+</body>
+</html>

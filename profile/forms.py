@@ -24,22 +24,34 @@ ERRORS = {
 }
 
 
+class PreRegistrationForm(forms.ModelForm):
+    class Meta:
+        model = Settings
+        fields = ("email",)
+
+    # def clean_email(self):
+    #     email = self.cleaned_data['email']
+    #     if Settings.objects.filter(email__iexact=email).exists():
+    #         raise forms.ValidationError(ERRORS['email_dup'])
+    #     return email
+
+
 class RegistrationForm(UserCreationForm):
     # Parent class has username, password1, and password2.
-
-    password1 = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={}))
-
-    password2 = forms.CharField(label="Password confirm", widget=forms.PasswordInput(attrs={}))
-
     first_name = forms.CharField(
         max_length=100, required=False, label=_("Name"), help_text=_(
             "Name displayed to other users. You can change this later."),
         widget=forms.TextInput(attrs={}))
 
-    email = forms.EmailField(
-        max_length=EmailField.MAX_EMAIL_LENGTH, label=_("Email"), help_text=_(
-            "The address to receive notifications from Villages."),
-        widget=forms.TextInput(attrs={}))
+    password1 = forms.CharField(label="Password", help_text=_("Desired password."),
+                                widget=forms.PasswordInput(attrs={}))
+
+    password2 = forms.CharField(label="Password confirm", widget=forms.PasswordInput(attrs={}))
+
+    # email = forms.EmailField(
+    #     max_length=EmailField.MAX_EMAIL_LENGTH, label=_("Email"), help_text=_(
+    #         "The address to receive notifications from Villages."),
+    #     widget=forms.TextInput(attrs={}))
     terms_of_service = forms.BooleanField(label='I agree with terms of service', required=True,
                                           widget=forms.CheckboxInput(attrs={'style': 'width: auto; box-shadow:none;'}))
 
@@ -49,13 +61,6 @@ class RegistrationForm(UserCreationForm):
             "Desired login name. You cannot change this.")
         self.fields['username'].widget = forms.TextInput(attrs={})
         self.fields['username'].validators = [alphanumeric]
-        self.fields['password1'].help_text = _("Desired password.")
-    
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if Settings.objects.filter(email__iexact=email).exists():
-            raise forms.ValidationError(ERRORS['email_dup'])
-        return email    
 
     def clean_username(self):
         # Adapted from UserCreationForm.clean_username.
@@ -67,7 +72,7 @@ class RegistrationForm(UserCreationForm):
             return username
         raise forms.ValidationError(
             _("A user with that username already exists."))
-    
+
     def save(self, location, language):
         data = self.cleaned_data
         user = super(RegistrationForm, self).save(commit=False)
@@ -132,7 +137,7 @@ class ForgotPasswordForm(forms.Form):
 
 class InvitationForm(forms.ModelForm):
     # TODO: Merge with EndorseForm somehow, into a common superclass?
-    
+
     class Meta:
         model = Invitation
         fields = ('to_email', 'message', 'endorsement_weight',
@@ -144,7 +149,7 @@ class InvitationForm(forms.ModelForm):
         self.fields['endorsement_weight'].widget = (
             forms.TextInput(attrs={'class': 'int spinner'}))
         self.fields['endorsement_weight'].min_value = 1        
-        
+
     def clean_to_email(self):
         to_email = self.cleaned_data['to_email']
         if Invitation.objects.filter(
@@ -162,14 +167,14 @@ class InvitationForm(forms.ModelForm):
         if self.instance.id:
             max_weight += self.instance.weight
         return max_weight
-        
+
     def clean_endorsement_weight(self):
         weight = self.cleaned_data['endorsement_weight']
         if self.from_profile.endorsement_limited and weight > self.max_weight:
             raise forms.ValidationError(
                 ERRORS['over_weight'] % self.max_weight)
         return weight
-    
+
     def save(self):
         invitation = super(InvitationForm, self).save(commit=False)
         invitation.from_profile = self.from_profile
@@ -186,7 +191,7 @@ class RequestInvitationForm(forms.Form):
         "Returns appropriate text for email sender field."
         data = self.cleaned_data
         return data.get('name'), data['email']
-    
+
     def send(self, to_profile=None):
         data = self.cleaned_data
         subject = "Villages.io Invitation Request"

@@ -88,6 +88,7 @@ def email_str(name, email):
     else:
         return email
 
+
 def is_valid_email(email):
     try:
         validate_email(email)

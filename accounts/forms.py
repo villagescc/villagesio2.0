@@ -1,4 +1,3 @@
-from django.core.validators import RegexValidator
 from django.forms import ModelForm, Form
 from django.contrib.auth.models import User
 from django import forms
@@ -44,18 +43,11 @@ class UserForm(ModelForm):
 
 
 class UserLoginForm(Form):
-    username = forms.CharField(widget=forms.TextInput(attrs={'style': 'width:auto;',
+    username = forms.CharField(label='EMAIL | USERNAME',
+                               widget=forms.TextInput(attrs={'style': 'width:auto;',
                                                              'placeholder': 'Email or username'}))
 
     password = forms.CharField(widget=forms.PasswordInput(attrs={'style': 'width:auto;', 'placeholder': 'Password'}))
-
-    @property
-    def username(self):
-        return self.cleaned_data['username']
-
-    @property
-    def password(self):
-        return self.cleaned_data['password']
 
 
 class ProfileCreationForm(ModelForm):
