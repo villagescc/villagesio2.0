@@ -24,16 +24,14 @@ ERRORS = {
 }
 
 
-class PreRegistrationForm(forms.ModelForm):
-    class Meta:
-        model = Settings
-        fields = ("email",)
+class PreRegistrationForm(forms.Form):
+    email = forms.EmailField(required=True)
 
-    # def clean_email(self):
-    #     email = self.cleaned_data['email']
-    #     if Settings.objects.filter(email__iexact=email).exists():
-    #         raise forms.ValidationError(ERRORS['email_dup'])
-    #     return email
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if Settings.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError(ERRORS['email_dup'])
+        return email
 
 
 class RegistrationForm(UserCreationForm):

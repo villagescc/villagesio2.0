@@ -189,11 +189,11 @@
                     </nav>
 
 {#                    {% if request.path != '/' %}#}
-                        <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" class="btn-std btn-blue">Join
-                            Now</a>
+                        <a href="{% url 'accounts:sign_in_user:sign_in_register' %}"
+                           class="btn-std btn-blue auth-button">Join Now</a>
 
                         <a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}"
-                           class="btn-std btn-blue outline">Login</a>
+                           class="btn-std btn-blue outline auth-button">Login</a>
 {#                    {% endif %}#}
                 </nav>
             </nav><!-- #site-navigation -->

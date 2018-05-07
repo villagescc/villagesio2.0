@@ -1,4 +1,5 @@
 {% extends 'new_templates/base.html' %}
+{% load staticfiles %}
 
 
 {% block content %}
@@ -8,18 +9,22 @@
             {% csrf_token %}
             <div class="auth-menu">
                 {% url 'accounts:sign_in_user:sign_in_register' as register_url %}
-                <a class="{% if register_url == request.path %}active{% endif %}" href="{{ register_url }}">
-                    Register
+
+                <a class="auth-navigation auth-button{% if register_url == request.path %}active"{% else %}"
+                    href="{{ register_url }}"{% endif %}>
+                Register
                 </a>
 
                 {% url 'accounts:sign_in_user:sign_in_log_in' as login_url %}
-                <a class="{% if login_url == request.path %}active{% endif %}" href="{{ login_url }}">
-                    Sign in
+                <a class="auth-navigation auth-button{% if login_url == request.path %}active"{% else %}"
+                    href="{{ login_url }}"{% endif %}>
+                Sign in
                 </a>
             </div>
 
-            <a class="btn btn-primary fb-reg-btn" href="{% url 'social:begin' 'facebook' %}?next=/settings/"><i
-                    class="fa fa-facebook-official">&nbsp; Continue with facebook</i></a>
+            <a class="btn btn-primary fb-reg-btn" href="{% url 'social:begin' 'facebook' %}?next=/settings/">
+                <i class="fa fa-facebook-official">&nbsp; Continue with facebook</i>
+            </a>
 
             <p>OR</p>
 
@@ -48,3 +53,13 @@
         </form>
     </div>
 {% endblock content %}
+
+{% block extra_js %}
+
+    <script>
+        $(document).ready(function () {
+               $(document).off('click','.auth-button');
+        });
+    </script>
+
+{% endblock extra_js %}

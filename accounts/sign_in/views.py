@@ -139,14 +139,18 @@ class SignInUserLogIn(AuthView):
             if user:
                 # Password matching and user found with authenticate
                 login(request, user)
+                messages.success(request, _("Welcome to Villages.io"))
                 return super(SignInUserLogIn, self).form_valid(form)
             else:
                 # Password wrong
-                messages.add_message(request, messages.ERROR, 'Username or Password is wrong')
+                form.add_error(None, 'Username or Password is wrong')
+                # messages.add_message(request, messages.ERROR, )
         except ObjectDoesNotExist:
-            messages.add_message(request, messages.WARNING, 'This user is not registered yet')
+            # messages.add_message(request, messages.WARNING, 'This user is not registered yet')
+            form.add_error(None, 'This user is not registered yet')
         except Exception as e:
-            messages.add_message(request, messages.ERROR, " User not found")
+            # messages.add_message(request, messages.ERROR, "User not found")
+            form.add_error(None, 'User not found')
 
         return super(SignInUserLogIn, self).form_invalid(form)
 
@@ -164,14 +168,13 @@ class SignInUserPreRegister(AuthView):
             'confirm_url': '{}?email_token={}'.format(complete_register_url, email_token)
         }
         send_mail_from_system('Please confirm your registration', invited_email, 'confirm_registration.txt', content)
+        messages.success(self.request, _("We sent you confirmation email"))
         return super(SignInUserPreRegister, self).form_valid(form)
 
 
 class SignInUserRegister(AuthView):
-    template_name = 'new_templates/auth.html'
     form_class = RegistrationForm
     success_url = reverse_lazy('accounts:sign_in_user:edit_profile')
-    invited_email = None
 
     # invitation = None
     # def get_invitation(self):
@@ -188,6 +191,22 @@ class SignInUserRegister(AuthView):
     #             except Invitation.DoesNotExist:
     #                 pass
     #     return register_invitation
+
+    def get_invited_email(self):
+        email_token = self.request.GET['email_token']
+        invited_email = force_text(urlsafe_base64_decode(email_token))
+        return invited_email
+
+    def check_token(self):
+        status = False
+        try:
+            invited_email = self.get_invited_email()
+            validate_email(invited_email)
+            if not Settings.objects.filter(email__iexact=invited_email).exists():
+                status = True
+        except (MultiValueDictKeyError, UnicodeDecodeError, TypeError, ValidationError) as e:
+            pass
+        return status
 
     def form_valid(self, form):
         request = self.request
@@ -218,22 +237,6 @@ class SignInUserRegister(AuthView):
         send_registration_email(profile)
         messages.info(request, MESSAGES['registration_done'])
         return super(SignInUserRegister, self).form_valid(form)
-
-    def get_invited_email(self):
-        email_token = self.request.GET['email_token']
-        invited_email = force_text(urlsafe_base64_decode(email_token))
-        return invited_email
-
-    def check_token(self):
-        status = False
-        try:
-            invited_email = self.get_invited_email()
-            validate_email(invited_email)
-            if not Settings.objects.filter(email__iexact=invited_email).exists():
-                status = True
-        except (MultiValueDictKeyError, UnicodeDecodeError, TypeError, ValidationError) as e:
-            pass
-        return status
 
     def dispatch(self, request, *args, **kwargs):
         if not self.check_token():
