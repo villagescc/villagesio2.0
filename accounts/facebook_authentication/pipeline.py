@@ -35,7 +35,6 @@ def create_profile_data(strategy, user, response, details, is_new=False, *args, 
             full_name = user.username
         new_profile = Profile(user=user, name=full_name)
         new_profile.user_id = user.id
-        new_profile.name = user.username
         new_profile.user.email = details['email'] if 'email' in details else None
 
         url = 'https://graph.facebook.com/{0}/picture'.format(response['id'])

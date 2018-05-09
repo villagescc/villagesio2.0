@@ -17,13 +17,11 @@ from django.utils.translation import ugettext_lazy as _
 
 from listings.models import Listings
 from listings.views import update_profile_tags
-from relate.forms import AcknowledgementForm, EndorseForm
 from tags.models import Tag
 from accounts.forms import UserForm
 from profile.forms import RegistrationForm, ProfileForm, ContactForm, SettingsForm, InvitationForm, \
     RequestInvitationForm, ForgotPasswordForm, FormProfileTag
 from profile.models import Profile, Invitation, PasswordResetLink, ProfilePageTag
-from relate.models import Referral
 from post.models import Post
 from geo.util import location_required
 from geo.models import Location
@@ -214,6 +212,11 @@ def reset_password(request, code):
 def edit_settings(request):
     request.session['from_settings'] = True
     # social_auth = request.user.social_auth.filter(provider="facebook")
+    user = request.user
+    if user.has_usable_password():
+        password_form = PasswordChangeForm
+    else:
+        password_form = SetPasswordForm
     if request.method == 'POST':
         if 'change_settings' in request.POST:
             old_email = request.profile.settings.email
@@ -229,19 +232,19 @@ def edit_settings(request):
                     messages.info(request, MESSAGES['settings_changed'])
                 return redirect(edit_settings)
         elif 'change_password' in request.POST:
-            password_form = PasswordChangeForm(request.user, request.POST)
-            if password_form.is_valid():
-                password_form.save()
+            password_change_form = password_form(request.user, request.POST)
+            if password_change_form.is_valid():
+                password_change_form.save()
                 messages.info(request, MESSAGES['password_changed'])
                 return redirect(edit_settings)
         
     if 'change_settings' not in request.POST:
         settings_form = SettingsForm(instance=request.profile.settings)
     if 'change_password' not in request.POST:
-        password_form = PasswordChangeForm(request.user)
+        password_change_form = password_form(request.user)
 
     return django_render(request, 'new_templates/profile_settings.html', {'settings_form': settings_form,
-                                                                          'password_form': password_form})
+                                                                          'password_form': password_change_form})
 
 
 def send_new_address_email(settings_obj):
