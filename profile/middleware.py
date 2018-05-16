@@ -7,6 +7,7 @@ class ProfileMiddleware(object):
         request.profile = None
         if request.user.is_authenticated():
             try:
-                request.profile = request.user.profile
+                request.profile = Profile.objects.select_related('user').prefetch_related('trusted_profiles')\
+                    .get(user=request.user)
             except Profile.DoesNotExist:
                 pass

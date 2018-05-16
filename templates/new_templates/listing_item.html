@@ -1,7 +1,7 @@
 {% load static profile %}
 
 <div class="col-12 col-sm-6 col-md-12 col-lg-6 col-xl-4 col-xxl-3"
-     id="div_listing_{{ item.user.profile.username }}">
+     id="div_listing_{{ item.user.username }}">
 
     <div class="post-box">
 
@@ -15,9 +15,11 @@
         <div class="post-content listing-modal" data-listing-id="{{ item.id }}">
             <div class="avatar-thumbnail"
                  style="background-image: url('{% profile_image_url item.user.profile '80x80' %}');">
+                {% if item.user.profile in request.profile.trusted_profiles.all %}
                 <img class="trusted-icon"
                      src="{% static 'new_template/res/img/icons/trusted-icon.png' %}"
                      alt="trusted">
+                {% endif %}
             </div>
 
             <h1>{{ item.title|slice:":80" }}</h1>
@@ -40,17 +42,17 @@
                         src="{% static 'new_template/res/img/icons/trash-alt.svg' %}"
                         alt="like"></a>
             {% else %}
-                <a class="action-menu-item trust-button"
-                   data-profile-username="{{ item.user.profile.username }}"
+                <a class="action-menu-item {% if request.user.is_authenticated %}trust-button{% endif %}"
+                   data-profile-username="{{ item.user.username }}"
                    href="{{ item.get_trust_link }}">
                     <img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="like">
                 </a>
-                <a class="action-menu-item pay-button"
-                   data-profile-username="{{ item.user.profile.username }}"
+                <a class="action-menu-item {% if request.user.is_authenticated %}pay-button{% endif %}"
+                   data-profile-username="{{ item.user.username }}"
                    href="{{ item.get_payment_link }}">
                     <img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="buy"></a>
-                <a class="action-menu-item contact-button"
-                   data-profile-username="{{ item.user.profile.username }}"
+                <a class="action-menu-item {% if request.user.is_authenticated %}contact-button{% endif %}"
+                   data-profile-username="{{ item.user.username }}"
                    data-listing-title="{{ item.title }}"
                    href="{{ item.get_contact_link }}"><img
                         src="{% static 'new_template/res/img/icons/mail.png' %}" alt="contact"></a>

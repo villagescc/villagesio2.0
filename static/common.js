@@ -142,7 +142,7 @@ function init_notification_dropdown() {
                 }
             });
             $('.count').removeClass('full').text(0);
-        } else{
+        } else {
             $('.notification-dropdown-items').hide();
             $('.dropdown-no-items').show();
         }
@@ -150,8 +150,67 @@ function init_notification_dropdown() {
     });
 }
 
+function init_auth_modals() {
+    $(document).on('click', '.auth-button', function (e) {
+        e.preventDefault();
+        var $btn = $(this),
+            url = $btn.attr('href');
+
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            method: 'GET',
+
+            success: function (data, status, xhr) {
+                var modal = $('#base-modal'), html = $(data),
+                    form = html.find('form');
+
+                // fill modal window with content
+                modal.find('.modal-body').html(form);
+                init_auth_modal_form(form, modal, url);
+
+                modal.modal({
+                    'keyboard': false,
+                    'show': true
+                });
+            },
+        });
+    });
+}
+
+function init_auth_modal_form(form, modal, url) {
+    form.ajaxForm({
+        url: url,
+        dataType: 'html',
+
+        'success': function (data, status, xhr) {
+            // console.log(this.url);
+
+            var html = $(data),
+                success_status = html.find('.messages'),
+                newform = html.find('form');
+            if (success_status.length > 0) {
+                if (~success_status.text().indexOf('Welcome')) {
+                    location.href = '/home';
+                } else {
+                    modal.find('.modal-body').html(success_status);
+                    setTimeout(function () {
+                        modal.modal('hide');
+                    }, 4000);
+                }
+
+            } else {
+                // initialize new form fields with errors
+                modal.find('.modal-body').html(newform);
+                init_auth_modal_form(newform, modal, url);
+            }
+        }
+    });
+}
+
+
 function init_modals() {
-    $(document).on('click','.trust-button, .pay-button, .contact-button, .delete-post-button', function (e) {
+    $(document).on('click', '.trust-button, .pay-button, .contact-button, .delete-post-button', function (e) {
         e.preventDefault();
         var $btn = $(this),
             url = $btn.attr('href');
@@ -181,9 +240,9 @@ function init_modals() {
                 }
 
                 modal.modal({
-					'keyboard': false,
-					'show': true
-				});
+                    'keyboard': false,
+                    'show': true
+                });
             },
         });
     });
@@ -194,7 +253,7 @@ function init_modal_form(form, modal, url) {
         url: url,
         dataType: 'html',
 
-        'success': function(data, status, xhr) {
+        'success': function (data, status, xhr) {
             var html = $(data),
                 success_status = html.find('.messages'),
                 newform = html.find('form');
@@ -218,4 +277,5 @@ $(document).ready(function () {
     init_notification_dropdown();
     init_listing_modal();
     init_modals();
+    init_auth_modals();
 });

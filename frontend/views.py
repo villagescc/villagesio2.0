@@ -1,6 +1,7 @@
 from django.http.response import HttpResponse
 from django.http import Http404
 from django.shortcuts import render
+from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
@@ -111,7 +112,7 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
     else:
         raise Exception(unicode(form.errors))
     if feed_items:
-        next_page_date = feed_items[-1].date
+        next_page_date = list(feed_items)[-1].date
     else:
         next_page_date = None
     url_params = request.GET.copy()
@@ -123,7 +124,6 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
 
     number_of_pages = len(total_items) / settings.FEED_ITEMS_PER_PAGE
 
-    categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)
     services_sub_categories = SubCategories.objects.all().filter(categories=2)
     rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
@@ -147,9 +147,8 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
                    'services_sub_categories': services_sub_categories,
                    'rideshare_sub_categories': rideshare_sub_categories,
                    'housing_sub_categories': housing_sub_categories,
-                   'categories': categories_list, 'trust_form': trust_form,
-                   'payment_form': payment_form, 'contact_form': contact_form,
-                   'number_of_pages': number_of_pages})
+                   'trust_form': trust_form, 'payment_form': payment_form,
+                   'contact_form': contact_form, 'number_of_pages': number_of_pages})
 
 
 def product_infinite_scroll(request, type_filter=None):
@@ -162,6 +161,7 @@ def product_infinite_scroll(request, type_filter=None):
                                                      start_limit=start_session_offset, end_limit=end_session_offset)
         if form_listing_settings.is_valid():
             listing_items, remaining_count = form_listing_settings.get_results()
+            listing_items = listing_items.prefetch_related('user__profile', 'profile', 'tag')
         else:
             listing_items = []
 
@@ -178,14 +178,23 @@ def product_infinite_scroll(request, type_filter=None):
         raise Http404
 
 
+class HomePage(TemplateView):
+    """
+    url: /
+    """
+    template_name = 'new_templates/home_page.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('frontend:home'))
+        return super(HomePage, self).get(request, *args, **kwargs)
+
+
 def home(request, type_filter=None, item_type=None, template=None, poster=None, recipient=None,
          extra_context=None, do_filter=False):
     """
     url: /home
     """
-    if not request.user.is_authenticated():
-        return render(request, 'new_templates/home_page.html')
-
     request.session['offset'] = settings.LISTING_ITEMS_PER_PAGE
     user_agent = get_user_agent(request)
     if user_agent.is_mobile:
@@ -207,7 +216,8 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter, do_filter)
     if form_listing_settings.is_valid():
         listing_items, remaining_count = form_listing_settings.get_results()
-        next_page_date = listing_items[-1].date if listing_items else None
+        listing_items = listing_items.select_related('user__profile', 'profile').prefetch_related('tag')
+        next_page_date = list(listing_items)[-1].date if listing_items else None
     else:
         listing_items = remaining_count = next_page_date = None
     url_params = request.GET.copy()
@@ -221,7 +231,6 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     contact_form = ContactForm()
 
     form = ListingsForms()
-    categories_list = Categories.objects.order_by('id')
     subcategories = SubCategories.objects.all()
     if type_filter in LISTING_TYPE_CHECK:
         # is listing_type filter
@@ -242,8 +251,8 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
         'item_sub_categories': item_sub_categories, 'subcategories': subcategories,
         'services_sub_categories': services_sub_categories, 'rideshare_sub_categories': rideshare_sub_categories,
         'housing_sub_categories': housing_sub_categories, 'user_agent_type': user_agent_type,
-        'people': people, 'listing_form': form, 'categories': categories_list,
-        'trusted_only': trusted_only, 'trust_form': trust_form, 'payment_form': payment_form,
+        'people': people, 'listing_form': form, 'trusted_only': trusted_only,
+        'trust_form': trust_form, 'payment_form': payment_form,
         'contact_form': contact_form, 'form_listing_settings': form_listing_settings,
         'item_type_name': item_type_name, 'is_listing': True, 'url_params': url_params,
         'listing_items': listing_items, 'next_page_date': next_page_date, 'remaining_count': remaining_count,
@@ -260,14 +269,13 @@ def map_visualization(request):
     rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
     housing_sub_categories = SubCategories.objects.all().filter(categories=4)
     payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
-    categories_list = Categories.objects.all()
     subcategories = SubCategories.objects.all()
     contact_form = ContactForm()
 
     notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
 
     return render(request, 'frontend/plugs/map-visualization.html',
-                  {'listing_form': form, 'categories': categories_list, 'item_sub_categories': item_sub_categories,
+                  {'listing_form': form, 'item_sub_categories': item_sub_categories,
                    'services_sub_categories': services_sub_categories, 'subcategories': subcategories,
                    'rideshare_sub_categories': rideshare_sub_categories,
                    'housing_sub_categories': housing_sub_categories,

@@ -1,0 +1,65 @@
+{% extends 'new_templates/base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+    <!-- App page content -->
+    <div class="trust-data register-form">
+        <form id="trust-form" role="form" action="" method="post">
+            {% csrf_token %}
+            <div class="auth-menu">
+                {% url 'accounts:sign_in_user:sign_in_register' as register_url %}
+
+                <a class="auth-navigation auth-button{% if register_url == request.path %}active"{% else %}"
+                    href="{{ register_url }}"{% endif %}>
+                Register
+                </a>
+
+                {% url 'accounts:sign_in_user:sign_in_log_in' as login_url %}
+                <a class="auth-navigation auth-button{% if login_url == request.path %}active"{% else %}"
+                    href="{{ login_url }}"{% endif %}>
+                Sign in
+                </a>
+            </div>
+
+            <a class="btn btn-primary fb-reg-btn" href="{% url 'social:begin' 'facebook' %}?next=/settings/">
+                <i class="fa fa-facebook-official">&nbsp; Continue with facebook</i>
+            </a>
+
+            <p>OR</p>
+
+            {% include 'new_templates/form.html' %}
+
+            {% if login_url == request.path %}
+                <a href="{% url 'forgot_password' %}">Forgot password</a>
+            {% endif %}
+
+            <div class="row" style="max-width: 600px;">
+                {#                <div class="col-sm-6">#}
+                {#                    <input class="btn btn-std btn-cancel" type="button" value="Cancel"#}
+                {#                           onclick="window.location='/'">#}
+                {#                </div>#}
+                <div class="col-sm-6">
+                    <input class="btn btn-std" id="save-trust" type="submit" value="Submit">
+                </div>
+            </div>
+            {% if not form.is_valid %}
+                <script>
+                    setTimeout(function () {
+                        $('.message').slideUp("fast");
+                    }, 4000);
+                </script>
+            {% endif %}
+        </form>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+
+    <script>
+        $(document).ready(function () {
+               $(document).off('click','.auth-button');
+        });
+    </script>
+
+{% endblock extra_js %}

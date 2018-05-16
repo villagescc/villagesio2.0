@@ -1,15 +1,6 @@
 {% extends 'new_templates/base.html' %}
 {% load staticfiles  i18n %}
 
-{% block extra_css %}
-
-    <style>
-
-
-    </style>
-
-{% endblock extra_css %}
-
 {% block content %}
     <div class="app-view">
 
@@ -134,9 +125,6 @@
 
 {% block extra_js %}
 
-<script>
-    var input_choose_file = $("#id_photo");
-    input_choose_file.css({height: "3em"});
-</script>
+    {% include 'new_templates/_location_autocomplete_script.html' %}
 
 {% endblock extra_js %}

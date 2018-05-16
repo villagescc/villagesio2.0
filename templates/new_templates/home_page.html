@@ -15,23 +15,73 @@
                         <span>has value</span>
                         <span>to share!</span>
                     </h1>
+                    {#                    <form id="sign-form" action="" method="post">#}
+                    {#                {{ sign_in_form.username }}#}
+                    {#              <input id="name" type="text" placeholder="Email">#}
+                    {#                        <div class="mx-0 mx-sm-3"></div>#}
+                    {#                {{ sign_in_form.password }}#}
+                    {#              <input id="password" type="password" name="password" placeholder="Password">#}
+                    {#                        <p class="smallprint">By clicking Sign Up, I agree to the Terms of Service and Privacy#}
+                    {#                            Policy.</p>#}
+                    {#                        <div class="btn-wrapper">#}
+                    {#                            <form id="trust-form" role="form" action="" method="post" enctype="multipart/form-data">#}
+                    {#                                {% csrf_token %}#}
+                    {#                                <div class="receiver-box" id="div-recipient-name">#}
+                    {#                                    <h4 class="mt-1">Email | Username</h4>#}
+                    {#                                    <div class="form-group">#}
+                    {#                                        {{ form.username }}#}
+                    {#                                        {% if form.username.errors %}#}
+                    {#                                            <div class="alert alert-warning message">#}
+                    {#                                                {% for error in form.username.errors %}#}
+                    {#                                                    {{ error }}#}
+                    {#                                                {% endfor %}#}
+                    {#                                            </div>#}
+                    {#                                        {% endif %}#}
+                    {#                                    </div>#}
+                    {#                                </div>#}
+                    {#                                <div class="receiver-box" id="div-recipient-name">#}
+                    {#                                    <h4 class="mt-1">Password</h4>#}
+                    {#                                    <div class="form-group">#}
+                    {#                                        {{ form.password }}#}
+                    {#                                        {% if form.password.errors %}#}
+                    {#                                            <div class="alert alert-warning message">#}
+                    {#                                                {% for error in form.password.errors %}#}
+                    {#                                                    {{ error }}#}
+                    {#                                                {% endfor %}#}
+                    {#                                            </div>#}
+                    {#                                        {% endif %}#}
+                    {#                                    </div>#}
+                    {#                                </div>#}
+                    {#                                <a href="{% url 'forgot_password' %}">Forgot password</a>#}
+                    {#                                <h4></h4>#}
+                    {#                                <div class="row" style="max-width: 600px;">#}
+                    {#                                    <div class="col-12 col-sm-6">#}
+                    {#                                        <input class="btn btn-std" type="submit" value="Login">#}
+                    {#                                    </div>#}
+                    {#                                    <div class="col-12 col-sm-6">#}
+                    {#                                        <a href="{% url 'accounts:sign_in_user:sign_in_register' %}"#}
+                    {#                                           class="btn-std btn-blue">Join Now</a>#}
+                    {#                                    </div>#}
+                    {#                                    <div class="col-12 ">#}
+                    {#                                        <a class="btn btn-primary"#}
+                    {#                                           href="{% url 'social:begin' 'facebook' %}?next={{ next_url }}"><i#}
+                    {#                                                class="fa fa-facebook-official">&nbsp; Login with facebook</i></a>#}
+                    {#                                    </div>#}
+                    {#                                </div>#}
+                    {#                            </form>#}
+                    {#                        </div>#}
+                    {#                    </form>#}
                     <form id="sign-form" action="" method="post">
-                        {#                {{ sign_in_form.username }}#}
-                        {#              <input id="name" type="text" placeholder="Email">#}
-                        <div class="mx-0 mx-sm-3"></div>
-                        {#                {{ sign_in_form.password }}#}
-                        {#              <input id="password" type="password" name="password" placeholder="Password">#}
                         <p class="smallprint">By clicking Sign Up, I agree to the Terms of Service and Privacy
                             Policy.</p>
                         <div class="btn-wrapper">
                             <a href="{% url 'accounts:sign_in_user:sign_in_register' %}"
-                               class="btn-std btn-white mr-0 mr-sm-4">Join Now</a>
+                               class="btn-std btn-white mr-0 mr-sm-4 auth-button">Join Now</a>
                             <a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}"
-                               class="btn-std btn-white outline mr-0 mr-sm-4">Login</a>
-                            {#                <input class="" type="submit" value="Login">#}
-                            {#                <div class="fb-login-button" data-width="179" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>#}
+                               class="btn-std btn-white outline mr-0 mr-sm-4 auth-button">Login</a>
                         </div>
                     </form>
+
                     <a href="#how-it-works">
                         <img src="{% static 'new_template/res/img/home/mouse.png' %}" alt="scroll down">
                     </a>

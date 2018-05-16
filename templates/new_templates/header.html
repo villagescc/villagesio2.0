@@ -7,7 +7,7 @@
     <header class="app-header">
         <nav class="navbar navbar-expand-lg">
 
-            <a class="navbar-brand" href="{% url 'frontend:home' %}">
+            <a class="navbar-brand" href="{% url 'frontend:home-page' %}">
                 <img class="d-none d-sm-block" src="{% static 'new_template/res/img/logo_full.png' %}"
                      alt="villages.io">
                 <img class="d-block d-sm-none" src="{% static 'new_template/res/img/logo.png' %}" alt="villages.io">
@@ -144,9 +144,9 @@
                     </button>
 
                     <div class="site-branding">
-                        <a href="{% url 'frontend:home' %}"><img class="img-fluid"
-                                                                 src="{% static 'new_template/res/img/home/logo_full.png' %}"
-                                                                 alt="Villages"></a>
+                        <a href="{% url 'frontend:home-page' %}"><img class="img-fluid"
+                                                                      src="{% static 'new_template/res/img/home/logo_full.png' %}"
+                                                                      alt="Villages"></a>
                     </div><!-- .site-branding -->
 
                     <nav id="primary-navbar" class="collapse navbar-collapse">
@@ -188,11 +188,13 @@
                         </ul>
                     </nav>
 
-                    <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" class="btn-std btn-blue">Join
-                        Now</a>
+{#                    {% if request.path != '/' %}#}
+                        <a href="{% url 'accounts:sign_in_user:sign_in_register' %}"
+                           class="btn-std btn-blue auth-button">Join Now</a>
 
-                    <a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}"
-                       class="btn-std btn-blue outline">Login</a>
+                        <a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}"
+                           class="btn-std btn-blue outline auth-button">Login</a>
+{#                    {% endif %}#}
                 </nav>
             </nav><!-- #site-navigation -->
 

@@ -1,0 +1,138 @@
+{% extends 'new_templates/base.html' %}
+{% load staticfiles %}
+
+{% block extra_css %}
+    <style>
+        .bootstrap-tagsinput .tag {
+            color: #000;
+        }
+
+        .bootstrap-tagsinput {
+            width: 100%;
+        }
+    </style>
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="container">
+        <div class="col-tab-12 col-lg-8 offset-lg-2">
+            <div class="form-content">
+                <div class="form-header">
+                    <h5 class="form-title">Edit Post</h5>
+                </div>
+                <div class="form-body">
+
+                    <form class="form-container" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% include 'new_templates/form.html' %}
+
+                        <div class="col-sm-12 col-md-6 offset-md-3">
+                            <button class="btn-save" style="width:100%">Save</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+
+{% block extra_js %}
+
+    <script>
+        $(document).ready(function () {
+            $('#save-post').click(function (e) {
+                e.preventDefault();
+                $('#save-post').attr("disabled", true);
+                var postData = new FormData($('#add-posting-modal')[0]);
+                $.ajax({
+                    url: '{% url 'new_listing' %}',
+                    type: 'POST',
+                    data: postData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        $('#new-posting-modal').modal("hide");
+                        showSuccessMessage('Listing added successfully!');
+                        $('#save-post').attr("disabled", false);
+                        location.reload();
+                    },
+                    error: function (d) {
+                        $('#save-post').attr("disabled", false);
+                        showFormErrors(d['responseJSON']['errors'])
+                    }
+                });
+                $('#add-posting-modal').unbind('submit');
+                return false
+            });
+
+            $("#id_categories").on('change', function (e) {
+                var selected_category = $(this).val();
+                $.ajax({
+                    url: "{% url 'subcategories_filter' %}",
+                    type: 'GET',
+                    data: {'category': selected_category},
+                    success: function (e) {
+                        $("#id_subcategories").find("option").remove().end();
+                        e.result.forEach(function (data) {
+                            $("#id_subcategories").append($("<option />").val(data["id"]).text(data["text"]))
+                        });
+                    },
+                    error: function (e) {
+                        showInternalServerError();
+                    }
+                })
+            });
+
+            // Filereader for image upload
+            var $input = $('.image-input');
+
+            $input.on('change', function (e) {
+                //hide error
+                $('.upload-error').text('');
+                $('.upload-error').css('opacity', '0');
+                //get FileList
+                var files = e.target.files;
+                var $this = $(this);
+
+                //if files are chosen
+                if (files.length) {
+                    var file = files[0];
+                    var fileSize = Math.round(file.size / 1024 / 1024 * 100) / 100;
+                    var img, reader;
+
+                    if (fileSize > 10) {
+                        $('.upload-error').text('Please, load image less than 10MB.');
+                        $('.upload-error').css('opacity', '1');
+                        return;
+                    }
+
+                    //get file data
+                    reader = new FileReader();
+
+                    reader.onload = function (e) {
+
+                        var fileData = e.target.result;
+
+                        if (file.type.substr(0, 5) === 'image') {
+                            var $imagePreview = $this.parent('.input-block').find('.image-preview');
+
+                            if ($imagePreview.length > 0) {
+                                $imagePreview.attr('src', fileData);
+                            } else {
+                                img = '<img class="image-preview" src="' + fileData + '" alt="preview">'
+                                $('.input-block').append(img);
+                            }
+                        } else {
+                            $('.upload-error').text('You should load an image here.');
+                            $('.upload-error').css('opacity', '1');
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+
+{% endblock extra_js %}
