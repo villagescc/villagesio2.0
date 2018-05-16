@@ -7913,8 +7913,6 @@ p {
     display: none; }
   .edit-profile .drag-and-drop-container img {
     display: flex;
-    width: 100%;
-    height: 100%;
     object-fit: cover; }
   .edit-profile .drag-and-drop-container p {
     margin-bottom: 0;
