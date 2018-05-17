@@ -15,6 +15,7 @@
     transition: all 0.2s ease;
     overflow: hidden;
     @include media-width-up(md) {
+      flex-wrap: nowrap;
       font-size: 16px;
     }
     &:hover {
@@ -26,6 +27,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
+      order: 0;
       @include media-width-up(md) {
         flex: 0 0 30%;
         flex-direction: row;
@@ -45,12 +47,37 @@
       }
     }
     .type,
-    .status,
     .time {
       padding: 0 5px;
       flex: 0 0 auto;
+      order: 1;
       @include media-width-up(md) {
-        flex: 0 0 20%;
+        flex: 0 0 15%;
+      }
+    }
+    .status {
+      text-align: center;
+      padding: 0 5px;
+      flex: 0 0 auto;
+      order: 1;
+      @include media-width-up(md) {
+        flex: 0 0 10%;
+      }
+    }
+    .amount {
+      flex: 0 0 auto;
+      order: 1;
+      @include media-width-up(md) {
+        flex: 0 0 10%;
+      }
+    }
+    .memo {
+      padding: 5px 10px;
+      flex: 1 0 60%;
+      order: 0;
+      @include media-width-up(md) {
+        flex: 1 0 auto;
+        order: 1;
       }
     }
     .type {

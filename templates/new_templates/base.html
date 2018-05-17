@@ -48,6 +48,7 @@
     <link href="{% static 'seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css' %}" rel="stylesheet">
     <!-- jQuery -->
     <script src="{% static 'js/jquery.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/jquery.form.min.js' %}" type="text/javascript"></script>
     <!-- Popper -->
     <script src="{% static 'js/popper.js' %}" type="text/javascript"></script>
     <!-- Bootstrap -->
@@ -77,47 +78,6 @@
 
     {% block extra_css %}{% endblock extra_css %}
 
-    <style>
-        .trust-data.register-form {
-            max-width: 600px;
-            margin: 50px auto;
-            box-shadow: 0 0 60px -10px #999;
-        }
-
-        @media (max-width: 640px) {
-            .trust-data.register-form {
-                max-width: 94%;
-            }
-        }
-
-        .trust-data.register-form .fb-reg-btn {
-            margin-bottom: 20px;
-        }
-
-        .app-main .trust-content.signin-form {
-            max-width: 600px;
-            margin: 50px auto;
-        }
-
-        @media (max-width: 640px) {
-            .app-main .trust-content.signin-form {
-                max-width: 100%;
-            }
-
-            .app-main .trust-content.signin-form form#trust-form {
-                padding: 40px 20px;
-            }
-        }
-
-        .app-main .trust-content.signin-form form#trust-form .receiver-box {
-            overflow: hidden;
-        }
-
-        .app-main .trust-content.signin-form form#trust-form input {
-            margin-bottom: 10px;
-        }
-    </style>
-
     <script>
         window.fbAsyncInit = function () {
             FB.init({
@@ -143,11 +103,8 @@
     </script>
 </head>
 <body>
+{% include 'new_templates/modal.html' %}
 {% include 'new_templates/listing_modal.html' %}
-{% include 'new_templates/add_post_modal.html' %}
-{% include 'new_templates/trust_modal.html' %}
-{% include 'new_templates/payment_modal.html' %}
-{% include 'new_templates/contact_admin.html' %}
 {% include 'new_templates/payment-loading-modal.html' %}
 {% include 'new_templates/error-modal.html' %}
 {% include 'new_templates/templates.html' %}

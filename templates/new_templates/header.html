@@ -7,7 +7,7 @@
     <header class="app-header">
         <nav class="navbar navbar-expand-lg">
 
-            <a class="navbar-brand" href="{% url 'frontend:home' %}">
+            <a class="navbar-brand" href="{% url 'frontend:home-page' %}">
                 <img class="d-none d-sm-block" src="{% static 'new_template/res/img/logo_full.png' %}"
                      alt="villages.io">
                 <img class="d-block d-sm-none" src="{% static 'new_template/res/img/logo.png' %}" alt="villages.io">
@@ -89,9 +89,15 @@
                         <a class="notification-dropdown dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                            aria-haspopup="true" id="notifDropdown">
                             <img src="{% static 'new_template/res/img/icons/bell.png' %}" alt="notifications">
-                            <span class="count {% if notifications_count %} full{% endif %}">{{ notifications_count }}</span>
+                            <span class="count {% if notifications_count %} full{% endif %}"
+                                  id="new-notifications-count">{{ notifications_count }}</span>
                         </a>
-                        <div class="dropdown-menu" id="notification-dropdown-menu" aria-labelledby="notifDropdown"></div>
+                        <div class="dropdown-menu" id="notification-dropdown-menu" aria-labelledby="notifDropdown">
+                            <div class="notification-dropdown-items"></div>
+                            <div class="dropdown-no-items">You don't have new notifications</div>
+                            <div class="dropdown-item"><a href="{% url 'notifications:all_notifications' %}">See all
+                                notifications</a></div>
+                        </div>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav">
@@ -138,9 +144,9 @@
                     </button>
 
                     <div class="site-branding">
-                        <a href="{% url 'frontend:home' %}"><img class="img-fluid"
-                                                                 src="{% static 'new_template/res/img/home/logo_full.png' %}"
-                                                                 alt="Villages"></a>
+                        <a href="{% url 'frontend:home-page' %}"><img class="img-fluid"
+                                                                      src="{% static 'new_template/res/img/home/logo_full.png' %}"
+                                                                      alt="Villages"></a>
                     </div><!-- .site-branding -->
 
                     <nav id="primary-navbar" class="collapse navbar-collapse">
@@ -182,11 +188,13 @@
                         </ul>
                     </nav>
 
-                    <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" class="btn-std btn-blue">Join
-                        Now</a>
+{#                    {% if request.path != '/' %}#}
+                        <a href="{% url 'accounts:sign_in_user:sign_in_register' %}"
+                           class="btn-std btn-blue auth-button">Join Now</a>
 
-                    <a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}"
-                       class="btn-std btn-blue outline">Login</a>
+                        <a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}"
+                           class="btn-std btn-blue outline auth-button">Login</a>
+{#                    {% endif %}#}
                 </nav>
             </nav><!-- #site-navigation -->
 

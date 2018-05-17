@@ -14,16 +14,16 @@ from notification.models import Notification
 @login_required()
 def new_notifications(request):
     if request.is_ajax():
-        notifications = Notification.objects.filter(recipient=request.profile, status=Notification.NEW)\
-            .select_related('notifier__user')\
-            .annotate(notifier_name=Concat('notifier__name', Value(" ("), 'notifier__user__username', Value(")")))\
-            .order_by('-created_at')[:5]
+        new_notifications = Notification.objects.filter(recipient=request.profile, status=Notification.NEW)\
+            .select_related('notifier__user').order_by('-created_at')[:5]
 
-        parsed_notifications = render_to_string('new_templates/notifications_dropdown.html',
-                                                {'request': request, 'notifications': notifications})
+        parsed_new_notifications = render_to_string('new_templates/notifications_dropdown.html',
+                                                    {'request': request, 'notifications': new_notifications})
 
-        Notification.objects.filter(recipient=request.profile, status=Notification.NEW).update(status=Notification.READ)
-        return HttpResponse(parsed_notifications)
+        if new_notifications:
+            Notification.objects.filter(recipient=request.profile, status=Notification.NEW)\
+                .update(status=Notification.READ)
+        return HttpResponse(parsed_new_notifications)
     else:
         raise Http404
 
@@ -43,5 +43,6 @@ def all_notifications(request):
     except EmptyPage:
         notifications = paginator.page(paginator.num_pages)
 
+    rendered_page = render(request, 'new_templates/notifications.html', {'notifications': notifications})
     Notification.objects.filter(recipient=request.profile, status=Notification.NEW).update(status=Notification.READ)
-    return render(request, 'new_templates/notifications.html', {'notifications': notifications})
+    return rendered_page

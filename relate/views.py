@@ -317,6 +317,7 @@ def blank_trust(request):
     elif request.method == 'POST':
         if not request.POST['recipient_name']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
+            form = BlankTrust(request.POST)
         else:
             recipient = get_object_or_404(Profile, user__username=request.POST['recipient_name'])
             if recipient == profile:
@@ -334,7 +335,8 @@ def blank_trust(request):
                     form = BlankTrust(request.POST, instance=endorsement, endorser=profile, recipient=recipient)
                     if form.is_valid():
                         endorsement = form.save()
-                        create_notification(notifier=profile, recipient=recipient, type=Notification.TRUST)
+                        create_notification(notifier=profile, recipient=recipient, type=Notification.TRUST,
+                                            amount=form.cleaned_data.get('weight'), memo=form.cleaned_data.get('text'))
                         existing_referral = Referral.objects.filter(referrer=profile, recipient=recipient)
                         if form.cleaned_data['referral']:
                             if not existing_referral:
@@ -376,13 +378,15 @@ def blank_payment(request):
     if request.method == 'POST':
         if not request.POST['recipient']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
+            form = BlankPaymentForm(request.POST)
         else:
             recipient = get_object_or_404(Profile, user__username=request.POST['recipient'])
             max_amount = ripple.max_payment(profile, recipient)
             form = BlankPaymentForm(request.POST, payer=profile, recipient=recipient, max_amount=max_amount)
             if form.is_valid():
                 payment = form.send_payment()
-                create_notification(notifier=profile, recipient=recipient, type=Notification.PAYMENT)
+                create_notification(notifier=profile, recipient=recipient, type=Notification.PAYMENT,
+                                    amount=form.cleaned_data.get('amount'), memo=form.cleaned_data.get('memo'))
                 send_payment_notification(payment)
                 messages.add_message(request, messages.INFO, 'Payment sent through the trust network.')
                 form = BlankPaymentForm()

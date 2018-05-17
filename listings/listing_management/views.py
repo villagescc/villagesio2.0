@@ -3,6 +3,9 @@ from django.db import IntegrityError, transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
+from django_user_agents.utils import get_user_agent
 
 from listings.models import Listings
 from listings.forms import ListingsForms
@@ -16,10 +19,12 @@ def view_listings(request):
                   {'listings': listings, 'listing_form': listing_form})
 
 
+@login_required
 def edit_listing(request, listing_id):
     listing = get_object_or_404(Listings, id=listing_id, user_id=request.user.id)
     if request.method == 'POST':
-        form = ListingsForms(request.POST, request.FILES, instance=listing)
+        user_agent = get_user_agent(request)
+        form = ListingsForms(request.POST, request.FILES, user_agent=user_agent, instance=listing)
         if form.is_valid():
             tags_list = form.cleaned_data.pop('tag').split(',')
             form.save()
@@ -45,10 +50,11 @@ def edit_listing(request, listing_id):
         form = ListingsForms(instance=listing,
                              initial={'categories': listing.subcategories.categories if listing.subcategories else None,
                                       'tag': tags_to_template})
-    return render(request, 'new_templates/edit_post.html', {'form': form, 'listing_id': listing_id})
+    return render(request, 'new_templates/post_edit.html', {'form': form, 'listing_id': listing_id})
 
 
 @transaction.atomic
+@login_required
 def delete_listing(request, listing_id):
     listing = get_object_or_404(Listings, id=listing_id, user_id=request.user.id)
     if request.method == 'POST':

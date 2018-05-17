@@ -157,7 +157,7 @@ class BlankTrust(forms.ModelForm):
 
 
 class BlankPaymentForm(forms.Form):
-    recipient = forms.CharField(label='Choose the trust receiver', required=True,
+    recipient = forms.CharField(label='Choose the payment receiver', required=True,
                                 widget=ReceiverPayInput(attrs={'class': 'typeahead', 'style': 'max-width: 100%'}))
 
     amount = forms.DecimalField(
@@ -166,10 +166,8 @@ class BlankPaymentForm(forms.Form):
         min_value=D('0.' + '0' * (SCALE - 1) + '1'),
         widget=AmountInput())
 
-    memo = forms.CharField(
-        label=_("Testimonial"),
-        required=False,
-        widget=forms.Textarea(attrs={'style': 'max-width: 100%; height: 100px;'}))
+    memo = forms.CharField(required=False,
+                           widget=forms.Textarea(attrs={'style': 'max-width: 100%; height: 100px;'}))
 
     def __init__(self, *args, **kwargs):
         self.payer = kwargs.pop('payer', None)

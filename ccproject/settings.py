@@ -62,7 +62,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'django.contrib.flatpages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'social_django',
@@ -107,7 +106,6 @@ MIDDLEWARE_CLASSES = [
     'profile.middleware.ProfileMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
     'geo.middleware.LocationMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -205,8 +203,8 @@ CACHES = {
 SESSIONS_DIRECTORY = os.path.join(BASE_DIR, 'sessions')
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.file'
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 43200      # 12 hours in seconds
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 604800  # 1 week in seconds
 SESSION_FILE_PATH = SESSIONS_DIRECTORY
 # SESSION_COOKIE_SECURE = True
 LOCATION_COOKIE_NAME = 'location_id'
@@ -252,6 +250,7 @@ DEFAULT_RADIUS = -1  # infinity
 
 INVITATION_ONLY = False
 
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email',

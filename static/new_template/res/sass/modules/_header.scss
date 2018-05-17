@@ -112,6 +112,12 @@
         &:last-child {
           margin-right: 0;
         }
+        &.green {
+          color: $lightgreen;
+        }
+        &.red {
+          color: $red;
+        }
       }
     }
   }
@@ -149,7 +155,7 @@
       color: $lightblue;
     }
   }
-  .no-items {
+  .dropdown-no-items {
     min-width: 18rem;
     padding: 10px 20px;
     color: $lightgrey;

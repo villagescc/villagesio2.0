@@ -15,7 +15,7 @@ urlpatterns = [
     url(r'^listing_filter/([^/]+)/$', frontend_views.listing_type_filter, name='listing_type'),
     url(r'^categories/(?:(?P<category_type>[a-zA-Z]+)/)?', frontend_views.categories_filter, name='category_type'),
     # url(r'^profile/(?P<username>\w+)/$', accounts_views.profile),
-    url(r'^$', frontend_views.home, name='home'),
+    url(r'^$', frontend_views.HomePage.as_view(), name='home-page'),
     url(r'^product_infinite_scroll(?:/(?P<type_filter>[0-9a-zA-Z]+))?', frontend_views.product_infinite_scroll, name='product_infinite_scroll')
 
 ]

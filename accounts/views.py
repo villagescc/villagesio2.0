@@ -47,4 +47,4 @@ def login_view(request):
 def logout_view(request):
     """ Remove user from the request """
     logout(request)
-    return HttpResponseRedirect(reverse("frontend:home"))
+    return HttpResponseRedirect(reverse("frontend:home-page"))

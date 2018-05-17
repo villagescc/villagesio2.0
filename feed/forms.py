@@ -96,7 +96,7 @@ class FeedFilterForm(forms.Form):
                     query_radius = None
                 continue
             break
-        return list(items), count, total
+        return items, count, total
         
     def update_sticky_filter_prefs(self):
         """

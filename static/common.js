@@ -81,108 +81,6 @@ function init_feed_filter_form() {
     });
 }
 
-function init_trust_modal() {
-    $(".trust-modal").click(function (e) {
-        $('#spin-modal').fadeIn();
-        var profile_username = $(this).attr('data-profile-username');
-        $("#profile-username").val(profile_username);
-        var url = '/trust_ajax/' + profile_username;
-        $.ajax({
-            url: url,
-            type: 'GET',
-            cache: false,
-            success: function (data) {
-                if (data["data"]["stat"] == "error") {
-                    $('#error-modal-alert').text(data["data"]["error_message"]);
-                    $('#spin-modal').fadeOut();
-                    $('#error-modal').modal("show");
-                }
-                else if (data["data"]["stat"] == "ok") {
-                    $('#spin-modal').fadeOut();
-                    $('#new-trust-heading').text('Trust ' + profile_username);
-                    $("#new-trust-modal").modal("show");
-                }
-                else if (data["data"]["stat"] == "existing") {
-                    $('#id_weight').val(data['data']['weight']);
-                    $('#id_text').val(data['data']['text']);
-                    debugger;
-                    if (data["data"]["refer"]) {
-                        $("#id_referral").prop('checked', true)
-                    }
-                    $('#spin-modal').fadeOut();
-                    $('.trust-modal-title').text('Trust ' + profile_username);
-                    $("#new-trust-modal").modal("show");
-                }
-            },
-            error: function (data) {
-                $('#spin-modal').fadeOut();
-                showInternalServerError();
-            }
-        });
-    });
-}
-
-function init_payment_modal() {
-//     $(".payment-modal").click(function (e) {
-//         $('#payment-error-modal-alert').html("<strong>Hold on,</strong> We are discovering trust pathways");
-//         $('#payment-loading-modal').modal("show");
-//         $('#spin-modal').fadeIn();
-//         var profile_username = $(this).attr('data-profile-username');
-//         $("#profile-username").val(profile_username);
-//         var url = '/acknowledge_ajax/' + profile_username;
-//         $.ajax({
-//             url: url,
-//             type: 'GET',
-//             cache: false,
-//             success: function (data) {
-//                 if (data["data"]["stat"] != "ok") {
-//                     $('#payment-error-modal-alert').text(data["data"]["stat"]);
-//                     $('#spin-modal').fadeOut();
-//                 }
-//                 else if (!data['data']['can_ripple']) {
-//                     $('label[for="id_ripple_0"]').closest('li').hide();
-//                     $('#id_ripple_1').attr('checked', true);
-//                     $('.ripple-hours').html("There are no available paths through the trust network to <strong>" + data['data']['recipient'] + "</strong>, so you can only send direct acknowledgement.")
-//                     $('#spin-modal').fadeOut();
-//                     $('#payment-loading-modal').modal("hide");
-//                     $("#new-payment-modal").modal("show");
-//                 } else if (data["data"]["can_ripple"]) {
-//                     $('#id_ripple_0').attr('checked', true);
-//                     $('.ripple-hours').html("You can send a trusted acknowledgement of up to " + data['data']['max_amount'] + " hour(s) or a direct acknowledgement of any amount.")
-//                     $('#spin-modal').fadeOut();
-//                     $('#payment-loading-modal').modal("hide");
-//                     $("#new-payment-modal").modal("show");
-//                 }
-//             },
-//
-//             error: function (data) {
-//                 debugger;
-//                 $('#spin-modal').fadeOut();
-//                 showInternalServerError();
-//             }
-//         });
-//         e.preventDefault();
-//     });
-}
-
-function init_contact_modal() {
-    $(".contact-modal").click(function (e) {
-        $('#spin-modal').fadeIn();
-        var profile_username = $(this).attr('data-profile-username');
-        var listing_title = $(this).attr('data-listing-title');
-        $("#profile-username").val(profile_username);
-        $("#listing-title").val(listing_title);
-        $('#contact-modal-title').text('Contact ' + profile_username);
-        $('#spin-modal').fadeOut();
-        $("#new-contact-modal").modal("show");
-    });
-
-    $('.menu-group div').click(function () {
-        var menu = $(this).parent().find('ul');
-        menu.slideToggle();
-    });
-}
-
 function init_listing_modal() {
     $("#product_list").on('click', '.listing-modal', function (e) {
         $('#spin-modal').fadeIn();
@@ -229,70 +127,165 @@ function init_listing_modal() {
     });
 }
 
-function init_edit_post() {
-
-    $('.my-profile').on('click', '.edit-post-button', function (e) {
-    //     var postId = $(this).parents('.post-box').find('.post-cover').data().listingId;
-    //     var url = '/get_listing_info/' + postId;
-    //     var listing_picture_path = '/uploads/';
-    //     var postModal = $('#add-posting-modal').find('.modal-content');
-    //     // new Modal header
-    //     $('#new-post-heading').text('Edit Post');
-    //     $.ajax({
-    //         url: url,
-    //         type: 'GET',
-    //         cache: false,
-    //         success: function (data) {
-    //             if (data["data"]["stat"] == "ok") {
-    //                 postModal.find('#id_listing_type option')
-    //                     .filter('option[value=' + data.data.listing_type + ']')
-    //                     .attr('selected', true);
-    //
-    //                 postModal.find('#id_categories option')
-    //                     .filter('option[value=' + data.data.listing_type + ']')
-    //                     .attr('selected', true);
-    //
-    //                 postModal.find('#id_title')
-    //                     .val(data.data.listing_title);
-    //
-    //                 postModal.find('#id_description')
-    //                     .val(data.data.description);
-    //             }
-    //         },
-    //         error: function (data) {
-    //             $('#spin-modal').fadeOut();
-    //             showInternalServerError();
-    //         }
-    //     });
-    });
-}
-
 function init_notification_dropdown() {
     $(".notification-dropdown").click(function () {
-        $.ajax({
-            url: "/notifications/new/",
-            dataType: 'html',
-            method: 'GET',
-            success: function (data, status, xhr) {
-                $('#notification-dropdown-menu').html(data);
-            }
-        });
-        $(this).find('.count').removeClass('full').text(0);
+        var new_notifications = parseInt($("#new-notifications-count").text());
+
+        if (new_notifications) {
+            $.ajax({
+                url: "/notifications/new/",
+                dataType: 'html',
+                method: 'GET',
+                success: function (data, status, xhr) {
+                    $('.dropdown-no-items').hide();
+                    $('.notification-dropdown-items').html(data);
+                }
+            });
+            $('.count').removeClass('full').text(0);
+        } else {
+            $('.notification-dropdown-items').hide();
+            $('.dropdown-no-items').show();
+        }
+
     });
 }
 
-function initModals () {
-    init_listing_modal();
-    init_contact_modal();
-    init_payment_modal();
-    init_trust_modal();
+function init_auth_modals() {
+    $(document).on('click', '.auth-button', function (e) {
+        e.preventDefault();
+        var $btn = $(this),
+            url = $btn.attr('href');
+
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            method: 'GET',
+
+            success: function (data, status, xhr) {
+                var modal = $('#base-modal'), html = $(data),
+                    form = html.find('form');
+
+                // fill modal window with content
+                modal.find('.modal-body').html(form);
+                init_auth_modal_form(form, modal, url);
+
+                modal.modal({
+                    'keyboard': false,
+                    'show': true
+                });
+            },
+        });
+    });
 }
+
+function init_auth_modal_form(form, modal, url) {
+    form.ajaxForm({
+        url: url,
+        dataType: 'html',
+
+        'success': function (data, status, xhr) {
+            // console.log(this.url);
+
+            var html = $(data),
+                success_status = html.find('.messages'),
+                newform = html.find('form');
+            if (success_status.length > 0) {
+                if (~success_status.text().indexOf('Welcome')) {
+                    location.href = '/home';
+                } else {
+                    modal.find('.modal-body').html(success_status);
+                    setTimeout(function () {
+                        modal.modal('hide');
+                    }, 4000);
+                }
+
+            } else {
+                // initialize new form fields with errors
+                modal.find('.modal-body').html(newform);
+                init_auth_modal_form(newform, modal, url);
+            }
+        }
+    });
+}
+
+
+function init_modals() {
+    $(document).on('click', '.trust-button, .pay-button, .contact-button, .delete-post-button', function (e) {
+        e.preventDefault();
+        var $btn = $(this),
+            url = $btn.attr('href');
+
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            method: 'GET',
+
+            success: function (data, status, xhr) {
+                var modal = $('#base-modal'), html = $(data),
+                    form = html.find('form');
+
+                // fill modal window with content
+                modal.find('.modal-body').html(form);
+                init_modal_form(form, modal, url);
+
+                // disable recipient input
+                if ($btn.hasClass('trust-button')) {
+                    modal.find('.form-group:first label').text('Trust receiver');
+                    modal.find('#id_recipient_name').hide();
+                } else if ($btn.hasClass('pay-button')) {
+                    modal.find('.id_recipient .form-group:first label').text('Payment receiver');
+                    form.find('input[name=recipient]').attr('readonly', true);
+                } else if ($btn.hasClass('contact-button')) {
+                    form.find('input[name=contact_recipient_name]').hide();
+                }
+
+                modal.modal({
+                    'keyboard': false,
+                    'show': true
+                });
+            },
+        });
+    });
+}
+
+function init_modal_form(form, modal, url) {
+    // show spinner over the form
+    var spinner = $('#spin-modal');
+
+    form.ajaxForm({
+        url: url,
+        dataType: 'html',
+        beforeSend: function () {
+            spinner.find('.back-spin').css('z-index', 1051);
+            spinner.fadeIn();
+        },
+        'success': function (data, status, xhr) {
+            var html = $(data),
+                success_status = html.find('.messages'),
+                newform = html.find('form');
+            if (success_status.length > 0) {
+                // close modal
+                modal.modal('hide');
+            } else {
+                // initialize new form fields with errors
+                modal.find('.modal-body').html(newform);
+                init_modal_form(newform, modal, url);
+            }
+        },
+        complete: function () {
+            spinner.find('.back-spin').css('z-index', 9);
+            spinner.fadeOut();
+        }
+    });
+}
+
 
 $(document).ready(function () {
     init_feed_filter_form();
     init_instruction_input();
     init_feed_items();
-    init_edit_post();
     init_notification_dropdown();
-    initModals();
+    init_listing_modal();
+    init_modals();
+    init_auth_modals();
 });

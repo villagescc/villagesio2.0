@@ -1,14 +1,16 @@
 from .models import Notification
 
 
-def create_notification(notifier, recipient, type):
+def create_notification(notifier, recipient, type, **kwargs):
     try:
-        new_notification = Notification()
-        new_notification.notifier = notifier
-        new_notification.recipient = recipient
-        new_notification.notification_type = type
-        new_notification.status = Notification.NEW
-        new_notification.save()
+        Notification.objects.create(
+            notifier=notifier,
+            recipient=recipient,
+            notification_type=type,
+            status=Notification.NEW,
+            amount=kwargs.get('amount'),
+            memo=kwargs.get('memo'),
+        )
         return True
     except Exception as e:
         print(e)
