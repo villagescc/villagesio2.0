@@ -265,7 +265,8 @@ input:checked + .slider:before {
 
 
 // Input photo
-.post-image {
+.post-image,
+.profile-image {
   .size-recommend {
     margin: 20px 0;
     padding: 10px 20px;
@@ -287,6 +288,12 @@ input:checked + .slider:before {
     &:hover {
       .image-preview {
         opacity: 0.3;
+      }
+    }
+    &.avatar-block {
+      @media screen and (min-width: 700px){
+        width: 200px;
+        height: 200px;
       }
     }
     .upload-error {
@@ -322,7 +329,10 @@ input:checked + .slider:before {
       position: absolute;
       top: 130px;
       left: 50%;
+      width: 60px;
       margin-left: -29px;
+      text-align: center;
+      font-size: 16px;
       color: #8d9aa6;
       z-index: 1;
     }
