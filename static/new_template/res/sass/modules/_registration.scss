@@ -1,0 +1,77 @@
+.trust-data {
+  &.register-form {
+    max-width: 600px;
+    margin: 50px auto;
+    box-shadow: 0 0 60px -10px #999;
+    @media (max-width: 640px) {
+      max-width: 94%;
+    }
+    .fb-reg-btn {
+      margin-bottom: 20px;
+    }
+  }
+}
+
+.app-main {
+  .trust-content.signin-form {
+    max-width: 600px;
+    margin: 50px auto;
+    @media (max-width: 640px) {
+      max-width: 100%;
+
+    }
+    form#trust-form {
+      @media (max-width: 640px) {
+        padding: 40px 20px;
+      }
+
+      .receiver-box {
+        overflow: hidden;
+      }
+      input {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+
+form#trust-form {
+  .fb-reg-btn {
+    margin-bottom: 20px;
+  }
+  .accent-text {
+    color: $lightblue;
+    font-weight: bold;
+  }
+}
+
+.auth-menu {
+  display: flex;
+  margin-bottom: 20px;
+  padding: 1px 1px 0;
+  background-color: #eaeaea;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  font-size: 0;
+  a {
+    flex: 0 0 50%;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    color: #bbb;
+    &:hover {
+      color: $lightblue;
+    }
+    &.auth-buttonactive {
+      color: $lightblue;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      background-color: #fff;
+      cursor: default;
+      &:hover {
+        color: $lightblue;
+      }
+    }
+  }
+}

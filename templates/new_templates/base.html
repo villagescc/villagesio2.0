@@ -78,47 +78,6 @@
 
     {% block extra_css %}{% endblock extra_css %}
 
-    <style>
-        .trust-data.register-form {
-            max-width: 600px;
-            margin: 50px auto;
-            box-shadow: 0 0 60px -10px #999;
-        }
-
-        @media (max-width: 640px) {
-            .trust-data.register-form {
-                max-width: 94%;
-            }
-        }
-
-        .trust-data.register-form .fb-reg-btn {
-            margin-bottom: 20px;
-        }
-
-        .app-main .trust-content.signin-form {
-            max-width: 600px;
-            margin: 50px auto;
-        }
-
-        @media (max-width: 640px) {
-            .app-main .trust-content.signin-form {
-                max-width: 100%;
-            }
-
-            .app-main .trust-content.signin-form form#trust-form {
-                padding: 40px 20px;
-            }
-        }
-
-        .app-main .trust-content.signin-form form#trust-form .receiver-box {
-            overflow: hidden;
-        }
-
-        .app-main .trust-content.signin-form form#trust-form input {
-            margin-bottom: 10px;
-        }
-    </style>
-
     <script>
         window.fbAsyncInit = function () {
             FB.init({
