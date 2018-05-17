@@ -39,19 +39,17 @@
                                 <div class="col-12 col-sm-6">
                                     <label>&nbsp;</label>
 
-                                    <div class="drag-and-drop-container">
-                                        <input id="id_photo" name="photo" type="file">
-
-                                        <div class="alert alert-warning collapse" id="error_{{ form.photo }}"></div>
-                                        {% if form.instance.photo %}
-                                            <img class="photo-preview" src="{{ form.instance.photo.url }}" alt="photo">
-                                            <p class="action-call"></p>
-                                            <p><label class="inline" for="id_photo">change</label></p>
-                                        {% else %}
-                                            <img src="{% static 'new_template/res/img/icons/camera.png' %}" alt="photo">
-                                            <p class="action-call"></p>
-                                            <p><label class="inline" for="id_photo">browse</label></p>
-                                        {% endif %}
+                                    <div class="profile-image">
+                                        <div class="input-block avatar-block">
+                                            <div class="alert alert-warning collapse" id="error_{{ form.photo }}"></div>
+                                            <div class="upload-error"></div>
+                                            <img class="camera-icon" src="{% static 'new_template/res/img/icons/camera.png' %}" alt="Camera">
+                                            <p class="browse-title">browse</p>
+                                            <input id="id_photo" name="photo" type="file">
+                                            {% if form.instance.photo %}
+                                            <img class="image-preview" src="{{ form.instance.photo.url }}" alt="photo">
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -59,24 +57,17 @@
                                     <label></label>
                                     <h4>Header image</h4>
 
-                                    <div class="drag-and-drop-container">
-                                        <input id="id_header_image" name="header_image" type="file">
-
-                                        <div class="alert alert-warning collapse"
-                                             id="error_{{ form.header_image }}"></div>
-                                        {% if form.instance.header_image %}
-                                            <img src="{{ form.instance.header_image.url }}" alt="Header image"
-                                                 width="150">
-                                            <p class="action-call"></p>
-                                            <p><label class="inline" for="id_header_image">change</label></p>
-
-                                        {% else %}
-                                            <img src="{% static 'new_template/res/img/icons/camera.png' %}"
-                                                 alt="Header image">
-                                            <p class="action-call"></p>
-                                            <p><label class="inline" for="id_header_image">browse</label></p>
-                                        {% endif %}
-
+                                    <div class="profile-image">
+                                        <div class="input-block">
+                                            <div class="alert alert-warning collapse" id="error_{{ form.header_image }}"></div>
+                                            <div class="upload-error"></div>
+                                            <img class="camera-icon" src="{% static 'new_template/res/img/icons/camera.png' %}" alt="Camera">
+                                            <p class="browse-title">browse</p>
+                                            <input id="id_header_image" name="header_image" type="file">
+                                            {% if form.instance.header_image %}
+                                            <img class="image-preview" src="{{ form.instance.header_image.url }}" alt="Header image">
+                                            {% endif %}
+                                        </div>
                                     </div>
 
                                 </div>
@@ -124,6 +115,64 @@
 {% endblock content %}
 
 {% block extra_js %}
+<script>
+$(document).ready(function () {
+    // Filereader for preview profile image, header image uploads
+    var $inputBlock = $('.input-block');
+
+    $inputBlock.on('change', '#id_photo', addImagePreview);
+    $inputBlock.on('change', '#id_header_image', addImagePreview);
+
+    function addImagePreview(e) {
+
+        //get FileList
+        var files = e.target.files;
+        var $this = $(this);
+
+        var $parent = $this.parents('.input-block');
+
+        //hide error
+        $parent.find('.upload-error').text('');
+        $parent.find('.upload-error').css('opacity', '0');
+
+        //if files are chosen
+        if (files.length) {
+            var file = files[0];
+            var fileSize = Math.round(file.size / 1024 / 1024 * 100) / 100;
+            var img, reader;
+
+            if (fileSize > 10) {
+                $parent.find('.upload-error').text('Please, load image less than 10MB.');
+                $parent.find('.upload-error').css('opacity', '1');
+                return;
+            }
+
+            //get file data
+            reader = new FileReader();
+
+            reader.onload = function (e) {
+
+                var fileData = e.target.result;
+
+                if (file.type.substr(0, 5) === 'image') {
+                    var $imagePreview = $parent.find('.image-preview');
+
+                    if ($imagePreview.length > 0) {
+                        $imagePreview.attr('src', fileData);
+                    } else {
+                        img = '<img class="image-preview" src="' + fileData + '" alt="preview">';
+                        $parent.append(img);
+                    }
+                } else {
+                    $parent.find('.upload-error').text('You should load an image here.');
+                    $parent.find('.upload-error').css('opacity', '1');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+});
+</script>
 
     {% include 'new_templates/_location_autocomplete_script.html' %}
 

@@ -88,6 +88,7 @@
             var $input = $('.image-input');
 
             $input.on('change', function (e) {
+
                 //hide error
                 $('.upload-error').text('');
                 $('.upload-error').css('opacity', '0');
@@ -120,7 +121,7 @@
                             if ($imagePreview.length > 0) {
                                 $imagePreview.attr('src', fileData);
                             } else {
-                                img = '<img class="image-preview" src="' + fileData + '" alt="preview">'
+                                img = '<img class="image-preview" src="' + fileData + '" alt="preview">';
                                 $('.input-block').append(img);
                             }
                         } else {
