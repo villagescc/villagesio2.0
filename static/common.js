@@ -249,10 +249,16 @@ function init_modals() {
 }
 
 function init_modal_form(form, modal, url) {
+    // show spinner over the form
+    var spinner = $('#spin-modal');
+
     form.ajaxForm({
         url: url,
         dataType: 'html',
-
+        beforeSend: function () {
+            spinner.find('.back-spin').css('z-index', 1051);
+            spinner.fadeIn();
+        },
         'success': function (data, status, xhr) {
             var html = $(data),
                 success_status = html.find('.messages'),
@@ -265,6 +271,10 @@ function init_modal_form(form, modal, url) {
                 modal.find('.modal-body').html(newform);
                 init_modal_form(newform, modal, url);
             }
+        },
+        complete: function () {
+            spinner.find('.back-spin').css('z-index', 9);
+            spinner.fadeOut();
         }
     });
 }
