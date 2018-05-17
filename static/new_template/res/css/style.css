@@ -7400,6 +7400,15 @@ p {
         font-size: 1.375em;
         font-weight: 300;
         color: #ffffff; }
+    .app-sidebar .user-statistics .person-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      width: 100%;
+      padding: 10px; }
+      @media (max-width: 575px) {
+        .app-sidebar .user-statistics .person-action {
+          order: 1; } }
     .app-sidebar .user-statistics .user-data {
       display: flex;
       flex: 0 0 100%;

@@ -125,6 +125,16 @@
         color: #ffffff;
       }
     }
+    .person-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      width: 100%;
+      padding: 10px;
+      @include media-width-down(575px) {
+        order: 1;
+      }
+    }
     & .user-data {
       display: flex;
       flex: 0 0 100%;
@@ -133,7 +143,7 @@
       @include media-width-down(575px) {
         flex-direction: row;
       }
-        .data-block {
+      .data-block {
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
