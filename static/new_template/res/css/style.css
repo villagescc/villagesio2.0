@@ -7526,6 +7526,23 @@ form#trust-form .accent-text {
       .auth-menu a.auth-buttonactive:hover {
         color: #1d90b5; }
 
+.id_username .form-group:first-child,
+.id_password1 .form-group:first-child,
+.id_password2 .form-group:first-child,
+.id_first_name .form-group:first-child {
+  margin-bottom: 10px; }
+
+.id_terms_of_service {
+  margin-bottom: 20px; }
+  .id_terms_of_service:after {
+    content: '';
+    display: table;
+    clear: both; }
+  .id_terms_of_service .form-group:first-child, .id_terms_of_service .form-group:nth-child(2) {
+    float: left; }
+  .id_terms_of_service .form-group #id_terms_of_service {
+    margin-left: 20px; }
+
 /* search-results */
 .search-results {
   width: 100%;
