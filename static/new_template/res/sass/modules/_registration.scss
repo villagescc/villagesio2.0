@@ -75,3 +75,33 @@ form#trust-form {
     }
   }
 }
+
+
+.id_username,
+.id_password1,
+.id_password2,
+.id_first_name {
+  .form-group {
+    &:first-child {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.id_terms_of_service {
+  margin-bottom: 20px;
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+  .form-group {
+    &:first-child,
+    &:nth-child(2) {
+      float: left;
+    }
+    #id_terms_of_service {
+      margin-left: 20px;
+    }
+  }
+}
