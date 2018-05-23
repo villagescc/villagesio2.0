@@ -42,6 +42,20 @@ input[type="submit"] {
   height: 100%;
 }
 
+.id_recipient_name,
+.id_weight,
+.id_text {
+  .form-group:first-child {
+    margin-bottom: 5px;
+  }
+}
+form .form-group label {
+  margin-bottom: 0;
+  font-size: 0.75em;
+  color: #9a9a9a;
+  text-transform: uppercase;
+}
+
 label.custom-radio,
 label.custom-check {
   flex: 1;
@@ -138,8 +152,9 @@ div.textbox-with-icon {
 .switch input {display:none;}
 
 /* The slider */
-.slider {
-  position: absolute;
+.slider,
+.reference .slider {
+  position: absolute !important;
   cursor: pointer;
   top: 0;
   left: 0;
@@ -150,6 +165,9 @@ div.textbox-with-icon {
   transition: .4s;
 }
 
+.reference p {
+  margin-bottom: 0;
+}
 .slider:before {
   position: absolute;
   content: "";
@@ -183,4 +201,272 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+// Autoselect Typehead
+.twitter-typeahead {
+  max-width: 100%;
+  display: block !important;
+  .tt-menu {
+    max-height: 150px;
+    width: 100%;
+    overflow-y: auto;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    background-color: #ffffff;
+    box-shadow: 0 5px 5px #ddd;
+    .tt-dataset {
+      padding: 10px 0;
+      .tt-suggestion {
+        padding-left: 10px;
+        cursor: pointer;
+        &:hover {
+          background-color: #ddd;
+        }
+      }
+    }
+  }
+}
+
+// Add Post Form wrapper
+.form-content {
+  margin-top: 40px;
+  .form-title {
+    font-size: 18px;
+    color: $lightblue;
+    text-transform: uppercase;
+    @include media-width-up(sm) {
+      font-size: 24px;
+    }
+  }
+  label {
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-family: "Open Sans", sans-serif;
+    color: $lightgrey;
+    font-size: 18px;
+  }
+  .btn-save {
+    padding: 15px;
+    font-size: 1em;
+    color: #fff;
+    text-transform: uppercase;
+    background-color: $lightblue;
+    cursor: pointer;
+    border-radius: 0;
+    @include crossTransition(background-color .3s);
+    &:hover,
+    &:focus {
+      background-color: darken($lightblue, 10%);
+    }
+  }
+}
+
+
+// Input photo
+.post-image,
+.profile-image {
+  .size-recommend {
+    margin: 20px 0;
+    padding: 10px 20px;
+    border-radius: 6px;
+    color: #fff;
+    background-color: #9abdf3;
+  }
+  .input-block{
+    position: relative;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border: 3px dashed #8d9aa6;
+    border-radius: 10px;
+    @media screen and (min-width: 700px){
+      width: 400px;
+      height: 200px;
+    }
+    &:hover {
+      .image-preview {
+        opacity: 0.3;
+      }
+    }
+    &.avatar-block {
+      @media screen and (min-width: 700px){
+        width: 200px;
+        height: 200px;
+      }
+    }
+    .upload-error {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      max-height: 80px;
+      padding: 10px;
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+      background-color: $red;
+      opacity: 0;
+      z-index: 3;
+    }
+    .image-preview {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 2;
+      transition: opacity 0.3s ease;
+    }
+    .camera-icon {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      margin-left: -30px;
+      z-index: 1;
+    }
+    .browse-title {
+      position: absolute;
+      top: 130px;
+      left: 50%;
+      width: 60px;
+      margin-left: -29px;
+      text-align: center;
+      font-size: 16px;
+      color: #8d9aa6;
+      z-index: 1;
+    }
+    .image-input {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background-color: transparent;
+      z-index: 4;
+    }
+  }
+}
+
+// Delete Post
+.confirm-block {
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 20px;
+  font-family: "Open Sans", sans-serif;
+  @include media-width-up(sm) {
+    padding: 40px;
+  }
+  .form-title {
+    font-size: 18px;
+    color: $lightblue;
+    @include media-width-up(sm) {
+      font-size: 24px;
+    }
+  }
+  p {
+    color: $lightgrey;
+  }
+  input {
+    margin-bottom: 10px;
+  }
+}
+
+// Errors
+.has-errors {
+  .errorlist {
+    margin: 0;
+    margin-top: -10px;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.form-container.contact-form {
+  padding: 40px;
+  background-color: #fff;
+  .modal-body & {
+    padding: 10px;
+  }
+  input,
+  textarea {
+    border: 1px solid #ebebeb;
+  }
+  .id_contact_recipient_name,
+  .id_message {
+    .form-group:first-child {
+      margin-bottom: 0;
+      label {
+        margin-bottom: 5px;
+      }
+    }
+  }
+  .btn-save {
+    padding: 15px;
+    font-size: 1em;
+    color: #fff;
+    text-transform: uppercase;
+    background-color: $lightblue;
+    cursor: pointer;
+    border-radius: 0;
+    @include crossTransition(background-color .3s);
+    &:hover,
+    &:focus {
+      background-color: darken($lightblue, 10%);
+    }
+  }
+}
+
+// Sign Up
+.register-form {
+  .btn.btn-std.btn-cancel {
+    @include media-width-down(sm) {
+      margin-bottom: 20px;
+    }
+  }
+  .form-group input#id_terms_of_service {
+    float: left;
+    margin-top: 5px;
+    margin-right: 10px;
+    height: 18px;
+    width: 18px;
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+// account-settings
+.account-settings {
+  .row {
+    max-width: 1000px;
+  }
+  .fb-btn {
+    margin-bottom: 20px;
+  }
+  .form-group {
+    label {
+      margin-bottom: 5px;
+    }
+  }
+  #id_send_notifications,
+  #id_send_newsletter {
+    width: 18px;
+    float: left;
+    margin-top: 6px;
+    margin-right: 10px;
+  }
+
+  .btn-submit {
+    padding: 10px 20px;
+  }
+
+}
+
+.bootstrap-tagsinput .tag {
+  color: #000;
+}
+
+.bootstrap-tagsinput {
+  width: 100%;
 }

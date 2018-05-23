@@ -1,13 +1,12 @@
 import json
 from django.shortcuts import render
-from django.views.generic import View
 from django.http import JsonResponse
+from django.conf import settings
 
 from feed.models import FeedItem
 from listings.models import Listings
 from listings.forms import ListingsForms
-from categories.models import Categories, SubCategories
-from notification.models import Notification
+from categories.models import SubCategories
 from profile.forms import ContactForm
 from relate.forms import AcknowledgementForm
 
@@ -61,11 +60,8 @@ def listing_map(request):
         rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
         housing_sub_categories = SubCategories.objects.all().filter(categories=4)
         payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
-        categories_list = Categories.objects.all()
         subcategories = SubCategories.objects.all()
         contact_form = ContactForm()
-
-        notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
 
         if request.GET.get('map-price'):
             min_price = request.GET.get('map-price').split(',')[0]
@@ -74,8 +70,7 @@ def listing_map(request):
             min_price = 0
             max_price = 1000
 
-        query = Listings.objects.filter(price__range=(min_price,
-                                                      max_price))
+        query = Listings.objects.filter(price__range=(min_price, max_price))
 
         if request.GET.get('trusted'):
             profile_obj_list = []
@@ -125,36 +120,13 @@ def listing_map(request):
                 print(e)
 
         listing_locations = json.dumps(listing_locations)
+        default_location = settings.DEFAULT_LOCATION
 
-        return render(request, 'frontend/plugs/map-visualization.html',
-                      {'listing_form': form, 'categories': categories_list, 'item_sub_categories': item_sub_categories,
+        return render(request, 'new_templates/map-visualization.html',
+                      {'listing_form': form, 'item_sub_categories': item_sub_categories,
                        'services_sub_categories': services_sub_categories, 'subcategories': subcategories,
                        'rideshare_sub_categories': rideshare_sub_categories,
                        'housing_sub_categories': housing_sub_categories,
                        'payment_form': payment_form, 'contact_form': contact_form,
-                       'notification_number': notification_number, 'listing_locations': listing_locations,
+                       'listing_locations': listing_locations, 'default_location': default_location,
                        'min_price': min_price, 'max_price': max_price})
-
-        # all_listings = Listings.objects.all()
-        #
-        # for each_listing in all_listings:
-        #     listing_locations.append({'lat': each_listing.user.profile.location.point.coords[1],
-        #                               'lng': each_listing.user.profile.location.point.coords[0],
-        #                               'seller': each_listing.user.profile.name,
-        #                               'seller_username': each_listing.user.username,
-        #                               'listing_id': each_listing.id,
-        #                               'price': int(each_listing.price),
-        #                               'title': each_listing.title,
-        #                               'listing_img': each_listing.photo.url if each_listing.photo else None,
-        #                               'profile_img': each_listing.user.profile.photo.url if each_listing.user.profile.photo else None})
-        #
-        # listing_locations = json.dumps(listing_locations)
-        #
-        # return render(request, 'frontend/plugs/map-visualization.html',
-        #               {'listing_form': form, 'categories': categories_list, 'item_sub_categories': item_sub_categories,
-        #                'services_sub_categories': services_sub_categories, 'subcategories': subcategories,
-        #                'rideshare_sub_categories': rideshare_sub_categories,
-        #                'housing_sub_categories': housing_sub_categories,
-        #                'payment_form': payment_form, 'contact_form': contact_form,
-        #                'notification_number': notification_number, 'listing_locations': listing_locations,
-        #                'min_price': min_price, 'max_price': max_price})

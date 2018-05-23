@@ -1,15 +1,17 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.conf import settings
+from django.utils import timezone
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
-from datetime import datetime
-from profile.models import (
-    Profile, Invitation, Settings, PasswordResetLink)
+
+from profile.models import Profile, Invitation, Settings, PasswordResetLink
 from general.models import EmailField
 from general.mail import send_mail, send_mail_to_admin
-from django.utils import timezone
+from general.util import rotate_image
+from general.forms import ReceiverInput
+from geo.util import build_location
+
 
 alphanumeric = RegexValidator(r'^[0-9a-zA-Z_\s]*$', 'Only alphanumeric characters are allowed.')
 
@@ -22,22 +24,32 @@ ERRORS = {
 }
 
 
+class PreRegistrationForm(forms.Form):
+    email = forms.EmailField(required=True)
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if Settings.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError(ERRORS['email_dup'])
+        return email
+
+
 class RegistrationForm(UserCreationForm):
     # Parent class has username, password1, and password2.
-
-    password1 = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={}))
-
-    password2 = forms.CharField(label="Password confirm", widget=forms.PasswordInput(attrs={}))
-
     first_name = forms.CharField(
         max_length=100, required=False, label=_("Name"), help_text=_(
             "Name displayed to other users. You can change this later."),
         widget=forms.TextInput(attrs={}))
 
-    email = forms.EmailField(
-        max_length=EmailField.MAX_EMAIL_LENGTH, label=_("Email"), help_text=_(
-            "The address to receive notifications from Villages."),
-        widget=forms.TextInput(attrs={}))
+    password1 = forms.CharField(label="Password", help_text=_("Desired password."),
+                                widget=forms.PasswordInput(attrs={}))
+
+    password2 = forms.CharField(label="Password confirm", widget=forms.PasswordInput(attrs={}))
+
+    # email = forms.EmailField(
+    #     max_length=EmailField.MAX_EMAIL_LENGTH, label=_("Email"), help_text=_(
+    #         "The address to receive notifications from Villages."),
+    #     widget=forms.TextInput(attrs={}))
     terms_of_service = forms.BooleanField(label='I agree with terms of service', required=True,
                                           widget=forms.CheckboxInput(attrs={'style': 'width: auto; box-shadow:none;'}))
 
@@ -47,13 +59,6 @@ class RegistrationForm(UserCreationForm):
             "Desired login name. You cannot change this.")
         self.fields['username'].widget = forms.TextInput(attrs={})
         self.fields['username'].validators = [alphanumeric]
-        self.fields['password1'].help_text = _("Desired password.")
-    
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if Settings.objects.filter(email__iexact=email).exists():
-            raise forms.ValidationError(ERRORS['email_dup'])
-        return email    
 
     def clean_username(self):
         # Adapted from UserCreationForm.clean_username.
@@ -65,7 +70,7 @@ class RegistrationForm(UserCreationForm):
             return username
         raise forms.ValidationError(
             _("A user with that username already exists."))
-    
+
     def save(self, location, language):
         data = self.cleaned_data
         user = super(RegistrationForm, self).save(commit=False)
@@ -130,7 +135,7 @@ class ForgotPasswordForm(forms.Form):
 
 class InvitationForm(forms.ModelForm):
     # TODO: Merge with EndorseForm somehow, into a common superclass?
-    
+
     class Meta:
         model = Invitation
         fields = ('to_email', 'message', 'endorsement_weight',
@@ -142,7 +147,7 @@ class InvitationForm(forms.ModelForm):
         self.fields['endorsement_weight'].widget = (
             forms.TextInput(attrs={'class': 'int spinner'}))
         self.fields['endorsement_weight'].min_value = 1        
-        
+
     def clean_to_email(self):
         to_email = self.cleaned_data['to_email']
         if Invitation.objects.filter(
@@ -160,14 +165,14 @@ class InvitationForm(forms.ModelForm):
         if self.instance.id:
             max_weight += self.instance.weight
         return max_weight
-        
+
     def clean_endorsement_weight(self):
         weight = self.cleaned_data['endorsement_weight']
         if self.from_profile.endorsement_limited and weight > self.max_weight:
             raise forms.ValidationError(
                 ERRORS['over_weight'] % self.max_weight)
         return weight
-    
+
     def save(self):
         invitation = super(InvitationForm, self).save(commit=False)
         invitation.from_profile = self.from_profile
@@ -184,7 +189,7 @@ class RequestInvitationForm(forms.Form):
         "Returns appropriate text for email sender field."
         data = self.cleaned_data
         return data.get('name'), data['email']
-    
+
     def send(self, to_profile=None):
         data = self.cleaned_data
         subject = "Villages.io Invitation Request"
@@ -199,6 +204,8 @@ class RequestInvitationForm(forms.Form):
 
 
 class ProfileForm(forms.ModelForm):
+    location = forms.CharField(required=False)
+
     class Meta:
         model = Profile
         fields = ('name', 'photo', 'header_image', 'job', 'description')
@@ -209,19 +216,40 @@ class ProfileForm(forms.ModelForm):
             # 'job': forms.TextInput(attrs={}),
         }
 
-    def save(self):
+    def __init__(self, *args, **kwargs):
+        self.user_agent = kwargs.pop('user_agent', None)
+        super(ProfileForm, self).__init__(*args, **kwargs)
+
+    def clean_photo(self):
+        photo = self.cleaned_data.get('photo')
+        new_photo = self.files.get('photo')
+        if new_photo:
+            user_agent = self.user_agent
+            if user_agent and (user_agent.device.family == 'iPhone' or user_agent.device.family == 'iPad'):
+                photo = rotate_image(new_photo)
+        return photo
+
+    def clean_header_image(self):
+        header_image = self.cleaned_data.get('header_image')
+        new_header_image = self.files.get('header_image')
+        if new_header_image:
+            user_agent = self.user_agent
+            if user_agent and (user_agent.device.family == 'iPhone' or user_agent.device.family == 'iPad'):
+                header_image = rotate_image(new_header_image)
+        return header_image
+
+    def save(self, commit=True):
+        location = self.cleaned_data.get('location')
+        if location:
+            self.instance.location = build_location(location)
         self.instance.set_updated()
-        return super(ProfileForm, self).save()
+        return super(ProfileForm, self).save(commit)
 
 
 class ContactForm(forms.Form):
-
     contact_recipient_name = forms.CharField(label='Recipients Name', required=True,
-                                     widget=forms.TextInput(attrs={'class': 'typeahead'}))
-
+                                             widget=ReceiverInput(attrs={'class': 'typeahead'}))
     message = forms.CharField(widget=forms.Textarea(attrs={'style': 'max-width: 100%; height:100px;'}))
-
-    data_profile = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     def send(self, sender, recipient, subject=None,
              template='contact_email.txt', extra_context=None):
@@ -239,14 +267,14 @@ class SettingsForm(forms.ModelForm):
     # username = forms.CharField(required=True, max_length=30, validators=[alphanumeric],
     #                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     # Email is required.
-    email = forms.EmailField(widget=forms.EmailInput(attrs={}),
+    email = forms.EmailField(widget=forms.EmailInput(),
                              max_length=EmailField.MAX_EMAIL_LENGTH)
 
     # endorsement_limited = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Settings
-        fields = ('email', 'send_notifications', 'send_newsletter', 'language')
+        fields = ('email', 'send_notifications', 'send_newsletter', 'feed_radius', 'language')
 
         widgets = {
             'language': forms.Select(attrs={

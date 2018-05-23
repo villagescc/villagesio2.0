@@ -99,3 +99,8 @@ ENV/
 
 # For local
 .villages_auth.json
+
+# Node
+node_modules/
+bower_components/
+static/new_template/node_modules/

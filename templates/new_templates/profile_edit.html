@@ -1,0 +1,179 @@
+{% extends 'new_templates/base.html' %}
+{% load staticfiles  i18n %}
+
+{% block content %}
+    <div class="app-view">
+
+        {% include 'new_templates/categories_sidebar.html' %}
+
+        <main class="app-main">
+
+            <div class="trust-content edit-profile">
+
+                <div class="row">
+                    <div class="col-12 col-xxl-8">
+
+                        <h2>Edit Profile</h2>
+                        <p>Your profile tells other community members about
+                            you, and lets them find you based on your interests and skills.
+                            Please mention anything that you wish to offer or bring to the
+                            community generally, so others will find you when they search
+                            for those things.</p>
+
+                        <span>
+                            <a href="{% url 'my_profile' %}" class="btn btn-info">
+                                {% trans 'View my profile' %}
+                            </a>
+                            <a class="btn btn-warning" href="{% url 'add_profile_tag' %}">Edit tags</a>
+                        </span>
+
+                        <div class="trust-data">
+                            <form id="trust-form" action="" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="receiver-box" id="div-recipient-name">
+                                    <h4 class="mt-1">Name</h4>
+                                    {{ form.name }}
+                                    <h4></h4>
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <label>&nbsp;</label>
+
+                                    <div class="profile-image">
+                                        <div class="input-block avatar-block">
+                                            <div class="alert alert-warning collapse" id="error_{{ form.photo }}"></div>
+                                            <div class="upload-error"></div>
+                                            <img class="camera-icon" src="{% static 'new_template/res/img/icons/camera.png' %}" alt="Camera">
+                                            <p class="browse-title">browse</p>
+                                            <input id="id_photo" name="photo" type="file">
+                                            {% if form.instance.photo %}
+                                            <img class="image-preview" src="{{ form.instance.photo.url }}" alt="photo">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <label></label>
+                                    <h4>Header image</h4>
+
+                                    <div class="profile-image">
+                                        <div class="input-block">
+                                            <div class="alert alert-warning collapse" id="error_{{ form.header_image }}"></div>
+                                            <div class="upload-error"></div>
+                                            <img class="camera-icon" src="{% static 'new_template/res/img/icons/camera.png' %}" alt="Camera">
+                                            <p class="browse-title">browse</p>
+                                            <input id="id_header_image" name="header_image" type="file">
+                                            {% if form.instance.header_image %}
+                                            <img class="image-preview" src="{{ form.instance.header_image.url }}" alt="Header image">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <h4>Job</h4>
+                                    {{ form.job }}
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <label for="description">Description</label>
+                                    {{ form.description }}
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <label for="location">Location</label>
+                                    <a href="{% url 'locator' %}" data-toggle="tooltip"
+                                       title="{{ request.location }}"><i
+                                            class="fa fa-location-arrow"></i>&nbsp&nbsp{{ request.location|truncatechars:"42" }}
+                                    </a>
+                                    <input id="autocomplete" name="location" placeholder="Enter your address"
+                                           onFocus="geolocate()" type="text">
+                                </div>
+                                <br>
+                                <div class="row" style="max-width: 600px;">
+                                    <div class="col-sm-6">
+                                        <input class="btn btn-std btn-cancel" type="button" value="Cancel">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input class="btn btn-std" id="save-trust" type="submit" value="Save Profile">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function () {
+    // Filereader for preview profile image, header image uploads
+    var $inputBlock = $('.input-block');
+
+    $inputBlock.on('change', '#id_photo', addImagePreview);
+    $inputBlock.on('change', '#id_header_image', addImagePreview);
+
+    function addImagePreview(e) {
+
+        //get FileList
+        var files = e.target.files;
+        var $this = $(this);
+
+        var $parent = $this.parents('.input-block');
+
+        //hide error
+        $parent.find('.upload-error').text('');
+        $parent.find('.upload-error').css('opacity', '0');
+
+        //if files are chosen
+        if (files.length) {
+            var file = files[0];
+            var fileSize = Math.round(file.size / 1024 / 1024 * 100) / 100;
+            var img, reader;
+
+            if (fileSize > 10) {
+                $parent.find('.upload-error').text('Please, load image less than 10MB.');
+                $parent.find('.upload-error').css('opacity', '1');
+                return;
+            }
+
+            //get file data
+            reader = new FileReader();
+
+            reader.onload = function (e) {
+
+                var fileData = e.target.result;
+
+                if (file.type.substr(0, 5) === 'image') {
+                    var $imagePreview = $parent.find('.image-preview');
+
+                    if ($imagePreview.length > 0) {
+                        $imagePreview.attr('src', fileData);
+                    } else {
+                        img = '<img class="image-preview" src="' + fileData + '" alt="preview">';
+                        $parent.append(img);
+                    }
+                } else {
+                    $parent.find('.upload-error').text('You should load an image here.');
+                    $parent.find('.upload-error').css('opacity', '1');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+});
+</script>
+
+    {% include 'new_templates/_location_autocomplete_script.html' %}
+
+{% endblock extra_js %}

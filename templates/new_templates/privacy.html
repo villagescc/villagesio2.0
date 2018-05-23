@@ -1,0 +1,119 @@
+{% extends 'new_templates/base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <div class="app-view">
+        <main class="app-main">
+            <div class="payment-content">
+                <div class="row">
+                    <div class="col-12 col-xxl-8">
+                        <h2>Privacy</h2>
+                        <div class="payment-data">
+                            <section id="how-it-works">
+                                <div class="page-wrapper">
+                                    <div class="padded-container">
+                                        <p>{% blocktrans %}Since Villages is meant for discovering people in your
+                                            area, most information you give is <strong>not private</strong>.
+                                            This includes:{% endblocktrans %}</p>
+
+                                        <ul>
+                                            <li>{% trans 'Your profile information' %}</li>
+                                            <li>{% trans 'Your posts' %}</li>
+                                            <li>{% blocktrans %}Endorsements given and received (these are only
+                                                available to registered users){% endblocktrans %}</li>
+                                            <li>{% trans 'Your overall acknowledgement balance' %}</li>
+                                        </ul>
+
+                                        <p>{% trans 'Things that are completely or relatively private:' %}</p>
+
+                                        <ul>
+                                            <li>{% trans 'Your email address' %}</li>
+                                            <li>{% trans 'The contents of any messages sent to other users' %}</li>
+                                            <li>{% trans 'Individual acknowledgement balances with other users' %}</li>
+                                            <li>{% trans 'Details of acknowledgements given and received' %}
+                                                <ul>
+                                                    <li>{% blocktrans %}When you send an acknowledgement through the
+                                                        network, the details are shared with users who are on the path
+                                                        travelled by the acknowledgement from sender to recipient.
+                                                    {% endblocktrans %}</li>
+                                                    <li>{% blocktrans %}Acknowledgement details may be available to
+                                                        more users in the future due to upcoming features.
+                                                    {% endblocktrans %}</li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+
+                                        <p>{% blocktrans %}Please do not use Villages thinking that other users will
+                                            not be able to see details of your activities. Once Villages has grown
+                                            to a certain number of users, we may add the option to keep more of
+                                            your details private. However, to start with, we're building a service
+                                            for people who want to put themselves out there and connect with
+                                            others in their community.{% endblocktrans %}</p>
+
+                                        <p>{% blocktrans %}If you want to try a Ripple system with more privacy,
+                                            please check out <a href="http://ripplepay.com/">Ripplepay</a>.
+                                            You may find it difficult to meet anybody there though
+                                            :){% endblocktrans %}</p>
+
+                                        <h3>{% trans 'Anonymous Visitors' %}</h3>
+
+                                        <p>{% blocktrans %}Anonymous visitors to the site, who are not registered
+                                            or logged in, can see your profile and your posts, but not your
+                                            endorsements or acknowledgements. {% endblocktrans %}</p>
+
+                                        <h3>{% trans 'Search Engines' %}</h3>
+
+                                        <p>{% blocktrans %}Villages requests that search engines not index any of
+                                            your personal data, such as your profile or your posts, so it won't
+                                            show up on Google or any other respectable search engine, even if
+                                            anonymous visitors to the site can view it.{% endblocktrans %}</p>
+
+                                        <h3>{% trans 'Real Names &amp; Handles' %}</h3>
+
+                                        <p>{% blocktrans %}Villages does <strong>not</strong> require you to
+                                            use your real name or reveal your real-world identity in any way,
+                                            so feel free to use any handle that your friends can recognize.
+                                        {% endblocktrans %}</p>
+
+                                        <h3>{% trans 'Tracking' %}</h3>
+
+                                        <p>{% blocktrans %}Villages will not do creepy things like track your
+                                            every click or sell your data to third parties. That isn't who
+                                            we are.{% endblocktrans %}</p>
+
+                                        <hr>
+                                        {% url 'contact_us' as contact_us %}
+                                        <p>{% blocktrans %}If you have any concerns about privacy, please
+                                            <a href="{{ contact_us }}">send us feedback</a>.{% endblocktrans %}</p>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- .app-main -->
+
+    </div>
+
+    {% include 'new_templates/footer.html' %}
+
+{% endblock content %}
+
+{% block extra_js %}
+
+    <script>
+        $(document).ready(function () {
+            $("#primary-navbar").on("show.bs.collapse", function () {
+                $(".bg-menu-overlay").addClass("show");
+            });
+            $("#primary-navbar").on("hidden.bs.collapse", function () {
+                $(".bg-menu-overlay").removeClass("show");
+            });
+        });
+    </script>
+
+{% endblock extra_js %}

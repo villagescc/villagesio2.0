@@ -9,11 +9,24 @@ var map;
 
 function initMap() {
 
-     var mapOptions;
-        if(localStorage.mapLat!=null && localStorage.mapLng!=null && localStorage.mapZoom!=null){
+    var mapOptions;
+
+    // Default to Vancouver.
+    // var pos = {lat: 49.248523, lng: -123.108};
+
+    // check if has coords in LocalStorage
+    var storeLat = localStorage.getItem('mapLat'),
+        storeLng = localStorage.getItem('mapLng'),
+        storeZoom = localStorage.getItem('mapZoom');
+
+    console.log(storeLat);
+
+
+    if(storeLat && storeLng && storeZoom) {
+        console.log('local');
             mapOptions = {
-                center: new google.maps.LatLng(localStorage.mapLat,localStorage.mapLng),
-                zoom: parseInt(localStorage.mapZoom),
+                center: new google.maps.LatLng(storeLat, storeLng),
+                zoom: parseInt(storeZoom),
                 scaleControl: true,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
@@ -25,14 +38,14 @@ function initMap() {
                 scaleControl: true,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
-        }
+    }
 
     var pos = {lat: 21.289373, lng: -157.917480};
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
-            call_area_map();
+            // call_area_map();
             add_listener_map();
         }, function() {
             console.log('Error: The Geolocation service failed.');
@@ -71,16 +84,17 @@ function initMap() {
 
 function call_area_map() {
     var value = $('#input_search').val();
+    console.log(map.getBounds());
     var area_map = {
-        lat_min: map.getBounds().getSouthWest().lat(),
-        lat_max: map.getBounds().getNorthEast().lat(),
-        lng_min: map.getBounds().getSouthWest().lng(),
-        lng_max: map.getBounds().getNorthEast().lng(),
-        min_price: priceSlider.slider('getValue')[0],
-        max_price: priceSlider.slider('getValue')[1],
-        query: value
+        // lat_min: map.getBounds().getSouthWest().lat(),
+        // lat_max: map.getBounds().getNorthEast().lat(),
+        // lng_min: map.getBounds().getSouthWest().lng(),
+        // lng_max: map.getBounds().getNorthEast().lng(),
+        // min_price: priceSlider.slider('getValue')[0],
+        // max_price: priceSlider.slider('getValue')[1],
+        // query: value
     };
-    get_wifi_data(area_map)
+    get_wifi_data(area_map);
 }
 
 function add_listener_map() {
@@ -92,11 +106,10 @@ function add_listener_map() {
 
 $('#search_wifi').on('click keypress', function (e) {
     e.preventDefault();
-    call_area_map()
+    call_area_map();
 });
 
 function get_wifi_data(area_map) {
-
     var locations = [];
     $.each(listings_locations, function (index, element) {
         var latlong = {
@@ -129,7 +142,7 @@ function get_wifi_data(area_map) {
         marker_content.listing_img = location['listing_img'];
         marker_content.profile_img = location['profile_img'];
         marker_content.listing_id = location['listing_id'];
-        return marker_content
+        return marker_content;
     });
 
     var oms = new OverlappingMarkerSpiderfier(map, {

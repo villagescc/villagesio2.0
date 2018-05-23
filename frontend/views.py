@@ -1,23 +1,21 @@
-import ujson
-from django.http.response import HttpResponse, JsonResponse
+from django.http.response import HttpResponse
+from django.http import Http404
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpRequest
+from django.views.generic import TemplateView
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.conf import settings
+from django.template.loader import render_to_string
 # Forms
-from accounts.forms import UserForm
 from listings.forms import ListingsForms
 from listings.models import LISTING_TYPE_CHECK
 from feed.forms import FeedFilterForm, DATE_FORMAT
 from notification.models import Notification
-from relate.forms import Endorsement, EndorseForm, AcknowledgementForm
+from relate.forms import EndorseForm, AcknowledgementForm
 from profile.forms import ContactForm
 from frontend.forms import FormListingsSettings
 from django_user_agents.utils import get_user_agent
 from profile.templatetags.profile import *
-from django.core.signals import request_finished
 # models
-from django.contrib.gis.db.models import Q
 from listings.models import Listings
 from categories.models import Categories, SubCategories
 
@@ -114,7 +112,7 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
     else:
         raise Exception(unicode(form.errors))
     if feed_items:
-        next_page_date = feed_items[-1].date
+        next_page_date = list(feed_items)[-1].date
     else:
         next_page_date = None
     url_params = request.GET.copy()
@@ -126,8 +124,6 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
 
     number_of_pages = len(total_items) / settings.FEED_ITEMS_PER_PAGE
 
-    listing_form = ListingsForms()
-    categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)
     services_sub_categories = SubCategories.objects.all().filter(categories=2)
     rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
@@ -135,17 +131,14 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
     trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
     payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
     contact_form = ContactForm()
-    notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
 
     context = locals()
     context.update(extra_context or {})
-    return render(request, 'new_templates/05_PeopleListing_001a.html',
+    return render(request, 'new_templates/people_listing.html',
                   {'url_params': url_params, 'feed_items': feed_items,
                    'next_page_date': next_page_date, 'context': context,
-                   'form': form, 'listing_form': listing_form,
-                   'poster': poster, 'do_filter': do_filter,
-                   'remaining_count': remaining_count,
-                   'item_type': item_type,
+                   'form': form, 'poster': poster, 'do_filter': do_filter,
+                   'remaining_count': remaining_count, 'item_type': item_type,
                    'url_param_str': url_param_str,
                    'next_page_param_str': next_page_param_str,
                    'extra_context': extra_context,
@@ -154,40 +147,47 @@ def people_listing(request, type_filter=None, item_type=None, template=None, pos
                    'services_sub_categories': services_sub_categories,
                    'rideshare_sub_categories': rideshare_sub_categories,
                    'housing_sub_categories': housing_sub_categories,
-                   'categories': categories_list, 'trust_form': trust_form,
-                   'payment_form': payment_form, 'contact_form': contact_form,
-                   'notification_number': notification_number,
-                   'number_of_pages': number_of_pages})
+                   'trust_form': trust_form, 'payment_form': payment_form,
+                   'contact_form': contact_form, 'number_of_pages': number_of_pages})
 
 
-def parse_products(products):
-    products_list = []
-    for each_product in products:
-        profile_image = profile_image_url(each_product.profile, '80x80')
-        product_image = product_image_url(each_product, '320x320')
-        products_list.append({'listing_id': each_product.id,
-                              'product_image': product_image,
-                              'profile_image': profile_image,
-                              'listing_type': each_product.listing_type,
-                              'profile_username': each_product.user.username,
-                              'price': str(each_product.price) if each_product.price else '0',
-                              'title': each_product.title[:80],
-                              'description': each_product.description[:100],
-                              'tags': each_product.tag.all() if each_product.tag else None})
-    return products_list
+def product_infinite_scroll(request, type_filter=None):
+    if request.is_ajax():
+        offset = int(request.GET.get('offset', settings.LISTING_ITEMS_PER_PAGE))
+        start_session_offset = request.session.get('offset', 0)
+        end_session_offset = start_session_offset + offset
+
+        form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter,
+                                                     start_limit=start_session_offset, end_limit=end_session_offset)
+        if form_listing_settings.is_valid():
+            listing_items, remaining_count = form_listing_settings.get_results()
+            listing_items = listing_items.prefetch_related('user__profile', 'profile', 'tag')
+        else:
+            listing_items = []
+
+        parsed_products = ''
+        for each_product in listing_items:
+            parsed_products += render_to_string('new_templates/listing_item.html',
+                                                {'request': request, 'item': each_product})
+
+        if len(listing_items) < offset or not listing_items:
+            end_session_offset = 0
+        request.session['offset'] = end_session_offset
+        return HttpResponse(parsed_products)
+    else:
+        raise Http404
 
 
-def product_infinite_scroll(request, offset=settings.LISTING_ITEMS_PER_PAGE):
-    start_session_offset = request.session.get('offset', 0)
-    end_session_offset = start_session_offset + int(offset)
+class HomePage(TemplateView):
+    """
+    url: /
+    """
+    template_name = 'new_templates/home_page.html'
 
-    products = Listings.objects.order_by('-updated')[start_session_offset:end_session_offset]
-    parsed_products = parse_products(products)
-
-    if not products:
-        end_session_offset = 0
-    request.session['offset'] = end_session_offset
-    return HttpResponse(ujson.dumps(parsed_products), content_type='application/json')
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('frontend:home'))
+        return super(HomePage, self).get(request, *args, **kwargs)
 
 
 def home(request, type_filter=None, item_type=None, template=None, poster=None, recipient=None,
@@ -195,9 +195,7 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     """
     url: /home
     """
-    # max_amount = ripple.max_payment(request.profile, recipient)
     request.session['offset'] = settings.LISTING_ITEMS_PER_PAGE
-    sign_in_form = UserForm
     user_agent = get_user_agent(request)
     if user_agent.is_mobile:
         user_agent_type = 'mobile'
@@ -218,11 +216,10 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter, do_filter)
     if form_listing_settings.is_valid():
         listing_items, remaining_count = form_listing_settings.get_results()
-
-    if listing_items:
-        next_page_date = listing_items[-1].date
+        listing_items = listing_items.select_related('user__profile', 'profile').prefetch_related('tag')
+        next_page_date = list(listing_items)[-1].date if listing_items else None
     else:
-        next_page_date = None
+        listing_items = remaining_count = next_page_date = None
     url_params = request.GET.copy()
     url_params.pop('d', None)
     if next_page_date:
@@ -234,15 +231,12 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     contact_form = ContactForm()
 
     form = ListingsForms()
-    categories_list = Categories.objects.all()
     subcategories = SubCategories.objects.all()
     if type_filter in LISTING_TYPE_CHECK:
         # is listing_type filter
         item_type_name = type_filter
     else:
         try:
-            SubCategories.objects.filter(id=type_filter)
-            # is subcategory id
             item_type_name = SubCategories.objects.filter(id=type_filter).values('sub_categories_text')[0]['sub_categories_text']
         except:
             # is category filter
@@ -253,19 +247,16 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
     housing_sub_categories = SubCategories.objects.all().filter(categories=4)
 
-    notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
-
-    return render(request, 'frontend/home.html', {
+    return render(request, 'new_templates/product_list.html', {
         'item_sub_categories': item_sub_categories, 'subcategories': subcategories,
         'services_sub_categories': services_sub_categories, 'rideshare_sub_categories': rideshare_sub_categories,
         'housing_sub_categories': housing_sub_categories, 'user_agent_type': user_agent_type,
-        'people': people, 'listing_form': form, 'categories': categories_list,
-        'trusted_only': trusted_only, 'trust_form': trust_form, 'payment_form': payment_form,
+        'people': people, 'listing_form': form, 'trusted_only': trusted_only,
+        'trust_form': trust_form, 'payment_form': payment_form,
         'contact_form': contact_form, 'form_listing_settings': form_listing_settings,
         'item_type_name': item_type_name, 'is_listing': True, 'url_params': url_params,
         'listing_items': listing_items, 'next_page_date': next_page_date, 'remaining_count': remaining_count,
-        'next_page_param_str': next_page_param_str, 'listing_type_filter': type_filter,
-        'notification_number': notification_number, 'sign_in_form': sign_in_form})
+        'next_page_param_str': next_page_param_str, 'listing_type_filter': type_filter})
 
 
 def map_visualization(request):
@@ -273,20 +264,18 @@ def map_visualization(request):
     if request.session.get('offset'):
         request.session['offset'] = 0
     form = ListingsForms()
-    categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)
     services_sub_categories = SubCategories.objects.all().filter(categories=2)
     rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
     housing_sub_categories = SubCategories.objects.all().filter(categories=4)
     payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
-    categories_list = Categories.objects.all()
     subcategories = SubCategories.objects.all()
     contact_form = ContactForm()
 
     notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
 
     return render(request, 'frontend/plugs/map-visualization.html',
-                  {'listing_form': form, 'categories': categories_list, 'item_sub_categories': item_sub_categories,
+                  {'listing_form': form, 'item_sub_categories': item_sub_categories,
                    'services_sub_categories': services_sub_categories, 'subcategories': subcategories,
                    'rideshare_sub_categories': rideshare_sub_categories,
                    'housing_sub_categories': housing_sub_categories,

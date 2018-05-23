@@ -10,15 +10,17 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 from django.contrib.gis.db.models import GeoManager
 from django.db.models import Q
-from general.models import VarCharField, EmailField
-from geo.models import Location
-import ripple.api as ripple
-from general.util import cache_on_object
-from general.mail import send_mail, email_str, send_mail_from_system
 from django.utils import translation
 from django.utils.translation import get_language_info as lang_info
 from django.utils.translation import ugettext_lazy as _
+
+from general.models import VarCharField, EmailField
+from geo.models import Location
 from tags.models import Tag
+from general.util import cache_on_object, reverse_querystring
+from general.mail import send_mail, email_str, send_mail_from_system
+import ripple.api as ripple
+
 
 CODE_LENGTH = 20
 CODE_CHARS = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -197,6 +199,17 @@ class Profile(models.Model):
         Returns '"Name" <email>' suitable for email headers.
         """
         return email_str(self.name, self.email)
+
+    def get_trust_link(self):
+        return reverse_querystring('blank_trust_user', query_kwargs={'recipient_name': self.username})
+
+    def get_payment_link(self):
+        return reverse_querystring('blank_payment_user', query_kwargs={'recipient_name': self.username})
+
+    def get_contact_link(self):
+        return reverse_querystring('undefined_contact', query_kwargs={'recipient_name': self.username})
+
+
     
     @classmethod
     def get_by_id(cls, id):
@@ -222,6 +235,15 @@ post_delete.connect(Profile.post_delete, sender=Profile,
 
 class Settings(models.Model):
     "Profile settings."
+    INFINITE_RADIUS = -1
+    FEED_RADIUS_CHOICES = (
+        (INFINITE_RADIUS, 'Anywhere'),
+        (1000, _('Within 1 km')),
+        (5000, _('Within 5 km')),
+        (10000, _('Within 10 km')),
+        (50000, _('Within 50 km')),
+    )
+
     profile = models.OneToOneField(Profile, related_name='settings', on_delete=models.CASCADE)
     email = EmailField(blank=True)
     endorsement_limited = models.BooleanField(
@@ -238,7 +260,7 @@ class Settings(models.Model):
     language = VarCharField(
         _("Language"), default="en", max_length=8, choices=langs)
     # Sticky form settings.
-    feed_radius = models.IntegerField(null=True, blank=True)
+    feed_radius = models.IntegerField(null=True, blank=True, choices=FEED_RADIUS_CHOICES)
     feed_trusted = models.BooleanField(default=False)
 
     def __unicode__(self):

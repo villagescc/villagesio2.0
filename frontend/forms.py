@@ -1,28 +1,23 @@
 from datetime import datetime
-from django.forms import ModelForm
-from django.forms.widgets import Select, NumberInput
 from django import forms
-from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
-from listings.models import Listings
+from listings.models import Listings, LISTING_TYPE
+from profile.models import Settings
 
-INFINITE_RADIUS = -1
+INFINITE_RADIUS = Settings.INFINITE_RADIUS
 
-RADIUS_CHOICES = (
-    (1000, _('Within 1 km')),
-    (5000, _('Within 5 km')),
-    (10000, _('Within 10 km')),
-    (50000, _('Within 50 km')),
-    (INFINITE_RADIUS, _('Anywhere')),
-)
+RADIUS_CHOICES = Settings.FEED_RADIUS_CHOICES
 
 RADII = [rc[0] for rc in RADIUS_CHOICES]
-DEFAULT_RADIUS = 5000
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 
 
 class FormListingsSettings(forms.Form):
+    listing_type = forms.TypedChoiceField(
+        required=False, choices=(('', 'All listings'),) + LISTING_TYPE, coerce=str, empty_value='',
+        widget=forms.Select(attrs={'class': 'filter-input',
+                                   'id': 'inputListingType'}))
 
     d = forms.DateTimeField(
         label="Up to date", required=False, input_formats=[DATE_FORMAT])
@@ -39,15 +34,19 @@ class FormListingsSettings(forms.Form):
 
     radius = forms.TypedChoiceField(
         required=False, choices=RADIUS_CHOICES, coerce=int, empty_value=None,
-        widget=forms.Select(attrs={'class': 'form-control'}))
+        widget=forms.Select(attrs={'class': 'filter-input'}))
 
-    def __init__(self, data, profile, location=None, type_filter=None, *args, **kwargs):
-        self.profile, self.location, self.type_filter, self.listing_type = (profile, location, type_filter, data.get('listing_type'))
+    def __init__(self, data, profile, location=None, type_filter=None, start_limit=0,
+                 end_limit=settings.LISTING_ITEMS_PER_PAGE, *args, **kwargs):
+        self.profile, self.location, self.type_filter, self.listing_type, self.start_limit, self.end_limit\
+            = (profile, location, type_filter, data.get('listing_type'), start_limit, end_limit)
         data = data.copy()
         if 'radius' not in data:
-            default_radius = (profile and profile.settings.feed_radius or DEFAULT_RADIUS)
+            default_radius = (profile and profile.settings.feed_radius or settings.DEFAULT_RADIUS)
             data['radius'] = default_radius
             self._explicit_radius = False
+        else:
+            self._explicit_radius = True
         super(FormListingsSettings, self).__init__(data, *args, **kwargs)
 
     def get_results(self):
@@ -64,10 +63,11 @@ class FormListingsSettings(forms.Form):
                                                                     trusted_only=trusted, radius=query_radius,
                                                                     up_to_date=date, request_profile=self.profile,
                                                                     type_filter=self.type_filter,
-                                                                    listing_type=self.listing_type)
+                                                                    listing_type=self.listing_type,
+                                                                    start_limit=self.start_limit,
+                                                                    end_limit=self.end_limit)
             if (not (self.profile and self.profile.settings.feed_radius) and
-                not self._explicit_radius and
-                len(items) < settings.LISTING_ITEMS_PER_PAGE and query_radius != None):
+                not self._explicit_radius and len(items) < settings.LISTING_ITEMS_PER_PAGE and query_radius != None):
                 query_radius = next_query_radius(query_radius)
                 self.data['radius'] = query_radius
                 if query_radius == INFINITE_RADIUS:

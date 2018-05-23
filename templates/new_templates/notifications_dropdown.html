@@ -1,0 +1,18 @@
+{% load staticfiles humanize %}
+
+{% for notification in notifications %}
+    <div class="dropdown-item">
+        <div class="note-item">
+            <span>New </span>
+            <span class="green">{{ notification.notification_type|lower }}</span>
+            <span>from </span>
+            <a href="{{ notification.notifier.get_absolute_url }}">{{ notification.notifier.username }}</a>
+            {% if notification.amount %}
+                <span class="red"> ({{ notification.amount }} V.H.)</span>
+            {% endif %}
+            <span> {{ notification.created_at|naturaltime }}</span>
+        </div>
+    </div>
+{% empty %}
+    <div class="dropdown-no-items">You don't have new notifications</div>
+{% endfor %}

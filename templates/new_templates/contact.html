@@ -1,0 +1,167 @@
+{% extends 'new_templates/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="col-tab-12 col-lg-8 offset-lg-2">
+            <div class="form-content">
+                <div class="form-header">
+                    <h5 class="form-title">Contact</h5>
+                    <p>Contact any person</p>
+                </div>
+                <div class="form-body">
+
+                    <form class="form-container contact-form" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% include 'new_templates/form.html' %}
+
+                        <div class="col-sm-12 col-md-6 offset-md-3">
+                            <button class="btn-save" style="width:100%">Send</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+
+<script src="{% static 'assets/typeahead.js/typeahead.jquery.min.js' %}"></script>
+<script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>
+
+<script>
+    var recipients = new Bloodhound({
+        datumTokenizer: function (datum) {
+            return Bloodhound.tokenizers.whitespace(datum.value);
+        },
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: {
+            wildcard: '%QUERY',
+            url: "{% url 'get_recipients_data' %}?query=%QUERY",
+            transform: function (response) {
+                return $.map(response.result, function (recipient) {
+                    $('#id_contact_recipient_name').attr("data-profile-selected", recipient.username);
+                    return {
+                        value: recipient.username,
+                        suggest: recipient
+                    };
+                });
+            }
+        }
+
+    });
+    $('#id_contact_recipient_name').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 0
+        },
+        {
+            display: 'value',
+            source: recipients,
+            limit: 20,
+            templates: {
+                suggestion: function (data) {
+                    return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
+                }
+            }
+        });
+
+
+    $("#id_contact_recipient_name").bind('typeahead:change typeahead:selected change', function (e) {
+
+        var selectedUser,
+            $input = $(this),
+            $recieverBox = $('#div-profile-photo');
+
+        // hide contact data when empty input
+        if (!$input.attr("data-profile-selected") || !$input.val()) {
+            $recieverBox.find('#name-profile-image').text('');
+            $recieverBox.find('.recipient-link').attr('href', '#');
+            $recieverBox.find('#profile-image').attr('src', '');
+            $recieverBox.attr('hidden', true);
+            return;
+        };
+
+        // prevent contact double load
+        if ($input.val() === $recieverBox.find('#name-profile-image').text()) {
+            return;
+        }
+
+        if (e.type === 'typeahead:selected') {
+            selectedUser = $input.val();
+            $input.attr("data-profile-selected", selectedUser);
+        } else {
+            selectedUser = $("#id_contact_recipient_name").attr("data-profile-selected");
+        }
+
+        $.ajax({
+            url: '/get_user_photo/' + selectedUser,
+            type: 'POST',
+            data: {'profile_username': selectedUser},
+            beforeSend: function (xhr) {
+                $('#spin-modal').fadeIn();
+                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (e) {
+
+                $("#id_weight").val('');
+                $("#id_text").val('');
+                $("#id_referral").prop('checked', false);
+
+                if (e['data']['error']) {
+                    $('#error-modal-alert').text(e["data"]["error_message"]);
+                    $('#spin-modal').fadeOut();
+                    $('#error-modal').modal("show");
+                    location.reload();
+                }
+                if (e['data']['has_trust']) {
+                    $("#id_weight").val(e['data']['credit_limit']);
+                    $("#id_text").val(e['data']['text']);
+                    if (e['data']['refer']) {
+                        $("#id_referral").prop('checked', true);
+                    }
+                }
+                $recieverBox.attr("hidden", false);
+                $('#div-profile-image .recipient-link').attr('href', '/profiles/' + selectedUser);
+                $('#profile-image').attr("src", e['data']['profile_photo_path']);
+                $('#name-profile-image').text(e['data']['recipient']);
+                $('#spin-modal').fadeOut();
+            },
+            error: function (e) {
+                if (e.status === 500) {
+                    showInternalServerError();
+                    $('#spin-modal').fadeOut();
+                }
+            }
+        });
+    });
+
+    $("form.contact-form").submit(function (e) {
+        var $errorModal = $('#error-modal');
+
+        $('#spin-modal').fadeIn();
+
+        // check whether all fields are filled
+        if ($("#id_contact_recipient_name").val() == '') {
+            e.preventDefault();
+            $errorModal.find('#error-modal-alert').text('Recipient is invalid.');
+            $errorModal.modal();
+        } else if ($(".id_message #id_message").val() == '') {
+            e.preventDefault();
+            $errorModal.find('#error-modal-alert').text('Please enter message text.');
+            $errorModal.modal();
+        } else {
+            $("#payment-form").submit();
+        }
+
+        $('#spin-modal').fadeOut();
+    });
+</script>
+
+
+{% endblock extra_js %}

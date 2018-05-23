@@ -29,7 +29,10 @@ def send_mail(subject, sender, recipient, template, context):
     
     msg = EmailMessage(subject=subject, body=body, from_email=from_email_str,
                        to=[to_email_str], reply_to=[sender_email], headers=headers)
-    msg.send()
+    try:
+        msg.send()
+    except Exception as e:
+        pass
 
     translation.activate(old_language)
 
@@ -84,6 +87,7 @@ def email_str(name, email):
         return u'"%s" <%s>' % (name, email)
     else:
         return email
+
 
 def is_valid_email(email):
     try:

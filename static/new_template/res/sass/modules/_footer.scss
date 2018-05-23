@@ -50,15 +50,23 @@
         top: 100%;
         left: 50%;
         @include crossTransform(translateX(-50%));
-        font-size: 0.75em;
-        color: #203234;
-        opacity: 0.34;
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        & span {
+        & span,
+        a {
+          font-size: 0.75em;
+          color: #203234;
+          opacity: 0.34;
           padding: 0 1em;
+        }
+        a {
+          transition: all 0.2s ease;
+          &:hover {
+            opacity: 1;
+            color: #166d89;
+          }
         }
       }
     }

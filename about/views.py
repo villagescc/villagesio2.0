@@ -7,16 +7,17 @@ MESSAGES = {
     'feedback_sent': _("Thank you for your feedback."),
 }
 
+
 def how_it_works(request):
-    return render(request, 'how_it_works.html')
+    return render(request, 'new_templates/how_it_works.html')
 
 
 def motivation(request):
-    return render(request, 'motivation.html')
+    return render(request, 'new_templates/motivation.html')
 
 
 def privacy(request):
-    return render(request, 'privacy.html')
+    return render(request, 'new_templates/privacy.html')
 
 
 def developers(request):
@@ -33,13 +34,16 @@ def contact_us(request):
             form = UserFeedbackForm(request.profile, request.POST)
         else:
             form = AnonymousFeedbackForm(request.POST)
-        if form.is_valid():
-            form.send()
-            messages.info(request, MESSAGES['feedback_sent'])
-            return redirect('home')
+
+        if 'cancel' in request.POST or form.is_valid():
+            if form.is_valid():
+                form.send()
+                messages.info(request, MESSAGES['feedback_sent'])
+            return redirect('frontend:home')
+
     else:
         if request.profile:
             form = UserFeedbackForm(request.profile)
         else:
             form = AnonymousFeedbackForm()
-    return render(request, 'feedback.html', {'form': form})
+    return render(request, 'new_templates/feedback.html', {'form': form})

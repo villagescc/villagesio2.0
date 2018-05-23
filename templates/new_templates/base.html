@@ -1,0 +1,157 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Villages IO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:url" content="https://villages.io"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="VILLAGES.IO - Barter Exchange Network"/>
+    <meta property="og:description" content="Exchange Trading System and Marketplace. Trade in 'Village Hours'
+    Credit Backed by Your Network's Services. Everyone has value to exchange!"/>
+    <meta property="og:image" content="https://villages.io/static/images/logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <link rel="stylesheet" href="{% static 'new_template/res/css/style.css' %}" type="text/css" media="all"/>
+
+    <!-- Font-awesome -->
+    <link rel="stylesheet" href="{% static 'assets/tether/css/tether.css' %}">
+    <link href="{% static 'stylesheets/main.css' %}" rel="stylesheet">
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/bootstrap-tagsinput/dist/bootstrap-tagsinput.css' %}" rel="stylesheet">
+    <link type="text/css" media="screen" rel="stylesheet" href="{% static 'css/responsive-tables.css' %}"/>
+    <link href="{% static 'css/home-toolbar.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:700" rel="stylesheet">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="{% static 'images/favicon/apple-icon-57x57.png' %}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'images/favicon/apple-icon-60x60.png' %}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'images/favicon/apple-icon-72x72.png' %}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'images/favicon/apple-icon-76x76.png' %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'images/favicon/apple-icon-114x114.png' %}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'images/favicon/apple-icon-120x120.png' %}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'images/favicon/apple-icon-144x144.png' %}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{% static 'images/favicon/apple-icon-152x152.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-icon-180x180.png' %}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/favicon/android-icon-192x192.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'images/favicon/favicon-96x96.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon/favicon-16x16.png' %}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- bootstrap-slider -->
+    <link href="{% static 'seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css' %}" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="{% static 'js/jquery.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/jquery.form.min.js' %}" type="text/javascript"></script>
+    <!-- Popper -->
+    <script src="{% static 'js/popper.js' %}" type="text/javascript"></script>
+    <!-- Bootstrap -->
+    <script src="{% static 'js/bootstrap.js' %}"
+            type="text/javascript"></script>
+
+    <script defer src="{% static 'js/brands.min.js' %}"></script>
+
+    <!-- Custom jQuery -->
+    <script src="{% static 'new_template/res/js/index.js' %}" type="text/javascript"></script>
+
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/chart.js' %}"></script>
+    <script src="{% static 'js/toastr.js' %}"></script>
+    <script src="{% static 'js/bootstrap-switch.min.js' %}"></script>
+    <script src="{% static 'js/jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
+
+    <script src="{% static 'js/custom.js' %}"></script>
+    <script src="{% static 'common.js' %}"></script>
+    <script src="{% static 'geo.js' %}"></script>
+    <script src="{% static 'assets/bootstrap-tagsinput/dist/bootstrap-tagsinput.js' %}"></script>
+    <script defer src="{% static 'js/fontawesome.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQAqenEQSDy5T5KNnyXBwOc-GmvSB8TQA"></script>
+
+    <!-- End custom jQuery -->
+
+    {% block extra_css %}{% endblock extra_css %}
+
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '492492537748359',
+                status: true,
+                cookie: true,
+                xfbml: true,
+                version: 'v2.9'
+            });
+            FB.AppEvents.logPageView();
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+</head>
+<body>
+{% include 'new_templates/modal.html' %}
+{% include 'new_templates/listing_modal.html' %}
+{% include 'new_templates/payment-loading-modal.html' %}
+{% include 'new_templates/error-modal.html' %}
+{% include 'new_templates/templates.html' %}
+
+{% include 'new_templates/header.html' %}
+{% include 'messages.html' %}
+
+{% block content %}{% endblock content %}
+<div id="spin-modal" class="collapse">
+    <div class="back-spin">
+        <i class="fa fa-refresh fa-spin fa-4x" style="z-index: 10"></i>
+    </div>
+</div>
+<script>
+    $(document).ready(function (){
+        $('.spin').click(function () {
+            $('#spin-modal').fadeIn();
+        });
+    });
+</script>
+
+<script>
+    window.intergramId = "-164920727";
+    window.intergramCustomizations = {
+        titleClosed: 'Live Support',
+        titleOpen: 'Live Support',
+        introMessage: 'Please let us know your email address and about your experience. We will get back to you as soon as we can.',
+        autoResponse: 'Please wait for support team.',
+        autoNoResponse: 'No one is currently available. Please leave your email address and a detailed message. We can get back to you as soon as possible.',
+        mainColor: "#2b5886",
+        alwaysUseFloatingButton: false // Use the mobile floating button also on large screens
+    };
+</script>
+<script id="intergram" type="text/javascript" src="https://www.intergram.xyz/js/widget.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108433179-1"></script>
+<script> window.dataLayer = window.dataLayer ||
+    [];
+
+function gtag() {
+    dataLayer.push(arguments);
+}
+
+gtag('js', new Date());
+gtag('config', 'UA-108433179-1');
+</script>
+
+{% block extra_js %}{% endblock extra_js %}
+
+</body>
+</html>

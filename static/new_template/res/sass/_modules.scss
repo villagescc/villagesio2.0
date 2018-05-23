@@ -2,6 +2,7 @@
 @import 'modules/footer';
 @import 'modules/home';
 @import 'modules/sidebar';
+@import 'modules/registration';
 @import 'modules/activities/search-results';
 @import 'modules/activities/trust-records';
 @import 'modules/activities/new-post';
@@ -9,3 +10,5 @@
 @import 'modules/activities/payment-content';
 @import 'modules/activities/trust-content';
 @import 'modules/activities/transaction-history';
+@import 'modules/activities/modals';
+@import 'modules/activities/notifications';

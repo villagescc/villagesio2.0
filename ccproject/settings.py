@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 import elasticsearch
 import ujson
+from envparse import env
 from datetime import timedelta
 from database.databases import Database
 from database.connection_strings import POSTGRESQL
@@ -27,50 +28,29 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['villages.io']
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'ccproject', 'locale/'),
 )
 
-AUTH_LOCATION = '/home/ubuntu/.villages_auth.json'
+if os.path.isfile('.env'):
+    env.read_envfile('.env')
 
-if os.path.exists(AUTH_LOCATION):
-    auth_data = ujson.loads(open(AUTH_LOCATION).read())
-
-    villages_db_user = auth_data['villages']['db_user']
-    villages_db_pass = auth_data['villages']['db_pass']
-    villages_db_name = auth_data['villages']['db_name']
-    ripple_db_user = auth_data['ripple']['db_user']
-    ripple_db_pass = auth_data['ripple']['db_pass']
-    ripple_db_name = auth_data['ripple']['db_name']
-    mail_user = auth_data['mail']['mail_user']
-    mail_password = auth_data['mail']['mail_pass']
-    secret_key = auth_data['secret_key']
-    mailchimp_apikey = auth_data['mailchimp_apikey']
-
-
-try:
-    from ccproject.local_settings import *
-except ImportError:
-    pass
-
-
-MAILCHIMP_APIKEY = mailchimp_apikey
+MAILCHIMP_APIKEY = env.str('MAILCHIMP_APIKEY')
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = secret_key
+SECRET_KEY = env.str('SECRET_KEY')
 
-SERVER_EMAIL = mail_user
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.zoho.com'
-EMAIL_PORT = 587
+EMAIL_HOST = env.str('EMAIL_HOST')
+EMAIL_PORT = env.str('EMAIL_PORT', default=587)
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = mail_user
-EMAIL_HOST_USER = mail_user
-EMAIL_HOST_PASSWORD = mail_password
+DEFAULT_FROM_EMAIL = env.str('MAIL_USER')
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.str('MAIL_PASSWORD')
 SITE_DOMAIN = 'villages.io'
-HELP_EMAIL = mail_user
+HELP_EMAIL = env.str('MAIL_USER')
 EMAIL_SUBJECT_PREFIX = "[Villages] "
 
 # Application definition
@@ -82,10 +62,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'django.contrib.flatpages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'social_django',
+    'snowpenguin.django.recaptcha2',
 
     # Custom apps
     'ccproject',
@@ -106,13 +86,12 @@ INSTALLED_APPS = [
     # Ripple
     'account',
     'payment',
-    'management',
+    # 'management',
 
     'accounts.apps.AccountsConfig',
     'frontend.apps.FrontendConfig',
     'endorsement.apps.EndorsementConfig',
     'categories.apps.CategoriesConfig'
-
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -127,7 +106,6 @@ MIDDLEWARE_CLASSES = [
     'profile.middleware.ProfileMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
     'geo.middleware.LocationMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -173,17 +151,17 @@ WSGI_APPLICATION = 'ccproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': villages_db_name,
-        'USER': villages_db_user,
-        'PASSWORD': villages_db_pass,
-        'HOST': 'localhost'
+        'NAME': env.str('VILLAGES_DB_NAME'),
+        'USER': env.str('VILLAGES_DB_USER'),
+        'PASSWORD': env.str('VILLAGES_DB_PASS'),
+        'HOST': env.str('VILLAGES_DB_HOST', default='localhost')
     },
     'ripple': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': ripple_db_name,
-        'USER': ripple_db_user,
-        'PASSWORD': ripple_db_pass,
-        'HOST': 'localhost'
+        'NAME': env.str('RIPPLE_DB_NAME'),
+        'USER': env.str('RIPPLE_DB_USER'),
+        'PASSWORD': env.str('RIPPLE_DB_PASS'),
+        'HOST': env.str('RIPPLE_DB_HOST', default='localhost')
     }
 }
 
@@ -225,8 +203,8 @@ CACHES = {
 SESSIONS_DIRECTORY = os.path.join(BASE_DIR, 'sessions')
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.file'
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 43200      # 12 hours in seconds
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 604800  # 1 week in seconds
 SESSION_FILE_PATH = SESSIONS_DIRECTORY
 # SESSION_COOKIE_SECURE = True
 LOCATION_COOKIE_NAME = 'location_id'
@@ -256,11 +234,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-ENDORSEMENT_BONUS = 5
-
-FEED_ITEMS_PER_PAGE = 20
-LISTING_ITEMS_PER_PAGE = 21
-
 MEDIA_URL = '/uploads/'
 
 MEDIA_ROOT = 'uploads'
@@ -273,9 +246,11 @@ PASSWORD_RESET_LINK_EXPIRY = timedelta(days=7)
 
 LOCATION_SESSION_KEY = 'location_id'
 DEFAULT_LOCATION = ('49.2696243', '-123.0696036')  # East Vancouver.
+DEFAULT_RADIUS = -1  # infinity
 
 INVITATION_ONLY = False
 
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email',
@@ -284,8 +259,8 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 
-SOCIAL_AUTH_FACEBOOK_KEY = '492492537748359'
-SOCIAL_AUTH_FACEBOOK_SECRET = '6eddbe0ef128f997f32962a15b77e215'
+SOCIAL_AUTH_FACEBOOK_KEY = env.str('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = env.str('SOCIAL_AUTH_FACEBOOK_SECRET')
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
@@ -305,4 +280,21 @@ SOCIAL_AUTH_PIPELINE = (
 
 USE_X_FORWARDED_HOST = True
 
-GOOGLE_MAPS_API_KEY = 'AIzaSyBuQbf5nmnkuK8vOlF2STsyqfWeCzL13jA'
+GOOGLE_MAPS_API_KEY = env.str('GOOGLE_MAPS_API_KEY')
+
+RECAPTCHA_PUBLIC_KEY = env.str('RECAPTCHA_PUBLIC_KEY')
+RECAPTCHA_PRIVATE_KEY = env.str('RECAPTCHA_PRIVATE_KEY')
+
+
+ENDORSEMENT_BONUS = 5
+
+FEED_ITEMS_PER_PAGE = 20
+
+LISTING_ITEMS_PER_PAGE = 21
+
+NOTIFICATIONS_PER_PAGE = 10
+
+try:
+    from ccproject.local_settings import *
+except ImportError:
+    pass

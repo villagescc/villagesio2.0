@@ -2,6 +2,9 @@
 .search-results {
   @include make-container;
   padding: 38px 0 10px;
+  #person_list {
+    min-width: 300px;
+  }
 }
 
 .post-box {
@@ -23,7 +26,7 @@
       left: 1rem;
       color: #fff;
       text-transform: uppercase;
-      box-shadow: 0 0 8px #444;
+      text-shadow: 0 0 10px #111;
     }
     & .type {
       top: 0.875em;
@@ -78,6 +81,7 @@
       font-size: 0.75em;
       font-weight: 300;
       color: #5c5c5c;
+      overflow: hidden;
     }
     & .tag {
       font-size: 0.6875em;
@@ -88,12 +92,28 @@
     justify-content: flex-start;
     align-items: center;
     border-top: 1px solid #f3f2f2;
+    &.self-profile {
+      .action-menu-item {
+        flex: 0 0 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 3.5em;
+        outline: none;
+        img {
+          width: 24px;
+          height: 24px;
+          fill: grey;
+        }
+      }
+    }
     & .action-menu-item {
       flex: 0 0 33.333%;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 3.5em;
+      outline: none;
       &:not(:first-of-type) {
         border-left: 1px solid #f3f2f2;
       }
@@ -109,10 +129,39 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
   background-color: #fff;
-  padding: 12px 1.3125em;
+  padding: 12px 20px;
+  font-size: 16px;
+  overflow: hidden;
   @include crossShadow(0 0 16px 0 rgba(119, 119, 119, 0.06));
+  &:hover {
+    background-color: #f5f5f5;
+  }
+  @include media-width-down(md) {
+    flex-flow: row wrap;
+    font-size: 14px;
+  }
+  @include media-width-down(sm) {
+    font-size: 12px;
+  }
+  .person-avatar {
+    flex: 0 0 8%;
+  }
+  .person-name {
+    flex: 0 0 20%;
+    @include media-width-down(md) {
+      flex: 1 0 auto;
+    }
+  }
+  .avatar-wrapper {
+    img {
+      height: 100%;
+      width: 100%;
+      max-width: 100% !important;
+      object-fit: cover;
+    }
+  }
 
   & .person-id {
     flex: 0 0 13.5em;
@@ -129,68 +178,98 @@
     }
   }
 
+  .likes-container {
+    flex: 0 0 12%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    @include media-width-down(md) {
+      flex: 0 0 40%;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+    }
+    @include media-width-down(570px) {
+      flex: 0 0 100%;
+      justify-content: flex-start;
+    }
+  }
+
   & .price-container {
-    flex: 0 0 10.5em;
-    padding-right: 1.5em;
-    padding-left: 1em;
+    margin: 5px;
+    flex: 0 0 auto;
     & span {
-      font-size: 1.125em;
       font-weight: 300;
     }
     & img {
-      margin: auto 0.5em;
+      margin-right: 4px;
       vertical-align: text-top;
+    }
+    @include media-width-down(md) {
     }
   }
 
   & .like-container {
-    flex: 0 0 11.5em;
-    padding-right: 1.5em;
-    padding-left: 1em;
+    margin: 5px;
+    flex: 0 0 auto;
     & span {
-      font-size: 1.125em;
       font-weight: 300;
     }
     & img {
-      margin: auto 0.5em;
+      margin-right: 7px;
       vertical-align: text-top;
     }
   }
 
   & .location-container {
-    flex: 0 0 17em;
+    flex: 0 0 29%;
     display: flex;
     justify-content: flex-start;
-    padding-right: 1.5em;
-    padding-left: 1em;
+    padding: 0 20px;
     & span {
-      font-size: 1.125em;
       font-weight: 300;
     }
     & img {
       margin: auto 0.5em;
       vertical-align: text-top;
+    }
+    @include media-width-down(md) {
+      flex: 0 0 100%;
+      padding: 20px 0;
+    }
+  }
+
+  .action-block {
+    flex: 0 0 31%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    @include media-width-down(lg) {
+      flex-direction: column;
+    }
+    @include media-width-down(md) {
+      flex: 0 0 100%;
+      flex-direction: row;
     }
   }
 
   & .date-container {
-    flex: 0 0 12em;
-    padding-right: 1.5em;
-    padding-left: 1em;
+    flex: 0 0 60%;
+    font-size: 12px;
     & span {
-      font-size: 1.125em;
       font-weight: 300;
     }
     & img {
       margin: auto 0.5em;
       vertical-align: text-top;
     }
+
   }
 
   & .person-action {
-    flex: 0 0 15em;
+    flex: 0 0 40%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     & .action-menu-item {
       flex: 0 0 33%;
@@ -201,85 +280,14 @@
         background-color: darken(#fff, 10%);
       }
     }
-  }
-
-  @include media-width-down(xl) {
-    & .person-id {
-      flex: 1 0 auto;
+    @include media-width-down(lg) {
+      margin: 10px;
+      width: 100%;
     }
-    & .location-container {
-      flex: 1 0 auto;
-      padding: 2em 0.25em;
-    }
-    & .date-container {
-      padding: 2em 0.25em;
-    }
-  }
-
-  @include media-width-down(lg) {
-    & .price-container {
-      flex: 0 0 25%;
-      padding: 1.5em 0.25em 1em;
-    }
-    & .like-container {
-      flex: 0 0 25%;
-      padding: 1.5em 0.25em 1em;
-    }
-    & .location-container {
-      flex: 1 0 auto;
-    }
-    & .date-container {
-      flex: 0 0 25%;
-    }
-  }
-
-  @include media-width-down(md) {
-    & .person-id {
-      flex: 1 1 auto;
-    }
-    & .price-container {
-      flex: 0 0 60%;
-    }
-    & .like-container {
+    @include media-width-down(md) {
+      margin: 0;
       flex: 0 0 40%;
-    }
-    & .location-container {
-      flex: 0 0 60%;
-      padding: 1em 0.25em;
-    }
-    & .date-container {
-      flex: 0 0 40%;
-      padding: 1em 0.25em;
-    }
-    & .person-action {
-      flex: 0 0 100%;
-      padding: 1em 0.25em;
-      border-top: 1px solid #e1e1e1;
-    }
-  }
-
-  @include media-width-down(sm) {
-    font-size: 0.9em;
-  }
-
-  @include media-width-down(xs) {
-    padding: 1.25em 1em 0.75em;
-    font-size: 0.8em;
-  }
-
-  @include media-width-down(xxs) {
-    & .price-container {
-      flex: 0 0 50%;
-    }
-    & .like-container {
-      flex: 0 0 50%;
-    }
-    & .location-container {
-      flex: 0 0 100%;
-    }
-    & .date-container {
-      flex: 0 0 100%;
-      padding: 1em 0 2em;
+      flex-direction: row;
     }
   }
 

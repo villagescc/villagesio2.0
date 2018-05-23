@@ -1,0 +1,80 @@
+{% extends "new_templates/base.html" %}
+{% load staticfiles humanize profile %}
+
+{% block content %}
+    <div class="container">
+        <div class="notification-list">
+            {% for notification in notifications %}
+                <div class="note">
+                    <div class="user">
+                        <div class="avatar-wrapper blue">
+                            <a href="{{ notification.notifier.get_absolute_url }}">
+                                <img src="{% profile_image_url notification.notifier '400x400' %}"
+                                     alt="photo"
+                                     data-toggle="tooltip" data-placement="right"
+                                     data-html="true"
+                                     title="&lt;span class='tip-balloon'&gt;{{ notification.notifier.username }}&lt;/span&gt;">
+                            </a>
+                        </div>
+                        <div class="name">
+                            {{ notification.notifier_name }}
+                        </div>
+                    </div>
+                    <div class="type">
+                        {{ notification.notification_type }}
+                    </div>
+                    <div class="amount">
+                        {% if notification.amount %}{{ notification.amount|default:"" }} V.H.{% endif %}
+                    </div>
+                    <div class="memo">
+                        {{ notification.memo|default:"" }}
+                    </div>
+                    <div class="status">
+                        {{ notification.status }}
+                    </div>
+                    <div class="time">
+                        {{ notification.created_at|naturaltime }}
+                    </div>
+                </div>
+            {% empty %}
+                <div class="container">
+                    <div class="no-notes">
+                        You have no notifications.
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% if notifications.has_next %}
+                <a class="load-more" id="notification-load-more" href="?page={{ notifications.next_page_number }}">Load
+                    more</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+
+    <script>
+        $('div.notification-list').on('click', 'a#notification-load-more', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+
+            $.ajax({
+                url: url,
+                dataType: 'html',
+                method: 'GET',
+
+                beforeSend: function (xhr, settings) {
+                    $("a#notification-load-more").remove();
+                },
+                success: function (data, status, xhr) {
+                    var new_notifications = $(data).find("div.notification-list").contents().hide();
+                    $("div.notification-list").append(new_notifications);
+                    new_notifications.fadeIn('fast');
+                }
+            });
+        });
+
+    </script>
+
+{% endblock extra_js %}

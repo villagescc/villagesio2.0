@@ -1,0 +1,111 @@
+.modal {
+  &#error-modal {
+    .modal-header h4 {
+      padding-left: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: $red;
+    }
+    .modal-body {
+      color: $lightgrey;
+      overflow-y: auto;
+    }
+    #error-modal-alert {
+      min-height: 40px;
+    }
+  }
+
+  &#listing-modal {
+    .modal-dialog {
+      max-width: 1000px;
+      @include media-width-down(sm) {
+        max-width: 500px;
+      }
+    }
+    .modal-content {
+      padding: 40px;
+      @include media-width-down(sm) {
+        padding: 20px;
+      }
+    }
+    .modal-header {
+      h5 {
+        font-size: 27px;
+        font-weight: normal;
+        color: $lightgrey;
+      }
+    }
+    .modal-body {
+      label {
+        margin-right: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        color: $lightblue;
+        @include media-width-down(sm) {
+          font-size: 16px;
+        }
+      }
+      span {
+        font-size: 18px;
+        font-weight: normal;
+        color: $lightgrey;
+        @include media-width-down(sm) {
+          font-size: 14px;
+        }
+      }
+      a {
+        font-size: 18px;
+        @include media-width-down(sm) {
+          font-size: 14px;
+        }
+      }
+      .item-holder {
+        max-height: 400px;
+        margin-bottom: 40px;
+        img {
+          object-fit: cover;
+        }
+      }
+      .col-12 {
+        min-height: 40px;
+      }
+    }
+  }
+
+  &#base-modal {
+    .modal-dialog {
+      #id_recipient_name {
+        display: none;
+      }
+      #id_weight {
+        width: 50%;
+        border: 1px solid #ebebeb;
+      }
+
+    }
+    p {
+      color: $lightgrey;
+    }
+    input[name=delete_button],
+    input[name=cancel] {
+      display: inline-block;
+      width: calc(50% - 5px);
+      padding: 10px;
+      line-height: 1.2;
+      border: none;
+      @include media-width-down(sm) {
+        width: 100%;
+      }
+    }
+    input[name=delete_button] {
+      margin-right: 5px;
+      @include media-width-down(sm) {
+        margin-right: 0;
+      }
+
+    }
+
+  }
+}
+

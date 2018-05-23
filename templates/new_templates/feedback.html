@@ -1,0 +1,62 @@
+{% extends 'new_templates/base.html' %}
+{% load staticfiles recaptcha2 %}
+
+{% block extra_css %}
+
+    {% recaptcha_init %}
+
+{% endblock extra_css %}
+
+{% block content %}
+
+    <div class="app-view">
+        <main class="app-main">
+            <div class="payment-content container">
+                <div class="row">
+                    <div class="col-xs-12 col-lg-8 offset-lg-2">
+                        <h2>Contact</h2>
+                        <div class="payment-data">
+                            <form action="" method="POST" id="payment-form">
+                                {% csrf_token %}
+                                <div class="receiver-box" id="div-recipient">
+                                    {% for field in form %}
+                                        <h4>{{ field.label }}</h4>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            <div class="alert alert-warning message">
+                                                {% for error in field.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    <div class="row" style="margin-top: 15px">
+                                        <div class="col-6">
+                                            <input class="btn btn-std btn-cancel" type="submit" name="cancel"
+                                                   value="Cancel">
+                                        </div>
+                                        <div class="col-6">
+                                            <input class="btn btn-std" type="submit" value="Send Feedback">
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if not form.is_valid %}
+                                    <script>
+                                        setTimeout(function () {
+                                            $('.message').slideUp("fast");
+                                        }, 4000);
+                                    </script>
+                                {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- .app-main -->
+    </div>
+
+    {% include 'new_templates/footer.html' %}
+
+{% endblock content %}

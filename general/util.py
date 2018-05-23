@@ -1,6 +1,11 @@
-"General utilities."
-
 from django.shortcuts import render as django_render, redirect
+from django.core.urlresolvers import reverse
+from django.utils.http import urlencode
+from django.core.files.base import ContentFile
+
+import io
+from PIL import Image, ExifTags
+
 
 class render(object):
     """
@@ -57,6 +62,7 @@ def cache_on_object(accessor_func):
     decorated_func.__module__ = accessor_func.__module__
     return decorated_func
 
+
 def deflect_logged_in(view_func):
     "Redirect logged-in users to home to prevent them from using this view."
     def decorated_func(request, *args, **kwargs):
@@ -67,6 +73,47 @@ def deflect_logged_in(view_func):
     decorated_func.__module__ = view_func.__module__
     return decorated_func
 
+
 def get_remote_ip(request):
     "Get the original client IP address."
     return request.META.get('HTTP_X_FORWARDED_FOR', request.META['REMOTE_ADDR'])
+
+
+def reverse_querystring(view, urlconf=None, args=None, kwargs=None, prefix=None, current_app=None, query_kwargs=None):
+    """
+    Custom reverse to handle query strings.
+    Usage:
+        reverse('app.views.my_view', kwargs={'pk': 123}, query_kwargs={'search', 'Bob'})
+    """
+    url = reverse(view, urlconf=urlconf, args=args, kwargs=kwargs, prefix=prefix, current_app=current_app)
+    if query_kwargs:
+        url = '{}?{}'.format(url, urlencode(query_kwargs))
+    return url
+
+
+def rotate_image(infile):
+    try:
+        image = Image.open(infile)
+        image_name = infile.name.rsplit('.', 1)[0]
+        image_format = image.format
+
+        for orientation in ExifTags.TAGS.keys():
+            if ExifTags.TAGS[orientation] == 'Orientation':
+                break
+        exif = dict(image._getexif().items())
+
+        if exif[orientation] == 3:
+            image = image.rotate(180, expand=True)
+        elif exif[orientation] == 6:
+            image = image.rotate(270, expand=True)
+        elif exif[orientation] == 8:
+            image = image.rotate(90, expand=True)
+
+        image_io = io.BytesIO()
+        image.save(image_io, format=image_format)
+        image = ContentFile(image_io.getvalue(), '{}.{}'.format(image_name, image_format))
+        return image
+
+    except (AttributeError, KeyError, IndexError):
+        # cases: image don't have getexif
+        return infile

@@ -21,12 +21,75 @@
     flex: 0 0 100%;
   }
 
-  & .cat-menu {
-    flex: 0 0 100%;
+  .cat-menu {
+    width: 100%;
+    @include media-width-down(xs) {
+      display: flex;
+    }
+    & .cat-item {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-flow: row;
+      width: 100%;
+      padding: 2em 3em;
+      background-blend-mode: multiply;
+      border-bottom: 1px solid rgba(29, 144, 181, 0.20);
+      @include media-width-down(sm) {
+        padding-right: 2em;
+        padding-left: 2em;
+      }
+      @include media-width-down(xs) {
+        flex: 0 0 20%;
+        padding: 1em;
+        border-bottom: none;
+        &:not(:first-of-type) {
+          border-left: 1px solid rgba(29, 144, 181, 0.20);
+        }
+      }
+      & .cat-item-icon {
+        display: flex;
+        width: 2.25em;
+        & img {
+          width: auto;
+        }
+        @include media-width-down(sm) {
+          width: auto;
+          margin: auto;
+        }
+      }
+      & .cat-item-name {
+        font-size: 1.125em;
+        color: #fff;
+        text-transform: uppercase;
+        @include crossTransition(all .3s);
+        @include media-width-down(sm) {
+          display: none;
+        }
+      }
+      &:hover,
+      &:focus,
+      &.active {
+        text-decoration: none;
+        background-color: rgba(0, 0, 0, 0.1);
+        & .cat-item-name {
+          color: #76c9e4;
+        }
+      }
+    }
   }
 
-  & .user-menu {
+  .user-sidebar {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
     flex: 0 0 100%;
+    min-height: 100%;
+    @include media-width-down(575px) {
+      flex-flow: row nowrap;
+    }
+  }
+  & .user-statistics {
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -37,13 +100,19 @@
       background-size: cover;
       background-repeat: no-repeat;
       padding-top: 44.5578231%;
+      @include media-width-down(sm) {
+        display: none;
+      }
     }
-    & .user-id {
+    & .user-avatar {
       padding: 1em;
       flex: 0 0 100%;
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
+      @include media-width-down(sm) {
+        display: none;
+      }
       & .avatar-wrapper {
         margin-top: -2em;
       }
@@ -56,17 +125,55 @@
         color: #ffffff;
       }
     }
+    .person-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      width: 100%;
+      padding: 10px;
+      @include media-width-down(575px) {
+        order: 1;
+      }
+    }
     & .user-data {
+      display: flex;
       flex: 0 0 100%;
       padding-left: 2em;
-      & .data-block {
+      flex-direction: column;
+      @include media-width-down(575px) {
+        flex-direction: row;
+      }
+      .data-block {
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
-        margin: 1.5em 0;
+        margin: 1em 0;
         font-size: 1.125em;
         font-weight: 300;
         color: #76c9e4;
+        @include media-width-down(575px) {
+          display: none;
+          margin: 0 2em 0 0;
+        }
+        &.balance {
+          @include media-width-down(575px) {
+            display: flex;
+            min-height: 42px;
+            align-items: center;
+          }
+          img {
+            @include media-width-down(575px) {
+              margin-bottom: 6px;
+            }
+          }
+        }
+        &.location {
+          @include media-width-up(xs) {
+            display: flex;
+            align-items: center;
+          }
+        }
+
         & img {
           margin: 0.25em 0.5em 0 0;
         }
@@ -83,13 +190,27 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: auto auto 2em;
+    flex: 0 0 120px;
     & .social-link {
-      padding: 8px 1.5em;
+      flex: 0 0 33.33%;
+      vertical-align: center;
+      text-align: center;
       &:hover,
       &:focus {
         opacity: 0.5;
       }
+      img {
+        height: 24px;
+        margin: auto;
+      }
+      &:last-child {
+        img {
+          height: 20px;
+        }
+      }
+    }
+    @include media-width-down(sm) {
+      margin: 0;
     }
     @include media-width-down(xs) {
       margin-bottom: 0;

@@ -1,4 +1,6 @@
 from django.db import models
+
+from account.models import AmountField
 from profile.models import Profile
 
 
@@ -8,8 +10,8 @@ class Notification(models.Model):
     NEW = 'NEW'
 
     STATUS_CHOICES = (
-        (READ, 'READ'),
-        (NEW, 'NEW')
+        (READ, 'Read'),
+        (NEW, 'New')
     )
 
     # Notification types
@@ -17,12 +19,14 @@ class Notification(models.Model):
     PAYMENT = 'PAYMENT'
 
     NOTIFICATION_TYPE_CHOICES = (
-        (TRUST, 'TRUST'),
-        (PAYMENT, 'PAYMENT')
+        (TRUST, 'Trust'),
+        (PAYMENT, 'Payment')
     )
 
     notifier = models.ForeignKey(Profile, related_name='notifier')
     recipient = models.ForeignKey(Profile, related_name='notification_received')
     notification_type = models.CharField(max_length=50, choices=NOTIFICATION_TYPE_CHOICES)
-    status = models.CharField(max_length=16, choices=STATUS_CHOICES)
+    amount = AmountField(blank=True, null=True)
+    memo = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=NEW)
     created_at = models.DateTimeField(auto_now_add=True)

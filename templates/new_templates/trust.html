@@ -1,0 +1,255 @@
+{% extends "new_templates/base.html" %}
+{% load staticfiles profile %}
+
+{% block content %}
+
+    <div class="app-view">
+
+        <main class="app-main">
+
+            <div class="trust-content">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h2>Trust</h2>
+                        <p>Let your friends know that you trust a promise from them and they can use their credit with
+                            your network.</p>
+                    </div>
+                    <div class="col-xs-12 col-lg-6">
+                        <div class="trust-data">
+                            <form id="trust-form" action="{% url 'blank_trust_user' %}" method="POST">
+                                {% csrf_token %}
+
+                                {% include 'new_templates/form.html' %}
+
+                                <div class="row" style="max-width: 600px;">
+                                    <div class="col-sm-12 col-md-6">
+                                        <input class="btn btn-std trust-btn" id="save-trust" type="submit"
+                                               value="Save Trust">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <div class="col-xs-12 col-lg-6 mt-5 mt-lg-0">
+
+                        <h2>Trust Info
+                            {#| <a class="small" href="#">View More</a>#}
+                        </h2>
+                        <label class="search-holder"><input class="search-by-name" type="search" placeholder="Search..."><i class="input-icon fa fa-search"></i></label>
+
+                        <div class="table-head">
+
+                            <span>Name</span>
+                            <span>Trust from Them</span>
+                            <span>Trust from You</span>
+
+                        </div>
+
+                        <div class="rows-wrapper">
+                            {% for account in accounts %}
+                                <div class="table-row"
+                                     data-partner="{{ account.partner }}"
+                                >
+                                    <div class="avatar-wrapper blue">
+                                        <a href="{{ account.partner.get_absolute_url }}">
+                                            <img src="{% profile_image_url account.partner '400x400' %}"
+                                                 data-toggle="tooltip" data-placement="right"
+                                                 data-html="true"
+                                                 title="&lt;span class='tip-balloon'&gt;{{ account.partner.username }}&lt;/span&gt;"
+                                            >
+                                        </a>
+                                    </div>
+                                    <span>{{ account.partner }}</span>
+                                    <span class="amount">
+                                    {% if account.partner_endorsement %}
+                                        <span class="price">{{ account.out_limit }} V.H.</span>
+                                    {% else %}
+                                        <span class="price">0</span> V.H.
+                                    {% endif %}
+                                </span>
+
+                                    <span class="amount">
+                                    {% if account.endorsement %}
+                                        <span class="price">{{ account.in_limit }} V.H.</span>
+                                    {% elif account.partner %}
+                                        <span class="price">0</span> V.H.
+                                    {% endif %}
+                                </span>
+                                <span class="edit">
+                                    <a href="{% url 'blank_trust_user' %}?recipient_name={{ account.partner.username }}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                </span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+        <!-- .app-main -->
+
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+
+    <script src="{% static 'assets/typeahead.js/typeahead.jquery.min.js' %}"></script>
+    <script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>
+
+    <script>
+        var recipients = new Bloodhound({
+            datumTokenizer: function (datum) {
+                return Bloodhound.tokenizers.whitespace(datum.value);
+            },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                wildcard: '%QUERY',
+                url: "{% url 'get_recipients_data' %}?query=%QUERY",
+                transform: function (response) {
+                    return $.map(response.result, function (recipient) {
+                        $('#id_recipient_name').attr("data-profile-selected", recipient.username);
+                        return {
+                            value: recipient.username,
+                            suggest: recipient
+                        };
+                    });
+                }
+            }
+
+        });
+        $('#id_recipient_name').typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 0
+            },
+            {
+                display: 'value',
+                source: recipients,
+                limit: 20,
+                templates: {
+                    suggestion: function (data) {
+                        return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
+                    }
+                }
+            });
+
+
+        $("#id_recipient_name").bind('typeahead:change typeahead:selected change', function (e) {
+            var selectedUser;
+            var $input = $(this);
+
+            // hide trust data when empty input
+            if (!$input.attr("data-profile-selected") || !$input.val()) {
+                $('#div-profile-photo').attr("hidden", true);
+                $('#div-profile-image .recipient-link').attr('href', '#');
+                $('#profile-image').attr("src", '');
+                $('#name-profile-image').text('');
+                return;
+            };
+
+            // prevent trust double load
+            if (!$input.attr("data-profile-selected") || ($input.val() === $('#name-profile-image').text())) {
+                return;
+            }
+
+            if (e.type === 'typeahead:selected') {
+                selectedUser = $input.val();
+                $input.attr("data-profile-selected", selectedUser)
+            } else {
+                selectedUser = $input.attr("data-profile-selected");
+            }
+
+            $.ajax({
+                url: '/get_user_photo/' + selectedUser,
+                type: 'POST',
+                data: {'profile_username': selectedUser},
+                beforeSend: function (xhr) {
+                    $('#spin-modal').fadeIn();
+                    var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (e) {
+
+                    $("#id_weight").val('');
+                    $("#id_text").val('');
+                    $("#id_referral").prop('checked', false);
+
+                    if (e['data']['error']) {
+                        $('#error-modal-alert').text(e["data"]["error_message"]);
+                        $('#spin-modal').fadeOut();
+                        $('#error-modal').modal("show");
+                        location.reload();
+                    }
+                    if (e['data']['has_trust']) {
+                        $("#id_weight").val(e['data']['credit_limit']);
+                        $("#id_text").val(e['data']['text']);
+                        if (e['data']['refer']) {
+                            $("#id_referral").prop('checked', true);
+                        }
+                    }
+                    $('#div-profile-photo').attr("hidden", false);
+                    $('#div-profile-image .recipient-link').attr('href', '/profiles/' + selectedUser);
+                    $('#profile-image').attr("src", e['data']['profile_photo_path']);
+                    $('#name-profile-image').text(e['data']['recipient']);
+                },
+                error: function (e) {
+                    if (e.status === 500) {
+                        showInternalServerError();
+                    }
+                },
+                complete: function () {
+                    $('#spin-modal').fadeOut();
+                }
+            });
+        });
+
+        $("#trust-form").submit(function (e) {
+            var $errorModal = $('#error-modal');
+
+            $('#spin-modal').fadeIn();
+
+            // check whether all fields are filled
+            if ($("#id_recipient_name").val() == '') {
+                e.preventDefault();
+                $errorModal.find('#error-modal-alert').text('Recipient is invalid.');
+                $errorModal.modal();
+            } else if ($("#id_weight").val() == '') {
+                e.preventDefault();
+                $errorModal.find('#error-modal-alert').text('Amount cannot be 0. Please verify.');
+                $errorModal.modal();
+            } else {
+                $("#trust-form").submit();
+            }
+
+            $('#spin-modal').fadeOut();
+        });
+
+        // Search
+        $('.search-by-name').on('input change', function () {
+            var value = $(this).val(),
+                $items = $('.rows-wrapper .table-row');
+
+            $items.hide();
+            if (value == '') {
+                $items.show();
+            }
+
+            $items.each(function (i, item) {
+                var $item = $(item);
+                var name = $item.attr('data-partner').toLowerCase();
+                if (name.indexOf(value.toLowerCase()) != -1) {
+                    $item.show();
+                }
+           });
+        });
+    </script>
+
+
+{% endblock extra_js %}
