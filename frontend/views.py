@@ -216,7 +216,8 @@ def home(request, type_filter=None, item_type=None, template=None, poster=None, 
     form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter, do_filter)
     if form_listing_settings.is_valid():
         listing_items, remaining_count = form_listing_settings.get_results()
-        listing_items = listing_items.select_related('user__profile', 'profile').prefetch_related('tag')
+        if remaining_count:
+            listing_items = listing_items.select_related('user__profile', 'profile').prefetch_related('tag')
         next_page_date = list(listing_items)[-1].date if listing_items else None
     else:
         listing_items = remaining_count = next_page_date = None
