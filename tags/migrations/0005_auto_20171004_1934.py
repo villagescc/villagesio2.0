@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         ),
         migrations.RemoveField(
             model_name='tagprofile',
-            name=b'tag',
+            name='tag',
         ),
         migrations.DeleteModel(
             name='TagProfile',

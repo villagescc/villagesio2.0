@@ -144,8 +144,8 @@ class CreditLine(models.Model):
     """
     One node's data for and view on a mutual credit account.
     """
-    account = models.ForeignKey(Account, related_name='creditlines')
-    node = models.ForeignKey(Node, related_name='creditlines')
+    account = models.ForeignKey(Account, related_name='creditlines', on_delete=models.CASCADE)
+    node = models.ForeignKey(Node, related_name='creditlines', on_delete=models.CASCADE)
     bal_mult = models.SmallIntegerField(
         choices=((1, '+1'), (-1, '-1')))
     # Max obligations node can emit to partner.

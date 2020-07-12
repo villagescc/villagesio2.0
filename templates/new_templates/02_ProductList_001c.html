@@ -1,4 +1,4 @@
-{% load staticfiles profile tag_utils %}
+{% load static profile tag_utils %}
 
 <!DOCTYPE html>
 <html>
@@ -54,13 +54,13 @@
               <a id="add-posting" class="nav-link" href="#"><img src="{% static 'new_template/res/img/icons/plus.png' %}" alt="add" data-toggle="modal" data-target="#new-post-modal"></a>
             </li>
             <li class="nav-item">
-              <a id="blank-trust-id" class="nav-link" href="{% url 'blank_trust_user' %}"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
+              <a id="blank-trust-id" class="nav-link" href="{% url 'relate:blank_trust_user' %}"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'blank_payment_user' %}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="wallet"></a>
+              <a class="nav-link" href="{% url 'relate:blank_payment_user' %}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="wallet"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'undefined_contact' %}"><img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="inbox"></a>
+              <a class="nav-link" href="{% url 'profile:undefined_contact' %}"><img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="inbox"></a>
             </li>
           </ul>
         </div>
@@ -76,7 +76,7 @@
                           </div>
                       </a>
                       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a>
+                          <a class="dropdown-item" href="{% url 'profile:my_profile' %}">Profile</a>
                           <a class="dropdown-item" href="{% url 'listing_management:manage_listings' %}">Manage Listing</a>
                           <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a>
                           <div class="dropdown-divider"></div>

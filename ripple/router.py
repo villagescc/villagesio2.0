@@ -22,11 +22,11 @@ class RippleRouter(object):
             return True
         return None
     
-    def allow_migrate(self, db, model):
+    def allow_migrate(self, db, app_label, model_name=None, **hints):
         if db == self.DB_ALIAS:
             # Only put models from APPS into Ripple table (and south).
-            return model._meta.app_label in self.APPS + ('south',)
-        elif model._meta.app_label in self.APPS:
+            return app_label in self.APPS + ('south',)
+        elif app_label in self.APPS:
             # Don't put Ripple models anywhere else.
             return False
         return None

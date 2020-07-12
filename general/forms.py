@@ -11,7 +11,7 @@ from django.utils.safestring import mark_safe
 # whitespace is input into required fields.)
 def strip_input(func):
     def decorated_func(self, value):
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             value = value.strip()
         return func(self, value)
     decorated_func.__name__ = func.__name__

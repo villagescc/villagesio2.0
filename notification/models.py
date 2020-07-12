@@ -23,8 +23,8 @@ class Notification(models.Model):
         (PAYMENT, 'Payment')
     )
 
-    notifier = models.ForeignKey(Profile, related_name='notifier')
-    recipient = models.ForeignKey(Profile, related_name='notification_received')
+    notifier = models.ForeignKey(Profile, related_name='notifier', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(Profile, related_name='notification_received', on_delete=models.CASCADE)
     notification_type = models.CharField(max_length=50, choices=NOTIFICATION_TYPE_CHOICES)
     amount = AmountField(blank=True, null=True)
     memo = models.TextField(blank=True, null=True)

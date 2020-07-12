@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load staticfiles tag_utils %}
+{% load static tag_utils %}
 
 {% block title %}{{ profile }}{% endblock %}
 
@@ -7,7 +7,7 @@
 
 {% block content %}
     {% load profile relate humanize feed%}
-    {% load staticfiles %}
+    {% load static %}
     {% load i18n %}
 
     <style>
@@ -203,7 +203,7 @@
                         </div>
 
                         <div>
-                            <label><a href="{% url 'relationship' profile.username %}"
+                            <label><a href="{% url 'relate:relationship' profile.username %}"
                             >{% trans 'Balance with Me: ' %}</a></label>
                             {% blocktrans count hours=account.balance %}
                                 {{hours}} hour

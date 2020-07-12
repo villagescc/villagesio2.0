@@ -7,17 +7,17 @@
   "author": "Rick Cardoso",
   "license": "MIT",
   "dependencies": {
-    "bootstrap": "4.0.0-beta.2",
-    "jquery": "^3.2.1",
-    "popper.js": "^1.12.9",
-    "vue": "^2.5.9"
+    "bootstrap": "4.5.0",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1",
+    "vue": "^2.6.11"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-concat-css": "^3.1.0",
-    "gulp-connect": "^5.5.0",
-    "gulp-livereload": "^3.8.1",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.4"
+    "gulp-connect": "^5.7.0",
+    "gulp-livereload": "^4.0.2",
+    "gulp-sass": "^4.1.0",
+    "gulp-sourcemaps": "^2.6.5"
   }
 }

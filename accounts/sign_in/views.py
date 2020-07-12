@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
@@ -114,7 +114,7 @@ class AuthView(FormView):
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return HttpResponseRedirect(self.get_success_url())
         return super(AuthView, self).dispatch(request, *args, **kwargs)
 

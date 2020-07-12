@@ -39,7 +39,7 @@ from django.db import models, connection, transaction
 from django.db.models.signals import post_save, post_delete
 from django.db.models import Q
 from django.conf import settings
-from django.contrib.gis.db.models import GeoManager
+from django.contrib.gis.db.models import Manager as GeoManager
 from datetime import datetime
 
 from profile.models import Profile
@@ -195,9 +195,9 @@ class FeedItem(models.Model):
     item is marked public, then the recipients are ignored.
     """
     date = models.DateTimeField(db_index=True)
-    poster = models.ForeignKey(Profile, related_name='posted_feed_items')
+    poster = models.ForeignKey(Profile, related_name='posted_feed_items', on_delete=models.CASCADE)
     recipient = models.ForeignKey(
-        Profile, related_name='received_feed_items', null=True, blank=True)
+        Profile, related_name='received_feed_items', null=True, blank=True, on_delete=models.CASCADE)
     item_type = models.CharField(max_length=16, choices=(
             (ITEM_TYPES[Post], 'Post'),
             (ITEM_TYPES[Profile], 'Profile Update'),
@@ -206,7 +206,7 @@ class FeedItem(models.Model):
             (ITEM_TYPES[Referral], 'Referral')
         ))
     item_id = models.PositiveIntegerField()
-    location = models.ForeignKey(Location, null=True, blank=True)
+    location = models.ForeignKey(Location, null=True, blank=True, on_delete=models.CASCADE)
     referral_count = models.IntegerField(null=True, blank=True, default=0)
     balance = models.DecimalField(null=True, blank=True, default=0, decimal_places=2, max_digits=12)
     public = models.BooleanField()

@@ -1,8 +1,8 @@
-{% load staticfiles profile %}
+{% load static profile %}
 
 <div class="transaction" id="div-transaction-photos" {% if not widget.value %}hidden{% endif %}>
     <div class="avatar-wrapper blue big">
-        <a href="{% url 'profile' 'my_profile' %}">
+        <a href="{% url 'profile:profile' 'my_profile' %}">
             <img src="{% profile_image_url widget.attrs.profile '400x400' %}"
                  class="rounded-circle">
         </a>
@@ -10,7 +10,7 @@
     <img style="padding: 0 0.5em;"
          src="{% static 'new_template/res/img/icons/arrow-right.png' %}" alt="to">
     <div class="avatar-wrapper blue big">
-        <a class="recipient-link" href="{% if widget.value %}{% url 'profile' widget.value %}{% else %}#{% endif %}">
+        <a class="recipient-link" href="{% if widget.value %}{% url 'profile:profile' widget.value %}{% else %}#{% endif %}">
             <img id="img-payee" src="{% image_url_by_username widget.value '400x400' %}"
                  class="rounded-circle" data-toggle="tooltip" data-placement="right"
                  data-html="true"

@@ -1,5 +1,5 @@
 {% extends 'new_templates/base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 {% block extra_css %}
     <style>
@@ -47,7 +47,7 @@
                 $('#save-post').attr("disabled", true);
                 var postData = new FormData($('#add-posting-modal')[0]);
                 $.ajax({
-                    url: '{% url 'new_listing' %}',
+                    url: '{% url 'listings:new_listing' %}',
                     type: 'POST',
                     data: postData,
                     processData: false,
@@ -70,7 +70,7 @@
             $("#id_categories").on('change', function (e) {
                 var selected_category = $(this).val();
                 $.ajax({
-                    url: "{% url 'subcategories_filter' %}",
+                    url: "{% url 'listings:subcategories_filter' %}",
                     type: 'GET',
                     data: {'category': selected_category},
                     success: function (e) {

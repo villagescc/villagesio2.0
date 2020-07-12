@@ -3,7 +3,7 @@ from categories.categories_manager.forms import AddCategory, EditCategory
 from django.contrib import messages
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import transaction
 
 

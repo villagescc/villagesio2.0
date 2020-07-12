@@ -8,6 +8,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.cache import cache
 from django.db import models, transaction
+from django.urls import reverse
 
 from account.models import CreditLine, Account, Node
 from payment.flow import FlowGraph, PaymentError
@@ -206,9 +207,8 @@ class RipplePayment(object):
         from profile.models import Profile
         return Profile.objects.get(pk=self.payment.recipient.alias)
 
-    @models.permalink
     def get_absolute_url(self):
-        return 'view_acknowledgement', (self.id,)
+        return reverse('view_acknowledgement', args=[self.id,])
 
     def entries_for_user(self, user):
         return [UserEntry(entry, user) for entry in

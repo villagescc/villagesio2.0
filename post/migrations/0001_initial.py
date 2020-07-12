@@ -23,8 +23,8 @@ class Migration(migrations.Migration):
                 ('text', models.TextField(verbose_name='Text')),
                 ('image', models.ImageField(upload_to=b'post/%Y/%m', max_length=256, verbose_name='Image', blank=True)),
                 ('want', models.BooleanField(default=False, help_text='Leave unchecked if your post is an offer.', verbose_name='Want')),
-                ('location', models.ForeignKey(to='geo.Location')),
-                ('user', models.ForeignKey(related_name='posts', to='profile.Profile')),
+                ('location', models.ForeignKey(on_delete=models.CASCADE, to='geo.Location')),
+                ('user', models.ForeignKey(on_delete=models.CASCADE, related_name='posts', to='profile.Profile')),
             ],
         ),
     ]

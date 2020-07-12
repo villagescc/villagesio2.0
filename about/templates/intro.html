@@ -32,15 +32,15 @@
 	acknowledgements rather than using their money, we take control of
 	our own economic destiny.{% endblocktrans %}</p>
 
-<p><a href="{% url 'about' %}">{% trans 'Read More' %}</a></p>
+<p><a href="{% url 'pages:about' %}">{% trans 'Read More' %}</a></p>
 
 <div class="call">
 	<h2>
-		<a href="{% url 'feed' %}">{% trans 'Browse the marketplace' %}</a>
+		<a href="{% url 'feed:feed' %}">{% trans 'Browse the marketplace' %}</a>
 	</h2>
 	<p>{% trans 'OR' %}</p>
 	<h2>
-		<a href="{% url 'check_invitation' %}">{% trans 'Sign up now!' %}</a>
+		<a href="{% url 'accounts:check_invitation' %}">{% trans 'Sign up now!' %}</a>
 	</h2>
 </div>
 

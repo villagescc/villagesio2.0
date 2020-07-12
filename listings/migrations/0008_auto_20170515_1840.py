@@ -22,12 +22,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='listings',
             name='tags',
-            field=models.ForeignKey(blank=True, to='tags.Tag', null=True),
+            field=models.ForeignKey(on_delete=models.CASCADE, blank=True, to='tags.Tag', null=True),
         ),
         migrations.AddField(
             model_name='taglisting',
             name='listing_id',
-            field=models.ForeignKey(to='listings.Listings'),
+            field=models.ForeignKey(on_delete=models.CASCADE, to='listings.Listings'),
         ),
         migrations.AddField(
             model_name='taglisting',

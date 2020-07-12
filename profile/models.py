@@ -8,11 +8,12 @@ from django.db.models.signals import post_save, pre_save, post_delete
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
-from django.contrib.gis.db.models import GeoManager
+from django.contrib.gis.db.models import Manager as GeoManager
 from django.db.models import Q
 from django.utils import translation
 from django.utils.translation import get_language_info as lang_info
 from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
 
 from general.models import VarCharField, EmailField
 from geo.models import Location
@@ -57,9 +58,9 @@ class QueryManager(GeoManager):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, related_name='profile')
+    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
     name = VarCharField(_("Name"), blank=True)
-    location = models.ForeignKey(Location, null=True, blank=True)
+    location = models.ForeignKey(Location, null=True, blank=True, on_delete=models.CASCADE)
     photo = models.ImageField(_("Photo"),
                               upload_to='user/%Y/%m', max_length=256, blank=True)
     header_image = models.ImageField(_("Header Image"),
@@ -82,9 +83,8 @@ class Profile(models.Model):
     def __unicode__(self):
         return self.name or self.username
 
-    @models.permalink
     def get_absolute_url(self):
-        return 'profile', (self.username,)
+        return reverse('profile', args=[self.username,])
 
     def set_updated(self):
         """
@@ -268,7 +268,7 @@ class Settings(models.Model):
 
 
 class Invitation(models.Model):
-    from_profile = models.ForeignKey(Profile, related_name='invitations_sent')
+    from_profile = models.ForeignKey(Profile, related_name='invitations_sent', on_delete=models.CASCADE)
     to_email = EmailField(_("Friend's email"))
     endorsement_weight = models.PositiveIntegerField(_("Hearts"), help_text=_(
             "Each heart represents an hour of value you'd provide "
@@ -288,9 +288,8 @@ class Invitation(models.Model):
     def __unicode__(self):
         return u"%s invites %s" % (self.from_profile, self.to_email)
 
-    @models.permalink
     def get_absolute_url(self):
-        return 'invitation', (self.code,)
+        return reverse('invitation', args=[self.code,])
 
     def send(self):
         send_mail(_("%s Has Invited You To Villages.io") % self.from_profile,
@@ -310,16 +309,15 @@ pre_save.connect(Invitation.pre_save, sender=Invitation,
 
 
 class PasswordResetLink(models.Model):
-    profile = models.ForeignKey(Profile)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     code = VarCharField(unique=True)
     expires = models.DateTimeField()
 
     def __unicode__(self):
         return _("Password reset link for %s") % self.profile
 
-    @models.permalink
     def get_absolute_url(self):
-        return 'reset_password', (self.code,)
+        return reverse('reset_password', args=[self.code,])
 
     def send(self):
         subject = _("Villages.io Password Reset Link")
@@ -354,6 +352,6 @@ def setlang(sender, **kwargs):
 
 class ProfilePageTag(models.Model):
     listing_type = models.CharField(max_length=100, blank=True, null=True)
-    tag = models.ForeignKey(Tag, related_name='profile_tag', blank=True, null=True)
-    profile = models.ForeignKey(Profile, related_name='profile')
+    tag = models.ForeignKey(Tag, related_name='profile_tag', blank=True, null=True, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, related_name='profile', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

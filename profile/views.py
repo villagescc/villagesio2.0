@@ -6,8 +6,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as django_login
-from django.contrib.auth.views import login as django_login_view
-from django.core.urlresolvers import reverse
+from django.contrib.auth.views import LoginView
+from django.urls import reverse
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.core.exceptions import PermissionDenied
 from django.conf import settings
@@ -165,7 +165,7 @@ def send_shared_link_registration_email(request, profile):
 
 @deflect_logged_in
 def login(request):
-    response = django_login_view(
+    response = LoginView.as_view(
         request, template_name='login.html', redirect_field_name='next')
     # Don't redirect to locator view upon login.
     if (isinstance(response, HttpResponseRedirect) and

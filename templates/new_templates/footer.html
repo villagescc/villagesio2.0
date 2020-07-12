@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 
 <footer id="colophon" class="site-footer">
     <div class="page-wrapper">
@@ -18,17 +18,17 @@
                             <a href="#">Home</a>
                         </li>
                         <li>
-                            <a href="{% url 'how_it_works' %}">About Us</a>
+                            <a href="{% url 'about:how_it_works' %}">About Us</a>
                         </li>
                         <li>
-                            <a href="{% url 'contact_us' %}">Contact Us</a>
+                            <a href="{% url 'about:contact_us' %}">Contact Us</a>
                         </li>
                     </ul>
                 </div>
 
                 <div class="legal">
                     <span>&copy; 2017 - Villages</span>
-                    <a href="{% url 'privacy' %}">Privacy Policy &bullet; Terms of Service</a>
+                    <a href="{% url 'about:privacy' %}">Privacy Policy &bullet; Terms of Service</a>
                 </div>
             </div>
 

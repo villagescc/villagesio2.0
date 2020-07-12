@@ -1,6 +1,6 @@
 {% load profile relate humanize %}
 {% load i18n %}
-{% load staticfiles %}
+{% load static %}
 
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
@@ -22,18 +22,18 @@
         <div id="navbar" class="navbar-collapse collapse navtop navbar-right">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="{% url 'locator' %}" data-toggle="tooltip" title="{{request.location}}"><i class="fa fa-location-arrow"></i>&nbsp&nbsp{{ request.location|truncatechars:"42" }}</a>
+                    <a href="{% url 'geo:locator' %}" data-toggle="tooltip" title="{{request.location}}"><i class="fa fa-location-arrow"></i>&nbsp&nbsp{{ request.location|truncatechars:"42" }}</a>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About Us<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'how_it_works' %}">How it works</a></li>
-                        <li><a href="{% url 'motivation' %}">Motivation</a></li>
-                        <li><a href="{% url 'privacy' %}">Privacy</a></li>
+                        <li><a href="{% url 'about:how_it_works' %}">How it works</a></li>
+                        <li><a href="{% url 'about:motivation' %}">Motivation</a></li>
+                        <li><a href="{% url 'about:privacy' %}">Privacy</a></li>
                         <li role="separator" class="divider"></li>
-                        {#                            <li><a href="{% url 'developers' %}">Developers</a></li>#}
-                        {#                            <li><a href="{% url 'donate' %}">Donate</a></li>#}
-                        <li><a href="{% url 'contact_us' %}">Feedback</a></li>
+                        {#                            <li><a href="{% url 'about:developers' %}">Developers</a></li>#}
+                        {#                            <li><a href="{% url 'about:donate' %}">Donate</a></li>#}
+                        <li><a href="{% url 'about:contact_us' %}">Feedback</a></li>
                     </ul>
                 </li>
                 <li>
@@ -42,13 +42,13 @@
                         <button id="add-posting" type="button" class="btn btn-default btn-warning" data-toggle="modal" data-target="#new-posting-modal" title="New Post">
                             <i class="fa fa-plus label-add-post" aria-hidden="true"></i>
                         </button>
-                        <a id="blank-trust-id" type="button" href="{% url 'blank_trust_user' %}" class="btn btn-default btn-danger trust-blank" title="Add & View Trusted Connections">
+                        <a id="blank-trust-id" type="button" href="{% url 'relate:blank_trust_user' %}" class="btn btn-default btn-danger trust-blank" title="Add & View Trusted Connections">
                             <i class="fa fa-heart" aria-hidden="true"></i>
                         </a>
-                        <a href="{% url 'blank_payment_user' %}" type="button" class="btn btn-default btn-success payment-blank" title="Send & View Payments">
+                        <a href="{% url 'relate:blank_payment_user' %}" type="button" class="btn btn-default btn-success payment-blank" title="Send & View Payments">
                             <i class="fa fa-money" aria-hidden="true"></i>
                         </a>
-                        <a href="{% url 'undefined_contact' %}" type="button" class="btn btn-default btn-primary contact-blank" title="Contact Another User">
+                        <a href="{% url 'profile:undefined_contact' %}" type="button" class="btn btn-default btn-primary contact-blank" title="Contact Another User">
                             <i class="fa fa-envelope" aria-hidden="true"></i>
                         </a>
                     </div>
@@ -64,7 +64,7 @@
                     {% endif %}
                     <ul class="dropdown-menu">
                         {% if request.profile %}
-                            <li><a href="{% url 'my_profile' %}">Profile</a></li>
+                            <li><a href="{% url 'profile:my_profile' %}">Profile</a></li>
                             <li><a href="{% url 'listing_management:manage_listings' %}">Manage Listing</a></li>
                             <li><a href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a></li>
                             <li><a href="{% url 'accounts:settings' %}">Settings</a></li>

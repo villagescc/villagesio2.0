@@ -1,5 +1,5 @@
 {% extends "new_templates/base.html" %}
-{% load staticfiles profile %}
+{% load static profile %}
 
 {% block content %}
 
@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-xs-12 col-lg-6">
                         <div class="trust-data">
-                            <form id="trust-form" action="{% url 'blank_trust_user' %}" method="POST">
+                            <form id="trust-form" action="{% url 'relate:blank_trust_user' %}" method="POST">
                                 {% csrf_token %}
 
                                 {% include 'new_templates/form.html' %}
@@ -79,7 +79,7 @@
                                     {% endif %}
                                 </span>
                                 <span class="edit">
-                                    <a href="{% url 'blank_trust_user' %}?recipient_name={{ account.partner.username }}">
+                                    <a href="{% url 'relate:blank_trust_user' %}?recipient_name={{ account.partner.username }}">
                                         <i class="fa fa-edit"></i>
                                     </a>
                                 </span>
@@ -111,7 +111,7 @@
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
                 wildcard: '%QUERY',
-                url: "{% url 'get_recipients_data' %}?query=%QUERY",
+                url: "{% url 'relate:get_recipients_data' %}?query=%QUERY",
                 transform: function (response) {
                     return $.map(response.result, function (recipient) {
                         $('#id_recipient_name').attr("data-profile-selected", recipient.username);

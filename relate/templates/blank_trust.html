@@ -13,7 +13,7 @@
         }
     </style>
 
-    <form id="form-blank-trust" action="{% url 'blank_trust_user' %}" method="POST">
+    <form id="form-blank-trust" action="{% url 'relate:blank_trust_user' %}" method="POST">
 
         <h3 class="page-title container">
             <span>
@@ -151,7 +151,7 @@
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
                 wildcard: '%QUERY',
-                url: "{% url 'get_recipients_data' %}?query=%QUERY",
+                url: "{% url 'relate:get_recipients_data' %}?query=%QUERY",
                 transform: function (response) {
                     return $.map(response.result, function (recipient) {
                         $('#id_recipient_name').attr("data-profile-selected", recipient.username);

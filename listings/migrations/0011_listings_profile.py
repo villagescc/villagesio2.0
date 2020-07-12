@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='listings',
             name='profile',
-            field=models.ForeignKey(blank=True, to='profile.Profile', null=True),
+            field=models.ForeignKey(on_delete=models.CASCADE, blank=True, to='profile.Profile', null=True),
         ),
     ]

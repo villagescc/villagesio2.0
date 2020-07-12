@@ -14,15 +14,15 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RemoveField(
             model_name='taglisting',
-            name=b'listing',
+            name='listing',
         ),
         migrations.RemoveField(
             model_name='taglisting',
-            name=b'tag',
+            name='tag',
         ),
         migrations.RemoveField(
             model_name='tagprofile',
-            name=b'profile',
+            name='profile',
         ),
         migrations.AddField(
             model_name='tagprofile',
@@ -32,20 +32,20 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='tagprofile',
             name='profile_id',
-            field=models.ForeignKey(related_name='tag_profile', blank=True, to='profile.Profile', null=True),
+            field=models.ForeignKey(on_delete=models.CASCADE, related_name='tag_profile', blank=True, to='profile.Profile', null=True),
         ),
         migrations.AlterField(
             model_name='tag',
-            name=b'name',
+            name='name',
             field=models.CharField(max_length=10),
         ),
         migrations.RemoveField(
             model_name='tagprofile',
-            name=b'tag',
+            name='tag',
         ),
         migrations.AddField(
             model_name='tagprofile',
-            name=b'tag',
+            name='tag',
             field=models.ManyToManyField(to='tags.Tag'),
         ),
         migrations.DeleteModel(

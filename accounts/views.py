@@ -1,11 +1,11 @@
 # Django http and shortcuts import
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 # From Contrib
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from sign_in.views import SignInUserLogIn
+from accounts.sign_in.views import SignInUserLogIn
 # Django User
 from django.contrib.auth.models import User
 

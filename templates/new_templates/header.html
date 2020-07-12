@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 
 {% if user.is_authenticated %}
     {% load profile notifications %}
@@ -25,7 +25,7 @@
                              style="position: relative; border-radius: 50%; overflow: hidden;">
                     </div>
                     <div class="responsive-profile-menu">
-                        <a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a>
+                        <a class="dropdown-item" href="{% url 'profile:my_profile' %}">Profile</a>
                         <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a>
                         <a class="dropdown-item" href="{% url 'accounts:settings' %}">Settings</a>
                         {#<a class="dropdown-item" href="{% url 'management:management' %}">Management</a>#}
@@ -49,11 +49,11 @@
                             About Us
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{% url 'how_it_works' %}">How it works</a>
-                            <a class="dropdown-item" href="{% url 'motivation' %}">Motivation</a>
-                            <a class="dropdown-item" href="{% url 'privacy' %}">Privacy</a>
+                            <a class="dropdown-item" href="{% url 'about:how_it_works' %}">How it works</a>
+                            <a class="dropdown-item" href="{% url 'about:motivation' %}">Motivation</a>
+                            <a class="dropdown-item" href="{% url 'about:privacy' %}">Privacy</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'contact_us' %}">Feedback</a>
+                            <a class="dropdown-item" href="{% url 'about:contact_us' %}">Feedback</a>
                         </div>
                     </li>
                     {% if request %}
@@ -64,20 +64,20 @@
                         </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a id="add-posting" class="nav-link" href="{% url 'new_listing' %}"><img
+                        <a id="add-posting" class="nav-link" href="{% url 'listings:new_listing' %}"><img
                                 src="{% static 'new_template/res/img/icons/plus.png' %}" alt="add" data-toggle="modal"
                                 data-target="#new-post-modal"></a>
                     </li>
                     <li class="nav-item">
-                        <a id="blank-trust-id" class="nav-link" href="{% url 'blank_trust_user' %}"><img
+                        <a id="blank-trust-id" class="nav-link" href="{% url 'relate:blank_trust_user' %}"><img
                                 src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'blank_payment_user' %}"><img
+                        <a class="nav-link" href="{% url 'relate:blank_payment_user' %}"><img
                                 src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="wallet"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'undefined_contact' %}"><img
+                        <a class="nav-link" href="{% url 'profile:undefined_contact' %}"><img
                                 src="{% static 'new_template/res/img/icons/mail.png' %}" alt="inbox"></a>
                     </li>
                 </ul>
@@ -111,7 +111,7 @@
                             </div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a>
+                            <a class="dropdown-item" href="{% url 'profile:my_profile' %}">Profile</a>
                             <!--<a class="dropdown-item" href="{% url 'listing_management:manage_listings' %}">Manage-->
                             <!--Listing</a>-->
                             <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit
@@ -164,10 +164,10 @@
                                 <a href="{% url 'frontend:home' %}" class="nav-link">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{% url 'how_it_works' %}" class="nav-link">About Us</a>
+                                <a href="{% url 'about:how_it_works' %}" class="nav-link">About Us</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{% url 'contact_us' %}" class="nav-link">Contact Us</a>
+                                <a href="{% url 'about:contact_us' %}" class="nav-link">Contact Us</a>
                             </li>
                         </ul>
                     </nav>

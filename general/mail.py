@@ -13,12 +13,11 @@ def send_mail(subject, sender, recipient, template, context):
     email.
     """
     old_language = translation.get_language()
-    if not isinstance(recipient, basestring):
+    if not isinstance(recipient, str):
         translation.activate(recipient.settings.language)
 
     context.update({'domain': settings.SITE_DOMAIN})
-    body = loader.render_to_string(
-        template, context, context_instance=Context(autoescape=False))
+    body = loader.render_to_string(template, context)
     sender_name, sender_email = split_name_email(sender)
     to_email_str = make_email(recipient)
 
@@ -68,7 +67,7 @@ def split_name_email(profile_or_tuple):
 
 def make_email(email_or_profile):
     "Returns email string from email string or profile input."
-    if isinstance(email_or_profile, basestring):
+    if isinstance(email_or_profile, str):
         return email_or_profile
     else:
         # Create email from Profile.        

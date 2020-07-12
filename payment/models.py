@@ -16,8 +16,8 @@ STATUS_CHOICES = (
 
 
 class Payment(models.Model):
-    payer = models.ForeignKey(Node, related_name='sent_payments')
-    recipient = models.ForeignKey(Node, related_name='received_payments')
+    payer = models.ForeignKey(Node, related_name='sent_payments', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(Node, related_name='received_payments', on_delete=models.CASCADE)
     amount = AmountField()
     memo = models.TextField(blank=True)
 
@@ -110,8 +110,8 @@ class EntryManager(models.Manager):
 
 class Entry(models.Model):
     "An entry on an account for a payment."
-    payment = models.ForeignKey(Payment, related_name='entries')
-    account = models.ForeignKey(Account, related_name='entries')
+    payment = models.ForeignKey(Payment, related_name='entries', on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, related_name='entries', on_delete=models.CASCADE)
     amount = AmountField()
     new_balance = AmountField()
 

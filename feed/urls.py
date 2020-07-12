@@ -1,6 +1,6 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
+from feed import views
 
-urlpatterns = patterns(
-    'feed.views',
-    url(r'^$', 'feed', {'do_filter': True}, name='feed'),
-)
+urlpatterns = [
+    url(r'^$', views.feed, {'do_filter': True}, name='feed'),
+]

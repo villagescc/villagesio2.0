@@ -1,5 +1,5 @@
 {% extends "new_templates/base.html" %}
-{% load staticfiles %}
+{% load static %}
 
 {% block content %}
     <div id="content" class="site-content">
@@ -51,7 +51,7 @@
                     {#                                        {% endif %}#}
                     {#                                    </div>#}
                     {#                                </div>#}
-                    {#                                <a href="{% url 'forgot_password' %}">Forgot password</a>#}
+                    {#                                <a href="{% url 'profile:forgot_password' %}">Forgot password</a>#}
                     {#                                <h4></h4>#}
                     {#                                <div class="row" style="max-width: 600px;">#}
                     {#                                    <div class="col-12 col-sm-6">#}

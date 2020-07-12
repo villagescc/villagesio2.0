@@ -1,5 +1,5 @@
 from django.shortcuts import render as django_render, redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.http import urlencode
 from django.core.files.base import ContentFile
 
@@ -66,7 +66,7 @@ def cache_on_object(accessor_func):
 def deflect_logged_in(view_func):
     "Redirect logged-in users to home to prevent them from using this view."
     def decorated_func(request, *args, **kwargs):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return redirect('home')
         return view_func(request, *args, **kwargs)
     decorated_func.__name__ = view_func.__name__

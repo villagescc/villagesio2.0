@@ -1,8 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
-from django.contrib.gis.db.models import GeoManager, Q
+from django.contrib.gis.db.models import Manager as GeoManager, Q
 
 from decimal import Decimal
 
@@ -10,6 +9,7 @@ from categories.models import Categories, SubCategories
 from tags.models import Tag
 from profile.models import Profile
 from general.util import reverse_querystring
+from six import python_2_unicode_compatible
 
 
 OFFER = 'OFFER'
@@ -92,12 +92,12 @@ class ListingsManager(GeoManager):
 
 @python_2_unicode_compatible
 class Listings(models.Model):
-    user = models.ForeignKey(User, null=True, blank=True)
-    profile = models.ForeignKey(Profile, null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=70)
     description = models.CharField(max_length=5000, null=True, blank=True)
     price = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0'))
-    subcategories = models.ForeignKey(SubCategories, null=True, blank=True)
+    subcategories = models.ForeignKey(SubCategories, null=True, blank=True, on_delete=models.CASCADE)
     # tag = models.ForeignKey(TagListing, null=True, blank=True)
 
     listing_type = models.CharField(max_length=100, choices=LISTING_TYPE)

@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 
-from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 
+from six import python_2_unicode_compatible
 
 @python_2_unicode_compatible
 class Categories(models.Model):
@@ -15,7 +15,7 @@ class Categories(models.Model):
 
 @python_2_unicode_compatible
 class SubCategories(models.Model):
-    categories = models.ForeignKey(Categories)
+    categories = models.ForeignKey(Categories, on_delete=models.CASCADE)
     sub_categories_text = models.CharField(max_length=220)
 
     def __str__(self):

@@ -2,7 +2,7 @@
 
 {% load i18n %}
 
-{% load staticfiles profile tag_utils %}
+{% load static profile tag_utils %}
 
 <!DOCTYPE html>
 <html>
@@ -56,10 +56,10 @@
                                 <a href="{% url 'frontend:home' %}" class="nav-link">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{% url 'how_it_works' %}" class="nav-link">About Us</a>
+                                <a href="{% url 'about:how_it_works' %}" class="nav-link">About Us</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{% url 'contact_us' %}" class="nav-link">Contact Us</a>
+                                <a href="{% url 'about:contact_us' %}" class="nav-link">Contact Us</a>
                             </li>
                         </ul>
                     </nav>
@@ -212,10 +212,10 @@
                             <a href="#">Home</a>
                         </li>
                         <li>
-                            <a href="{% url 'how_it_works' %}">About Us</a>
+                            <a href="{% url 'about:how_it_works' %}">About Us</a>
                         </li>
                         <li>
-                            <a href="{% url 'contact_us' %}">Contact Us</a>
+                            <a href="{% url 'about:contact_us' %}">Contact Us</a>
                         </li>
                     </ul>
                 </div>

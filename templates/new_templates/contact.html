@@ -1,5 +1,5 @@
 {% extends 'new_templates/base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 {% block content %}
 
@@ -41,7 +41,7 @@
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
             wildcard: '%QUERY',
-            url: "{% url 'get_recipients_data' %}?query=%QUERY",
+            url: "{% url 'relate:get_recipients_data' %}?query=%QUERY",
             transform: function (response) {
                 return $.map(response.result, function (recipient) {
                     $('#id_contact_recipient_name').attr("data-profile-selected", recipient.username);
