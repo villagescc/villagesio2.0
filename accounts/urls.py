@@ -15,5 +15,5 @@ urlpatterns = [
     url(r'^settings/$', profile_views.edit_settings, name='settings'),
     url(r'^login/$', account_views.login_view, name='login'),
     url(r'^logout/$', account_views.logout_view, name='logout'),
-    url(r'^sign_in/', include(accounts.sign_in.urls, namespace='sign_in_user'))
+    url(r'^sign_in/', include(('accounts.sign_in.urls', 'accounts.sign_in'), namespace='sign_in_user'))
 ]

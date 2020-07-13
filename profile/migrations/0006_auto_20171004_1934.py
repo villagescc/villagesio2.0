@@ -27,11 +27,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profilepagetag',
             name='profile',
-            field=models.ForeignKey(related_name='profile', to='profile.Profile'),
+            field=models.ForeignKey(on_delete=models.CASCADE, related_name='profile', to='profile.Profile'),
         ),
         migrations.AddField(
             model_name='profilepagetag',
             name='tag',
-            field=models.ForeignKey(related_name='profile_tag', blank=True, to='tags.Tag', null=True),
+            field=models.ForeignKey(on_delete=models.CASCADE, related_name='profile_tag', blank=True, to='tags.Tag', null=True),
         ),
     ]

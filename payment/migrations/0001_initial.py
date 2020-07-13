@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('amount', account.models.AmountField(max_digits=12, decimal_places=2)),
                 ('new_balance', account.models.AmountField(max_digits=12, decimal_places=2)),
-                ('account', models.ForeignKey(related_name='entries', to='account.Account')),
+                ('account', models.ForeignKey(on_delete=models.CASCADE, related_name='entries', to='account.Account')),
             ],
             options={
                 'verbose_name_plural': 'Entries',
@@ -33,13 +33,13 @@ class Migration(migrations.Migration):
                 ('submitted_at', models.DateTimeField(auto_now_add=True)),
                 ('last_attempted_at', models.DateTimeField(null=True)),
                 ('status', models.CharField(default=b'pending', max_length=16, choices=[(b'pending', b'Pending'), (b'completed', b'Completed'), (b'failed', b'Failed')])),
-                ('payer', models.ForeignKey(related_name='sent_payments', to='account.Node')),
-                ('recipient', models.ForeignKey(related_name='received_payments', to='account.Node')),
+                ('payer', models.ForeignKey(on_delete=models.CASCADE, related_name='sent_payments', to='account.Node')),
+                ('recipient', models.ForeignKey(on_delete=models.CASCADE, related_name='received_payments', to='account.Node')),
             ],
         ),
         migrations.AddField(
             model_name='entry',
             name='payment',
-            field=models.ForeignKey(related_name='entries', to='payment.Payment'),
+            field=models.ForeignKey(on_delete=models.CASCADE, related_name='entries', to='payment.Payment'),
         ),
     ]

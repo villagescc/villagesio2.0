@@ -43,9 +43,9 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(verbose_name='Description', blank=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now_add=True)),
-                ('location', models.ForeignKey(blank=True, to='geo.Location', null=True)),
+                ('location', models.ForeignKey(on_delete=models.CASCADE, blank=True, to='geo.Location', null=True)),
                 ('trusted_profiles', models.ManyToManyField(related_name='trusting_profiles', to='profile.Profile', blank=True)),
-                ('user', models.OneToOneField(related_name='profile', to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(on_delete=models.CASCADE, related_name='profile', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -59,17 +59,17 @@ class Migration(migrations.Migration):
                 ('language', general.models.VarCharField(default=b'en', max_length=8, verbose_name='Language', choices=[(b'en', 'English'), (b'fi', 'suomi'), (b'ru', '\u0420\u0443\u0441\u0441\u043a\u0438\u0439'), (b'es', 'espa\xf1ol'), (b'de', 'Deutsch'), (b'it', 'italiano'), (b'fr', 'fran\xe7ais')])),
                 ('feed_radius', models.IntegerField(null=True, blank=True)),
                 ('feed_trusted', models.BooleanField(default=False)),
-                ('profile', models.OneToOneField(related_name='settings', to='profile.Profile')),
+                ('profile', models.OneToOneField(on_delete=models.CASCADE, related_name='settings', to='profile.Profile')),
             ],
         ),
         migrations.AddField(
             model_name='passwordresetlink',
             name='profile',
-            field=models.ForeignKey(to='profile.Profile'),
+            field=models.ForeignKey(on_delete=models.CASCADE, to='profile.Profile'),
         ),
         migrations.AddField(
             model_name='invitation',
             name='from_profile',
-            field=models.ForeignKey(related_name='invitations_sent', to='profile.Profile'),
+            field=models.ForeignKey(on_delete=models.CASCADE, related_name='invitations_sent', to='profile.Profile'),
         ),
     ]

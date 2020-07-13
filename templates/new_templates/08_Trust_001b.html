@@ -1,4 +1,4 @@
-{% load staticfiles profile tag_utils %}
+{% load static profile tag_utils %}
 
 <!DOCTYPE html>
 <html>
@@ -68,11 +68,11 @@
                   About Us
                 </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{% url 'how_it_works' %}">How it works</a>
-                <a class="dropdown-item" href="{% url 'motivation' %}">Motivation</a>
-                <a class="dropdown-item" href="{% url 'privacy' %}">Privacy</a>
+                <a class="dropdown-item" href="{% url 'about:how_it_works' %}">How it works</a>
+                <a class="dropdown-item" href="{% url 'about:motivation' %}">Motivation</a>
+                <a class="dropdown-item" href="{% url 'about:privacy' %}">Privacy</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'contact_us' %}">Feedback</a>
+                <a class="dropdown-item" href="{% url 'about:contact_us' %}">Feedback</a>
               </div>
             </li>
               {% if request %}
@@ -86,13 +86,13 @@
               <a id="add-posting" class="nav-link" href="#"><img src="{% static 'new_template/res/img/icons/plus.png' %}" alt="add" data-toggle="modal" data-target="#new-post-modal"></a>
             </li>
             <li class="nav-item">
-              <a id="blank-trust-id" class="nav-link" href="{% url 'blank_trust_user' %}"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
+              <a id="blank-trust-id" class="nav-link" href="{% url 'relate:blank_trust_user' %}"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'blank_payment_user' %}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="wallet"></a>
+              <a class="nav-link" href="{% url 'relate:blank_payment_user' %}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="wallet"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'undefined_contact' %}"><img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="inbox"></a>
+              <a class="nav-link" href="{% url 'profile:undefined_contact' %}"><img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="inbox"></a>
             </li>
           </ul>
         </div>
@@ -108,7 +108,7 @@
                           </div>
                       </a>
                       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a>
+                          <a class="dropdown-item" href="{% url 'profile:my_profile' %}">Profile</a>
                           <a class="dropdown-item" href="{% url 'listing_management:manage_listings' %}">Manage Listing</a>
                           <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a>
                           <div class="dropdown-divider"></div>
@@ -169,7 +169,7 @@
               <p>Let your friends know that you trust a promise from them and they can use their credit with your network.</p>
 
               <div class="trust-data">
-                <form id="trust-form" action="{% url 'blank_trust_user' %}" method="POST">
+                <form id="trust-form" action="{% url 'relate:blank_trust_user' %}" method="POST">
                     {% csrf_token %}
                     <div class="receiver-box" id="div-recipient-name">
                         <h4 class="mt-1">Choose Trust Receiver</h4>
@@ -286,7 +286,7 @@
           queryTokenizer: Bloodhound.tokenizers.whitespace,
           remote: {
               wildcard: '%QUERY',
-              url: "{% url 'get_recipients_data' %}?query=%QUERY",
+              url: "{% url 'relate:get_recipients_data' %}?query=%QUERY",
               transform: function (response) {
                   return $.map(response.result, function (recipient) {
                       $('#id_recipient_name').attr("data-profile-selected", recipient.username);

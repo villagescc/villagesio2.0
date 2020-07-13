@@ -1,4 +1,4 @@
-{% load staticfiles profile relate i18n tag_utils %}
+{% load static profile relate i18n tag_utils %}
 
 <!DOCTYPE html>
 <html>
@@ -60,11 +60,11 @@
                   About Us
                 </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{% url 'how_it_works' %}">How it works</a>
-                <a class="dropdown-item" href="{% url 'motivation' %}">Motivation</a>
-                <a class="dropdown-item" href="{% url 'privacy' %}">Privacy</a>
+                <a class="dropdown-item" href="{% url 'about:how_it_works' %}">How it works</a>
+                <a class="dropdown-item" href="{% url 'about:motivation' %}">Motivation</a>
+                <a class="dropdown-item" href="{% url 'about:privacy' %}">Privacy</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'contact_us' %}">Feedback</a>
+                <a class="dropdown-item" href="{% url 'about:contact_us' %}">Feedback</a>
               </div>
             </li>
               {% if request %}
@@ -78,13 +78,13 @@
               <a id="add-posting" class="nav-link" href="#"><img src="{% static 'new_template/res/img/icons/plus.png' %}" alt="add" data-toggle="modal" data-target="#new-posting-modal"></a>
             </li>
             <li class="nav-item">
-              <a id="blank-trust-id" class="nav-link" href="{% url 'blank_trust_user' %}"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
+              <a id="blank-trust-id" class="nav-link" href="{% url 'relate:blank_trust_user' %}"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'blank_payment_user' %}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="wallet"></a>
+              <a class="nav-link" href="{% url 'relate:blank_payment_user' %}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="wallet"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'undefined_contact' %}"><img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="inbox"></a>
+              <a class="nav-link" href="{% url 'profile:undefined_contact' %}"><img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="inbox"></a>
             </li>
           </ul>
         </div>

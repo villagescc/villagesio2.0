@@ -1,6 +1,6 @@
 {% extends 'new_templates/base.html' %}
 {% load i18n %}
-{% load staticfiles %}
+{% load static %}
 
 {% block content %}
 
@@ -84,7 +84,7 @@
                                             we are.{% endblocktrans %}</p>
 
                                         <hr>
-                                        {% url 'contact_us' as contact_us %}
+                                        {% url 'about:contact_us' as contact_us %}
                                         <p>{% blocktrans %}If you have any concerns about privacy, please
                                             <a href="{{ contact_us }}">send us feedback</a>.{% endblocktrans %}</p>
                                     </div>

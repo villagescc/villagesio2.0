@@ -4,7 +4,7 @@ from geo.util import location_required
 from feed.forms import FeedFilterForm, DATE_FORMAT
 from django.views.decorators.cache import cache_page
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth import REDIRECT_FIELD_NAME
 
 

@@ -3,7 +3,7 @@ from django.http import Http404
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template.loader import render_to_string
 # Forms
 from listings.forms import ListingsForms
@@ -185,7 +185,7 @@ class HomePage(TemplateView):
     template_name = 'new_templates/home_page.html'
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return HttpResponseRedirect(reverse('frontend:home'))
         return super(HomePage, self).get(request, *args, **kwargs)
 

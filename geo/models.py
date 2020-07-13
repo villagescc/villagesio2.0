@@ -25,7 +25,7 @@ class Location(models.Model):
     city = VarCharField(_("City"), blank=True)
     neighborhood = VarCharField(_("Neighbourhood"), blank=True)
 
-    objects = models.GeoManager()
+    objects = models.Manager()
 
     def __unicode__(self):
         if self.city:

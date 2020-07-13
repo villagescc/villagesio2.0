@@ -3,6 +3,7 @@ Models for user-submitted posts.
 """
 
 from django.db import models
+from django.urls import reverse
 
 from profile.models import Profile
 from general.models import VarCharField
@@ -16,7 +17,7 @@ class UndeletedPostManager(models.Manager):
             deleted=False)
     
 class Post(models.Model):
-    user = models.ForeignKey(Profile, related_name='posts')
+    user = models.ForeignKey(Profile, related_name='posts', on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     deleted = models.BooleanField(default=False)
     title = VarCharField(_("Title"), max_length=100)
@@ -25,7 +26,7 @@ class Post(models.Model):
         upload_to='post/%Y/%m', max_length=256, blank=True)
     want = models.BooleanField(_("Want"),
         default=False, help_text=_("Leave unchecked if your post is an offer."))
-    location = models.ForeignKey(Location)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     objects = UndeletedPostManager()
     all_objects = models.Manager()
@@ -35,9 +36,8 @@ class Post(models.Model):
     def __unicode__(self):
         return u"%s [%s]" % (self.title, self.want and _("Want") or _("Offer"))
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('post.views.view_post', (self.id,))
+        return reverse('post.views.view_post', args=[self.id,])
 
     def can_edit(self, profile):
         return self.user == profile

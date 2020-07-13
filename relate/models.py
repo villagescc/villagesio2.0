@@ -1,6 +1,7 @@
 from django.db.models.signals import post_save, post_delete
 from django.db import models, connection, transaction
 from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
 
 from profile.models import Profile
 import ripple.api as ripple
@@ -17,9 +18,9 @@ class EndorsementManager(models.Manager):
 
 
 class Endorsement(models.Model):
-    endorser = models.ForeignKey(Profile, related_name='endorsements_made')
+    endorser = models.ForeignKey(Profile, related_name='endorsements_made', on_delete=models.CASCADE)
     recipient = models.ForeignKey(
-        Profile, related_name='endorsements_received')
+        Profile, related_name='endorsements_received', on_delete=models.CASCADE)
     weight = models.PositiveIntegerField(_("Weight"), help_text=_(
             "Each heart represents an hour of value you'd provide "
             "in exchange for acknowledgements."))
@@ -37,9 +38,8 @@ class Endorsement(models.Model):
         return u'%s endorses %s (%d)' % (
             self.endorser, self.recipient, self.weight)
 
-    @models.permalink
     def get_absolute_url(self):
-        return 'endorsement', (self.id,)
+        return reverse('endorsement', args=[self.id,])
 
     @property
     def date(self):
@@ -114,9 +114,9 @@ post_save.connect(Endorsement.post_save, sender=Endorsement,
 
 
 class Referral(models.Model):
-    referrer = models.ForeignKey(Profile, related_name='referral_made')
+    referrer = models.ForeignKey(Profile, related_name='referral_made', on_delete=models.CASCADE)
     recipient = models.ForeignKey(
-        Profile, related_name='referral_received')
+        Profile, related_name='referral_received', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now=True)
 
     @property

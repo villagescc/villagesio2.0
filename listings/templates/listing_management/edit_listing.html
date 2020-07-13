@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 {% block head-css %}
 {{ block.super }}
@@ -66,7 +66,7 @@
     $("#div_id_categories").on('change', "#id_categories", function (e) {
         var selected_category = $(this).val();
         $.ajax({
-            url: "{% url 'subcategories_filter' %}",
+            url: "{% url 'listings:subcategories_filter' %}",
             type: 'GET',
             data: {'category': selected_category},
             success: function (e) {

@@ -1,5 +1,5 @@
 {% extends 'new_templates/base.html' %}
-{% load staticfiles  i18n %}
+{% load static  i18n %}
 
 {% block content %}
     <div class="app-view">
@@ -21,10 +21,10 @@
                             for those things.</p>
 
                         <span>
-                            <a href="{% url 'my_profile' %}" class="btn btn-info">
+                            <a href="{% url 'profile:my_profile' %}" class="btn btn-info">
                                 {% trans 'View my profile' %}
                             </a>
-                            <a class="btn btn-warning" href="{% url 'add_profile_tag' %}">Edit tags</a>
+                            <a class="btn btn-warning" href="{% url 'profile:add_profile_tag' %}">Edit tags</a>
                         </span>
 
                         <div class="trust-data">
@@ -84,7 +84,7 @@
 
                                 <div class="col-12 col-sm-6">
                                     <label for="location">Location</label>
-                                    <a href="{% url 'locator' %}" data-toggle="tooltip"
+                                    <a href="{% url 'geo:locator' %}" data-toggle="tooltip"
                                        title="{{ request.location }}"><i
                                             class="fa fa-location-arrow"></i>&nbsp&nbsp{{ request.location|truncatechars:"42" }}
                                     </a>

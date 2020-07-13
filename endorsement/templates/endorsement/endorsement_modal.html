@@ -42,7 +42,7 @@
         var error_message = $('#error_message');
         var save = $("#add-endorsement-modal");
         $.ajax({
-            url:'{% url 'endorse_user' each.profile.username %}',
+            url:'{% url 'relate:endorse_user' each.profile.username %}',
             type:'POST',
             data: {
             },

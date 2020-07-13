@@ -16,8 +16,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created_at', models.DateTimeField(auto_now=True)),
-                ('recipient', models.ForeignKey(related_name='referral_received', to='profile.Profile')),
-                ('referrer', models.ForeignKey(related_name='referral_made', to='profile.Profile')),
+                ('recipient', models.ForeignKey(on_delete=models.CASCADE, related_name='referral_received', to='profile.Profile')),
+                ('referrer', models.ForeignKey(on_delete=models.CASCADE, related_name='referral_made', to='profile.Profile')),
             ],
         ),
     ]

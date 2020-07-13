@@ -1,4 +1,4 @@
-{% load staticfiles profile tag_utils %}
+{% load static profile tag_utils %}
 
 <style>
     @media (min-width: 2000px)/* The minimum width of the display area, such as a browser window*/ {
@@ -177,7 +177,7 @@
     $("#saveReferral").click(function () {
         var profile_username = $("#profile-username").val();
         $.ajax({
-            url: "{% url 'referral_on_payment' %}",
+            url: "{% url 'relate:referral_on_payment' %}",
             data: JSON.stringify({'profile': profile_username}),
             contentType: "application/json; charset=utf-8",
             method: 'POST',

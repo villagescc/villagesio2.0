@@ -18,8 +18,8 @@ class Migration(migrations.Migration):
                 ('weight', models.PositiveIntegerField(help_text="Each heart represents an hour of value you'd provide in exchange for acknowledgements.", verbose_name='Hearts')),
                 ('text', models.TextField(verbose_name='Testimonial', blank=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
-                ('endorser', models.ForeignKey(related_name='endorsements_made', to='profile.Profile')),
-                ('recipient', models.ForeignKey(related_name='endorsements_received', to='profile.Profile')),
+                ('endorser', models.ForeignKey(on_delete=models.CASCADE, related_name='endorsements_made', to='profile.Profile')),
+                ('recipient', models.ForeignKey(on_delete=models.CASCADE, related_name='endorsements_received', to='profile.Profile')),
             ],
         ),
         migrations.AlterUniqueTogether(

@@ -1,6 +1,6 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
+from geo import views
 
-urlpatterns = patterns(
-    'geo.views',
-    url(r'^locator/$', 'locator', name='locator'),
-)
+urlpatterns = [
+    url(r'^locator/$', views.locator, name='locator'),
+]

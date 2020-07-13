@@ -102,8 +102,8 @@ class RegistrationForm(UserCreationForm):
         return self.cleaned_data['password1']
 
 
-RegistrationForm.base_fields.keyOrder = [
-    'first_name', 'email', 'username', 'password1', 'password2']
+# RegistrationForm.base_fields.keyOrder = [
+#     'first_name', 'email', 'username', 'password1', 'password2']
 
 
 class ForgotPasswordForm(forms.Form):

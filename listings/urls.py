@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from listing_management import urls as listing_management_urls
+from listings.listing_management import urls as listing_management_urls
 import listings.views as listing_views
 
 from listings.map_visualization import urls as search_listings
@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^listing_details/([^/]+)/$', listing_views.listing_details, name='listing_details'),
     url(r'^get_listing_info/([^/]+)/$', listing_views.get_listing_info, name='listing_modal_details'),
     url(r'^get_subcategories', listing_views.get_subcategories_filter, name='subcategories_filter'),
-    url(r'^search/', include(search_listings, namespace='map_search')),
-    url(r'^listing_management/', include(listing_management_urls, namespace='listing_management'))
+    url(r'^search/', include((search_listings, 'listings.map_visualization'), namespace='map_search')),
+    url(r'^listing_management/', include((listing_management_urls, 'listings.listing_management'), namespace='listing_management'))
 
 ]

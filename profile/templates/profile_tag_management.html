@@ -63,7 +63,7 @@
             if (confirm('Are you sure ? ')) {
                 $.ajax({
                     async: false,
-                    url: '{% url 'delete_profile_tags' %}',
+                    url: '{% url 'profile:delete_profile_tags' %}',
                     type: 'POST',
                     data: { ids:values, csrfmiddlewaretoken:"{{ csrf_token }}" },
                     success: function (data) {

@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name='tag',
-            name=b'name',
+            name='name',
             field=models.CharField(unique=True, max_length=10),
         ),
     ]

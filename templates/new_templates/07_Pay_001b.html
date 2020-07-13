@@ -1,4 +1,4 @@
-{% load staticfiles profile tag_utils %}
+{% load static profile tag_utils %}
 
 <!DOCTYPE html>
 <html>
@@ -58,7 +58,7 @@
                             </div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a>
+                            <a class="dropdown-item" href="{% url 'profile:my_profile' %}">Profile</a>
                             <a class="dropdown-item" href="{% url 'listing_management:manage_listings' %}">Manage Listing</a>
                             <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a>
                             <div class="dropdown-divider"></div>
@@ -81,11 +81,11 @@
                             About Us
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{% url 'how_it_works' %}">How it works</a>
-                            <a class="dropdown-item" href="{% url 'motivation' %}">Motivation</a>
-                            <a class="dropdown-item" href="{% url 'privacy' %}">Privacy</a>
+                            <a class="dropdown-item" href="{% url 'profile:how_it_works' %}">How it works</a>
+                            <a class="dropdown-item" href="{% url 'profile:motivation' %}">Motivation</a>
+                            <a class="dropdown-item" href="{% url 'profile:privacy' %}">Privacy</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'contact_us' %}">Feedback</a>
+                            <a class="dropdown-item" href="{% url 'profile:contact_us' %}">Feedback</a>
                         </div>
                     </li>
                     {% if request %}
@@ -99,13 +99,13 @@
                         <a id="add-posting" class="nav-link" href="#"><img src="{% static 'new_template/res/img/icons/plus.png' %}" alt="add" data-toggle="modal" data-target="#new-post-modal"></a>
                     </li>
                     <li class="nav-item">
-                        <a id="blank-trust-id" class="nav-link" href="{% url 'blank_trust_user' %}"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
+                        <a id="blank-trust-id" class="nav-link" href="{% url 'relate:blank_trust_user' %}"><img src="{% static 'new_template/res/img/icons/heart.png' %}" alt="favorites"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'blank_payment_user' %}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="wallet"></a>
+                        <a class="nav-link" href="{% url 'relate:blank_payment_user' %}"><img src="{% static 'new_template/res/img/icons/wallet.png' %}" alt="wallet"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'undefined_contact' %}"><img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="inbox"></a>
+                        <a class="nav-link" href="{% url 'profile:undefined_contact' %}"><img src="{% static 'new_template/res/img/icons/mail.png' %}" alt="inbox"></a>
                     </li>
                 </ul>
             </div>
@@ -121,7 +121,7 @@
                           </div>
                       </a>
                       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a>
+                          <a class="dropdown-item" href="{% url 'profile:my_profile' %}">Profile</a>
                           <a class="dropdown-item" href="{% url 'listing_management:manage_listings' %}">Manage Listing</a>
                           <a class="dropdown-item" href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a>
                           <div class="dropdown-divider"></div>
@@ -182,7 +182,7 @@
 
                         <div class="payment-data">
 {#                            <div class="item-cover" style="background-image: url({% static 'new_template/res/img/posts/conscious-sensuality/cover-big.png' %});"></div>#}
-                            <form action="{% url 'blank_payment_user' %}" method="POST" id="payment-form">
+                            <form action="{% url 'relate:blank_payment_user' %}" method="POST" id="payment-form">
                                 {% csrf_token %}
                                 <div class="receiver-box" id="div-recipient">
                                     <h4>Recipient</h4>
@@ -309,7 +309,7 @@
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
             wildcard: '%QUERY',
-            url: "{% url 'get_recipients_data' %}?query=%QUERY",
+            url: "{% url 'relate:get_recipients_data' %}?query=%QUERY",
             transform: function (response) {
                 return $.map(response.result, function (recipient) {
                     $('#id_recipient').attr("data-profile-selected", recipient.username);
@@ -430,7 +430,7 @@
     $("#saveReferral").click(function () {
         var profile = $('#id_recipient').val();
         $.ajax({
-            url: "{% url 'referral_on_payment' %}",
+            url: "{% url 'relate.referral_on_payment' %}",
             data: JSON.stringify({'profile': profile}),
             contentType: "application/json; charset=utf-8",
             method: 'POST',

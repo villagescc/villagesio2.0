@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render
 from categories.models import SubCategories
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from categories.subcategories_manager.forms import AddSubCategory, EditSubCategory
 from django.db import transaction
 

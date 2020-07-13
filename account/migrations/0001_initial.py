@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('bal_mult', models.SmallIntegerField(choices=[(1, b'+1'), (-1, b'-1')])),
                 ('limit', account.models.AmountField(default=Decimal('0'), null=True, max_digits=12, decimal_places=2, blank=True)),
-                ('account', models.ForeignKey(related_name='creditlines', to='account.Account')),
+                ('account', models.ForeignKey(on_delete=models.CASCADE, related_name='creditlines', to='account.Account')),
             ],
         ),
         migrations.CreateModel(
@@ -40,6 +40,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='creditline',
             name='node',
-            field=models.ForeignKey(related_name='creditlines', to='account.Node'),
+            field=models.ForeignKey(on_delete=models.CASCADE, related_name='creditlines', to='account.Node'),
         ),
     ]

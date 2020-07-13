@@ -1,5 +1,5 @@
 {% extends "new_templates/base.html" %}
-{% load staticfiles profile %}
+{% load static profile %}
 
 {% block content %}
 
@@ -16,7 +16,7 @@
                     <div class="col-xs-12 col-lg-6">
 
                         <div class="payment-data">
-                            <form action="{% url 'blank_payment_user' %}" method="POST" id="payment-form">
+                            <form action="{% url 'relate:blank_payment_user' %}" method="POST" id="payment-form">
                                 {% csrf_token %}
 
                                 {% include "new_templates/form.html" %}
@@ -130,7 +130,7 @@
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
                 wildcard: '%QUERY',
-                url: "{% url 'get_recipients_data' %}?query=%QUERY",
+                url: "{% url 'relate:get_recipients_data' %}?query=%QUERY",
                 transform: function (response) {
                     return $.map(response.result, function (recipient) {
                         $('#id_recipient').attr("data-profile-selected", recipient.username);
@@ -251,7 +251,7 @@
         $("#saveReferral").click(function () {
             var profile = $('#id_recipient').val();
             $.ajax({
-                url: "{% url 'referral_on_payment' %}",
+                url: "{% url 'relate:referral_on_payment' %}",
                 data: JSON.stringify({'profile': profile}),
                 contentType: "application/json; charset=utf-8",
                 method: 'POST',

@@ -1,7 +1,7 @@
 from geo.models import Location
+from django.utils.deprecation import MiddlewareMixin
 
-
-class LocationMiddleware(object):
+class LocationMiddleware(MiddlewareMixin):
     @staticmethod
     def process_request(request):
         """

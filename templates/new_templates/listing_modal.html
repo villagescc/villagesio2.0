@@ -1,4 +1,4 @@
-{% load staticfiles profile tag_utils %}
+{% load static profile tag_utils %}
 
 <form class="form-horizontal" id="form-listing-modal" method="POST">
     {% csrf_token %}
@@ -50,7 +50,7 @@
                             </div>
                             <div class="col-12">
                                 <label for="profile-location">Location:</label>
-                                <span class="label label-info"><a href="{% url 'locator' %}" id="profile-location"></a></span>
+                                <span class="label label-info"><a href="{% url 'geo:locator' %}" id="profile-location"></a></span>
                             </div>
                             <div class="col-12">
                                 <label for="listing-created-at">Post creation date:</label>
