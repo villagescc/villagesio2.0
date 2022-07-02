@@ -8795,3 +8795,18 @@ form#trust-form .accent-text {
     background-color: #1d90b5; }
     .notification-list .load-more:hover {
       background-color: #28b1dd; }
+/* Temp edits */
+ul.social-navbar a {
+    display: none;
+}
+nav#social-navbar {
+    display: none;
+}
+i.fa.fa-facebook-official {
+}
+a.btn.btn-primary.fb-reg-btn {
+    display: none;
+}
+p.accent-text {
+    display: none;
+}
