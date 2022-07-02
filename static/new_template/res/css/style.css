@@ -8810,3 +8810,6 @@ a.btn.btn-primary.fb-reg-btn {
 p.accent-text {
     display: none;
 }
+.social-menu a {
+    display: none;
+}
