@@ -8813,3 +8813,6 @@ p.accent-text {
 .app-sidebar .social-menu {
     display: none !important;
 }
+div#filters {
+    display: none;
+}
