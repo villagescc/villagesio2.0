@@ -6760,7 +6760,7 @@ ol.custom-breadcrumbs {
     padding: 0 1em;
     font-size: 1.375rem; }
     #masthead #social-navbar ul li a {
-      padding: 0 0.75em;
+      padding: 0 0.25em;
       color: #000;
       opacity: 0.2; }
       #masthead #social-navbar ul li a:hover, #masthead #social-navbar ul li a:focus {
@@ -7043,7 +7043,7 @@ p {
           justify-content: center; }
           .site-footer .site-info .footer-social .social-navbar li,
           .site-footer .site-info .footer-social .social-navbar li:not(:first-of-type) {
-            margin: 0 1em; } }
+            margin: 0 .75em; } }
     @media (max-width: 413px) {
       .site-footer .site-info .footer-nav {
         margin-bottom: 2.5em; }
