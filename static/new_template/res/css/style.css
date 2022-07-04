@@ -8796,7 +8796,14 @@ form#trust-form .accent-text {
     .notification-list .load-more:hover {
       background-color: #28b1dd; }
 /* Temp edits */
-
+.app-sidebar nav#social-navbar {
+    font-size: larger;
+    margin: 0 auto;
+}
+@media (max-width: 991px)
+.app-sidebar nav#social-navbar{
+    display:none !important;
+}
 i.fa.fa-facebook-official {
 }
 a.btn.btn-primary.fb-reg-btn {
