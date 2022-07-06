@@ -45,7 +45,7 @@
                                             <div class="upload-error"></div>
                                             <img class="camera-icon" src="{% static 'new_template/res/img/icons/camera.png' %}" alt="Camera">
                                             <p class="browse-title">browse</p>
-                                            <input id="id_photo" name="photo" type="file" accept="image/*" capture>
+                                            <input id="id_photo" name="photo" type="file">
                                             {% if form.instance.photo %}
                                             <img class="image-preview" src="{{ form.instance.photo.url }}" alt="photo">
                                             {% endif %}
@@ -63,7 +63,7 @@
                                             <div class="upload-error"></div>
                                             <img class="camera-icon" src="{% static 'new_template/res/img/icons/camera.png' %}" alt="Camera">
                                             <p class="browse-title">browse</p>
-                                            <input id="id_header_image" name="header_image" type="file" accept="image/*" capture>
+                                            <input id="id_header_image" name="header_image" type="file">
                                             {% if form.instance.header_image %}
                                             <img class="image-preview" src="{{ form.instance.header_image.url }}" alt="Header image">
                                             {% endif %}
