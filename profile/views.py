@@ -241,10 +241,10 @@ def edit_settings(request):
             user_pk = request.user.pk
             django_logout(request)
             user = get_user_model().objects.filter(pk=user_pk)
-            profile_obj = Profile.objects.filter(user=user).delete()
+            Profile.objects.filter(user=user).delete()
             user.delete()
 
-            return redirect(reverse('home'))
+            return redirect(reverse('frontend:home-page'))
         
     if 'change_settings' not in request.POST:
         settings_form = SettingsForm(instance=request.profile.settings)
