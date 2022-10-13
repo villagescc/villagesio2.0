@@ -92,6 +92,17 @@
                                 </div>
                             </table>
                         </form>
+                        <hr>
+                        <h3>Delete Account</h3>
+                        <form method="post" action="">
+                            {% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4">
+                                <input class="btn btn-submit" type="submit"
+                                       name="delete_account" value="DELETE ACCOUNT">
+                            </div>
+                        </div>
+                        </form>
 
                     </div>
                 </div>
