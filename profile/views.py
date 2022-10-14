@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth import authenticate, login as django_login
+from django.contrib.auth import authenticate, login as django_login, logout as django_logout, get_user_model
 from django.contrib.auth.views import login as django_login_view
 from django.core.urlresolvers import reverse
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
@@ -237,6 +237,14 @@ def edit_settings(request):
                 password_change_form.save()
                 messages.info(request, MESSAGES['password_changed'])
                 return redirect(edit_settings)
+        elif 'delete_account' in request.POST:
+            user_pk = request.user.pk
+            django_logout(request)
+            user = get_user_model().objects.filter(pk=user_pk)
+            Profile.objects.filter(user=user).delete()
+            user.delete()
+
+            return redirect(reverse('frontend:home-page'))
         
     if 'change_settings' not in request.POST:
         settings_form = SettingsForm(instance=request.profile.settings)
