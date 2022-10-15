@@ -5,4 +5,4 @@ GNU GENERAL PUBLIC LICENSE
 
 For installation and configuration instructions please refer to the docs:
 
-https://github.com/fpSpindola/Villagescc_new_ui/wiki/Documentation
+https://www.icloud.com/iclouddrive/0e0Kl8t0ddLK-zod5LBVMurfw#villages_final_doc
