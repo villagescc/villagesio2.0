@@ -1,3 +1,5 @@
+import json
+
 from django.db.models.functions import Concat
 from django.db.models import Value
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -8,7 +10,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-from notification.models import Notification
+from notification.models import Notification, PushNotificationDevice
 
 
 @login_required()
@@ -46,3 +48,29 @@ def all_notifications(request):
     rendered_page = render(request, 'new_templates/notifications.html', {'notifications': notifications})
     Notification.objects.filter(recipient=request.profile, status=Notification.NEW).update(status=Notification.READ)
     return rendered_page
+
+
+@login_required()
+def subscribe_to_push(request):
+    """
+    Subscribe logged-in device to push notification
+    """
+    body = json.loads(request.body.decode('utf-8'))
+    device = PushNotificationDevice(
+        profile=request.profile,
+        device_id=body.get("device_id"),
+        push_token_identifier=body.get("push_token_identifier"),
+        device_type=body.get("device_type")
+    )
+    device.save()
+    return HttpResponse()
+
+
+@login_required()
+def unsubscribe_from_push(request):
+    """
+    Unsubscribe device when logged out
+    """
+    device = PushNotificationDevice.objects.filter(profile=request.profile)
+    device.delete()
+    return HttpResponse()
