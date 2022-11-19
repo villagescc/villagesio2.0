@@ -2,6 +2,10 @@ import requests
 from notification.models import PushNotificationDevice
 from django.conf import settings
 
+title_dict = {
+    "Trust": "New Trust",
+    "Payment": "New Payment",
+}
 
 def send_push_notification(notifier, recipient, type, **kwargs):
     """
@@ -31,10 +35,11 @@ def send_push_notification(notifier, recipient, type, **kwargs):
         auth=("Basic", settings.ONE_SIGNAL_REST_API_KEY)
     ).json()
 
-    if response.get("errors", {}).get("invalid_player_ids"):
-        PushNotificationDevice.objects.filter(
-            device_id__in=response.get("errors").get("invalid_player_ids")
-        ).delete()
+    if isinstance(response.get("errors"), dict):
+        if response.get("errors").get("invalid_player_ids"):
+            PushNotificationDevice.objects.filter(
+                device_id__in=response.get("errors").get("invalid_player_ids")
+            ).delete()
 
     # print response
     return True

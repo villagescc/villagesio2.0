@@ -46,6 +46,5 @@ class PushNotificationDevice(models.Model):
     )
     profile = models.ForeignKey(Profile, related_name="device_profile", on_delete=models.CASCADE)
     device_id = models.CharField(max_length=60)
-    push_token_identifier = models.CharField(max_length=120)
-    device_type = models.IntegerField(max_length=2, choices=PLATFORM_CHOICES)
+    device_type = models.IntegerField(choices=PLATFORM_CHOICES, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
