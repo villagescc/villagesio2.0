@@ -3,12 +3,12 @@ from notification.models import PushNotificationDevice
 from django.conf import settings
 
 title_dict = {
-    "TRUST": "New Trust",
-    "PAYMENT": "New Payment",
+    "TRUST": "You were given trust. Trust them back?",
+    "PAYMENT": "Received Village Hours Payment",
 }
 contents_dict = {
-    "TRUST": "User {notifier} now trusts you, {recipient}",
-    "PAYMENT": "User {notifier} have sent you a payment, {recipient}",
+    "TRUST": "{notifier} trusted you with {amount} VH credit limit.\n{memo}",
+    "PAYMENT": "{notifier} sent you {amount} VH for \n\"{memo}\"",
 }
 
 def send_push_notification(notifier, recipient, type, **kwargs):
@@ -33,7 +33,12 @@ def send_push_notification(notifier, recipient, type, **kwargs):
         "app_id": settings.ONE_SIGNAL_APP_ID,
         "include_player_ids": [str(device.device_id) for device in devices],
         "contents": {
-            "en": kwargs.get("memo") or contents_dict[type].format(notifier=notifier, recipient=recipient),
+            "en": contents_dict[type].format(
+                notifier=notifier,
+                recipient=recipient,
+                amount=kwargs.get("amount"),
+                memo=kwargs.get("memo"),
+            ),
         },
         "headings": {
             "en": title_dict[type],
@@ -53,6 +58,5 @@ def send_push_notification(notifier, recipient, type, **kwargs):
                 device_id__in=response.get("errors").get("invalid_player_ids")
             ).delete()
 
-    # print response
     return True
 
