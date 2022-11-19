@@ -21,6 +21,9 @@ def subscribe_to_push(user, device_id):
     """
     Subscribe logged-in device to push notification
     """
+    if PushNotificationDevice.objects.get(device_id=device_id):
+        return
+
     profile = Profile.objects.get(user__exact=user)
     device = PushNotificationDevice(
         profile=profile,
