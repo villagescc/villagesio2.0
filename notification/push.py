@@ -3,15 +3,24 @@ from notification.models import PushNotificationDevice
 from django.conf import settings
 
 title_dict = {
-    "Trust": "New Trust",
-    "Payment": "New Payment",
+    "TRUST": "New Trust",
+    "PAYMENT": "New Payment",
+}
+contents_dict = {
+    "TRUST": "User {notifier} now trusts you, {recipient}",
+    "PAYMENT": "User {notifier} have sent you a payment, {recipient}",
 }
 
 def send_push_notification(notifier, recipient, type, **kwargs):
     """
     Send push to profile's subscribed devices
     """
-    devices = PushNotificationDevice.objects.filter(profile=recipient).all()
+    devices = (
+        PushNotificationDevice
+        .objects
+        .filter(profile__name=recipient)
+        .all()
+    )
     if not devices:
         return False
 
@@ -24,7 +33,10 @@ def send_push_notification(notifier, recipient, type, **kwargs):
         "app_id": settings.ONE_SIGNAL_APP_ID,
         "include_player_ids": [str(device.device_id) for device in devices],
         "contents": {
-            "en": str(notifier) + str(recipient) + str(type) + kwargs.get("memo", ""),
+            "en": kwargs.get("memo") or contents_dict[type].format(notifier=notifier, recipient=recipient),
+        },
+        "headings": {
+            "en": title_dict[type],
         },
     }
 
