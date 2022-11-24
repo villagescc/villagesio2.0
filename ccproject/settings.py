@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 import elasticsearch
-# import ujson
+import ujson
 from envparse import env
 from datetime import timedelta
 from database.databases import Database
@@ -298,7 +298,3 @@ try:
     from ccproject.local_settings import *
 except ImportError:
     pass
-
-ONE_SIGNAL_REST_API_KEY = env.str('ONE_SIGNAL_REST_API_KEY')
-
-ONE_SIGNAL_APP_ID = env.str('ONE_SIGNAL_APP_ID')

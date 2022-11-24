@@ -50,18 +50,6 @@
                     }, 4000);
                 </script>
             {% endif %}
-        <script>
-                const device_id_interval = setInterval(
-                    function(){
-                        if (isFlutterInAppWebViewReady) {
-                            clearInterval(device_id_interval);
-                            window.flutter_inappwebview.callHandler('myHandlerName').then(function(token_obj) {
-                            document.getElementById("id_device_id").value = token_obj.token;
-                            });
-                        }
-                    }, 500
-                );
-                </script>
         </form>
     </div>
 {% endblock content %}

@@ -1,5 +1,5 @@
-from .models import Notification, PushNotificationDevice
-from profile.models import Profile
+from .models import Notification
+
 
 def create_notification(notifier, recipient, type, **kwargs):
     try:
@@ -16,17 +16,3 @@ def create_notification(notifier, recipient, type, **kwargs):
         print(e)
         return False
 
-
-def subscribe_to_push(user, device_id):
-    """
-    Subscribe logged-in device to push notification
-    """
-    if PushNotificationDevice.objects.filter(device_id=device_id).all():
-        return
-
-    profile = Profile.objects.get(user__exact=user)
-    device = PushNotificationDevice(
-        profile=profile,
-        device_id=device_id,
-    )
-    device.save()

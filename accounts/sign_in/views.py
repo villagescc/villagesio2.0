@@ -25,7 +25,6 @@ from general.mail import send_mail_from_system
 from profile.models import Settings
 from geo.models import Location
 from profile.forms import PreRegistrationForm, RegistrationForm, ProfileForm
-from notification.utils import subscribe_to_push
 
 import mailchimp
 import requests
@@ -132,7 +131,6 @@ class SignInUserLogIn(AuthView):
         request = self.request
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
-        device_id = form.cleaned_data['device_id']
         try:
             if '@' in username:
                 username = Settings.objects.get(email__iexact=username).profile.username
@@ -142,8 +140,6 @@ class SignInUserLogIn(AuthView):
                 # Password matching and user found with authenticate
                 login(request, user)
                 messages.success(request, _("Welcome to Villages.io"))
-                if device_id:
-                    subscribe_to_push(user, device_id)
                 return super(SignInUserLogIn, self).form_valid(form)
             else:
                 # Password wrong
