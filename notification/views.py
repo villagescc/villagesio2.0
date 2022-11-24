@@ -1,3 +1,5 @@
+import json
+
 from django.db.models.functions import Concat
 from django.db.models import Value
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -8,7 +10,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-from notification.models import Notification
+from notification.models import Notification, PushNotificationDevice
 
 
 @login_required()
