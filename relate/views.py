@@ -12,6 +12,7 @@ from profile.models import Profile
 from relate.forms import EndorseForm, AcknowledgementForm, BlankTrust, BlankPaymentForm
 from relate.models import Endorsement, Referral
 from notification.models import Notification
+from notification.push import send_push_notification
 from notification.utils import create_notification
 from general.mail import send_notification
 from django.utils.translation import ugettext as _
@@ -72,6 +73,7 @@ def endorse_user(request, recipient_username):
         if form.is_valid():
             endorsement = form.save()
             create_notification(notifier=request.profile, recipient=recipient, type=Notification.TRUST)
+            send_push_notification(notifier=request.profile, recipient=recipient, type=Notification.TRUST)
             if form.cleaned_data['referral']:
                 existing_referral = Referral.objects.filter(referrer=request.profile, recipient=recipient)
                 if not existing_referral:
@@ -165,6 +167,7 @@ def acknowledge_user(request, recipient_username):
             acknowledgement = form.send_acknowledgement(
                 request.profile, recipient)
             create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
+            send_push_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
             # send_acknowledgement_notification(acknowledgement)
             messages.info(request, MESSAGES['acknowledgement_sent'])
             return HttpResponseRedirect(acknowledgement.get_absolute_url())
@@ -189,6 +192,7 @@ def pay_user_ajax(request, recipient_username):
             acknowledgement = form.send_acknowledgement(
                 request.profile, recipient)
             create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
+            send_push_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
             has_referral = Referral.objects.filter(referrer=request.profile, recipient=recipient).all()
             send_acknowledgement_notification(acknowledgement)
             messages.info(request, MESSAGES['acknowledgement_sent'])
@@ -337,6 +341,8 @@ def blank_trust(request):
                         endorsement = form.save()
                         create_notification(notifier=profile, recipient=recipient, type=Notification.TRUST,
                                             amount=form.cleaned_data.get('weight'), memo=form.cleaned_data.get('text'))
+                        send_push_notification(notifier=profile, recipient=recipient, type=Notification.TRUST,
+                                            amount=form.cleaned_data.get('weight'), memo=form.cleaned_data.get('text'))
                         existing_referral = Referral.objects.filter(referrer=profile, recipient=recipient)
                         if form.cleaned_data['referral']:
                             if not existing_referral:
@@ -387,6 +393,8 @@ def blank_payment(request):
                 payment = form.send_payment()
                 create_notification(notifier=profile, recipient=recipient, type=Notification.PAYMENT,
                                     amount=form.cleaned_data.get('amount'), memo=form.cleaned_data.get('memo'))
+                send_push_notification(notifier=profile, recipient=recipient, type=Notification.PAYMENT,
+                                       amount=form.cleaned_data.get('amount'), memo=form.cleaned_data.get('memo'))
                 send_payment_notification(payment)
                 messages.add_message(request, messages.INFO, 'Payment sent through the trust network.')
                 form = BlankPaymentForm()
