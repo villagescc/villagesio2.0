@@ -48,7 +48,6 @@ class UserLoginForm(Form):
                                                              'placeholder': 'Email or username'}))
 
     password = forms.CharField(widget=forms.PasswordInput(attrs={'style': 'width:auto;', 'placeholder': 'Password'}))
-    device_id = forms.CharField(label='', widget=forms.HiddenInput(), required=False)
 
 
 class ProfileCreationForm(ModelForm):
