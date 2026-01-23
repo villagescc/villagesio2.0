@@ -1,305 +1,601 @@
-{% load staticfiles profile tag_utils %}
+{% extends 'new_templates/base.html' %}
 
-<!DOCTYPE html>
-<html>
+{% load staticfiles %}
 
-<head>
-    <meta charset="utf-8">
-    <title>Home | Villages</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{% static 'new_template/res/css/style.css' %}" type="text/css" media="all" />
-</head>
+{% block extra_css %}
+<style>
+    /* How It Works Page Styles */
+    .hiw-hero {
+        background: linear-gradient(135deg, #f8fffe 0%, #e8f4f2 100%);
+        padding: 60px 0 40px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hiw-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("{% static 'new_template/res/img/home/how-it-works-hero.png' %}") center center / cover no-repeat;
+        opacity: 0.15;
+    }
+    
+    .hiw-hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    .hiw-hero h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #1a3c4d;
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+    
+    .hiw-hero .lead {
+        font-size: 1.25rem;
+        color: #4a6670;
+        line-height: 1.7;
+        max-width: 650px;
+        margin: 0 auto;
+    }
+    
+    .hiw-section {
+        padding: 80px 0;
+    }
+    
+    .hiw-section:nth-child(even) {
+        background-color: #f8fffe;
+    }
+    
+    .hiw-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    /* Three Steps Section */
+    .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+        margin-top: 50px;
+    }
+    
+    @media (max-width: 991px) {
+        .steps-grid {
+            grid-template-columns: 1fr;
+            gap: 60px;
+        }
+    }
+    
+    .step-card {
+        text-align: center;
+        position: relative;
+    }
+    
+    .step-number {
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #2b9e8b 0%, #1a7a6c 100%);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        box-shadow: 0 4px 15px rgba(43, 158, 139, 0.3);
+        z-index: 2;
+    }
+    
+    .step-image {
+        width: 100%;
+        max-width: 300px;
+        height: 300px;
+        margin: 40px auto 30px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+    
+    .step-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .step-card h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1a3c4d;
+        margin-bottom: 15px;
+    }
+    
+    .step-card p {
+        color: #5a7580;
+        line-height: 1.7;
+        font-size: 1rem;
+    }
+    
+    /* Section Headers */
+    .section-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .section-header h2 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #1a3c4d;
+        margin-bottom: 15px;
+    }
+    
+    .section-header p {
+        font-size: 1.15rem;
+        color: #5a7580;
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.7;
+    }
+    
+    /* Trust Network Section */
+    .trust-network-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        margin-top: 40px;
+    }
+    
+    @media (max-width: 991px) {
+        .trust-network-content {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .trust-network-image {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+    }
+    
+    .trust-network-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    .trust-network-text h3 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #1a3c4d;
+        margin-bottom: 20px;
+    }
+    
+    .trust-network-text p {
+        color: #5a7580;
+        line-height: 1.8;
+        margin-bottom: 20px;
+    }
+    
+    .trust-example {
+        background: linear-gradient(135deg, #e8f8f5 0%, #d1f2eb 100%);
+        border-radius: 15px;
+        padding: 25px;
+        margin-top: 25px;
+        border-left: 4px solid #2b9e8b;
+    }
+    
+    .trust-example h4 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1a3c4d;
+        margin-bottom: 10px;
+    }
+    
+    .trust-example p {
+        color: #4a6670;
+        margin-bottom: 0;
+        font-size: 0.95rem;
+    }
+    
+    /* Villages Hours Section */
+    .hours-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        margin-top: 40px;
+    }
+    
+    @media (max-width: 991px) {
+        .hours-content {
+            grid-template-columns: 1fr;
+        }
+        .hours-content .hours-image {
+            order: -1;
+        }
+    }
+    
+    .hours-image {
+        text-align: center;
+    }
+    
+    .hours-image img {
+        max-width: 400px;
+        width: 100%;
+        border-radius: 20px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+    }
+    
+    .hours-text h3 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #1a3c4d;
+        margin-bottom: 20px;
+    }
+    
+    .hours-text p {
+        color: #5a7580;
+        line-height: 1.8;
+        margin-bottom: 20px;
+    }
+    
+    .hours-features {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 30px;
+    }
+    
+    @media (max-width: 575px) {
+        .hours-features {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .hours-feature {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e8f0ed;
+    }
+    
+    .hours-feature-icon {
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, #2b9e8b 0%, #1a7a6c 100%);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+    
+    .hours-feature h5 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #1a3c4d;
+        margin-bottom: 8px;
+    }
+    
+    .hours-feature p {
+        font-size: 0.9rem;
+        color: #6a8590;
+        margin-bottom: 0;
+        line-height: 1.6;
+    }
+    
+    /* Call to Action */
+    .hiw-cta {
+        background: linear-gradient(135deg, #2b9e8b 0%, #1a6b5f 100%);
+        padding: 80px 0;
+        text-align: center;
+    }
+    
+    .hiw-cta h2 {
+        color: white;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+    
+    .hiw-cta p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.15rem;
+        max-width: 600px;
+        margin: 0 auto 30px;
+    }
+    
+    .hiw-cta .btn-join {
+        display: inline-block;
+        background: white;
+        color: #1a6b5f;
+        padding: 15px 40px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .hiw-cta .btn-join:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+    }
+    
+    /* Key Benefits */
+    .benefits-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+        margin-top: 50px;
+    }
+    
+    @media (max-width: 991px) {
+        .benefits-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 575px) {
+        .benefits-row {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .benefit-item {
+        text-align: center;
+        padding: 30px 20px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+    }
+    
+    .benefit-item:hover {
+        transform: translateY(-5px);
+    }
+    
+    .benefit-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #e8f8f5 0%, #d1f2eb 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 1.8rem;
+        color: #2b9e8b;
+    }
+    
+    .benefit-item h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1a3c4d;
+        margin-bottom: 10px;
+    }
+    
+    .benefit-item p {
+        font-size: 0.9rem;
+        color: #6a8590;
+        margin-bottom: 0;
+        line-height: 1.6;
+    }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+</style>
+{% endblock extra_css %}
 
-<body>
+{% block content %}
 
-<!-- svg sprites -->
-<svg style="width:0; height:0; position: absolute; top: -9999px;">
-    <symbol id="balance" viewbox="0 0 21 18">
-    </symbol>
-</svg>
-<!---->
+<!-- Hero Section -->
+<section class="hiw-hero">
+    <div class="hiw-hero-content">
+        <h1>Build Trust. Share Skills. Thrive Together.</h1>
+        <p class="lead">Villages is a community-powered exchange where trust is your currency. Endorse people you trust, share your skills, and receive help from your extended network—all without traditional money.</p>
+    </div>
+</section>
 
-<div class="bg-menu-overlay" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation"></div>
-
-<div id="page" class="site">
-
-    <header id="masthead" class="site-header">
-
-        <div class="page-wrapper">
-
-            <nav id="site-navigation" class="main-navigation">
-
-                <nav class="navbar navbar-expand-lg">
-
-                    <button class="navbar-toggler hidden-lg-up px-3" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fal fa-bars" aria-hidden="true"></i>
-                    </button>
-
-                    <div class="site-branding">
-                        <a href="{% url 'frontend:home' %}"><img class="img-fluid" src="{% static 'new_template/res/img/home/logo_full.png' %}" alt="Villages"></a>
-                    </div><!-- .site-branding -->
-
-                    <nav id="primary-navbar" class="collapse navbar-collapse">
-                        <ul id="primary-menu" class="navbar-nav">
-
-                            <li class="d-lg-none my-4 mx-3">
-                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#primary-navbar" aria-controls="primary-navbar" aria-expanded="false" aria-label="Toggle navigation">
-                                    <i class="fal fa-arrow-left" aria-hidden="true"></i>
-                                </button>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="{% url 'frontend:home' %}" class="nav-link">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{% url 'how_it_works' %}" class="nav-link">About Us</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{% url 'contact_us' %}" class="nav-link">Contact Us</a>
-                            </li>
-                        </ul>
-                    </nav>
-
-                    <nav id="social-navbar">
-                        <ul class="nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fab fa-twitter" aria-hidden="true"></i></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                            </li>
-
-                        </ul>
-                    </nav>
-
-                    <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" class="btn-std btn-blue">Join Now</a>
-
-                    <a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}" class="btn-std btn-blue outline">Login</a>
-
-                </nav>
-
-            </nav><!-- #site-navigation -->
-
+<!-- Key Benefits -->
+<section class="hiw-section" style="padding-top: 60px; padding-bottom: 60px; background-color: white;">
+    <div class="hiw-container">
+        <div class="benefits-row">
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="fa fa-users"></i>
+                </div>
+                <h4>Community First</h4>
+                <p>Connect with trusted neighbors and build meaningful relationships</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="fa fa-shield"></i>
+                </div>
+                <h4>Trust-Based</h4>
+                <p>Your endorsements create a web of trust that protects everyone</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="fa fa-exchange"></i>
+                </div>
+                <h4>Fair Exchange</h4>
+                <p>Trade skills and services using time-based community currency</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="fa fa-globe"></i>
+                </div>
+                <h4>Global Network</h4>
+                <p>Your trust network extends through friends of friends worldwide</p>
+            </div>
         </div>
+    </div>
+</section>
 
-    </header><!-- #masthead -->
+<!-- Three Steps Section -->
+<section class="hiw-section">
+    <div class="hiw-container">
+        <div class="section-header">
+            <h2>How Villages Works</h2>
+            <p>Getting started is simple. Build your trust network, find help in your community, and exchange value—all in three easy steps.</p>
+        </div>
+        
+        <div class="steps-grid">
+            <!-- Step 1: Endorse -->
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-image">
+                    <img src="{% static 'new_template/res/img/home/step-endorse.png' %}" alt="Endorse trusted community members">
+                </div>
+                <h3>Endorse</h3>
+                <p>Start by endorsing people you trust. Give them "hours"—a credit limit showing how much value you'd exchange with them. This builds the foundation of your trust network and lets them transact with people you don't even know yet.</p>
+            </div>
+            
+            <!-- Step 2: Interact -->
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-image">
+                    <img src="{% static 'new_template/res/img/home/step-interact.png' %}" alt="Find help in your community">
+                </div>
+                <h3>Discover & Connect</h3>
+                <p>Browse listings from your extended network. Find tutors, handymen, babysitters, or someone to share their garden harvest. Every person comes with a trust score based on their connection to you through the network.</p>
+            </div>
+            
+            <!-- Step 3: Pay -->
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-image">
+                    <img src="{% static 'new_template/res/img/home/step-pay.png' %}" alt="Exchange value with village hours">
+                </div>
+                <h3>Exchange</h3>
+                <p>When someone helps you, acknowledge their contribution with Village Hours. These aren't debts—they're gentle promises to return the favor. The system routes payments through your trust network automatically.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <div class="app-view">
-        <main class="app-main">
-            <div class="payment-content">
-                <div class="row">
-                    <div class="col-12 col-xxl-8">
-                        <h2>How it works</h2>
-                        <div class="payment-data">
-                            <section id="how-it-works">
-                <div class="page-wrapper">
-                    <div class="padded-container">
-                        <div class="col-12">
-                            <div class="flow-wrapper">
-                                <h4 class="section-title"><strong>1. Endorse</strong></h4>
+<!-- Trust Network Explanation -->
+<section class="hiw-section">
+    <div class="hiw-container">
+        <div class="section-header">
+            <h2>The Magic of Ripple Payments</h2>
+            <p>Your trust network makes it possible to exchange with people you've never met, through people you both trust.</p>
+        </div>
+        
+        <div class="trust-network-content">
+            <div class="trust-network-image">
+                <img src="{% static 'new_template/res/img/home/trust-network.png' %}" alt="Trust network payment routing">
+            </div>
+            <div class="trust-network-text">
+                <h3>Payments Flow Through Trust</h3>
+                <p>Villages uses a technology called <strong>Ripple</strong> to route payments through your network. When you want to pay someone you don't directly know, the system finds a path of trust connecting you.</p>
+                
+                <p>Each person on the path only exchanges promises with people they've personally endorsed. This means strangers can trade safely through mutual friends.</p>
+                
+                <div class="trust-example">
+                    <h4>Example: How It Works</h4>
+                    <p>You want to pay Bob for tutoring, but you don't know Bob. However, your friend Emma has endorsed Bob. The system routes your payment: <strong>You → Emma → Bob</strong>. You owe Emma (who you trust), and Emma owes Bob (who she trusts). Everyone only deals with people they know!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-                                <p class="caption">Endorse users you trust to build the trust network.
-                                    When you endorse someone, it indicates that you trust them to
-                                    provide value to the community.</p>
-
-
-                                <p class="caption">You choose a number of hours credit limit to endorse them with.
-                                    Each heart allows them and people they trust to send you one hour's
-                                    worth of acknowledgement (more on this below). You can also leave a
-                                    recommendation message for other users to see.</p>
-
-                                <p class="caption">Starting out, you have a limited hours credit limit to give out.
-                                    This helps keep the value of your interactions with the system lower
-                                    at first so it's not too big a deal if you screw up. You have five
-                                    hours credit limit to give for every person that endorses you.</p>
-                            </div>
+<!-- Villages Hours Section -->
+<section class="hiw-section">
+    <div class="hiw-container">
+        <div class="section-header">
+            <h2>Villages Hours: A Currency Based on Time</h2>
+            <p>Our community currency is backed by something everyone has: time.</p>
+        </div>
+        
+        <div class="hours-content">
+            <div class="hours-text">
+                <h3>What is a Village Hour Worth?</h3>
+                <p>One Village Hour represents approximately one hour of basic labor—a sustainable wage that varies by community but remains stable as a measure of value.</p>
+                
+                <p>Unlike volatile currencies, Hours are grounded in real human effort. Skilled work can be valued at multiple hours per clock-hour, based on the expertise involved.</p>
+                
+                <div class="hours-features">
+                    <div class="hours-feature">
+                        <div class="hours-feature-icon">
+                            <i class="fa fa-clock-o"></i>
                         </div>
-
-
-                        <div class="col-12">
-                            <div class="flow-wrapper">
-                                <h4 class="section-title"><strong>2. Interact</strong></h4>
-
-                                <p class="caption">Use the Villages feed to find people and posts that interest you.
-                                    Put your skills and interests in your profile so others can find you.
-                                    Post items and services you want or have to offer.
-                                    Meet up to help each other out.</p>
-
-                                <p class="caption">Villages helps you find people who have been endorsed by those you trust,
-                                    so you can feel secure in knowing you are dealing with good people.
-                                    Each user is given a reputation score that helps you know how
-                                    trustworthy they are based on how well they are connected to
-                                    you in the network. The more ways you are connected,
-                                    and the more hours credit limit that have been given out as endorsements
-                                    along those paths, the higher the reputation score.</p>
-
-                            </div>
+                        <h5>Time-Based</h5>
+                        <p>Anchored to the value of human effort and skill</p>
+                    </div>
+                    <div class="hours-feature">
+                        <div class="hours-feature-icon">
+                            <i class="fa fa-balance-scale"></i>
                         </div>
-
-                        <div class="col-12">
-                            <div class="flow-wrapper">
-
-                                <h4 class="section-title"><strong>3. Payment</strong></h4>
-
-                                <p class="caption">When someone has helped you out, acknowledge that help on Villages.
-                                    Villages acknowledgements are a currency denominated credit limit (In Village hours),
-                                    consisting of gentle promises made to the person who helped you out to return the
-                                    favour at some point in the future. When you have received acknowledgements, you
-                                    can spend them to acknowledge others without having to issue any promises of your own.</p>
-
-                                <p class="caption">If there is a connection through the trust network from
-                                    you to the person you're acknowledging, Villages can transmit the acknowledgement
-                                    through the network using <a href="http://ripple-project.org/">Ripple</a>, so that
-                                    the person who helped you receives your acknowledgement as promises from someone they
-                                    have endorsed, and your promises go to someone who has endorsed you.</p>
-
-                                <p class="caption">Sometimes you will be on a path connecting another person
-                                    to someone they're acknowledging. For example, your friend Anne, who you
-                                    have endorsed, might want to acknowledge Bob, who has endorsed you, but
-                                    does not know Anne. In this case, the system will find the path from Anne
-                                    to you to Bob, and record the acknowledgement as Anne acknoledging you,
-                                    and you acknowledging Bob.
-                                </p>
-
-                                <p class="caption">Anne's acknowledgement might not have meant that much to Bob,
-                                    since he doesn't know her. Anne's acknowledgement has meaning to you, however,
-                                    since you have endorsed her, and your acknowledgement has meaning to Bob,
-                                    since you have endorsed him.</p>
-
-                                {% url 'feedback' as url_feedback %}
-                                <p>(If anyone want to make a nice picture here, please
-                                    <a href="{{ url_feedback }}">let me know</a>.)</p>
-
-                                <p class="caption">Acknowledgements are meant to represent that you have
-                                    received a gift, and would one day like to return the favour.
-                                    They are not a debt to be collected, or an obligation that creates stress or worry.
-                                    They are more like a reminder to yourself of something you would like to do, and a way
-                                    for the friendly exchange of gifts within a social circle to extend beyond to encompass
-                                    the entire community.</p>
-
-                                <a name="hours"></a>
-                                <h4>A Note About Hours</h4>
-
-                                <p class="caption">In Villages, one hour of acknowledgement is meant to represent
-                                    one hour of basic, unskilled labour, approximately equal in value to minimum wage.
-                                    Those offering skills to the community that have taken years of work to develop can
-                                    and should be acknowledged with multiple acknowledgement-hours for each hour of their
-                                    time given, according to the value of what they have given in that time.</p>
-
-                                <p class="caption">If you need a dollar value for hours, our community,
-                                    in Hawaii, generally agreed at a public community currency meeting that
-                                    a 'village hour' is worth $15 USD.
-                                    This will vary based on your local community and global economic situations</p>
-
-                            </div>
+                        <h5>Fair & Stable</h5>
+                        <p>Immune to inflation and market speculation</p>
+                    </div>
+                    <div class="hours-feature">
+                        <div class="hours-feature-icon">
+                            <i class="fa fa-handshake-o"></i>
                         </div>
+                        <h5>Promise-Based</h5>
+                        <p>Gentle commitments, not stressful debts</p>
+                    </div>
+                    <div class="hours-feature">
+                        <div class="hours-feature-icon">
+                            <i class="fa fa-map-marker"></i>
+                        </div>
+                        <h5>Community-Set</h5>
+                        <p>Each community decides their hour's dollar value</p>
                     </div>
                 </div>
-                </section>
-                        </div>
-                    </div>
-                </div>
             </div>
-        </main>
-        <!-- .app-main -->
-
-    </div>
-
-    <div id="content" class="site-content">
-
-        <div class="page-content">
-
-
+            <div class="hours-image">
+                <img src="{% static 'new_template/res/img/home/villages-hours.png' %}" alt="Villages Hours currency">
+            </div>
         </div>
     </div>
-</div><!-- #content -->
+</section>
 
-<footer id="colophon" class="site-footer">
-    <div class="page-wrapper">
-
-        <div class="site-info">
-            <div class="logo-link">
-                <a href="#">
-                    <img class="img-fluid" src="{% static 'new_template/res/img/home/logo_grayscale.png' %}" alt="Villages">
-                </a>
-            </div>
-            <div class="footer-nav">
-
-                <div id="footer-navbar" class="menu-primary-navigation-container">
-                    <ul id="footer-menu" class="menu">
-                        <li class="menu-item">
-                            <a href="#">Home</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'how_it_works' %}">About Us</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'contact_us' %}">Contact Us</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="legal">
-                    <span>&copy; 2017 - Villages</span>
-                    <span>Privacy Policy &bullet; Terms of Service</span>
-                </div>
-            </div>
-
-            <div class="footer-social">
-                <ul class="social-navbar">
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://www.instagram.com"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://www.twitter.com"><i class="fab fa-twitter" aria-hidden="true"></i></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://www.facebook.com"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                    </li>
-
-                </ul>
-            </div>
-        </div><!-- .site-info -->
-
+<!-- Call to Action -->
+<section class="hiw-cta">
+    <div class="hiw-container">
+        <h2>Ready to Join Your Village?</h2>
+        <p>Start building your trust network today. It only takes a few endorsements to unlock the power of community exchange.</p>
+        <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" class="btn-join">Join Villages Free</a>
     </div>
-</footer><!-- #colophon -->
+</section>
 
-</div>
+{% include 'new_templates/footer.html' %}
 
-</body>
-
-<script src="{% static 'new_template/node_modules/jquery/dist/jquery.js' %}" type="text/javascript"></script>
-<!-- jQuery -->
-<script src="{% static 'new_template/node_modules/popper.js/dist/umd/popper.js' %}" type="text/javascript"></script>
-<!-- Popper -->
-<script src="{% static 'new_template/node_modules/bootstrap/dist/js/bootstrap.js' %}" type="text/javascript"></script>
-<!-- Bootstrap -->
-
-<!-- Font-Awesome -->
-<script defer src="{% static 'new_template/node_modules/font-awesome/packs/brands.js' %}"></script>
-<script defer src="{% static 'new_template/node_modules/font-awesome/packs/solid.js' %}"></script>
-<script defer src="{% static 'new_template/node_modules/font-awesome/packs/regular.js' %}"></script>
-<script defer src="{% static 'new_template/node_modules/font-awesome/packs/light.js' %}"></script>
-<script defer src="{% static 'new_template/node_modules/font-awesome/fontawesome.js' %}"></script>
-<!-- -->
-
-<!-- Custom jQuery -->
-<script src="{% static 'new_template/res/js/index.js' %}" type="text/javascript"></script>
-<!---->
-
-<script>
-    $(document).ready(function() {
-        $("#primary-navbar").on("show.bs.collapse", function() {
-            $(".bg-menu-overlay").addClass("show");
-        });
-        $("#primary-navbar").on("hidden.bs.collapse", function() {
-            $(".bg-menu-overlay").removeClass("show");
-        });
-    });
-</script>
-
-</html>
+{% endblock content %}
